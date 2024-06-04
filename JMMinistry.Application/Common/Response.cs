@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Common
 {
-    internal class Response
+    public class Response<T>
     {
+        public string Details { get; set; } = string.Empty;
+        public string[] Errors { get; set; } = [];
+        public bool Success { get; set; } = false;
+        public T? Data { get; set; }
     }
 }

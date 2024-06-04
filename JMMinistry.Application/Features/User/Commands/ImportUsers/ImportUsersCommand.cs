@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.User.Commands.ImportUsers
+namespace JMMinistry.Application.Features.User.Commands.ImportUsers
 {
-    public class ImportUsersCommand: IRequest
+    public class ImportUsersCommand : IRequest
     {
         public IFormFile? File { get; set; }
     }

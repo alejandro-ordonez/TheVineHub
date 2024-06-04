@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.User.Commands.CreateUser
+namespace JMMinistry.Application.Features.User.Commands.CreateUser
 {
     public class CreateUserHandler(
         UserManager<PersonalInfo> userManager,

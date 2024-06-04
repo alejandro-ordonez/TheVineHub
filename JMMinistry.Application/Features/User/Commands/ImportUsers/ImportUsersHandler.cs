@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.User.Commands.ImportUsers
+namespace JMMinistry.Application.Features.User.Commands.ImportUsers
 {
     public class ImportUsersHandler
     {

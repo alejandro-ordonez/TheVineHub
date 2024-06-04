@@ -1,4 +1,4 @@
-﻿using JMMinistry.Application.User.Dtos;
+﻿using JMMinistry.Application.Features.User.Dtos;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -7,11 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.User.Commands.CreateUser
+namespace JMMinistry.Application.Features.User.Commands.Authenticate
 {
-    public class CreateUserCommand : UserInfoDto, IRequest
+    public class AuthenticateCommand : IRequest<TokenResult>
     {
-        [Required]
+        public string Document { get; set; } = string.Empty;
+
         public string Password { get; set; } = string.Empty;
     }
 }

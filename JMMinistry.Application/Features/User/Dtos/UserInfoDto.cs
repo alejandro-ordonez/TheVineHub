@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.User.Dtos
+namespace JMMinistry.Application.Features.User.Dtos
 {
     public class UserInfoDto
     {
