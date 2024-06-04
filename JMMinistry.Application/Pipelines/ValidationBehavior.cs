@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using JMMinistry.Application.Common;
+using JMMinistry.Common;
 using MediatR;
 using MediatR.Pipeline;
 using Microsoft.Build.Framework;

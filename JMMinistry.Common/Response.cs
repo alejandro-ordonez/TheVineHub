@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.Common
+namespace JMMinistry.Common
 {
     public class Response<T>
     {

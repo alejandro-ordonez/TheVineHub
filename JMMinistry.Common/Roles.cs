@@ -4,17 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.Common
+namespace JMMinistry.Common
 {
     public enum Roles
     {
         Admin,
         Regular,
+        Leader,
         Gain,
         Cells,
         Evangelism,
         Attendance,
         Conventions,
-        SchoolDirector
+        SchoolDirector,
+        Coordinator,
+        Assistant
     }
 }

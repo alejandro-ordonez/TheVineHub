@@ -11,7 +11,7 @@ namespace JMMinistry.Application.Features.User.Commands.CreateUser
 {
     public class CreateUserHandler(
         UserManager<PersonalInfo> userManager,
-        RoleManager<Ministry> roleManager) : IRequestHandler<CreateUserCommand>
+        RoleManager<Role> roleManager) : IRequestHandler<CreateUserCommand>
     {
         public Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {

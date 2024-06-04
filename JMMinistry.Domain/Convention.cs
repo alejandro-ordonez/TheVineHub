@@ -15,6 +15,5 @@ public partial class Convention
 
     public DateOnly EndDate { get; set; }
 
-    public int MinistryId { get; set; }
-    public Ministry Ministry { get; set; } = null!;
+    ICollection<ConventionAttendee> ConventionAttendees { get; set; } = [];
 }

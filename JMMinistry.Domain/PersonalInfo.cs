@@ -24,6 +24,7 @@ public partial class PersonalInfo: IdentityUser
 
     public DateOnly Birthday { get; set; }
 
+    public DateTime LastAccess { get; set; }
 
     public int? GainedId { get; set; }
     /// <summary>
@@ -45,7 +46,8 @@ public partial class PersonalInfo: IdentityUser
     public ICollection<ConventionAttendee> Conventions { get; set; } = Array.Empty<ConventionAttendee>();
     public ICollection<ConventionAttendee> ConventionInvites { get; set; } = Array.Empty<ConventionAttendee>();
     public ICollection<CellAttendance> CellAttendances { get; set; } = Array.Empty<CellAttendance>();
-    public ICollection<MinistryManagement> MinistryManagements { get; set; } = Array.Empty<MinistryManagement>();
+
+    public ICollection<Role> Roles { get; set; } = Array.Empty<Role>();
 
     /// <summary>
     /// Gained by the person

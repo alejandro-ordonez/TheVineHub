@@ -22,11 +22,15 @@ namespace JMMinistry.Application.Features.User.Commands.Authenticate
         {
             var user = await userManager.Users.FirstOrDefaultAsync(user => user.Document == request.Document, cancellationToken) ?? throw new AuthenticationException("User not found");
 
-            if (user.PasswordHash == null)
+            if (await userManager.HasPasswordAsync(user))
                 throw new AuthenticationException("The user must set a password first");
 
             if (!await userManager.CheckPasswordAsync(user, request.Password))
                 throw new AuthenticationException($"Incorrect credentials for: {request.Document}");
+
+            user.LastAccess = DateTime.UtcNow;
+            await userManager.UpdateAsync(user);
+            
 
             var token = await CreateJwtToken(user);
 

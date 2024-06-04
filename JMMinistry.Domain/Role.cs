@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace JMMinistry.Domain;
 
-public partial class Ministry: IdentityRole
+public partial class Role: IdentityRole
 {
     public string Description { get; set; } = string.Empty;
 
-    public ICollection<MinistryManagement> MinistryManagements { get; set; } = Array.Empty<MinistryManagement>();
+    public ICollection<PersonalInfo> Users { get; set; } = [];
 }

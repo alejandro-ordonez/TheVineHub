@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Infrastructure.Persistence;
 
-public partial class JmDbContext : IdentityDbContext<PersonalInfo>
+public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
 {
     public JmDbContext()
     {
@@ -39,9 +39,7 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo>
 
     public virtual DbSet<MeetingAttendance> MeetingAttendances { get; set; }
 
-    public virtual DbSet<Ministry> Ministries { get; set; }
-
-    public virtual DbSet<MinistryManagement> MinistryManagements { get; set; }
+    public virtual DbSet<Role> Ministries { get; set; }
 
     public virtual DbSet<PersonalInfo> PersonalInfos { get; set; }
 
@@ -49,6 +47,8 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder
             .HasPostgresEnum("meeting_type", ["one", "rocks", "family"])
             .HasPostgresEnum("member_type", ["coordinator", "staff", "assistant"])

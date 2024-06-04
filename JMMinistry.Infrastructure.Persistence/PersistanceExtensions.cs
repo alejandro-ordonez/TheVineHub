@@ -1,4 +1,5 @@
-﻿using JMMinistry.Domain;
+﻿using JMMinistry.Common;
+using JMMinistry.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.Web.CodeGeneration.Design;
 using System;
 using System.Collections.Generic;
@@ -46,10 +48,46 @@ namespace JMMinistry.Infrastructure.Persistence
                 //Seed Default Users
                 logger.LogInformation("Seeding initial values...");
                 var userManager = services.GetRequiredService<UserManager<PersonalInfo>>();
-                var roleManager = services.GetRequiredService<RoleManager<Ministry>>(new Ministry { Name = "Gain", Description = "Ministry that manages the new members",  });
-                
-                await roleManager.CreateAsync()
+                var roleManager = services.GetRequiredService<RoleManager<Role>>();
 
+
+                List<Role> ministries =
+                    [
+                        new Role { Name = Roles.Admin.ToString(), Description = "Admin of the system" },
+                        new Role { Name = Roles.Attendance.ToString(), Description = "Manages the attendance to the meetings" },
+                        new Role { Name = Roles.Cells.ToString(), Description = "Manages the cells in the ministry" },
+                        new Role { Name = Roles.Conventions.ToString(), Description = "Manages the conventions and its attendees" },
+                        new Role { Name = Roles.Evangelism.ToString(), Description = "Coordinates the activities to evangelize"},
+                        new Role { Name = Roles.Gain.ToString(), Description = "Manages the new ones invited to the ministry and the church"},
+                        new Role { Name = Roles.Leader.ToString(), Description = "Manages their own cells" },
+                        new Role { Name = Roles.Regular.ToString(), Description = "Regular role" },
+                        new Role { Name = Roles.SchoolDirector.ToString(), Description = "Manages the schools in the ministry"},
+                        new Role { Name = Roles.Coordinator.ToString(), Description = "Coordinator of a given Ministry"},
+                        new Role { Name = Roles.Assistant.ToString(), Description = "Assistant to the coordinator of a given ministry"}
+                    ];
+
+                // No need to populate already inserted.
+                if (!roleManager.Roles.Any())
+                {
+                    foreach (var ministry in ministries)
+                        await roleManager.CreateAsync(ministry);
+                }
+
+                var defaultUser = services.GetRequiredService<IOptions<DefaultUser>>().Value;
+
+                if (defaultUser != null &&  !await userManager.Users.AnyAsync(user => user.Document == defaultUser.Document))
+                {
+                    var userIdentity = new PersonalInfo
+                    {
+                        Name = defaultUser.Name,
+                        LastName = defaultUser.LastName,
+                        Document = defaultUser.Document
+                    };
+
+                    await userManager.CreateAsync(userIdentity, defaultUser.Password);
+
+                    await userManager.AddToRoleAsync(userIdentity, Roles.Admin.ToString());
+                }
             }
             catch (Exception ex)
             {

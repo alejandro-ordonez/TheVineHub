@@ -17,7 +17,4 @@ public partial class Event
     [Required]
     public DateOnly EndDate { get; set; }
 
-    [Required]
-    public int MinistryId { get; set; }
-    public Ministry Ministry { get; set; } = null!;
 }

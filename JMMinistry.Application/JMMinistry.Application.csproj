@@ -15,10 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Common\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\JMMinistry.Common\JMMinistry.Common.csproj" />
     <ProjectReference Include="..\JMMinistry.Domain\JMMinistry.Domain.csproj" />
     <ProjectReference Include="..\JMMinistry.Infrastructure.Persistence\JMMinistry.Infrastructure.Persistence.csproj" />
   </ItemGroup>

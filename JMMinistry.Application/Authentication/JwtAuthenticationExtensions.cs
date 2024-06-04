@@ -17,7 +17,7 @@ namespace JMMinistry.Application.Authentication
     {
         public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddIdentity<PersonalInfo, Ministry>()
+            services.AddIdentity<PersonalInfo, Role>()
                 .AddEntityFrameworkStores<JmDbContext>();
 
             //Adding Authentication - JWT
