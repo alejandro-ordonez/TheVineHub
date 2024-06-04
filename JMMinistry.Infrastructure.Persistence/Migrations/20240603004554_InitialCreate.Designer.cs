@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace JMMinistry.Infrastructure.Persistance.Migrations
+namespace JMMinistry.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(JmDbContext))]
     [Migration("20240603004554_InitialCreate")]

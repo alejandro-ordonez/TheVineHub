@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\JMMinistry.Application\JMMinistry.Application.csproj" />
+    <ProjectReference Include="..\JMMinistry.Application\JMMinistry.Application.csproj" />
   </ItemGroup>
 
 </Project>

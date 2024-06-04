@@ -1,5 +1,6 @@
 ﻿using JMMinistry.Application.User.Commands.Authenticate;
 using JMMinistry.Application.User.Commands.CreateUser;
+using JMMinistry.Application.User.Commands.ImportUsers;
 using JMMinistry.Application.User.Dtos;
 using JMMinistry.Application.User.Queries;
 using MediatR;
@@ -14,6 +15,12 @@ namespace JMMinistry.API.Controllers
     [ApiController]
     public class UserController(IMediator mediator) : ControllerBase
     {
+        [HttpPost("auth")]
+        public async Task<ActionResult<TokenResult>> Authenticate(AuthenticateCommand authenticate)
+        {
+            return Ok(await mediator.Send(authenticate));
+        }
+
 
         [HttpPost("register")]
         public async Task<ActionResult> Register(CreateUserCommand createUserCommand)
@@ -22,11 +29,16 @@ namespace JMMinistry.API.Controllers
             return Created();
         }
 
-        [HttpPost("auth")]
-        public async Task<ActionResult<TokenResult>> Authenticate(AuthenticateCommand authenticate)
+        [HttpPost("import")]
+        public async Task<ActionResult> Import(IFormFile formFile)
         {
-            return Ok(await mediator.Send(authenticate));
+            if (formFile == null)
+                return BadRequest("File not submitted");
+
+            await mediator.Send(new ImportUsersCommand { File = formFile });
+            return Ok();
         }
+
 
         [HttpGet]
         public async Task<ActionResult<UserInfoDto>> GetUserInfo()
