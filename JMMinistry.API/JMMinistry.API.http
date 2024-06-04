@@ -1,0 +1,6 @@
+@JMMinistry.API_HostAddress = http://localhost:5217
+
+GET {{JMMinistry.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
