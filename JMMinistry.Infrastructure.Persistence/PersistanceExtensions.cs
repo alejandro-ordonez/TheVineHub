@@ -25,6 +25,8 @@ namespace JMMinistry.Infrastructure.Persistence
                 options.UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(JmDbContext).Assembly.FullName)));
+
+            services.Configure<DefaultUser>(configuration.GetSection(nameof(DefaultUser)));
         }
 
         public static async void InitializeDb(this IHost app)
@@ -81,12 +83,25 @@ namespace JMMinistry.Infrastructure.Persistence
                     {
                         Name = defaultUser.Name,
                         LastName = defaultUser.LastName,
-                        Document = defaultUser.Document
+                        Document = defaultUser.Document,
+                        UserName = $"{defaultUser.Name.Split(' ')[0]}.{defaultUser.Name.Split(' ')[0]}",
                     };
 
-                    await userManager.CreateAsync(userIdentity, defaultUser.Password);
+                    var createUserResult = await userManager.CreateAsync(userIdentity, defaultUser.Password);
 
-                    await userManager.AddToRoleAsync(userIdentity, Roles.Admin.ToString());
+                    if (!createUserResult.Succeeded)
+                    {
+                        logger.LogError("There was an error creating the default user, errors {errors}", string.Join("\n", createUserResult.Errors));
+                        return;
+                    }
+
+                    var addRolesResult = await userManager.AddToRoleAsync(userIdentity, Roles.Admin.ToString());
+
+                    if (!addRolesResult.Succeeded)
+                    {
+                        logger.LogError("There was an error creating the default user, errors {errors}", string.Join("\n", addRolesResult.Errors));
+                        return;
+                    }
                 }
             }
             catch (Exception ex)
