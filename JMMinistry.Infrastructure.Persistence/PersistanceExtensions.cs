@@ -84,7 +84,7 @@ namespace JMMinistry.Infrastructure.Persistence
                         Name = defaultUser.Name,
                         LastName = defaultUser.LastName,
                         Document = defaultUser.Document,
-                        UserName = $"{defaultUser.Name.Split(' ')[0]}.{defaultUser.Name.Split(' ')[0]}",
+                        UserName = $"{defaultUser.Name.Split(' ')[0]}.{defaultUser.LastName.Split(' ')[0]}",
                     };
 
                     var createUserResult = await userManager.CreateAsync(userIdentity, defaultUser.Password);

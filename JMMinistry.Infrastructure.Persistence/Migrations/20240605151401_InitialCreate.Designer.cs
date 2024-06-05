@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JMMinistry.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(JmDbContext))]
-    [Migration("20240604232235_InitialCreate")]
+    [Migration("20240605151401_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -386,14 +386,13 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<DateOnly>("Birthday")
+                    b.Property<DateOnly?>("Birthday")
                         .HasColumnType("date");
 
                     b.Property<int?>("CellId")
                         .HasColumnType("integer");
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -413,7 +412,7 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Property<int?>("GainedId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("LastAccess")
+                    b.Property<DateTime?>("LastAccess")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LastName")
@@ -421,7 +420,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Locality")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
@@ -435,7 +433,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Neighborhood")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("NormalizedEmail")
@@ -479,7 +476,7 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("PersonalInfo", (string)null);
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.Role", b =>
@@ -509,7 +506,7 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("Role", (string)null);
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.School", b =>
@@ -611,11 +608,18 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Property<string>("RoleId")
                         .HasColumnType("text");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(34)
+                        .HasColumnType("character varying(34)");
+
                     b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("RoleId");
-
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUserRole<string>");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -637,19 +641,13 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("PersonalInfoRole", b =>
+            modelBuilder.Entity("JMMinistry.Domain.PersonalInfoRole", b =>
                 {
-                    b.Property<string>("RolesId")
-                        .HasColumnType("text");
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserRole<string>");
 
-                    b.Property<string>("UsersId")
-                        .HasColumnType("text");
+                    b.HasIndex("RoleId");
 
-                    b.HasKey("RolesId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("PersonalInfoRole");
+                    b.HasDiscriminator().HasValue("PersonalInfoRole");
                 });
 
             modelBuilder.Entity("CellAttendancePersonalInfo", b =>
@@ -837,21 +835,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JMMinistry.Domain.PersonalInfo", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
                     b.HasOne("JMMinistry.Domain.PersonalInfo", null)
@@ -861,19 +844,23 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PersonalInfoRole", b =>
+            modelBuilder.Entity("JMMinistry.Domain.PersonalInfoRole", b =>
                 {
-                    b.HasOne("JMMinistry.Domain.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
+                    b.HasOne("JMMinistry.Domain.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("JMMinistry.Domain.PersonalInfo", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
+                    b.HasOne("JMMinistry.Domain.PersonalInfo", "PersonalInfo")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PersonalInfo");
+
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.Cell", b =>
@@ -905,6 +892,13 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Navigation("Gained");
 
                     b.Navigation("MeetingAttendances");
+
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("JMMinistry.Domain.Role", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

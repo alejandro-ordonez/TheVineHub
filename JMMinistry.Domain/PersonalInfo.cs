@@ -14,23 +14,23 @@ public partial class PersonalInfo: IdentityUser
 
     public string LastName { get; set; } = null!;
 
-    public string City { get; set; } = null!;
+    public string? City { get; set; }
 
-    public string Locality { get; set; } = null!;
+    public string? Locality { get; set; }
 
-    public string Neighborhood { get; set; } = null!;
+    public string? Neighborhood { get; set; }
 
     public string? Address { get; set; }
 
-    public DateOnly Birthday { get; set; }
+    public DateOnly? Birthday { get; set; }
 
-    public DateTime LastAccess { get; set; }
+    public DateTime? LastAccess { get; set; }
 
     public int? GainedId { get; set; }
     /// <summary>
     /// Record when the person was gained.
     /// </summary>
-    public Gained? GainedRecord { get; set; } = null!;
+    public Gained? GainedRecord { get; set; }
 
 
     public int? CellId { get; set; }
@@ -47,7 +47,7 @@ public partial class PersonalInfo: IdentityUser
     public ICollection<ConventionAttendee> ConventionInvites { get; set; } = Array.Empty<ConventionAttendee>();
     public ICollection<CellAttendance> CellAttendances { get; set; } = Array.Empty<CellAttendance>();
 
-    public ICollection<Role> Roles { get; set; } = Array.Empty<Role>();
+    public virtual ICollection<PersonalInfoRole> UserRoles { get; set; } = [];
 
     /// <summary>
     /// Gained by the person

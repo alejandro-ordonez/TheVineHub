@@ -23,7 +23,7 @@ namespace JMMinistry.Application.Exceptions
                 response.Errors = fluentException.Errors.Select(error => error.ErrorMessage).ToArray();
             }
 
-            if (exception is ArgumentException || exception is AuthenticationException)
+            else if (exception is ArgumentException || exception is AuthenticationException)
             {
                 response.Details = "Your request was incorrect";
                 httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;

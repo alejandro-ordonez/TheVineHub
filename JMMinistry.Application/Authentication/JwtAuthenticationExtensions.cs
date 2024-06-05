@@ -39,9 +39,9 @@ namespace JMMinistry.Application.Authentication
                         ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero,
 
-                        ValidIssuer = configuration["JWT:Issuer"],
-                        ValidAudience = configuration["JWT:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"] ?? throw new Exception("No security key Provided")))
+                        ValidIssuer = configuration["JwtSettings:Issuer"],
+                        ValidAudience = configuration["JwtSettings:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"] ?? throw new Exception("No security key Provided")))
                     };
                 });
         }

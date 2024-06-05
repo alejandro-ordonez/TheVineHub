@@ -1,11 +1,11 @@
 using JMMinistry.Application;
 using JMMinistry.Application.Authentication;
+using JMMinistry.Application.Exceptions;
 using JMMinistry.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Services.AddApplicationLayer(builder.Configuration);
@@ -15,6 +15,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 app.InitializeDb();
 
 // Configure the HTTP request pipeline.

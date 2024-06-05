@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using JMMinistry.Application.Authentication;
+using JMMinistry.Application.Configuration;
+using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Pipelines;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,10 @@ namespace JMMinistry.Application
     {
         public static void AddApplicationLayer(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddExceptionHandler<GlobalExceptionHandler>();
+            services.AddProblemDetails();
+
+            services.Configure<JWTSettings>(configuration.GetSection(nameof(JWTSettings)));
             services.AddJwtAuthentication(configuration);
 
             services.AddMediatR(cfg =>

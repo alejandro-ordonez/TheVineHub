@@ -32,21 +32,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetRoles",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Conventions",
                 columns: table => new
                 {
@@ -77,6 +62,21 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Role",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Role", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Schools",
                 columns: table => new
                 {
@@ -104,9 +104,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        name: "FK_AspNetRoleClaims_Role_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
+                        principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -209,53 +209,18 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "text", nullable: false),
-                    RoleId = table.Column<string>(type: "text", nullable: false)
+                    RoleId = table.Column<string>(type: "text", nullable: false),
+                    Discriminator = table.Column<string>(type: "character varying(34)", maxLength: 34, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        name: "FK_AspNetUserRoles_Role_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
+                        principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Document = table.Column<string>(type: "text", nullable: true),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
-                    City = table.Column<string>(type: "text", nullable: false),
-                    Locality = table.Column<string>(type: "text", nullable: false),
-                    Neighborhood = table.Column<string>(type: "text", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: true),
-                    Birthday = table.Column<DateOnly>(type: "date", nullable: false),
-                    LastAccess = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    GainedId = table.Column<int>(type: "integer", nullable: true),
-                    CellId = table.Column<int>(type: "integer", nullable: true),
-                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -270,10 +235,36 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CellAttendance",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CellId = table.Column<int>(type: "integer", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CellAttendance", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CellAttendancePersonalInfo",
+                columns: table => new
+                {
+                    AttendeesId = table.Column<string>(type: "text", nullable: false),
+                    CellAttendancesId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CellAttendancePersonalInfo", x => new { x.AttendeesId, x.CellAttendancesId });
                     table.ForeignKey(
-                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
+                        name: "FK_CellAttendancePersonalInfo_CellAttendance_CellAttendancesId",
+                        column: x => x.CellAttendancesId,
+                        principalTable: "CellAttendance",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -291,12 +282,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cells", x => x.CellId);
-                    table.ForeignKey(
-                        name: "FK_Cells_AspNetUsers_LeaderId",
-                        column: x => x.LeaderId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -309,12 +294,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ClassAttendancePersonalInfo", x => new { x.AttendeesId, x.ClassAttendancesId });
-                    table.ForeignKey(
-                        name: "FK_ClassAttendancePersonalInfo_AspNetUsers_AttendeesId",
-                        column: x => x.AttendeesId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ClassAttendancePersonalInfo_ClassAttendances_ClassAttendanc~",
                         column: x => x.ClassAttendancesId,
@@ -337,12 +316,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ClassStudents", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ClassStudents_AspNetUsers_StudentId",
-                        column: x => x.StudentId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ClassStudents_Classes_ClassId",
                         column: x => x.ClassId,
@@ -367,17 +340,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_ConventionAttendees", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ConventionAttendees_AspNetUsers_AttendeeId",
-                        column: x => x.AttendeeId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ConventionAttendees_AspNetUsers_InvitedById",
-                        column: x => x.InvitedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_ConventionAttendees_Conventions_ConventionId",
                         column: x => x.ConventionId,
                         principalTable: "Conventions",
@@ -401,11 +363,52 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Gaineds", x => x.GainedId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PersonalInfo",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "text", nullable: false),
+                    Document = table.Column<string>(type: "text", nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
+                    City = table.Column<string>(type: "text", nullable: true),
+                    Locality = table.Column<string>(type: "text", nullable: true),
+                    Neighborhood = table.Column<string>(type: "text", nullable: true),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    Birthday = table.Column<DateOnly>(type: "date", nullable: true),
+                    LastAccess = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    GainedId = table.Column<int>(type: "integer", nullable: true),
+                    CellId = table.Column<int>(type: "integer", nullable: true),
+                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersonalInfo", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Gaineds_AspNetUsers_InvitedById",
-                        column: x => x.InvitedById,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        name: "FK_PersonalInfo_Cells_CellId",
+                        column: x => x.CellId,
+                        principalTable: "Cells",
+                        principalColumn: "CellId");
+                    table.ForeignKey(
+                        name: "FK_PersonalInfo_Gaineds_GainedId",
+                        column: x => x.GainedId,
+                        principalTable: "Gaineds",
+                        principalColumn: "GainedId");
                 });
 
             migrationBuilder.CreateTable(
@@ -422,90 +425,16 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 {
                     table.PrimaryKey("PK_MeetingAttendances", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MeetingAttendances_AspNetUsers_PersonId",
+                        name: "FK_MeetingAttendances_PersonalInfo_PersonId",
                         column: x => x.PersonId,
-                        principalTable: "AspNetUsers",
+                        principalTable: "PersonalInfo",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PersonalInfoRole",
-                columns: table => new
-                {
-                    RolesId = table.Column<string>(type: "text", nullable: false),
-                    UsersId = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PersonalInfoRole", x => new { x.RolesId, x.UsersId });
-                    table.ForeignKey(
-                        name: "FK_PersonalInfoRole_AspNetRoles_RolesId",
-                        column: x => x.RolesId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PersonalInfoRole_AspNetUsers_UsersId",
-                        column: x => x.UsersId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CellAttendance",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CellId = table.Column<int>(type: "integer", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CellAttendance", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CellAttendance_Cells_CellId",
-                        column: x => x.CellId,
-                        principalTable: "Cells",
-                        principalColumn: "CellId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CellAttendancePersonalInfo",
-                columns: table => new
-                {
-                    AttendeesId = table.Column<string>(type: "text", nullable: false),
-                    CellAttendancesId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CellAttendancePersonalInfo", x => new { x.AttendeesId, x.CellAttendancesId });
-                    table.ForeignKey(
-                        name: "FK_CellAttendancePersonalInfo_AspNetUsers_AttendeesId",
-                        column: x => x.AttendeesId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CellAttendancePersonalInfo_CellAttendance_CellAttendancesId",
-                        column: x => x.CellAttendancesId,
-                        principalTable: "CellAttendance",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "RoleNameIndex",
-                table: "AspNetRoles",
-                column: "NormalizedName",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -521,28 +450,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "EmailIndex",
-                table: "AspNetUsers",
-                column: "NormalizedEmail");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_CellId",
-                table: "AspNetUsers",
-                column: "CellId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_GainedId",
-                table: "AspNetUsers",
-                column: "GainedId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
-                table: "AspNetUsers",
-                column: "NormalizedUserName",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Assignments_SchoolId",
@@ -615,58 +522,137 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 column: "PersonId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersonalInfoRole_UsersId",
-                table: "PersonalInfoRole",
-                column: "UsersId");
+                name: "EmailIndex",
+                table: "PersonalInfo",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonalInfo_CellId",
+                table: "PersonalInfo",
+                column: "CellId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonalInfo_GainedId",
+                table: "PersonalInfo",
+                column: "GainedId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "PersonalInfo",
+                column: "NormalizedUserName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "Role",
+                column: "NormalizedName",
+                unique: true);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                name: "FK_AspNetUserClaims_PersonalInfo_UserId",
                 table: "AspNetUserClaims",
                 column: "UserId",
-                principalTable: "AspNetUsers",
+                principalTable: "PersonalInfo",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                name: "FK_AspNetUserLogins_PersonalInfo_UserId",
                 table: "AspNetUserLogins",
                 column: "UserId",
-                principalTable: "AspNetUsers",
+                principalTable: "PersonalInfo",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                name: "FK_AspNetUserRoles_PersonalInfo_UserId",
                 table: "AspNetUserRoles",
                 column: "UserId",
-                principalTable: "AspNetUsers",
+                principalTable: "PersonalInfo",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_Cells_CellId",
-                table: "AspNetUsers",
-                column: "CellId",
-                principalTable: "Cells",
-                principalColumn: "CellId");
+                name: "FK_AspNetUserTokens_PersonalInfo_UserId",
+                table: "AspNetUserTokens",
+                column: "UserId",
+                principalTable: "PersonalInfo",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_AspNetUsers_Gaineds_GainedId",
-                table: "AspNetUsers",
-                column: "GainedId",
-                principalTable: "Gaineds",
-                principalColumn: "GainedId");
+                name: "FK_CellAttendance_Cells_CellId",
+                table: "CellAttendance",
+                column: "CellId",
+                principalTable: "Cells",
+                principalColumn: "CellId",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_CellAttendancePersonalInfo_PersonalInfo_AttendeesId",
+                table: "CellAttendancePersonalInfo",
+                column: "AttendeesId",
+                principalTable: "PersonalInfo",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Cells_PersonalInfo_LeaderId",
+                table: "Cells",
+                column: "LeaderId",
+                principalTable: "PersonalInfo",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ClassAttendancePersonalInfo_PersonalInfo_AttendeesId",
+                table: "ClassAttendancePersonalInfo",
+                column: "AttendeesId",
+                principalTable: "PersonalInfo",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ClassStudents_PersonalInfo_StudentId",
+                table: "ClassStudents",
+                column: "StudentId",
+                principalTable: "PersonalInfo",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ConventionAttendees_PersonalInfo_AttendeeId",
+                table: "ConventionAttendees",
+                column: "AttendeeId",
+                principalTable: "PersonalInfo",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ConventionAttendees_PersonalInfo_InvitedById",
+                table: "ConventionAttendees",
+                column: "InvitedById",
+                principalTable: "PersonalInfo",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Gaineds_PersonalInfo_InvitedById",
+                table: "Gaineds",
+                column: "InvitedById",
+                principalTable: "PersonalInfo",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Cells_AspNetUsers_LeaderId",
+                name: "FK_Cells_PersonalInfo_LeaderId",
                 table: "Cells");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Gaineds_AspNetUsers_InvitedById",
+                name: "FK_Gaineds_PersonalInfo_InvitedById",
                 table: "Gaineds");
 
             migrationBuilder.DropTable(
@@ -709,7 +695,7 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 name: "MeetingAttendances");
 
             migrationBuilder.DropTable(
-                name: "PersonalInfoRole");
+                name: "Role");
 
             migrationBuilder.DropTable(
                 name: "CellAttendance");
@@ -721,16 +707,13 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 name: "Conventions");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
                 name: "Classes");
 
             migrationBuilder.DropTable(
                 name: "Schools");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "PersonalInfo");
 
             migrationBuilder.DropTable(
                 name: "Cells");

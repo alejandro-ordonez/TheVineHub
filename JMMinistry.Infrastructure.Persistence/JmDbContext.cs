@@ -54,6 +54,27 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
             .HasPostgresEnum("member_type", ["coordinator", "staff", "assistant"])
             .HasPostgresEnum("ministry_status", ["guess", "gained", "consolidating", "disciple", "leader"]);
 
+        modelBuilder.Entity<PersonalInfo>(user =>
+        {
+            user.HasMany(e => e.UserRoles)
+                .WithOne(e => e.PersonalInfo)
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
+
+            user.ToTable(nameof(PersonalInfo));
+        });
+
+        modelBuilder.Entity<Role>(b =>
+        {
+            // Each Role can have many entries in the UserRole join table
+            b.HasMany(role => role.UserRoles)
+                .WithOne(user => user.Role)
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
+
+            b.ToTable(nameof(Role));
+        });
+
         modelBuilder.Entity<Cell>()
             .HasMany(c => c.Disciples)
             .WithOne(p => p.Cell)
