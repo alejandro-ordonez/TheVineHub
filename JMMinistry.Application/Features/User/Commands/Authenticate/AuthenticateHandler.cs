@@ -1,5 +1,5 @@
 ﻿using JMMinistry.Application.Configuration;
-using JMMinistry.Application.Features.User.Dtos;
+using JMMinistry.Common.Dtos.User;
 using JMMinistry.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Identity;

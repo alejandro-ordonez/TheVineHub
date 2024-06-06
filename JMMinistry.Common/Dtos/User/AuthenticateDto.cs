@@ -1,15 +1,15 @@
-﻿using JMMinistry.Common.Dtos.User;
-using MediatR;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.Features.User.Queries
+namespace JMMinistry.Common.Dtos.User
 {
-    public class GetUserInfoQuery : IRequest<UserInfoDto>
+    public class AuthenticateDto
     {
         public string Document { get; set; } = string.Empty;
+
+        public string Password { get; set; } = string.Empty;
     }
 }

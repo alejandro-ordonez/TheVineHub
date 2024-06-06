@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.Features.User.Dtos
+namespace JMMinistry.Common.Dtos.User
 {
     public class UserInfoDto
     {
@@ -20,7 +20,7 @@ namespace JMMinistry.Application.Features.User.Dtos
 
         public string Neighborhood { get; set; } = null!;
 
-        public string? Address { get; set; }
+        public string Address { get; set; } = null!;
 
         public DateOnly Birthday { get; set; }
     }

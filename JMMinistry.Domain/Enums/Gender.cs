@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Domain.Enums
 {
-    public enum MinistryStatus
+    public enum Gender
     {
-        Gained,
-        InACell,
-        Timothy,
-        Sent,
-        Leader
+        Male,
+        Female
     }
 }

@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace JMMinistry.Domain;
 
 public partial class School
 {
+    [Key]
     public int Id { get; set; }
 
-    public DateOnly StartDate { get; set; }
+    public string SchoolName { get; set; } = null!;
+    public string Description { get; set; } = null!;
 
-    public DateOnly EndDate { get; set; }
+    public ICollection<Class> Classes { get; set; } = [];
 }

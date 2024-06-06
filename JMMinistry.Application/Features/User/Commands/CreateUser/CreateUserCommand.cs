@@ -1,4 +1,4 @@
-﻿using JMMinistry.Application.Features.User.Dtos;
+﻿using JMMinistry.Common.Dtos.User;
 using MediatR;
 using System;
 using System.Collections.Generic;

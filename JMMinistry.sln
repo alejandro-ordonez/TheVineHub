@@ -7,16 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JMMinistry.Web", "JMMinistr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JMMinistry.API", "JMMinistry.API\JMMinistry.API.csproj", "{A5D23019-DE13-4552-952C-27F1E7A9B5A8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JMMinistry.DB", "JMMinistry.DB", "{8E4FFC91-3B00-4CDA-8A1D-16263BDBAA51}"
-	ProjectSection(SolutionItems) = preProject
-		JMMinistry.DB\db.sql = JMMinistry.DB\db.sql
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JMMinistry.Deployment", "JMMinistry.Deployment", "{A7E3A60B-E5EF-429D-8E47-A9810555FF03}"
-EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A79B354B-4170-4D71-B41E-209364AD6837}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JMMinistry.Server", "JMMinistry.Server", "{19D06C88-3CFD-4765-A41F-13F27A84AC67}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{19D06C88-3CFD-4765-A41F-13F27A84AC67}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JMMinistry.Domain", "JMMinistry.Domain\JMMinistry.Domain.csproj", "{3C0B139B-7C09-41CE-A152-13CB9B8DD50D}"
 EndProject
@@ -24,7 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JMMinistry.Application", "J
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JMMinistry.Infrastructure.Persistence", "JMMinistry.Infrastructure.Persistence\JMMinistry.Infrastructure.Persistence.csproj", "{4B9CBB5B-E15B-43B6-B3A6-80A6A000AA00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JMMinistry.Common", "JMMinistry.Common\JMMinistry.Common.csproj", "{C96E46A6-E71C-4BE1-96E3-E910749C6F87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JMMinistry.Common", "JMMinistry.Common\JMMinistry.Common.csproj", "{C96E46A6-E71C-4BE1-96E3-E910749C6F87}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{FF1C821D-35D3-4DA9-8CCF-25234F8F6415}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JMMinistry.CQRS", "JMMinistry.CQRS\JMMinistry.CQRS.csproj", "{2F76C1EE-13FF-437F-9421-473539A7475C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,6 +87,14 @@ Global
 		{C96E46A6-E71C-4BE1-96E3-E910749C6F87}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C96E46A6-E71C-4BE1-96E3-E910749C6F87}.Release|x64.ActiveCfg = Release|Any CPU
 		{C96E46A6-E71C-4BE1-96E3-E910749C6F87}.Release|x64.Build.0 = Release|Any CPU
+		{2F76C1EE-13FF-437F-9421-473539A7475C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F76C1EE-13FF-437F-9421-473539A7475C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F76C1EE-13FF-437F-9421-473539A7475C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2F76C1EE-13FF-437F-9421-473539A7475C}.Debug|x64.Build.0 = Debug|Any CPU
+		{2F76C1EE-13FF-437F-9421-473539A7475C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F76C1EE-13FF-437F-9421-473539A7475C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F76C1EE-13FF-437F-9421-473539A7475C}.Release|x64.ActiveCfg = Release|Any CPU
+		{2F76C1EE-13FF-437F-9421-473539A7475C}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,7 +104,8 @@ Global
 		{3C0B139B-7C09-41CE-A152-13CB9B8DD50D} = {19D06C88-3CFD-4765-A41F-13F27A84AC67}
 		{10D3C20F-73C9-4021-8C27-5CC9A2721592} = {19D06C88-3CFD-4765-A41F-13F27A84AC67}
 		{4B9CBB5B-E15B-43B6-B3A6-80A6A000AA00} = {19D06C88-3CFD-4765-A41F-13F27A84AC67}
-		{C96E46A6-E71C-4BE1-96E3-E910749C6F87} = {19D06C88-3CFD-4765-A41F-13F27A84AC67}
+		{C96E46A6-E71C-4BE1-96E3-E910749C6F87} = {FF1C821D-35D3-4DA9-8CCF-25234F8F6415}
+		{2F76C1EE-13FF-437F-9421-473539A7475C} = {FF1C821D-35D3-4DA9-8CCF-25234F8F6415}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {963BA140-F7FF-4CB1-8E37-50733D167495}
