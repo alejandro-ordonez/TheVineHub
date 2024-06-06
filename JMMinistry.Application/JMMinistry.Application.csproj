@@ -16,7 +16,9 @@
 
   <ItemGroup>
     <Folder Include="Common\" />
-    <Folder Include="Features\NewFolder\" />
+    <Folder Include="Features\Class\EditClass\" />
+    <Folder Include="Features\Class\CreateClassSession\" />
+    <Folder Include="Features\User\Commands\EditUser\" />
     <Folder Include="Services\" />
   </ItemGroup>
 

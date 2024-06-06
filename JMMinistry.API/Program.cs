@@ -5,6 +5,16 @@ using JMMinistry.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "CORS",
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:5048");
+                      });
+});
+
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddPersistenceLayer(builder.Configuration);

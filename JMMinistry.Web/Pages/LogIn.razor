@@ -1,0 +1,90 @@
+﻿@using JMMinistry.Common.Dtos.User
+@using JMMinistry.Web.Api
+@using JMMinistry.Web.Services
+@using JMMinistry.Web.Layout
+
+@inject IAuthService authService
+@inject IStringLocalizer<UIStrings> Loc
+@inject NavigationManager navigation
+
+@page "/auth"
+@layout EmptyLayout
+
+<div class="login-container">
+    <section class="column login-section">
+        <MudCard Style="flex-grow: 1;">
+            <MudForm Model="Model" @ref="form" Validation="AuthValidator.ValidateValue" ValidationDelay="0">
+
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h2">@Loc["Welcome"]</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+
+                <MudCardContent>
+                    <MudTextField @bind-Value="Model!.Document"
+                                  For="@(() => Model!.Document)"
+                                  Immediate="true"
+                                  Variant="Variant.Outlined"
+                                  Label="@Loc["Document"]" />
+
+                    <MudTextField @bind-Value="Model!.Password"
+                                  For="@(() => Model!.Password)"
+                                  Immediate="true"
+                                  Variant="Variant.Outlined"
+                                  Label="@Loc["Password"]" />
+
+                </MudCardContent>
+
+                <MudCardActions Style="justify-content: center;">
+                    <MudButton Variant="Variant.Filled" 
+                               Color="Color.Primary" 
+                               OnClick="@(async () => await Submit())">
+                               @Loc["LogIn"]
+                    </MudButton>
+                </MudCardActions>
+            </MudForm>
+        </MudCard>
+    </section>
+
+    <section class="column side-section">
+
+    </section>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public AuthenticateDto? Model { get; set; }
+
+    public AuthenticateValidator AuthValidator = new AuthenticateValidator();
+
+    [Inject] 
+    ISnackbar? SnackBar { get; set; }
+
+    MudForm? form;
+
+    protected override void OnInitialized()
+    {
+        Model ??= new AuthenticateDto();
+    }
+
+    private async Task Submit()
+    {
+        form?.Validate();
+
+        if(!form?.IsValid ?? false)
+        {
+            SnackBar?.Add(Loc["VerifyYourInputs"], Severity.Error);
+            return;
+        }
+
+        var result = await authService.AuthenticateAsync(Model!);
+
+        if (result)
+        {
+            navigation.NavigateTo("/");
+            SnackBar?.Add(Loc["AuthenticationSuccess"], Severity.Success);
+        }
+    }
+}
