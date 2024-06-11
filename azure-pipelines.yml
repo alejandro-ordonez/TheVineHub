@@ -6,14 +6,31 @@
 trigger:
 - master
 
+
 pool:
-  vmImage: ubuntu-latest
+  name: Default
+  demands: 
+  - Agent.Name -equals Raspberry
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+steps:  
+- task: CmdLine@2
+  displayName: 'Stop containers'
+  inputs:
+    script: 'docker compose down'
+    workingDirectory: '/home/src/JMMinistry'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: CmdLine@2
+  displayName: 'Update repo'
+  inputs:
+    script: 'git fetch && git pull'
+    workingDirectory: '/home/src/JMMinistry'
+
+- task: CmdLine@2
+  displayName: 'Build and run containers'
+  inputs:
+    script: 'docker compose up -d --build'
+    workingDirectory: '/home/src/JMMinistry'
+
+
+
+
