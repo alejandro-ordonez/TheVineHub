@@ -36,9 +36,6 @@ services:
             dockerfile: JMMinistry.API/Dockerfile
         ports:
             - "62421:8080"
-            - "64984:8081"
-        volumes:
-            - /app-data/certs/:/data/certs/
         networks:
             - jm-network
         extra_hosts:
