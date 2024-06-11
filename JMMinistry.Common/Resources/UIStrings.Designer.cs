@@ -88,11 +88,29 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to load resource.
+        /// </summary>
+        public static string FailedToLoadResource {
+            get {
+                return ResourceManager.GetString("FailedToLoadResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log in.
         /// </summary>
         public static string LogIn {
             get {
                 return ResourceManager.GetString("LogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage.
+        /// </summary>
+        public static string Manage {
+            get {
+                return ResourceManager.GetString("Manage", resourceCulture);
             }
         }
         
@@ -111,6 +129,15 @@ namespace JMMinistry.Common.Resources {
         public static string Profile {
             get {
                 return ResourceManager.GetString("Profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schools.
+        /// </summary>
+        public static string Schools {
+            get {
+                return ResourceManager.GetString("Schools", resourceCulture);
             }
         }
         

@@ -5,10 +5,10 @@ namespace JMMinistry.Web.Api
 {
     public interface ISchoolApi
     {
-        Task CreateSchool(SchoolDto schoolDto);
+        Task CreateSchool(SchoolDto schoolDto, CancellationToken cancellationToken = default);
 
-        Task<Response<SchoolWithClassesDto>> GetSchool(int schoolId);
+        Task<Response<SchoolWithClassesDto>?> GetSchool(int schoolId, CancellationToken cancellationToken = default);
 
-        Task<Response<ICollection<SchoolDto>>> GetSchools();
+        Task<Response<IEnumerable<SchoolDto>>?> GetSchools(CancellationToken cancellationToken = default);
     }
 }

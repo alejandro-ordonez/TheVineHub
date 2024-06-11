@@ -1,4 +1,5 @@
 ﻿using JMMinistry.Common.Dtos.Class;
+using JMMinistry.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,7 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Common.Dtos.School
 {
-    public class SchoolDto
+    public class SchoolDto: CardModel<int>
     {
-        public int Id { get; set; }
-        public string SchoolName { get; set; } = null!;
-        public string Description { get; set; } = null!;
     }
 }

@@ -59,7 +59,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Pages\Schools.razor" />
+    <None Include="Pages\Schools\Schools.razor" />
   </ItemGroup>
 
 </Project>

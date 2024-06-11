@@ -6,7 +6,8 @@ namespace JMMinistry.Domain;
 public partial class Class
 {
     public int Id { get; set; }
-    public string ClassName { get; set; } = null!;
+    public string Name { get; set; } = null!;
+    public string Description { get; set; } = null!;
     public DateOnly StartDate { get; set; }
     public DateTime EndDate { get; set; }
 

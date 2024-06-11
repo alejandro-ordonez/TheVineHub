@@ -118,3 +118,8 @@ a, .btn-link {
 code {
     color: #c02d76;
 }
+
+.dynamic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))
+}

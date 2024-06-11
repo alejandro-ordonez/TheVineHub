@@ -1,0 +1,55 @@
+﻿
+@inject NavigationManager _navigator
+@inject ISchoolApi _api 
+@inject IStringLocalizer<UIStrings> _translator
+
+@page "/schools/{id:int}"
+@using JMMinistry.Common.Dtos.School
+@using JMMinistry.Web.Api
+
+<h3>SchoolDetails</h3>
+
+@if (!LoadSuccess)
+{
+    <div>@_translator["FailedToLoadResource"]</div>
+}
+
+else
+{
+    <h1>@School?.Name</h1>
+    <p>@School?.Description</p>
+
+    <div class="dynamic-grid">
+        @foreach(var classDto in School?.Classes ?? [])
+        {
+            <CardComponent BasePath="/class" CardModel="classDto" ModelType="int"/>
+        }
+    </div>
+}
+
+
+@code {
+
+    [Parameter]
+    public int? SchoolId { get; set; }
+
+    private SchoolWithClassesDto? School { get; set; }
+
+    private bool LoadSuccess { get; set; } = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        if(SchoolId == null)
+        {
+            _navigator.NavigateTo("/");
+            return;
+        }
+
+        var response = await _api.GetSchool(SchoolId.Value);
+        LoadSuccess = response?.Success ?? false;
+        School = response?.Data;
+    }
+}

@@ -1,0 +1,35 @@
+﻿@using JMMinistry.Common.Dtos.School
+@using JMMinistry.Web.Api
+
+@inject ISchoolApi _api
+@inject IStringLocalizer<UIStrings> _translator
+@inject NavigationManager _navigator
+
+@page "/schools"
+
+
+<h3>@_translator["Schools"]</h3>
+
+<div class="dynamic-grid">
+
+    @foreach(var school in SchoolList)
+    {
+        <CardComponent ModelType="int" CardModel="school" BasePath="/Schools"/>
+    }
+
+</div>
+
+
+@code {
+    IEnumerable<SchoolDto> SchoolList { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        SchoolList = (await _api.GetSchools())?.Data ?? [];
+    }
+
+    void OpenSchool(int schoolId)
+    {
+        _navigator.NavigateTo($"/schools/{schoolId}");
+    }
+}

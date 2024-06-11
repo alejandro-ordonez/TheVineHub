@@ -1,0 +1,46 @@
+﻿@using JMMinistry.Common.Models
+
+@typeparam ModelType where ModelType: IConvertible
+
+@inject NavigationManager _navigator
+@inject IStringLocalizer<UIStrings> _translator
+
+<MudCard>
+    <MudCardHeader>
+        <MudCardContent>
+
+        </MudCardContent>
+    </MudCardHeader>
+
+    <MudCard>
+        <MudCardMedia Image="images/door.jpg" Height="200" />
+        <MudCardContent>
+            <MudText Typo="Typo.h5">@CardModel?.Name</MudText>
+            <MudText Typo="Typo.body2">@CardModel?.Description</MudText>
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => OpenModel())">@_translator["Manage"]</MudButton>
+        </MudCardActions>
+    </MudCard>
+
+</MudCard>
+
+@code {
+
+    [Parameter]
+    public CardModel<ModelType>? CardModel { get; set; }
+
+    [Parameter]
+    public string BasePath { get; set; } = string.Empty;
+
+    void OpenModel()
+    {
+        if (string.IsNullOrEmpty(BasePath))
+            throw new ArgumentException("The Base path is required");
+
+        if (CardModel == null)
+            throw new ArgumentException("The model needs to be set");
+
+        _navigator.NavigateTo($"{BasePath}/{CardModel.Id}");
+    }
+}

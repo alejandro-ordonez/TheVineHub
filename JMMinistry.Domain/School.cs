@@ -9,7 +9,7 @@ public partial class School
     [Key]
     public int Id { get; set; }
 
-    public string SchoolName { get; set; } = null!;
+    public string Name { get; set; } = null!;
     public string Description { get; set; } = null!;
 
     public ICollection<Class> Classes { get; set; } = [];

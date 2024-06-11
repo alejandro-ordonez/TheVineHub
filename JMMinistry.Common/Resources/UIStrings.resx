@@ -126,14 +126,23 @@
   <data name="Document" xml:space="preserve">
     <value>Document</value>
   </data>
+  <data name="FailedToLoadResource" xml:space="preserve">
+    <value>Failed to load resource</value>
+  </data>
   <data name="LogIn" xml:space="preserve">
     <value>Log in</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Manage</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
   <data name="Profile" xml:space="preserve">
     <value>Profile</value>
+  </data>
+  <data name="Schools" xml:space="preserve">
+    <value>Schools</value>
   </data>
   <data name="User" xml:space="preserve">
     <value>User</value>
