@@ -4,10 +4,6 @@ using LettuceEncrypt;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddLettuceEncrypt()
-    .PersistDataToDirectory(new DirectoryInfo(builder.Configuration["CertsDir"] ?? "/certs"), builder.Configuration["CertPass"]);
-
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "CORS",
@@ -39,7 +35,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
