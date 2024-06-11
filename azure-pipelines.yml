@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+
+pool:
+  name: Default
+  demands: 
+  - Agent.Name -equals Raspberry
+
+steps:  
+- task: CmdLine@2
+  displayName: 'Stop containers'
+  inputs:
+    script: 'docker compose down'
+
+- task: CmdLine@2
+  displayName: 'Build and run containers'
+  inputs:
+    script: 'docker compose up -d --build'
+
+
+
+
