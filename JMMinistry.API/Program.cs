@@ -1,17 +1,19 @@
 using JMMinistry.Application;
 using JMMinistry.Infrastructure.Persistence;
+using LettuceEncrypt;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddLettuceEncrypt()
+    .PersistDataToDirectory(new DirectoryInfo(builder.Configuration["CertsDir"] ?? "/certs"), builder.Configuration["CertPass"]);
+
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "CORS",
                       policy =>
                       {
-                          policy.WithOrigins(
-                              "http://host:5048",
-                              "http://192.168.2.1:5048"
-                              );
+                          policy.AllowAnyOrigin();
                       });
 });
 
