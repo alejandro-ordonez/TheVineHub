@@ -21,7 +21,7 @@ steps:
 - task: CmdLine@2
   displayName: 'Build and run containers'
   inputs:
-    script: 'docker compose up -d --build'
+    script: 'docker compose up -d --build e TUNNEL_TOKEN=$(TUNNEL_TOKEN)'
 
 
 
