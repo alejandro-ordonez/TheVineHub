@@ -7,10 +7,15 @@
     <UserSecretsId>6a94bb88-1717-4f96-b40c-7ba3b6302f07</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Pages\Schools.razor" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Blazored.FluentValidation" Version="2.2.0" />
@@ -38,6 +43,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Layout\EmptyLayout.razor" />
     <_ContentIncludedByDefault Remove="Pages\LogIn.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Schools.razor" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +52,14 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Layout\EmptyLayout.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Schools.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\Schools.razor" />
   </ItemGroup>
 
 </Project>

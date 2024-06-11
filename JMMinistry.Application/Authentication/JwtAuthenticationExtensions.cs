@@ -1,15 +1,8 @@
-﻿using JMMinistry.Domain;
-using JMMinistry.Infrastructure.Persistence;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Authentication
 {
@@ -17,9 +10,6 @@ namespace JMMinistry.Application.Authentication
     {
         public static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddIdentity<PersonalInfo, Role>()
-                .AddEntityFrameworkStores<JmDbContext>();
-
             //Adding Authentication - JWT
             services.AddAuthentication(options =>
             {

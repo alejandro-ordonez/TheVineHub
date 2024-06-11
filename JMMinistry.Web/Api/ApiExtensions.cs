@@ -10,10 +10,11 @@ namespace JMMinistry.Web.Api
         {
             services.AddScoped(sp => new HttpClient
             {
-                BaseAddress = new Uri("https://localhost:62421")
+                BaseAddress = new Uri("https://mministry.api:64984")
             });
 
             services.AddTransient<IUserApi, UserApi>();
+            services.AddTransient<ISchoolApi, SchoolApi>();
         }
 
         public static IEnumerable<Claim> ParseClaimsFromJwt(this string jwt)

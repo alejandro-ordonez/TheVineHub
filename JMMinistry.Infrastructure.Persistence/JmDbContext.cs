@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using JMMinistry.Application.Services;
 using JMMinistry.Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Infrastructure.Persistence;
 
-public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
+public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>, IJmDbContext
 {
     public JmDbContext()
     {
@@ -35,13 +36,13 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
 
     public virtual DbSet<Event> Events { get; set; }
 
-    public virtual DbSet<Gained> Gaineds { get; set; }
+    public virtual DbSet<Gained> Gained { get; set; }
 
     public virtual DbSet<MeetingAttendance> MeetingAttendances { get; set; }
 
     public virtual DbSet<Role> Ministries { get; set; }
 
-    public virtual DbSet<PersonalInfo> PersonalInfos { get; set; }
+    public virtual DbSet<PersonalInfo> PersonalInfo { get; set; }
 
     public virtual DbSet<School> Schools { get; set; }
 

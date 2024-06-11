@@ -1,4 +1,5 @@
-﻿using JMMinistry.Common;
+﻿using JMMinistry.Application.Services;
+using JMMinistry.Common;
 using JMMinistry.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -26,7 +27,12 @@ namespace JMMinistry.Infrastructure.Persistence
                     configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(JmDbContext).Assembly.FullName)));
 
+            services.AddIdentity<PersonalInfo, Role>()
+                .AddEntityFrameworkStores<JmDbContext>();
+
             services.Configure<DefaultUser>(configuration.GetSection(nameof(DefaultUser)));
+
+            services.AddScoped<IJmDbContext, JmDbContext>();
         }
 
         public static async void InitializeDb(this IHost app)

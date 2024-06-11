@@ -4,7 +4,8 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "jmministry.api": "StartDebugging"
+        "jmministry.api": "StartDebugging",
+        "jmministry.web": "Start"
       }
     }
   }

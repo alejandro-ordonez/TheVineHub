@@ -4,17 +4,13 @@ using System.Net.Http.Json;
 
 namespace JMMinistry.Web.Api
 {
-    public class UserApi : IUserApi
+    public class UserApi(HttpClient httpClient, ILogger<UserApi> logger) : IUserApi
     {
         private const string _userApi = "api/User";
-        private readonly HttpClient httpClient;
-        private readonly ILogger<UserApi> logger;
 
-        public UserApi(HttpClient httpClient, ILogger<UserApi> logger)
-        {
-            this.httpClient = httpClient;
-            this.logger = logger;
-        }
+        private readonly HttpClient httpClient = httpClient;
+        private readonly ILogger<UserApi> logger = logger;
+
         public async Task<Response<TokenResult?>?> Authenticate(AuthenticateDto authenticateDto)
         {
             var result = await httpClient.PostAsJsonAsync($"{_userApi}/auth", authenticateDto);

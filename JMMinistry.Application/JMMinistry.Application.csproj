@@ -7,9 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="FluentValidation" Version="11.9.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.1" />
-    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="MediatR" Version="12.3.0" />
     <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
   </ItemGroup>
@@ -19,13 +20,11 @@
     <Folder Include="Features\Class\EditClass\" />
     <Folder Include="Features\Class\CreateClassSession\" />
     <Folder Include="Features\User\Commands\EditUser\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\JMMinistry.Common\JMMinistry.Common.csproj" />
     <ProjectReference Include="..\JMMinistry.Domain\JMMinistry.Domain.csproj" />
-    <ProjectReference Include="..\JMMinistry.Infrastructure.Persistence\JMMinistry.Infrastructure.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

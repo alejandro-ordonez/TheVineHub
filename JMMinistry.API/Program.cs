@@ -1,6 +1,4 @@
 using JMMinistry.Application;
-using JMMinistry.Application.Authentication;
-using JMMinistry.Application.Exceptions;
 using JMMinistry.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +8,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "CORS",
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:5048");
+                          policy.WithOrigins(
+                              "http://host:5048",
+                              "http://192.168.2.1:5048"
+                              );
                       });
 });
 

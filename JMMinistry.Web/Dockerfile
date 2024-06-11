@@ -1,25 +1,33 @@
 ﻿# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
-# Set the working directory for our app
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER app
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
+# This stage is used to build the service project
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-# Copy the .csproj file and restore dependencies
-COPY "./JMMinistry.Web/JMMinistry.Web.csproj" "JMMinistry.Web/"
+COPY ["JMMinistry.Web/JMMinistry.Web.csproj", "JMMinistry.Web/"]
 RUN dotnet restore "./JMMinistry.Web/JMMinistry.Web.csproj"
-# Copy all contents from the main project folder and build the app
 COPY . .
 WORKDIR "/src/JMMinistry.Web"
-RUN dotnet build "./JMMinistry.Web.csproj" -c Release -o /build
+RUN dotnet build "./JMMinistry.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-# Publish the project to the publish folder
-FROM build-env AS publish
-RUN dotnet publish "./JMMinistry.Web.csproj" -c Release -o /publish
+# This stage is used to publish the service project to be copied to the final stage
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./JMMinistry.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
-# Use the base Nginx image
+# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+
 FROM nginx:alpine AS final
-# Set the working directory for Nginx
 WORKDIR /usr/share/nginx/html
-# Copy the contents from the publish folder into Nginx's html folder
-COPY --from=publish /publish/wwwroot /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/nginx.conf
+#Copy from Environment(build/publish)
+COPY --from=publish app/publish/wwwroot .
