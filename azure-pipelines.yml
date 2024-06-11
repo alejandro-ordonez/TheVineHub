@@ -17,19 +17,11 @@ steps:
   displayName: 'Stop containers'
   inputs:
     script: 'docker compose down'
-    workingDirectory: '/home/src/JMMinistry'
-
-- task: CmdLine@2
-  displayName: 'Update repo'
-  inputs:
-    script: 'git fetch && git pull'
-    workingDirectory: '/home/src/JMMinistry'
 
 - task: CmdLine@2
   displayName: 'Build and run containers'
   inputs:
     script: 'docker compose up -d --build'
-    workingDirectory: '/home/src/JMMinistry'
 
 
 
