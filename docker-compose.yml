@@ -44,18 +44,16 @@ services:
             - database
         
 
-    #jmministry.web:
-    #    #image: ${DOCKER_REGISTRY-}jmministryweb
-    #    build:
-    #        context: .
-    #        dockerfile: JMMinistry.Web/Dockerfile
-    #    ports:
-    #        #- "62421:8080"
-    #        - "4200:80"
-    #    networks:
-    #        - jm-network
-    #    depends_on:
-    #        - jmministry.api
+    jmministry.web:
+        #image: ${DOCKER_REGISTRY-}jmministryweb
+        build:
+            context: .
+            dockerfile: JMMinistry.Web/Dockerfile
+        ports:
+            #- "62421:8080"
+            - "4200:80"
+        networks:
+            - jm-network
     
 
     tunnel:
@@ -65,6 +63,8 @@ services:
         command: tunnel run
         environment:
           - TUNNEL_TOKEN
+        networks:
+            - jm-network
 
 networks:
   jm-network:
