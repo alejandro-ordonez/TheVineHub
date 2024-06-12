@@ -10,7 +10,7 @@ namespace JMMinistry.Web.Api
         {
             services.AddScoped(sp => new HttpClient
             {
-                BaseAddress = new Uri("https://api.jmministry.org:62421")
+                BaseAddress = new Uri("https://api.jmministry.org")
                 //BaseAddress = new Uri("https://localhost:64984")
             });
 
