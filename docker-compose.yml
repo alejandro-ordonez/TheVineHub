@@ -2,11 +2,11 @@ version: '3.9'
 
 networks:
   jm-backend:
-    driver: bridge
-    #external: true
+    external: true
+    #driver: bridge
   jm-frontend:
-    #external: true
-    driver: bridge
+    external: true
+    #driver: bridge
   jm-db:
     driver: bridge
 
