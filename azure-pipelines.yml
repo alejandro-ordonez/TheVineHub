@@ -14,7 +14,11 @@ pool:
 
 
 steps:  
-
+- task: CmdLine@2
+  displayName: 'Stop containers'
+  inputs:
+    script: 'docker compose down'
+    
 - task: CmdLine@2
   displayName: 'Configure frontend network'
   inputs:
@@ -34,11 +38,6 @@ steps:
       # Check if the network exists
       docker network inspect "$NETWORK_NAME" >/dev/null 2>&1 || \
           docker network create --driver bridge "$NETWORK_NAME"
-
-- task: CmdLine@2
-  displayName: 'Stop containers'
-  inputs:
-    script: 'docker compose down'
 
 - task: CmdLine@2
   displayName: 'Build and run containers'
