@@ -1,4 +1,12 @@
-version: '3.4'
+version: '3.9'
+
+networks:
+  jm-backend:
+    external: true
+  jm-frontend:
+    external: true
+  jm-db:
+    driver: bridge
 
 services:
     database:
@@ -27,7 +35,7 @@ services:
             # You don't need to create the `db-data` folder. Docker Compose will do it for you
             - /app-data/db/:/var/lib/postgresql/data/
         networks:
-            - jm-network
+            - jm-db
 
     jmministry.api:
         #image: ${DOCKER_REGISTRY-}jmministryapi
@@ -36,10 +44,19 @@ services:
             dockerfile: JMMinistry.API/Dockerfile
         environment:
             - ASPNETCORE_HTTP_PORTS=8080
+            - JwtSettings__Key
+            - JwtSettings__Issuer
+            - JwtSettings__DurationInMinutes
+            - JwtSettings__Audience
+            - DefaultUser__Password
+            - DefaultUser__Name
+            - DefaultUser__LastName
+            - DefaultUser__Document
         ports:
             - "62421:8080"
         networks:
-            - jm-network
+            - jm-backend
+            - jm-db
         extra_hosts:
             - "host:192.168.2.1"
         depends_on:
@@ -55,20 +72,4 @@ services:
             #- "62421:8080"
             - "4200:80"
         networks:
-            - jm-network
-    
-
-    tunnel:
-        container_name: cloudflared-tunnel
-        image: cloudflare/cloudflared:latest
-        restart: unless-stopped
-        command: tunnel --no-autoupdate run
-        environment:
-          - TUNNEL_TOKEN
-        networks:
-            - jm-network
-
-networks:
-  jm-network:
-    driver: bridge
-  
+            - jm-frontend
