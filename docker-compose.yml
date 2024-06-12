@@ -55,7 +55,7 @@ services:
             - DefaultUser__LastName
             - DefaultUser__Document
         ports:
-            - "62421:8080"
+            - 62421:8080
         networks:
             - jm-backend
             - jm-db
