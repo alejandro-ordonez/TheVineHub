@@ -2,9 +2,11 @@ version: '3.9'
 
 networks:
   jm-backend:
-    external: true
+    driver: bridge
+    #external: true
   jm-frontend:
-    external: true
+    #external: true
+    driver: bridge
   jm-db:
     driver: bridge
 
@@ -57,8 +59,6 @@ services:
         networks:
             - jm-backend
             - jm-db
-        extra_hosts:
-            - "host:192.168.2.1"
         depends_on:
             - database
         
