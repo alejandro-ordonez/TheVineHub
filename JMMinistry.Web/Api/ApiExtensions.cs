@@ -10,8 +10,7 @@ namespace JMMinistry.Web.Api
         {
             services.AddScoped(sp => new HttpClient
             {
-                BaseAddress = new Uri("https://api.jm-ministry.org/")
-                //BaseAddress = new Uri("https://localhost:64984")
+                BaseAddress = new Uri("https://api.jm-ministry.org")
             });
 
             services.AddTransient<IUserApi, UserApi>();
