@@ -12,7 +12,29 @@ pool:
   demands: 
   - Agent.Name -equals Raspberry
 
+
 steps:  
+
+- task: CmdLine@2
+  displayName: 'Configure frontend network'
+  inputs:
+    script: |
+      NETWORK_NAME="jm-frontend"
+      
+      # Check if the network exists
+      docker network inspect "$NETWORK_NAME" >/dev/null 2>&1 || \
+          docker network create --driver bridge "$NETWORK_NAME"
+
+- task: CmdLine@2
+  displayName: 'Configure backend network'
+  inputs:
+    script: |
+      NETWORK_NAME="jm-backend"
+      
+      # Check if the network exists
+      docker network inspect "$NETWORK_NAME" >/dev/null 2>&1 || \
+          docker network create --driver bridge "$NETWORK_NAME"
+
 - task: CmdLine@2
   displayName: 'Stop containers'
   inputs:
@@ -21,7 +43,17 @@ steps:
 - task: CmdLine@2
   displayName: 'Build and run containers'
   inputs:
-    script: 'TUNNEL_TOKEN=$(TUNNEL_TOKEN) docker compose up -d --build '
+    script: | 
+      DefaultUser__Document=$(DefaultUser__Document) \
+      DefaultUser__LastName=$(DefaultUser__LastName) \
+      DefaultUser__Name=$(DefaultUser__Name) \
+      DefaultUser__Password=$(DefaultUser__Password) \
+      JwtSettings__Audience=$(JwtSettings__Audience) \
+      JwtSettings__DurationInMinutes=$(JwtSettings__DurationInMinutes) \
+      JwtSettings__Issuer=$(JwtSettings__Issuer) \
+      JwtSettings__Key=$(JwtSettings__Key) \
+      POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) \
+      docker compose up -d --build
 
 
 
