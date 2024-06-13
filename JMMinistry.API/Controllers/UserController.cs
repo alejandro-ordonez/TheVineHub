@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace JMMinistry.API.Controllers
 {
@@ -45,7 +46,7 @@ namespace JMMinistry.API.Controllers
         [HttpGet]
         public async Task<ActionResult<UserInfoDto>> GetUserInfo()
         {
-            var documentClaim = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Sub);
+            var documentClaim = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
             var document = documentClaim?.Value ?? throw new ArgumentException("It was not possible to retrieve your document");
 
             var userInfo = await mediator.Send(new GetUserInfoQuery { Document =  document });

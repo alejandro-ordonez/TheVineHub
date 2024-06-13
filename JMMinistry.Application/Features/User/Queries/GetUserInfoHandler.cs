@@ -1,5 +1,8 @@
-﻿using JMMinistry.Common.Dtos.User;
+﻿using AutoMapper;
+using JMMinistry.Application.Services;
+using JMMinistry.Common.Dtos.User;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +11,16 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Features.User.Queries
 {
-    public class GetUserInfoHandler : IRequestHandler<GetUserInfoQuery, UserInfoDto>
+    public class GetUserInfoHandler(IJmDbContext dbContext, IMapper mapper) : IRequestHandler<GetUserInfoQuery, UserInfoDto>
     {
-        public Task<UserInfoDto> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
+        public async Task<UserInfoDto> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var userInfo = await dbContext.PersonalInfo
+                .FirstOrDefaultAsync(user => user.Document == request.Document, cancellationToken);
+
+            var userInfoDto = mapper.Map<UserInfoDto>(userInfo);
+
+            return userInfoDto;
         }
     }
 }

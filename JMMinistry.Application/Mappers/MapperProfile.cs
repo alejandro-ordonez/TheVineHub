@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using JMMinistry.Common.Dtos.Class;
 using JMMinistry.Common.Dtos.School;
+using JMMinistry.Common.Dtos.User;
 using JMMinistry.Domain;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,7 @@ namespace JMMinistry.Application.Mappers
     {
         public MapperProfile()
         {
-            //CreateMap<PersonalInfo, Prof>
-
+            CreateMap<PersonalInfo, UserInfoDto>();
 
             CreateMap<School, SchoolDto>();
             CreateMap<School, SchoolWithClassesDto>();
