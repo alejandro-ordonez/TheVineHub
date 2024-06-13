@@ -31,6 +31,14 @@ namespace JMMinistry.Application.Exceptions
                 response.Errors = [exception.Message];
             }
 
+            else if(exception is NotFoundException)
+            {
+                httpContext.Response.StatusCode= StatusCodes.Status404NotFound;
+
+                response.Details = "The requested resource was not found";
+                response.Errors = [exception.Message];
+            }
+
             else
                 response.Errors = [exception.Message];
 

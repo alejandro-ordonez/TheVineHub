@@ -8,18 +8,21 @@
 <MudCard>
     <MudCardHeader>
         <MudCardContent>
-
+            <MudText Typo="Typo.h3">@CardModel?.Name</MudText>
         </MudCardContent>
     </MudCardHeader>
 
     <MudCard>
         <MudCardMedia Image="images/door.jpg" Height="200" />
         <MudCardContent>
-            <MudText Typo="Typo.h5">@CardModel?.Name</MudText>
             <MudText Typo="Typo.body2">@CardModel?.Description</MudText>
         </MudCardContent>
         <MudCardActions>
-            <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => OpenModel())">@_translator["Manage"]</MudButton>
+            <MudButton Variant="Variant.Text" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Send" OnClick="@(() => OpenModel())">@_translator["Manage"]</MudButton>
+            @if(OnEdit.HasDelegate)
+            {
+                <MudButton Variant="Variant.Text" Color="Color.Secondary" EndIcon="@Icons.Material.Filled.Edit" OnClick="@(() => OnEdit.InvokeAsync(CardModel))"></MudButton>
+            }
         </MudCardActions>
     </MudCard>
 
@@ -28,10 +31,13 @@
 @code {
 
     [Parameter]
-    public CardModel<ModelType>? CardModel { get; set; }
+    public required CardModel<ModelType> CardModel { get; set; }
 
     [Parameter]
-    public string BasePath { get; set; } = string.Empty;
+    public required string BasePath { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<CardModel<ModelType>> OnEdit { get; set; }
 
     void OpenModel()
     {

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.Features.School.Queries.GetSchoolById
+namespace JMMinistry.Application.Features.Schools.Queries.GetSchoolById
 {
     public class GetSchoolByIdHandler(IJmDbContext dbContext, IMapper mapper) : IRequestHandler<GetSchoolByIdCommand, SchoolWithClassesDto>
     {

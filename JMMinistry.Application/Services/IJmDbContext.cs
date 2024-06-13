@@ -37,5 +37,7 @@ namespace JMMinistry.Application.Services
         DbSet<PersonalInfo> PersonalInfo { get; set; }
 
         DbSet<School> Schools { get; set; }
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

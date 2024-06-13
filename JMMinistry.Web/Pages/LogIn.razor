@@ -13,7 +13,7 @@
 <div class="login-container">
     <section class="column login-section">
         <MudCard Style="flex-grow: 1;">
-            <MudForm Model="Model" @ref="form" Validation="AuthValidator.ValidateValue" ValidationDelay="0">
+            <MudForm Model="Model" @ref="form" Validation="AuthValidator.ValidateValue" ValidationDelay="3">
 
                 <MudCardHeader>
                     <CardHeaderContent>
@@ -24,19 +24,19 @@
                 <MudCardContent>
                     <MudTextField @bind-Value="Model!.Document"
                                   For="@(() => Model!.Document)"
-                                  OnlyValidateIfDirty="true"
+                                  Immediate="true"
                                   Required="true"
-                                  RequiredError="@Loc["DocumentRequired"]"
+                                  RequiredError="@Loc["FieldRequired"]"
                                   Variant="Variant.Outlined"
                                   Label="@Loc["Document"]" 
                                   InputType="InputType.Number"/>
 
                     <MudTextField @bind-Value="Model!.Password"
                                   For="@(() => Model!.Password)"
-                                  Immediate="false"
+                                  Immediate="true"
                                   Required="true"
                                   OnlyValidateIfDirty="true"
-                                  RequiredError="@Loc["PasswordRequired"]"
+                                  RequiredError="@Loc["FieldRequired"]"
                                   Variant="Variant.Outlined"
                                   Label="@Loc["Password"]" 
                                   InputType="InputType.Password"/>

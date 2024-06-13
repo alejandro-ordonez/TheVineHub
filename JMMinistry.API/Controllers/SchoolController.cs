@@ -1,5 +1,6 @@
-﻿using JMMinistry.Application.Features.School.Queries.GetSchoolById;
-using JMMinistry.Application.Features.School.Queries.GetSchools;
+﻿using JMMinistry.Application.Features.Schools.Commands.CreateSchool;
+using JMMinistry.Application.Features.Schools.Queries.GetSchoolById;
+using JMMinistry.Application.Features.Schools.Queries.GetSchools;
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.School;
 using MediatR;
@@ -36,6 +37,20 @@ namespace JMMinistry.API.Controllers
                 return NoContent();
 
             return Ok(schools);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Response<SchoolDto>>> CreateSchool(SchoolDto schoolDto)
+        {
+            var school = await mediator.Send(new UpsertSchoolCommand { Id = default, Name = schoolDto.Name, Description = schoolDto.Description });
+            return Ok(school);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<Response<SchoolDto>>> UpdateSchool(SchoolDto schoolDto)
+        {
+            var school = await mediator.Send(new UpsertSchoolCommand { Id = schoolDto.Id, Name = schoolDto.Name, Description = schoolDto.Description });
+            return Ok(school);
         }
     }
 }

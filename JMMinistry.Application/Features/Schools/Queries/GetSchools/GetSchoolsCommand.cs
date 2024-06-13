@@ -6,10 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.Features.School.Queries.GetSchoolById
+namespace JMMinistry.Application.Features.Schools.Queries.GetSchools
 {
-    public class GetSchoolByIdCommand: IRequest<SchoolWithClassesDto>
+    public class GetSchoolsCommand: IRequest<IEnumerable<SchoolDto>>
     {
-        public int SchoolId { get; set; }
     }
 }

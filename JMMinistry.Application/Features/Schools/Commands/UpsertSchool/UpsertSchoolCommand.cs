@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.Features.School.Queries.GetSchools
+namespace JMMinistry.Application.Features.Schools.Commands.CreateSchool
 {
-    public class GetSchoolsCommand: IRequest<IEnumerable<SchoolDto>>
+    public class UpsertSchoolCommand: SchoolDto, IRequest<SchoolDto>
     {
     }
 }

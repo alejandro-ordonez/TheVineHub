@@ -4,7 +4,7 @@ using JMMinistry.Common.Dtos.School;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace JMMinistry.Application.Features.School.Queries.GetSchools
+namespace JMMinistry.Application.Features.Schools.Queries.GetSchools
 {
     public class GetSchoolsHandler(IJmDbContext dbContext, IMapper mapper) : IRequestHandler<GetSchoolsCommand, IEnumerable<SchoolDto>>
     {

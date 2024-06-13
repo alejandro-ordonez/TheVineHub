@@ -9,14 +9,20 @@ namespace JMMinistry.Web.Api
     {
         private const string _schoolApi = "api/School";
 
-        public Task CreateSchool(SchoolDto schoolDto, CancellationToken cancellationToken = default)
+        public Task<Response<SchoolDto>> CreateSchool(SchoolDto schoolDto, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Response<SchoolWithClassesDto>?> GetSchool(int schoolId, CancellationToken cancellationToken = default)
+        public Task<Response<SchoolDto>> UpdateSchool(SchoolDto schoolDto, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Response<SchoolWithClassesDto>?> GetSchool(int schoolId, CancellationToken cancellationToken = default)
+        {
+            var response = await httpClient.GetFromJsonAsync<Response<SchoolWithClassesDto>?>($"{_schoolApi}/{schoolId}", cancellationToken);
+            return response;
         }
 
         public async Task<Response<IEnumerable<SchoolDto>>?> GetSchools(CancellationToken cancellationToken = default)

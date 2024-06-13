@@ -1,4 +1,5 @@
 ﻿@using JMMinistry.Common.Dtos.School
+@using JMMinistry.Common.Models
 @using JMMinistry.Web.Api
 
 @inject ISchoolApi _api
@@ -6,15 +7,56 @@
 @inject NavigationManager _navigator
 
 @page "/schools"
-
+@layout MainLayout
 
 <h3>@_translator["Schools"]</h3>
+
+<MudButton  Variant="Variant.Filled" 
+            EndIcon="@Icons.Material.Filled.Add" 
+            Color="Color.Primary"
+            Disabled="@EditorOpen"
+            OnClick="() => EditorOpen = !EditorOpen">
+            @_translator["Create"]
+</MudButton>
+
+<MudPopover Open="@EditorOpen" Fixed="true" Class="px-4 pt-4">
+    <div class="d-flex flex-column">
+        <MudForm Model="SchoolToEdit" @ref="schoolForm" Validation="SchoolValidator.ValidateValue" ValidationDelay="3">
+            <MudText Typo="Typo.h2">@(SchoolToEdit.Id != 0? _translator["Update", SchoolToEdit.Name] : _translator["CreateNew", _translator["School"]])</MudText>
+            <MudDivider />
+
+
+                <MudTextField @bind-Value="SchoolToEdit!.Name"
+                              For="@(() => SchoolToEdit!.Name)"
+                              Immediate="true"
+                              Required="true"
+                              RequiredError="@_translator["FieldRequired"]"
+                              Variant="Variant.Outlined"
+                              Label="@_translator["SchoolName"]"
+                              InputType="InputType.Text" />
+
+                <MudTextField @bind-Value="SchoolToEdit!.Description"
+                              For="@(() => SchoolToEdit!.Description)"
+                              Immediate="true"
+                              Required="true"
+                              RequiredError="@_translator["FieldRequired"]"
+                              Variant="Variant.Outlined"
+                              Label="@_translator["Description"]"
+                              InputType="InputType.Text" />
+
+
+            <MudDivider />
+            <MudButton OnClick="SaveSchool" Disabled="!schoolForm?.IsValid ?? true" Class="ml-auto mr-n3 mb-1" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Save">@_translator["Save"]</MudButton>
+            <MudButton OnClick="Cancel" Class="ml-auto mr-n3 mb-1" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Save">@_translator["Cancel"]</MudButton>
+        </MudForm>
+    </div>
+</MudPopover>
 
 <div class="dynamic-grid">
 
     @foreach(var school in SchoolList)
     {
-        <CardComponent ModelType="int" CardModel="school" BasePath="/Schools"/>
+        <CardComponent ModelType="int" CardModel="school" BasePath="/Schools" OnEdit="EditSchool"/>
     }
 
 </div>
@@ -22,6 +64,19 @@
 
 @code {
     IEnumerable<SchoolDto> SchoolList { get; set; } = [];
+
+    [SupplyParameterFromForm]
+    SchoolDto SchoolToEdit { get; set; } = new SchoolDto();
+
+    bool EditorOpen { get; set; } = false;
+
+    SchoolDtoValidator SchoolValidator { get; set; } = new SchoolDtoValidator();
+
+    MudForm? schoolForm;
+
+    [Inject]
+    ISnackbar? SnackBar { get; set; }
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -31,5 +86,35 @@
     void OpenSchool(int schoolId)
     {
         _navigator.NavigateTo($"/schools/{schoolId}");
+    }
+
+    void EditSchool(CardModel<int> school)
+    {
+        SchoolToEdit = (SchoolDto)school;
+        EditorOpen = true;
+    }
+
+    void Cancel()
+    {
+        EditorOpen = false;
+        SchoolToEdit = new SchoolDto();
+    }
+
+    async Task SaveSchool()
+    {
+        schoolForm?.Validate();
+
+        if (!schoolForm?.IsValid ?? false)
+        {
+            SnackBar?.Add(_translator["VerifyYourInputs"], Severity.Error);
+            return;
+        }
+
+        if (SchoolToEdit.Id == default)
+            await _api.CreateSchool(SchoolToEdit);
+        else
+            await _api.UpdateSchool(SchoolToEdit);
+
+        SchoolList = (await _api.GetSchools())?.Data ?? [];
     }
 }

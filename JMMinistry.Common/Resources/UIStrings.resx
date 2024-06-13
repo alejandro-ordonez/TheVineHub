@@ -153,13 +153,22 @@
   <data name="Welcome" xml:space="preserve">
     <value>Welcome</value>
   </data>
-  <data name="PasswordRequired" xml:space="preserve">
-    <value>Password required</value>
-  </data>
-  <data name="DocumentRequired" xml:space="preserve">
-    <value>Document required</value>
+  <data name="FieldRequired" xml:space="preserve">
+    <value>Field required</value>
   </data>
   <data name="MyMinistry" xml:space="preserve">
     <value>My ministry</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="SchoolName" xml:space="preserve">
+    <value>School Name</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="CreateNew" xml:space="preserve">
+    <value>Create new {0}</value>
   </data>
 </root>
