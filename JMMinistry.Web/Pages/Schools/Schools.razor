@@ -7,7 +7,7 @@
 @inject NavigationManager _navigator
 
 @page "/schools"
-@layout MainLayout
+@attribute [Authorize]
 
 <h3>@_translator["Schools"]</h3>
 

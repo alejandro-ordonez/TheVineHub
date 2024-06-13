@@ -9,7 +9,7 @@ using static JMMinistry.Web.Shared.Constants;
 
 namespace JMMinistry.Web.Services
 {
-    public class AuthenticationProvider(IUserApi userApi, ILocalStorageService localStorage) : AuthenticationStateProvider, IAuthService
+    public class AuthenticationProvider(IUserApi userApi, HttpClient httpClient, ILocalStorageService localStorage) : AuthenticationStateProvider, IAuthService
     {
         public async Task<bool> AuthenticateAsync(AuthenticateDto authenticateDto)
         {
@@ -19,6 +19,8 @@ namespace JMMinistry.Web.Services
                 return false;
 
             await localStorage.SetItemAsync(JwtToken, authResult.Data!);
+
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authResult.Data!.Token);
 
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
             return true;
