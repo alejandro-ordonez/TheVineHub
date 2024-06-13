@@ -153,4 +153,13 @@
   <data name="Welcome" xml:space="preserve">
     <value>Bienvenido</value>
   </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>Contraseña requerida</value>
+  </data>
+  <data name="DocumentRequired" xml:space="preserve">
+    <value>Documento requerido</value>
+  </data>
+  <data name="MyMinistry" xml:space="preserve">
+    <value>Mi ministerio</value>
+  </data>
 </root>

@@ -10,7 +10,8 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy.WithOrigins("https://app.jm-ministry.org")
-                            .AllowAnyMethod();
+                            .AllowAnyMethod()
+                            .AllowAnyHeader();
                       });
 });
 

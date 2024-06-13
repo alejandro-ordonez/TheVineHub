@@ -24,15 +24,22 @@
                 <MudCardContent>
                     <MudTextField @bind-Value="Model!.Document"
                                   For="@(() => Model!.Document)"
-                                  Immediate="true"
+                                  OnlyValidateIfDirty="true"
+                                  Required="true"
+                                  RequiredError="@Loc["DocumentRequired"]"
                                   Variant="Variant.Outlined"
-                                  Label="@Loc["Document"]" />
+                                  Label="@Loc["Document"]" 
+                                  InputType="InputType.Number"/>
 
                     <MudTextField @bind-Value="Model!.Password"
                                   For="@(() => Model!.Password)"
-                                  Immediate="true"
+                                  Immediate="false"
+                                  Required="true"
+                                  OnlyValidateIfDirty="true"
+                                  RequiredError="@Loc["PasswordRequired"]"
                                   Variant="Variant.Outlined"
-                                  Label="@Loc["Password"]" />
+                                  Label="@Loc["Password"]" 
+                                  InputType="InputType.Password"/>
 
                 </MudCardContent>
 
