@@ -1,3 +1,4 @@
+using JMMinistry.API.Middleware;
 using JMMinistry.Application;
 using JMMinistry.Infrastructure.Persistence;
 using LettuceEncrypt;
@@ -36,6 +37,8 @@ if (app.Environment.IsDevelopment())
 {
     
 }
+
+app.UseResponseMiddleware();
 
 app.UseSwagger();
 app.UseSwaggerUI();

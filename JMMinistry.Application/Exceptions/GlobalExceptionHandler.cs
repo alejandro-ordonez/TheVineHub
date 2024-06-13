@@ -17,22 +17,24 @@ namespace JMMinistry.Application.Exceptions
 
             if (exception is FluentValidation.ValidationException fluentException)
             {
-                response.Details = "One or more validation errors occurred.";
                 httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
-
+                
+                response.Details = "One or more validation errors occurred.";
                 response.Errors = fluentException.Errors.Select(error => error.ErrorMessage).ToArray();
             }
 
             else if (exception is ArgumentException || exception is AuthenticationException)
             {
-                response.Details = "Your request was incorrect";
                 httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
 
+                response.Details = "Your request was incorrect";
                 response.Errors = [exception.Message];
             }
 
             else
                 response.Errors = [exception.Message];
+
+            response.StatusCode = httpContext.Response.StatusCode;
 
             logger.LogError("Exception occurred: {ExceptionName}", exception.GetType().Name);
 
