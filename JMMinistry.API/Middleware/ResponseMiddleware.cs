@@ -1,51 +1,34 @@
 ﻿using JMMinistry.Common;
-using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace JMMinistry.API.Middleware
 {
-    public class ResponseMiddleware(RequestDelegate next, ILogger<ResponseMiddleware> logger)
+    public class ResponseMiddleware(RequestDelegate next, ILogger<ResponseMiddleware> logger): IMiddleware
     {
-        public async Task Invoke(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            try
-            {
-                var currentBody = httpContext.Response.Body;
+            logger.LogInformation("Processing request for: {request}", context.Request.Path);
+            // execute the request
+            await next(context);
 
-                using (var memoryStream = new MemoryStream())
-                {
-                    //set the current response to the memoryStream.
-                    httpContext.Response.Body = memoryStream;
-
-                    await next(httpContext);
-
-                    //reset the body 
-                    httpContext.Response.Body = currentBody;
-                    memoryStream.Seek(0, SeekOrigin.Begin);
-
-                    var readToEnd = new StreamReader(memoryStream).ReadToEnd();
-                    var objResult = JsonConvert.DeserializeObject(readToEnd);
-
-                    var result = new Response<object>
-                    {
-                        Data = objResult,
-                        Success = true,
-                        StatusCode = httpContext.Response.StatusCode,
-                        Details = $"Operation success: {httpContext.Request.Path}"
-                    };
-
-                    await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(result));
-                }
-            }
-            catch (Exception)
-            {
-                if (httpContext.Response.HasStarted)
-                {
-                    logger.LogWarning("The response has already started, the http status code middleware will not be executed.");
-                    throw;
-                }
+            if (context.Response.ContentType != "application/json")
                 return;
-            }
+
+            var currentBody = JsonSerializer.DeserializeAsync<object>(context.Response.Body);
+
+            var result = new Response<object>
+            {
+                Data = currentBody,
+                Success = true,
+                StatusCode = context.Response.StatusCode,
+                Details = $"Operation success: {context.Request.Path}"
+            };
+
+            await context.Response.WriteAsync(JsonSerializer.Serialize(result));
         }
     }
 

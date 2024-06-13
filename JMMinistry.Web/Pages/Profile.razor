@@ -1,11 +1,23 @@
 ﻿@attribute [Authorize] 
 
 @page "/profile"
+@using JMMinistry.Common.Dtos.User
+@using JMMinistry.Web.Api
+
+@inject IUserApi _userApi
 
 <h3>Profile</h3>
+
+
 
 <LanguageSelector />
 
 @code {
+    UserInfoDto UserInfo { get; set; } = new UserInfoDto();
 
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var result = await _userApi.GetUserInfo();
+    }
 }

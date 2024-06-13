@@ -1,10 +1,12 @@
-﻿using JMMinistry.Common;
+﻿using Blazored.LocalStorage;
+using JMMinistry.Common;
 using JMMinistry.Common.Dtos.User;
+using JMMinistry.Web.Shared;
 using System.Net.Http.Json;
 
 namespace JMMinistry.Web.Api
 {
-    public class UserApi(HttpClient httpClient, ILogger<UserApi> logger) : IUserApi
+    public class UserApi(HttpClient httpClient, ILocalStorageService localStorageService,  ILogger<UserApi> logger) : IUserApi
     {
         private const string _userApi = "api/User";
 
@@ -19,10 +21,19 @@ namespace JMMinistry.Web.Api
 
             if (!response?.Success ?? false)
             {
-                logger.LogError("Failed to authenticate, reason: \n {0}", string.Join("\n", response?.Errors ?? []));
+                logger.LogError("Failed to authenticate, reason: \n {Errors}", string.Join("\n", response?.Errors ?? []));
             }
 
             return response;
+        }
+
+        public async Task<Response<UserInfoDto>?> GetUserInfo()
+        {
+            var token = await localStorageService.GetItemAsync<TokenResult>(Constants.JwtToken);
+
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token?.Token);
+            var result = await httpClient.GetFromJsonAsync<Response<UserInfoDto>>(_userApi);
+            return result;
         }
     }
 }

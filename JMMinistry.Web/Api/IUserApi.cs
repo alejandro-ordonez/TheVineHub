@@ -6,5 +6,6 @@ namespace JMMinistry.Web.Api
     public interface IUserApi
     {
         Task<Response<TokenResult?>?> Authenticate(AuthenticateDto authenticateDto);
+        Task<Response<UserInfoDto>?> GetUserInfo();
     }
 }
