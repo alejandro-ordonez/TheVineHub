@@ -1,11 +1,12 @@
 ﻿
+using Blazored.LocalStorage;
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.School;
 using System.Net.Http.Json;
 
 namespace JMMinistry.Web.Api
 {
-    public class SchoolApi(HttpClient httpClient) : ISchoolApi
+    public class SchoolApi(HttpClient httpClient, ILocalStorageService localStorage) : BaseApi(httpClient, localStorage), ISchoolApi
     {
         private const string _schoolApi = "api/School";
 
@@ -21,13 +22,13 @@ namespace JMMinistry.Web.Api
 
         public async Task<Response<SchoolWithClassesDto>?> GetSchool(int schoolId, CancellationToken cancellationToken = default)
         {
-            var response = await httpClient.GetFromJsonAsync<Response<SchoolWithClassesDto>?>($"{_schoolApi}/{schoolId}", cancellationToken);
+            var response = await _httpClient.GetFromJsonAsync<Response<SchoolWithClassesDto>?>($"{_schoolApi}/{schoolId}", cancellationToken);
             return response;
         }
 
         public async Task<Response<IEnumerable<SchoolDto>>?> GetSchools(CancellationToken cancellationToken = default)
         {
-            var response = await httpClient.GetFromJsonAsync<Response<IEnumerable<SchoolDto>>>(_schoolApi, cancellationToken);
+            var response = await _httpClient.GetFromJsonAsync<Response<IEnumerable<SchoolDto>>>(_schoolApi, cancellationToken);
             return response;
         }
     }
