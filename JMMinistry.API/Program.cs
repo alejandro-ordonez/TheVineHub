@@ -4,9 +4,10 @@ using LettuceEncrypt;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var CORSPolicy = "_corsPolicy";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: "CORS",
+    options.AddPolicy(name: CORSPolicy,
                       policy =>
                       {
                           policy.WithOrigins("https://app.jm-ministry.org")
@@ -38,6 +39,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseCors(CORSPolicy);
 
 app.UseAuthentication();
 app.UseAuthorization();
