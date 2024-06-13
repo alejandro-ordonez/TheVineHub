@@ -7,13 +7,22 @@ using System.Text.Json;
 
 namespace JMMinistry.API.Middleware
 {
-    public class ResponseMiddleware(RequestDelegate next, ILogger<ResponseMiddleware> logger): IMiddleware
+    public class ResponseMiddleware
     {
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        private readonly RequestDelegate _next;
+        private readonly ILogger<ResponseMiddleware> _logger;
+
+        public ResponseMiddleware(RequestDelegate next, ILogger<ResponseMiddleware> logger)
         {
-            logger.LogInformation("Processing request for: {request}", context.Request.Path);
+            _next = next;
+            _logger = logger;
+        }
+
+        public async Task InvokeAsync(HttpContext context)
+        {
+            _logger.LogInformation("Processing request for: {request}", context.Request.Path);
             // execute the request
-            await next(context);
+            await _next(context);
 
             if (context.Response.ContentType != "application/json")
                 return;
@@ -27,6 +36,8 @@ namespace JMMinistry.API.Middleware
                 StatusCode = context.Response.StatusCode,
                 Details = $"Operation success: {context.Request.Path}"
             };
+
+            _logger.LogInformation("The operation was completed with status: {status}", context.Response.StatusCode);
 
             await context.Response.WriteAsync(JsonSerializer.Serialize(result));
         }

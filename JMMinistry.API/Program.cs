@@ -1,3 +1,4 @@
+using JMMinistry.API.Extensions;
 using JMMinistry.API.Middleware;
 using JMMinistry.Application;
 using JMMinistry.Infrastructure.Persistence;
@@ -24,7 +25,7 @@ builder.Services.AddControllers();
 builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Services.AddApplicationLayer(builder.Configuration);
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwagger();
 
 var app = builder.Build();
 
