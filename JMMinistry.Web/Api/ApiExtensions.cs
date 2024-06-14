@@ -17,7 +17,7 @@ namespace JMMinistry.Web.Api
             services.AddTransient<ISchoolApi, SchoolApi>();
         }
 
-        public static IEnumerable<Claim> ParseClaimsFromJwt(this string jwt)
+        public static IList<Claim> ParseClaimsFromJwt(this string jwt)
         {
             var claims = new List<Claim>();
             var payload = jwt.Split('.')[1];

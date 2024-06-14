@@ -8,7 +8,8 @@ networks:
     external: true
     #driver: bridge
   jm-db:
-    driver: bridge
+    external: true
+    #driver: bridge
 
 services:
     database:

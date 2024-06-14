@@ -20,7 +20,7 @@ namespace JMMinistry.Web.Services
 
             await localStorage.SetItemAsync(JwtToken, authResult.Data!);
 
-            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authResult.Data!.Token);
+            //
 
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
             return true;
@@ -42,6 +42,8 @@ namespace JMMinistry.Web.Services
 
             if (savedToken == null)
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+
+            //httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", savedToken.Token);
 
             var claims = savedToken.Token.ParseClaimsFromJwt();
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt")));
