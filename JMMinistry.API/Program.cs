@@ -38,7 +38,11 @@ if (app.Environment.IsDevelopment())
     
 }
 
-app.UseResponseMiddleware();
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuilder =>
+{
+    appBuilder.UseResponseMiddleware();
+});
+
 
 app.UseSwagger();
 app.UseSwaggerUI();
