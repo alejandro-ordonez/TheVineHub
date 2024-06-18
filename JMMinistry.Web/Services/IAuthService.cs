@@ -4,8 +4,7 @@ namespace JMMinistry.Web.Services
 {
     public interface IAuthService
     {
-        Task<bool> AuthenticateAsync(AuthenticateDto authenticateDto);
-
+        Task<bool> LogIn(AuthenticateDto authenticateDto);
         Task LogOut();
     }
 }

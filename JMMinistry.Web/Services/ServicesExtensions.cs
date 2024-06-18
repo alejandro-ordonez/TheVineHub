@@ -12,9 +12,10 @@ namespace JMMinistry.Web.Services
             services.AddScoped<AuthenticationStateProvider, AuthenticationProvider>();
 
             services.AddScoped(
-                    sp => (IAuthService)sp.GetRequiredService<AuthenticationStateProvider>()
+                    sp => (IAuthStateProvider)sp.GetRequiredService<AuthenticationStateProvider>()
                 );
 
+            services.AddScoped<IAuthService, AuthenticationService>();
         }
     }
 }

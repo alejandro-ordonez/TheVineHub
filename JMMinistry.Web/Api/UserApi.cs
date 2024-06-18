@@ -1,12 +1,13 @@
 ﻿using Blazored.LocalStorage;
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.User;
+using JMMinistry.Web.Services;
 using JMMinistry.Web.Shared;
 using System.Net.Http.Json;
 
 namespace JMMinistry.Web.Api
 {
-    public class UserApi(HttpClient httpClient, ILocalStorageService localStorageService,  ILogger<UserApi> logger) : IUserApi
+    public class UserApi(HttpClient httpClient, ILocalStorageService localStorageService, ILogger<UserApi> logger) : IUserApi
     {
         private const string _userApi = "api/User";
 

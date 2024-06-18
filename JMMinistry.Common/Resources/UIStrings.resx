@@ -171,4 +171,7 @@
   <data name="CreateNew" xml:space="preserve">
     <value>Create new {0}</value>
   </data>
+  <data name="AuthenticationFailed" xml:space="preserve">
+    <value>Authentication failed, verify your credentials</value>
+  </data>
 </root>

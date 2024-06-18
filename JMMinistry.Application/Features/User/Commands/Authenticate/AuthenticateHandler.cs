@@ -62,6 +62,7 @@ namespace JMMinistry.Application.Features.User.Commands.Authenticate
                 new Claim(JwtRegisteredClaimNames.Sub, user.Document),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email?? user.Document),
+                new Claim(ClaimTypes.Name, user.Name),
                 new Claim("uid", user.Id)
             }
                 .Union(userClaims)

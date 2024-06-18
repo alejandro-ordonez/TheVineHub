@@ -99,13 +99,17 @@
             return;
         }
 
-        var result = await authService.AuthenticateAsync(Model!);
+        var result = await authService.LogIn(Model!);
 
         if (result)
         {
             navigation.NavigateTo("/");
             SnackBar?.Add(Loc["AuthenticationSuccess"], Severity.Success);
         }
+
+        else
+            SnackBar?.Add(Loc["AuthenticationFailed"], Severity.Error);
+
         Busy = false;
     }
 }

@@ -9,33 +9,8 @@ using static JMMinistry.Web.Shared.Constants;
 
 namespace JMMinistry.Web.Services
 {
-    public class AuthenticationProvider(IUserApi userApi, HttpClient httpClient, ILocalStorageService localStorage) : AuthenticationStateProvider, IAuthService
+    public class AuthenticationProvider(HttpClient httpClient, ILocalStorageService localStorage) : AuthenticationStateProvider, IAuthStateProvider
     {
-        public async Task<bool> AuthenticateAsync(AuthenticateDto authenticateDto)
-        {
-            var authResult = await userApi.Authenticate(authenticateDto);
-
-            if (authResult == null || !authResult.Success)
-                return false;
-
-            await localStorage.SetItemAsync(JwtToken, authResult.Data!);
-
-            //
-
-            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-            return true;
-        }
-
-        public async Task LogOut()
-        {
-            await localStorage.RemoveItemAsync(JwtToken);
-
-            var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
-            var authState = Task.FromResult(new AuthenticationState(anonymousUser));
-            NotifyAuthenticationStateChanged(authState);
-        }
-
-
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var savedToken = await localStorage.GetItemAsync<TokenResult>(JwtToken);
@@ -43,10 +18,26 @@ namespace JMMinistry.Web.Services
             if (savedToken == null)
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
 
-            //httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", savedToken.Token);
+            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", savedToken.Token);
 
             var claims = savedToken.Token.ParseClaimsFromJwt();
             return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt")));
+        }
+
+        public void NotifyUserAuthenticated(string userId)
+        {
+            var authUser = new ClaimsPrincipal(new ClaimsIdentity(
+                    [new Claim(ClaimTypes.Name, userId)]
+                ));
+
+            var authState = new AuthenticationState(authUser);
+            NotifyAuthenticationStateChanged(Task.FromResult(authState));
+        }
+
+        public void NotifyUserLogOut()
+        {
+            var authState = new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
+            NotifyAuthenticationStateChanged(Task.FromResult(authState));
         }
     }
 }

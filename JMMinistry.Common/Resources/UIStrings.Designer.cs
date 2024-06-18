@@ -70,6 +70,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authentication failed, verify your credentials.
+        /// </summary>
+        public static string AuthenticationFailed {
+            get {
+                return ResourceManager.GetString("AuthenticationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sucessful Authentication.
         /// </summary>
         public static string AuthenticationSucess {
