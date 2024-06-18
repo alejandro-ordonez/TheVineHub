@@ -81,10 +81,6 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
             .WithOne(p => p.Cell)
             .HasForeignKey(p => p.CellId);
 
-        modelBuilder.Entity<Cell>()
-            .HasOne(c => c.Leader)
-            .WithMany(p => p.Cells)
-            .HasForeignKey(c => c.LeaderId);
 
         modelBuilder.Entity<ConventionAttendee>()
             .HasOne(c => c.InvitedBy)

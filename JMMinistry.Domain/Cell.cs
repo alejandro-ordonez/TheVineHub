@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace JMMinistry.Domain;
 
@@ -9,12 +10,7 @@ public partial class Cell
     public required string Name { get; set; }
     public bool MainCell { get; set; }
 
-    public required string PrimaryLeaderId { get; set; }
-    public virtual PersonalInfo PrimaryLeader { get; set; } = null!;
-
-    public required string SecondaryLeaderId { get; set; }
-    public virtual PersonalInfo SecondaryLeader { get; set; } = null!;
-
-
+    [MaxLength(2)]
+    public ICollection<PersonalInfo> Leaders { get; set; } = Array.Empty<PersonalInfo>();
     public ICollection<PersonalInfo> Disciples { get; set; } = Array.Empty<PersonalInfo>();
 }
