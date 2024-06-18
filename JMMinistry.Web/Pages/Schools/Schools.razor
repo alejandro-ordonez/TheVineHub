@@ -83,11 +83,6 @@
         SchoolList = (await _api.GetSchools())?.Data ?? [];
     }
 
-    void OpenSchool(int schoolId)
-    {
-        _navigator.NavigateTo($"/schools/{schoolId}");
-    }
-
     void EditSchool(CardModel<int> school)
     {
         SchoolToEdit = (SchoolDto)school;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.Features.Class.CreateClass
+namespace JMMinistry.Application.Features.Classes.CreateClass
 {
     internal class CreateClassHandler
     {

@@ -1,4 +1,5 @@
-﻿using JMMinistry.Application.Features.User.Commands.Authenticate;
+﻿using JMMinistry.API.Attributes;
+using JMMinistry.Application.Features.User.Commands.Authenticate;
 using JMMinistry.Application.Features.User.Commands.CreateUser;
 using JMMinistry.Application.Features.User.Commands.ImportUsers;
 using JMMinistry.Application.Features.User.Queries;
@@ -44,10 +45,10 @@ namespace JMMinistry.API.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<UserInfoDto>> GetUserInfo()
+        public async Task<ActionResult<UserInfoDto>> GetUserInfo([Id] string? document)
         {
-            var documentClaim = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
-            var document = documentClaim?.Value ?? throw new ArgumentException("It was not possible to retrieve your document");
+            if (string.IsNullOrEmpty(document))
+                throw new ArgumentException("Your token must be included");
 
             var userInfo = await mediator.Send(new GetUserInfoQuery { Document =  document });
             return Ok(userInfo);

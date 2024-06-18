@@ -47,7 +47,17 @@
                     <MudButton Variant="Variant.Filled" 
                                Color="Color.Primary" 
                                OnClick="@(async () => await Submit())">
-                               @Loc["LogIn"]
+                               
+
+                        @if (Busy)
+                        {
+                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                            <MudText Class="ms-2">Processing</MudText>
+                        }
+                        else
+                        {
+                            <MudText>@Loc["LogIn"]</MudText>
+                        }
                     </MudButton>
                 </MudCardActions>
             </MudForm>
@@ -71,6 +81,8 @@
 
     MudForm? form;
 
+    bool Busy { get; set; } = false;
+
     protected override void OnInitialized()
     {
         Model ??= new AuthenticateDto();
@@ -78,6 +90,7 @@
 
     private async Task Submit()
     {
+        Busy = true;
         form?.Validate();
 
         if(!form?.IsValid ?? false)
@@ -93,5 +106,6 @@
             navigation.NavigateTo("/");
             SnackBar?.Add(Loc["AuthenticationSuccess"], Severity.Success);
         }
+        Busy = false;
     }
 }
