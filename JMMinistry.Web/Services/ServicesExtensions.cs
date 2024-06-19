@@ -7,7 +7,6 @@ namespace JMMinistry.Web.Services
     {
         public static void AddServices(this IServiceCollection services)
         {
-            services.AddCascadingAuthenticationState();
             services.AddAuthorizationCore();
             services.AddScoped<AuthenticationStateProvider, AuthenticationProvider>();
 

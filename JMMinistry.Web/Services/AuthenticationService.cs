@@ -17,7 +17,7 @@ namespace JMMinistry.Web.Services
                 return false;
 
             var authResult = tokenResult?.Data;
-            await localStorage.SetItemAsync(Constants.JwtToken, authResult!.Document);
+            await localStorage.SetItemAsync(Constants.JwtToken, authResult);
 
             authStateProvider.NotifyUserAuthenticated(authResult!.Document);
 

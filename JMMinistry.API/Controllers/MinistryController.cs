@@ -1,4 +1,4 @@
-﻿using JMMinistry.API.Attributes;
+﻿using JMMinistry.API.Extensions;
 using JMMinistry.Application.Features.Cell.Queries.GetCells;
 using JMMinistry.Common.Dtos.Cell;
 using MediatR;
@@ -12,8 +12,10 @@ namespace JMMinistry.API.Controllers
     public class MinistryController(IMediator mediator) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CellDto>>> GetCells([Id] string document)
+        public async Task<ActionResult<IEnumerable<CellDto>>> GetCells()
         {
+            var document = HttpContext.GetDocumentClaim() ?? throw new ArgumentException("Missing document in token");
+
             var cells = await mediator.Send(new GetCellsCommand { Document = document });
             return Ok(cells);
         }

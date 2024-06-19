@@ -21,13 +21,14 @@ namespace JMMinistry.Web.Services
             httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", savedToken.Token);
 
             var claims = savedToken.Token.ParseClaimsFromJwt();
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt")));
+            var authState =  new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt")));
+            return authState;
         }
 
         public void NotifyUserAuthenticated(string userId)
         {
             var authUser = new ClaimsPrincipal(new ClaimsIdentity(
-                    [new Claim(ClaimTypes.Name, userId)]
+                    [new Claim(ClaimTypes.Name, userId)], "jwt"
                 ));
 
             var authState = new AuthenticationState(authUser);

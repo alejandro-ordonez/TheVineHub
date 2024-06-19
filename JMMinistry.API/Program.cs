@@ -21,7 +21,9 @@ builder.Services.AddCors(options =>
 
 
 // Add services to the container.
+
 builder.Services.AddControllers();
+
 builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Services.AddApplicationLayer(builder.Configuration);
 

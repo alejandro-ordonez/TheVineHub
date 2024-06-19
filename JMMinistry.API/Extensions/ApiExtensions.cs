@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using System.Security.Claims;
 
 namespace JMMinistry.API.Extensions
 {
@@ -37,6 +38,14 @@ namespace JMMinistry.API.Extensions
                 };
                 config.AddSecurityRequirement(securityRequirements);
             });
+        }
+
+        public static string? GetDocumentClaim(this HttpContext httpContext)
+        {
+            var documentClaim = httpContext.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
+            var document = documentClaim?.Value;
+
+            return document;
         }
     }
 }

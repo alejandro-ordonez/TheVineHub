@@ -1,4 +1,4 @@
-﻿using JMMinistry.API.Attributes;
+﻿using JMMinistry.API.Extensions;
 using JMMinistry.Application.Features.User.Commands.Authenticate;
 using JMMinistry.Application.Features.User.Commands.CreateUser;
 using JMMinistry.Application.Features.User.Commands.ImportUsers;
@@ -45,8 +45,9 @@ namespace JMMinistry.API.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<UserInfoDto>> GetUserInfo([Id] string? document)
+        public async Task<ActionResult<UserInfoDto>> GetUserInfo()
         {
+            var document = HttpContext.GetDocumentClaim();
             if (string.IsNullOrEmpty(document))
                 throw new ArgumentException("Your token must be included");
 
