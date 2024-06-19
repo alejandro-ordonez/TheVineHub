@@ -9,7 +9,7 @@ using static JMMinistry.Web.Shared.Constants;
 
 namespace JMMinistry.Web.Services
 {
-    public class AuthenticationProvider(HttpClient httpClient, ILocalStorageService localStorage) : AuthenticationStateProvider, IAuthStateProvider
+    public class AuthenticationProvider(ILocalStorageService localStorage) : AuthenticationStateProvider, IAuthStateProvider
     {
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
@@ -17,8 +17,6 @@ namespace JMMinistry.Web.Services
 
             if (savedToken == null)
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
-
-            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", savedToken.Token);
 
             var claims = savedToken.Token.ParseClaimsFromJwt();
             var authState =  new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(claims, "jwt")));

@@ -20,11 +20,7 @@ namespace JMMinistry.API.Controllers
         [HttpGet("{schoolId}")]
         public async Task<ActionResult<Response<SchoolDto>>> GetSchool(int schoolId)
         {
-            var school = await mediator.Send(new GetSchoolByIdCommand {SchoolId = schoolId});
-
-            if (school == null)
-                return NotFound();
-
+            var school = await mediator.Send(new GetSchoolByIdCommand { SchoolId = schoolId });
             return Ok(school);
         }
 

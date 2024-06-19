@@ -1,0 +1,28 @@
+﻿
+<div class="header-page">
+    <div class="details-header">
+        <div class="details-title">
+            <MudText Typo="Typo.h5">@Title</MudText>
+            <MudText Typo="Typo.subtitle2">@SubTitle</MudText>
+        </div>
+
+        <div>
+            @ActionMenu
+        </div>
+    </div>
+
+    <MudDivider></MudDivider>
+</div>
+
+@code {
+
+    [Parameter]
+    public string? Title { get; set; }
+
+    [Parameter]
+    public string? SubTitle { get; set; }
+
+    [Parameter]
+    public RenderFragment? ActionMenu { get; set; }
+
+}

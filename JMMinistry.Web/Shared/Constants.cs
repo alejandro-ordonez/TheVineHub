@@ -6,5 +6,6 @@
         public const string DefaultCulture = "en-US";
 
         public const string JwtToken = nameof(JwtToken);
+        public const string ApiClient = nameof(ApiClient);
     }
 }

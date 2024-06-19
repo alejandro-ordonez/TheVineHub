@@ -3,11 +3,9 @@
 @inject ISchoolApi _api 
 @inject IStringLocalizer<UIStrings> _translator
 
-@page "/schools/{id:int}"
+@page "/schools/{schoolId:int}"
 @using JMMinistry.Common.Dtos.School
 @using JMMinistry.Web.Api
-
-<h3>SchoolDetails</h3>
 
 @if (!LoadSuccess)
 {
@@ -16,8 +14,16 @@
 
 else
 {
-    <h1>@School?.Name</h1>
-    <p>@School?.Description</p>
+    <HeaderPage Title="@School?.Name" SubTitle="@School?.Description">
+        <ActionMenu>
+            <MudFab StartIcon="@Icons.Material.Filled.Add"
+                    Color="Color.Primary"
+                    Disabled="@EditorOpen"
+                    Size="Size.Small"
+                    OnClick="() => EditorOpen = !EditorOpen">
+            </MudFab>
+        </ActionMenu>
+    </HeaderPage>
 
     <div class="dynamic-grid">
         @foreach(var classDto in School?.Classes ?? [])
@@ -29,6 +35,8 @@ else
 
 
 @code {
+    private bool EditorOpen { get; set; } = false;
+
 
     [Parameter]
     public int? SchoolId { get; set; }

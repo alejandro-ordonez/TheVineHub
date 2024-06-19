@@ -7,15 +7,14 @@ using System.Net.Http.Json;
 
 namespace JMMinistry.Web.Api
 {
-    public class UserApi(HttpClient httpClient, ILocalStorageService localStorageService, ILogger<UserApi> logger) : IUserApi
+    public class UserApi(IHttpClientFactory clientFactory, ILogger<UserApi> logger): IUserApi
     {
         private const string _userApi = "api/User";
-
-        private readonly HttpClient httpClient = httpClient;
         private readonly ILogger<UserApi> logger = logger;
 
         public async Task<Response<TokenResult?>?> Authenticate(AuthenticateDto authenticateDto)
         {
+            var httpClient = clientFactory.CreateClient(Constants.ApiClient);
             var result = await httpClient.PostAsJsonAsync($"{_userApi}/auth", authenticateDto);
 
             var response = await result.Content.ReadFromJsonAsync<Response<TokenResult?>?>();
@@ -30,9 +29,7 @@ namespace JMMinistry.Web.Api
 
         public async Task<Response<UserInfoDto>?> GetUserInfo()
         {
-            var token = await localStorageService.GetItemAsync<TokenResult>(Constants.JwtToken);
-
-            httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token?.Token);
+            var httpClient = clientFactory.CreateClient(Constants.ApiClient);
             var result = await httpClient.GetFromJsonAsync<Response<UserInfoDto>>(_userApi);
             return result;
         }

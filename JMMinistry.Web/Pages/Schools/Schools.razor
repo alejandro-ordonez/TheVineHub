@@ -9,48 +9,51 @@
 @page "/schools"
 @attribute [Authorize]
 
-<h3>@_translator["Schools"]</h3>
+<HeaderPage Title="@_translator["Schools"]">
+    <ActionMenu>
+        <MudFab StartIcon="@Icons.Material.Filled.Add"
+                Color="Color.Primary"
+                Disabled="@EditorOpen"
+                Size="Size.Small"
+                OnClick="() => EditorOpen = !EditorOpen">
+        </MudFab>
+    </ActionMenu>
+</HeaderPage>
 
-<MudButton  Variant="Variant.Filled" 
-            EndIcon="@Icons.Material.Filled.Add" 
-            Color="Color.Primary"
-            Disabled="@EditorOpen"
-            OnClick="() => EditorOpen = !EditorOpen">
-            @_translator["Create"]
-</MudButton>
-
-<MudPopover Open="@EditorOpen" Fixed="true" Class="px-4 pt-4">
-    <div class="d-flex flex-column">
+<Popup Open="EditorOpen">
+    <Content>
         <MudForm Model="SchoolToEdit" @ref="schoolForm" Validation="SchoolValidator.ValidateValue" ValidationDelay="3">
-            <MudText Typo="Typo.h2">@(SchoolToEdit.Id != 0? _translator["Update", SchoolToEdit.Name] : _translator["CreateNew", _translator["School"]])</MudText>
+            <MudText Typo="Typo.h6">@(SchoolToEdit.Id != 0 ? _translator["Update", SchoolToEdit.Name] : _translator["CreateNew", _translator["School"]])</MudText>
             <MudDivider />
 
 
-                <MudTextField @bind-Value="SchoolToEdit!.Name"
-                              For="@(() => SchoolToEdit!.Name)"
-                              Immediate="true"
-                              Required="true"
-                              RequiredError="@_translator["FieldRequired"]"
-                              Variant="Variant.Outlined"
-                              Label="@_translator["SchoolName"]"
-                              InputType="InputType.Text" />
+            <MudTextField @bind-Value="SchoolToEdit!.Name"
+                          For="@(() => SchoolToEdit!.Name)"
+                          Immediate="true"
+                          Required="true"
+                          RequiredError="@_translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@_translator["SchoolName"]"
+                          InputType="InputType.Text" />
 
-                <MudTextField @bind-Value="SchoolToEdit!.Description"
-                              For="@(() => SchoolToEdit!.Description)"
-                              Immediate="true"
-                              Required="true"
-                              RequiredError="@_translator["FieldRequired"]"
-                              Variant="Variant.Outlined"
-                              Label="@_translator["Description"]"
-                              InputType="InputType.Text" />
+            <MudTextField @bind-Value="SchoolToEdit!.Description"
+                          For="@(() => SchoolToEdit!.Description)"
+                          Immediate="true"
+                          Required="true"
+                          RequiredError="@_translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@_translator["Description"]"
+                          InputType="InputType.Text" />
 
 
             <MudDivider />
             <MudButton OnClick="SaveSchool" Disabled="!schoolForm?.IsValid ?? true" Class="ml-auto mr-n3 mb-1" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Save">@_translator["Save"]</MudButton>
             <MudButton OnClick="Cancel" Class="ml-auto mr-n3 mb-1" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Save">@_translator["Cancel"]</MudButton>
         </MudForm>
-    </div>
-</MudPopover>
+
+    </Content>
+</Popup>
+
 
 <div class="dynamic-grid">
 
@@ -111,5 +114,6 @@
             await _api.UpdateSchool(SchoolToEdit);
 
         SchoolList = (await _api.GetSchools())?.Data ?? [];
+        EditorOpen = false;
     }
 }

@@ -174,4 +174,10 @@
   <data name="AuthenticationFailed" xml:space="preserve">
     <value>Autenticación fallida, verifica tus credenciales.</value>
   </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>Hubo un error en nuestro servidor, por favor ponte en contacto con el administrador para reportar el problema</value>
+  </data>
+  <data name="SessionExpired" xml:space="preserve">
+    <value>Tu sesión expiró, ingresa nuevamente</value>
+  </data>
 </root>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.School;
 using MediatR;
@@ -17,7 +18,7 @@ namespace JMMinistry.Application.Features.Schools.Queries.GetSchoolById
         {
             var school = await dbContext.Schools
                 .Include(school => school.Classes)
-                .FirstOrDefaultAsync(school => school.Id == request.SchoolId, cancellationToken);
+                .FirstOrDefaultAsync(school => school.Id == request.SchoolId, cancellationToken) ?? throw new NotFoundException(request.SchoolId.ToString());
 
             var schoolDto = mapper.Map<SchoolWithClassesDto>(school);
             

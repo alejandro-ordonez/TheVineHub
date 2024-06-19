@@ -1,6 +1,10 @@
 ﻿using JMMinistry.Web.Extensions;
 using System.Security.Claims;
 using System.Text.Json;
+using Microsoft.Extensions.DependencyInjection;
+using JMMinistry.Web.Shared;
+using Blazored.LocalStorage;
+using JMMinistry.Common.Dtos.User;
 
 namespace JMMinistry.Web.Api
 {
@@ -8,10 +12,17 @@ namespace JMMinistry.Web.Api
     {
         public static void AddApiServices(this IServiceCollection services)
         {
-            services.AddScoped(sp => new HttpClient
-            {
-                BaseAddress = new Uri("https://api.jm-ministry.org")
-            });
+            var serverUrl = new Uri("https://api.jm-ministry.org");
+
+            services.AddTransient<HttpDelegatingHandler>();
+
+            services
+                .AddHttpClient(Constants.ApiClient,  config =>
+                {
+                    config.BaseAddress = serverUrl;
+                })
+                .AddHttpMessageHandler<HttpDelegatingHandler>();
+
 
             services.AddTransient<IUserApi, UserApi>();
             services.AddTransient<ISchoolApi, SchoolApi>();

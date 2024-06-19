@@ -8,14 +8,14 @@
 <MudCard>
     <MudCardHeader>
         <MudCardContent>
-            <MudText Typo="Typo.h3">@CardModel?.Name</MudText>
+            <MudText Typo="Typo.h5">@CardModel?.Name</MudText>
         </MudCardContent>
     </MudCardHeader>
 
     <MudCard>
-        <MudCardMedia Image="images/door.jpg" Height="200" />
+        <MudCardMedia Image="images/door.jpg" Height="150" />
         <MudCardContent>
-            <MudText Typo="Typo.body2">@CardModel?.Description</MudText>
+            <MudText Typo="Typo.subtitle2">@CardModel?.Description</MudText>
         </MudCardContent>
         <MudCardActions>
             <MudButton Variant="Variant.Text" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Send" OnClick="@(() => OpenModel())">@_translator["Manage"]</MudButton>

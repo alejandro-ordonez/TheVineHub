@@ -14,8 +14,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddMudServices();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddLocalization();
-builder.Services.AddApiServices();
 builder.Services.AddServices();
+builder.Services.AddApiServices();
 
 var host = builder.Build();
 

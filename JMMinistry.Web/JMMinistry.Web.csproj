@@ -21,6 +21,7 @@
     <PackageReference Include="Blazored.FluentValidation" Version="2.2.0" />
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.6" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0-Preview.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.4" />
@@ -56,10 +57,6 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\Schools.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Pages\Schools\Schools.razor" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,15 @@
+﻿.details-header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding: 1rem;
+}
+
+.details-title {
+    flex-grow: 1;
+}
+
+.header-page{
+    margin-bottom: 2rem;
+    padding: 1rem;
+}
