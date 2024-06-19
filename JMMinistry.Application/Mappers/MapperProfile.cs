@@ -18,6 +18,8 @@ namespace JMMinistry.Application.Mappers
             CreateMap<PersonalInfo, UserInfoDto>();
 
             CreateMap<School, SchoolDto>();
+            CreateMap<SchoolDto, School>();
+
             CreateMap<School, SchoolWithClassesDto>();
 
             CreateMap<Class, ClassDto>();

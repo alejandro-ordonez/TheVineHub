@@ -32,10 +32,6 @@ namespace JMMinistry.API.Controllers
         public async Task<ActionResult<Response<ICollection<SchoolDto>>>> GetSchools()
         {
             var schools = await mediator.Send(new GetSchoolsCommand());
-            
-            if(schools.IsNullOrEmpty())
-                return NoContent();
-
             return Ok(schools);
         }
 
