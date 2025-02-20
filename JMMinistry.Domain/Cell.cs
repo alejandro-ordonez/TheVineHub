@@ -9,6 +9,7 @@ public partial class Cell
     public int Id { get; set; }
     public required string Name { get; set; }
     public bool MainCell { get; set; }
+    public required string Address { get; set; }
 
     [MaxLength(2)]
     public IList<PersonalInfo> Leaders { get; set; } = [];

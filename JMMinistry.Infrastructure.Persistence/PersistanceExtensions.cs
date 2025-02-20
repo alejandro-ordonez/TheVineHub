@@ -82,7 +82,8 @@ namespace JMMinistry.Infrastructure.Persistence
                         new Role { Name = Roles.Regular.ToString(), Description = "Regular role" },
                         new Role { Name = Roles.SchoolDirector.ToString(), Description = "Manages the schools in the ministry"},
                         new Role { Name = Roles.Coordinator.ToString(), Description = "Coordinator of a given Ministry"},
-                        new Role { Name = Roles.Assistant.ToString(), Description = "Assistant to the coordinator of a given ministry"}
+                        new Role { Name = Roles.Assistant.ToString(), Description = "Assistant to the coordinator of a given ministry"},
+                        new Role { Name = Roles.Disciple.ToString(), Description = "Regular User"}
                     ];
 
                 // No need to populate already inserted.

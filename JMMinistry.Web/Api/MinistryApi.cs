@@ -9,10 +9,24 @@ namespace JMMinistry.Web.Api
     {
         private const string _ministryApi = "api/Ministry";
 
-        public Task<Response<IList<CellDto>>?> GetAsync()
+        public async Task<Response<CellDto>?> AddDisciples(AddDisciplesDto addDisciples)
         {
-            var client = clientFactory.CreateClient(Constants.ApiClient);
-            var response = client.GetFromJsonAsync<Response<IList<CellDto>>?>(_ministryApi);
+            using var client = clientFactory.CreateClient(Constants.ApiClient);
+            var response = await client.PostAsJsonAsync(_ministryApi, addDisciples);
+            return await response.Content.ReadFromJsonAsync<Response<CellDto>>();
+        }
+
+        public async Task<Response<CellDto>?> CreateCell(CreateCellDto cell)
+        {
+            using var client = clientFactory.CreateClient(Constants.ApiClient);
+            var response = await client.PostAsJsonAsync(_ministryApi, cell);
+            return await response.Content.ReadFromJsonAsync<Response<CellDto>>();
+        }
+
+        public async Task<Response<IList<CellDto>>?> GetAsync()
+        {
+            using var client = clientFactory.CreateClient(Constants.ApiClient);
+            var response = await client.GetFromJsonAsync<Response<IList<CellDto>>?>(_ministryApi);
             return response;
         }
     }

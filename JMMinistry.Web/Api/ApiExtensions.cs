@@ -17,11 +17,16 @@ namespace JMMinistry.Web.Api
             services.AddTransient<HttpDelegatingHandler>();
 
             services
-                .AddHttpClient(Constants.ApiClient,  (provider, config) =>
+                .AddHttpClient(Constants.ApiClient, (provider, config) =>
                 {
+#if DEBUG
+                    var serverUrl = "http://localhost:5217";
+#else
                     var configuration = GetConfiguration();
                     var serverUrl = configuration[Constants.ApiURL] ?? 
                         throw new ArgumentException("Api URL not set");
+#endif
+
 
                     config.BaseAddress = new Uri(serverUrl);
                 })

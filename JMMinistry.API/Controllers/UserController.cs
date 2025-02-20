@@ -55,12 +55,5 @@ namespace JMMinistry.API.Controllers
             var userInfo = await mediator.Send(new GetUserInfoQuery { Document =  document });
             return Ok(userInfo);
         }
-
-        [HttpGet("test")]
-        public async Task<ActionResult<UserInfoDto>> TestDto()
-        {
-            await Task.Delay(100);
-            return Ok(new UserInfoDto { Name = "Sup" });
-        }
     }
 }

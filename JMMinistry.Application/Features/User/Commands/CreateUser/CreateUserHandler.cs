@@ -1,4 +1,7 @@
-﻿using JMMinistry.Domain;
+﻿using AutoMapper;
+using JMMinistry.Application.Exceptions;
+using JMMinistry.Common;
+using JMMinistry.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -11,12 +14,34 @@ namespace JMMinistry.Application.Features.User.Commands.CreateUser
 {
     public class CreateUserHandler(
         UserManager<PersonalInfo> userManager,
-        RoleManager<Role> roleManager) : IRequestHandler<CreateUserCommand>
+        IMapper mapper
+        ) 
+        : IRequestHandler<CreateUserCommand>
     {
-        public Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
+            var _ = await userManager.FindByIdAsync(request.Document) ??
+                throw new EntityAlreadyExistsException<PersonalInfo>(request.Document);
+            
+            var personalInfo = mapper.Map<PersonalInfo>(request);
 
-            throw new NotImplementedException();
+            var result = await userManager.CreateAsync(personalInfo, request.Password);
+            ThrowOnError(result);
+
+            result = await userManager.AddToRoleAsync(personalInfo, Roles.Disciple.ToString());
+            ThrowOnError(result);
+        }
+
+        private static void ThrowOnError(IdentityResult? result)
+        {
+            if (result == null)
+                return;
+
+            if (result.Succeeded)
+                return;
+
+            var errors = string.Join("\n", result.Errors.Select(error => $"{error.Code}: {error.Description}";
+            throw new Exception(errors);
         }
     }
 }

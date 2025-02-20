@@ -180,4 +180,7 @@
   <data name="SessionExpired" xml:space="preserve">
     <value>Tu sesión expiró, ingresa nuevamente</value>
   </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
 </root>

@@ -18,6 +18,7 @@ namespace JMMinistry.Common
         Conventions,
         SchoolDirector,
         Coordinator,
-        Assistant
+        Assistant,
+        Disciple
     }
 }
