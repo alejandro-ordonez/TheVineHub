@@ -1,4 +1,6 @@
-﻿using JMMinistry.Common.Models;
+﻿using JMMinistry.Common.Dtos.Common;
+using JMMinistry.Common.Dtos.User;
+using JMMinistry.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Common.Dtos.Cell
 {
-    public class CellDto: CardModel<int>
+    public class CellDto: CreateCellDto
     {
-        public bool MainCell { get; set; }
-        public int Disciples { get; set; }
+        public IList<UserInfoDto> Disciples { get; set; } = [];
     }
+
 }

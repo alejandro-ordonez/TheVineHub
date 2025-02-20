@@ -17,7 +17,7 @@ namespace JMMinistry.Domain
         [Required]
         public DateTime Date { get; set; }
 
-        public ICollection<PersonalInfo> Attendees { get; set; } = Array.Empty<PersonalInfo>();
+        public IList<PersonalInfo> Attendees { get; set; } = Array.Empty<PersonalInfo>();
 
     }
 }

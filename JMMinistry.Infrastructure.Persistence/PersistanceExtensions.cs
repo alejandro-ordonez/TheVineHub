@@ -22,10 +22,18 @@ namespace JMMinistry.Infrastructure.Persistence
     {
         public static void AddPersistenceLayer(this IServiceCollection services, IConfiguration configuration)
         {
+#if DEBUG
+            services.AddDbContext<JmDbContext>(options =>
+                options.UseInMemoryDatabase($"{nameof(JMMinistry)}Db")
+
+            );
+            
+#else
             services.AddDbContext<JmDbContext>(options =>
                 options.UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(JmDbContext).Assembly.FullName)));
+#endif
 
             services.AddIdentity<PersonalInfo, Role>()
                 .AddEntityFrameworkStores<JmDbContext>();
@@ -49,7 +57,10 @@ namespace JMMinistry.Infrastructure.Persistence
                 // Run migrations
                 logger.LogInformation("Preparing DB");
                 using var dbContext = services.GetRequiredService<JmDbContext>();
-                dbContext.Database.Migrate();
+
+                if (dbContext.Database.IsRelational())
+                    dbContext.Database.Migrate();
+
                 logger.LogInformation("DB migrated to latest state");
 
             
@@ -97,7 +108,7 @@ namespace JMMinistry.Infrastructure.Persistence
 
                     if (!createUserResult.Succeeded)
                     {
-                        logger.LogError("There was an error creating the default user, errors {errors}", string.Join("\n", createUserResult.Errors));
+                        logger.LogError("There was an error creating the default user, errors {errors}", string.Join("\n", createUserResult.Errors.Select(error => $"{error.Code} : {error.Description}")));
                         return;
                     }
 
@@ -105,7 +116,7 @@ namespace JMMinistry.Infrastructure.Persistence
 
                     if (!addRolesResult.Succeeded)
                     {
-                        logger.LogError("There was an error creating the default user, errors {errors}", string.Join("\n", addRolesResult.Errors));
+                        logger.LogError("There was an error creating the default user, errors {errors}", string.Join("\n", addRolesResult.Errors.Select(error => $"{error.Code} : {error.Description}")));
                         return;
                     }
                 }

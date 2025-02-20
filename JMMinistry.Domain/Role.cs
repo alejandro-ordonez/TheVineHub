@@ -8,5 +8,5 @@ public partial class Role: IdentityRole
 {
     public string Description { get; set; } = string.Empty;
 
-    public virtual ICollection<PersonalInfoRole> UserRoles { get; set; } = [];
+    public virtual IList<PersonalInfoRole> UserRoles { get; set; } = [];
 }

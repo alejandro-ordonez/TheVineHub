@@ -15,5 +15,5 @@ public partial class Convention
 
     public DateOnly EndDate { get; set; }
 
-    ICollection<ConventionAttendee> ConventionAttendees { get; set; } = [];
+    IList<ConventionAttendee> ConventionAttendees { get; set; } = [];
 }

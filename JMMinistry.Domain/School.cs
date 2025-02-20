@@ -12,5 +12,5 @@ public partial class School
     public string Name { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<Class> Classes { get; set; } = [];
+    public IList<Class> Classes { get; set; } = [];
 }

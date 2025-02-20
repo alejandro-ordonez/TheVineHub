@@ -2,9 +2,11 @@
 using System.Security.Claims;
 using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using JMMinistry.Web.Shared;
 using Blazored.LocalStorage;
 using JMMinistry.Common.Dtos.User;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
 namespace JMMinistry.Web.Api
 {
@@ -12,21 +14,34 @@ namespace JMMinistry.Web.Api
     {
         public static void AddApiServices(this IServiceCollection services)
         {
-            var serverUrl = new Uri("https://api.jm-ministry.org");
-
             services.AddTransient<HttpDelegatingHandler>();
 
             services
-                .AddHttpClient(Constants.ApiClient,  config =>
+                .AddHttpClient(Constants.ApiClient,  (provider, config) =>
                 {
-                    config.BaseAddress = serverUrl;
+                    var configuration = GetConfiguration();
+                    var serverUrl = configuration[Constants.ApiURL] ?? 
+                        throw new ArgumentException("Api URL not set");
+
+                    config.BaseAddress = new Uri(serverUrl);
                 })
                 .AddHttpMessageHandler<HttpDelegatingHandler>();
 
 
             services.AddTransient<IUserApi, UserApi>();
             services.AddTransient<ISchoolApi, SchoolApi>();
+            services.AddTransient<IMinistryApi, MinistryApi>();
         }
+
+        public static IConfigurationRoot GetConfiguration()
+        {
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json");
+
+            return builder.Build(); 
+        }
+
+
 
         public static IList<Claim> ParseClaimsFromJwt(this string jwt)
         {

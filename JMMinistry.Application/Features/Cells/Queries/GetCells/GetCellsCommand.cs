@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.Features.Cell.Queries.GetCells
+namespace JMMinistry.Application.Features.Cells.Queries.GetCells
 {
     public class GetCellsCommand: IRequest<IEnumerable<CellDto>>
     {

@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using JMMinistry.Common;
+using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Web.Services;
 using JMMinistry.Web.Shared;
@@ -25,6 +26,11 @@ namespace JMMinistry.Web.Api
             }
 
             return response;
+        }
+
+        public Task<Response<PagedResponse<UserInfoDto>>> GetUserByCriteria(UserCriteriaSearch userCriteriaSearch = null)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<Response<UserInfoDto>?> GetUserInfo()

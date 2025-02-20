@@ -3,9 +3,13 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "jmministry.api",
+      "composeLaunchUrl": "{Scheme}://localhost:{ServicePort}/swagger",
       "serviceActions": {
         "jmministry.api": "StartDebugging",
-        "jmministry.web": "Start"
+        "database": "StartWithoutDebugging",
+        "jmministry.web": "StartWithoutDebugging"
       }
     }
   }

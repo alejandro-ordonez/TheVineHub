@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.Class;
 using JMMinistry.Common.Dtos.School;
 using JMMinistry.Common.Dtos.User;
@@ -23,6 +24,9 @@ namespace JMMinistry.Application.Mappers
             CreateMap<School, SchoolWithClassesDto>();
 
             CreateMap<Class, ClassDto>();
+
+            CreateMap<Cell, CellDto>();
+            CreateMap<CreateCellDto, Cell>();
         }
     }
 }

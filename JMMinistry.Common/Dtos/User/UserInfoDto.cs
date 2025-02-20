@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JMMinistry.Common.Dtos.User.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,5 +24,9 @@ namespace JMMinistry.Common.Dtos.User
         public string Address { get; set; } = null!;
 
         public DateOnly Birthday { get; set; }
+
+        public MinistryStatus MinistryStatus { get; set; }
+
+        public Gender Gender { get; set; }
     }
 }

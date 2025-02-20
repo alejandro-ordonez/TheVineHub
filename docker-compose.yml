@@ -2,14 +2,14 @@ version: '3.9'
 
 networks:
   jm-backend:
-    external: true
-    #driver: bridge
+    #external: true
+    driver: bridge
   jm-frontend:
-    external: true
-    #driver: bridge
+    #external: true
+    driver: bridge
   jm-db:
-    external: true
-    #driver: bridge
+    #external: true
+    driver: bridge
 
 services:
     database:
@@ -28,7 +28,7 @@ services:
 
         environment:
             - POSTGRES_USER=jm-db # The PostgreSQL user (useful to connect to the database)
-            - POSTGRES_PASSWORD # The PostgreSQL password (useful to connect to the database)
+            - POSTGRES_PASSWORD=jm-ministry-2024 # The PostgreSQL password (useful to connect to the database)
             - POSTGRES_DB=jm-db # The PostgreSQL default database (automatically created at first launch)
 
         volumes:
@@ -42,6 +42,7 @@ services:
 
     jmministry.api:
         #image: ${DOCKER_REGISTRY-}jmministryapi
+        container_name: jmministry-api
         build:
             context: .
             dockerfile: JMMinistry.API/Dockerfile
@@ -60,17 +61,22 @@ services:
         networks:
             - jm-backend
             - jm-db
+            - jm-frontend 
         depends_on:
             - database
-        
 
     jmministry.web:
-        #image: ${DOCKER_REGISTRY-}jmministryweb
-        build:
-            context: .
-            dockerfile: JMMinistry.Web/Dockerfile
-        ports:
-            #- "62421:8080"
-            - "4200:80"
-        networks:
-            - jm-frontend
+       container_name: jmministry-web
+       build:
+           context: .
+           dockerfile: JMMinistry.Web/Dockerfile
+           args:
+            - API_URL=$API_URL
+       environment:
+            - API_URL
+       ports:
+           - 62422:80
+       networks:
+           - jm-frontend
+       depends_on:
+           - jmministry.api

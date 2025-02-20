@@ -3,6 +3,7 @@ using JMMinistry.Application.Features.User.Commands.Authenticate;
 using JMMinistry.Application.Features.User.Commands.CreateUser;
 using JMMinistry.Application.Features.User.Commands.ImportUsers;
 using JMMinistry.Application.Features.User.Queries;
+using JMMinistry.Application.Features.User.Queries.GetUserInfo;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Common.Dtos.User.Enums;
 using MediatR;

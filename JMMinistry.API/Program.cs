@@ -7,13 +7,15 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 var CORSPolicy = "_corsPolicy";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: CORSPolicy,
                       policy =>
                       {
-                          policy.WithOrigins("https://app.jm-ministry.org", "http://localhost:5048")
+                          policy.WithOrigins("https://app.jm-ministry.org", "http://localhost:62422")
                             .AllowAnyMethod()
                             .AllowAnyHeader();
                       });
@@ -30,6 +32,8 @@ builder.Services.AddApplicationLayer(builder.Configuration);
 builder.Services.AddSwagger();
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 app.UseExceptionHandler();
 app.InitializeDb();

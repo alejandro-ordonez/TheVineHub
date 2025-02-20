@@ -419,6 +419,7 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Document")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
@@ -471,6 +472,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
 
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
@@ -491,6 +495,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("CellId");
 
+                    b.HasIndex("Document")
+                        .IsUnique();
+
                     b.HasIndex("GainedId")
                         .IsUnique();
 
@@ -500,6 +507,8 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("Name", "LastName");
 
                     b.ToTable("PersonalInfo", (string)null);
                 });

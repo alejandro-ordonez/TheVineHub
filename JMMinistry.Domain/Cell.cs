@@ -11,6 +11,6 @@ public partial class Cell
     public bool MainCell { get; set; }
 
     [MaxLength(2)]
-    public ICollection<PersonalInfo> Leaders { get; set; } = Array.Empty<PersonalInfo>();
-    public ICollection<PersonalInfo> Disciples { get; set; } = Array.Empty<PersonalInfo>();
+    public IList<PersonalInfo> Leaders { get; set; } = Array.Empty<PersonalInfo>();
+    public IList<PersonalInfo> Disciples { get; set; } = Array.Empty<PersonalInfo>();
 }
