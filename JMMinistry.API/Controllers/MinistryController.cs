@@ -1,4 +1,5 @@
 ﻿using JMMinistry.API.Extensions;
+using JMMinistry.Application.Features.Cells.Commands.AddDisciples;
 using JMMinistry.Application.Features.Cells.Commands.CreateCell;
 using JMMinistry.Application.Features.Cells.Queries.GetCells;
 using JMMinistry.Common.Dtos.Cell;
@@ -28,6 +29,15 @@ namespace JMMinistry.API.Controllers
 
             var cells = await mediator.Send(new GetCellsCommand { Document = document });
             return Ok(cells);
+        }
+
+        [HttpPost("{cellId}")]
+        public async Task<ActionResult<CellDto>> AddDisciples(int cellId, [FromBody] AddDisciplesCommand addDisciples)
+        {
+            addDisciples.CellId = cellId;
+
+            var cell = await mediator.Send(addDisciples);
+            return cell;
         }
     }
 }

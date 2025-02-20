@@ -15,5 +15,5 @@ public partial class Class
     public School School { get; set; } = null!;
 
 
-    public IList<ClassAttendance> ClassAttendances { get; set; } = Array.Empty<ClassAttendance>();
+    public IList<ClassAttendance> ClassAttendances { get; set; } = [];
 }

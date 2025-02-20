@@ -14,5 +14,5 @@ public partial class ClassAttendance
     public Class Class { get; set; } = null!;
 
 
-    public IList<PersonalInfo> Attendees { get; set; } = Array.Empty<PersonalInfo>();
+    public IList<PersonalInfo> Attendees { get; set; } = [];
 }
