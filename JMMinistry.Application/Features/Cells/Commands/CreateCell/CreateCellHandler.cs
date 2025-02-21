@@ -18,7 +18,7 @@ public class CreateCellHandler (IJmDbContext dbContext, IMapper mapper) :
         if (await dbContext.Cells.AnyAsync(cell => cell.Name == request.Name, cancellationToken))
             throw new EntityAlreadyExistsException<Cell>();
 
-        var user = await dbContext.PersonalInfo.FirstOrDefaultAsync(user => user.Document == request.Document, cancellationToken) ??
+        var user = await dbContext.PersonalInfo.FirstOrDefaultAsync(user => user.Id == request.Document, cancellationToken) ??
             throw new NotFoundException(request.Document);
 
         user.Cells.Add(model);

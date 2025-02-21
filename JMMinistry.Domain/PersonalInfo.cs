@@ -7,11 +7,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JMMinistry.Domain;
 
-[Index(nameof(Document), IsUnique = true)]
 [Index(nameof(Name), nameof(LastName))]
-public partial class PersonalInfo: IdentityUser
+public partial class PersonalInfo: IdentityUser<string>
 {
-    public string Document { get; set; } = null!;
+    public PersonalInfo()
+    {
+        SecurityStamp = Guid.NewGuid().ToString();
+    }
 
     public string Name { get; set; } = null!;
 

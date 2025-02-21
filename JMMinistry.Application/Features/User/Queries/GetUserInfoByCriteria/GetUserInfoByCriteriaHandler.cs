@@ -25,7 +25,7 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
                 query.Where(user => user.LastName.StartsWith(request.LastName.Trim()));
 
             if (!string.IsNullOrEmpty(request.Document))
-                query.Where(user=> user.Document.StartsWith(request.Document.Trim()));
+                query.Where(user=> user.Id.StartsWith(request.Document.Trim()));
 
             var totalCount = await query.CountAsync(cancellationToken);
 

@@ -16,7 +16,7 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
         public async Task<UserInfoDto> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
         {
             var userInfo = await dbContext.PersonalInfo
-                .FirstOrDefaultAsync(user => user.Document == request.Document, cancellationToken);
+                .FirstOrDefaultAsync(user => user.Id == request.Document, cancellationToken);
 
             var userInfoDto = mapper.Map<UserInfoDto>(userInfo);
 

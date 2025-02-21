@@ -14,7 +14,7 @@ public class AddDisciplesHandler(IJmDbContext dbContext, IMapper mapper) :
     public async Task<CellDto> Handle(AddDisciplesCommand request, CancellationToken cancellationToken)
     {
         var users = await dbContext.PersonalInfo
-            .Where(user => request.Documents.Contains(user.Document))
+            .Where(user => request.Documents.Contains(user.Id))
             .ToListAsync(cancellationToken);
 
         if (users.Count != request.Documents.Count)

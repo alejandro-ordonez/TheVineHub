@@ -20,7 +20,8 @@ namespace JMMinistry.Application.Features.User.Commands.Authenticate
     {
         public async Task<TokenResult> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
         {
-            var user = await userManager.Users.FirstOrDefaultAsync(user => user.Document == request.Document, cancellationToken) ?? throw new AuthenticationException("User not found");
+            var user = await userManager.FindByIdAsync(request.Document) ?? 
+                throw new AuthenticationException("User not found");
 
             if (!await userManager.HasPasswordAsync(user))
                 throw new AuthenticationException("The user must set a password first");
@@ -59,9 +60,9 @@ namespace JMMinistry.Application.Features.User.Commands.Authenticate
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Document),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email?? user.Document),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email?? user.Id),
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim("uid", user.Id)
             }

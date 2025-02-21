@@ -4,20 +4,20 @@
 @using JMMinistry.Web.Layout
 
 @inject IAuthService authService
-@inject IStringLocalizer<UIStrings> Loc
+@inject IStringLocalizer<UIStrings> _translator;
 @inject NavigationManager navigation
 
 @page "/auth"
 @layout EmptyLayout
 
-<div class="login-container">
-    <section class="column login-section">
-        <MudCard Style="flex-grow: 1;">
+<div class="page-container">
+    <section class="column content-section">
+        <MudCard Style="flex-grow: 0.7;">
             <MudForm Model="Model" @ref="form" Validation="AuthValidator.ValidateValue" ValidationDelay="3">
 
                 <MudCardHeader>
                     <CardHeaderContent>
-                        <MudText Typo="Typo.h2">@Loc["Welcome"]</MudText>
+                        <MudText Typo="Typo.h2">@_translator["Welcome"]</MudText>
                     </CardHeaderContent>
                 </MudCardHeader>
 
@@ -26,28 +26,28 @@
                                   For="@(() => Model!.Document)"
                                   Immediate="true"
                                   Required="true"
-                                  RequiredError="@Loc["FieldRequired"]"
+                                  RequiredError="@_translator["FieldRequired"]"
                                   Variant="Variant.Outlined"
-                                  Label="@Loc["Document"]" 
-                                  InputType="InputType.Number"/>
+                                  Label="@_translator["Document"]"
+                                  InputType="InputType.Number" />
 
                     <MudTextField @bind-Value="Model!.Password"
                                   For="@(() => Model!.Password)"
                                   Immediate="true"
                                   Required="true"
                                   OnlyValidateIfDirty="true"
-                                  RequiredError="@Loc["FieldRequired"]"
+                                  RequiredError="@_translator["FieldRequired"]"
                                   Variant="Variant.Outlined"
-                                  Label="@Loc["Password"]" 
-                                  InputType="InputType.Password"/>
+                                  Label="@_translator["Password"]"
+                                  InputType="InputType.Password" />
 
                 </MudCardContent>
 
-                <MudCardActions Style="justify-content: center;">
-                    <MudButton Variant="Variant.Filled" 
-                               Color="Color.Primary" 
+                <MudCardActions Style="justify-content: space-evenly;">
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
                                OnClick="@(async () => await Submit())">
-                               
+
 
                         @if (Busy)
                         {
@@ -56,8 +56,14 @@
                         }
                         else
                         {
-                            <MudText>@Loc["LogIn"]</MudText>
+                            <MudText>@_translator["LogIn"]</MudText>
                         }
+                    </MudButton>
+
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               Href="/Signup">
+                        @_translator["SignUp"]
                     </MudButton>
                 </MudCardActions>
             </MudForm>
@@ -65,7 +71,6 @@
     </section>
 
     <section class="column side-section">
-
     </section>
 </div>
 
@@ -76,7 +81,7 @@
 
     public AuthenticateValidator AuthValidator = new AuthenticateValidator();
 
-    [Inject] 
+    [Inject]
     ISnackbar? SnackBar { get; set; }
 
     MudForm? form;
@@ -93,9 +98,9 @@
         Busy = true;
         form?.Validate();
 
-        if(!form?.IsValid ?? false)
+        if (!form?.IsValid ?? false)
         {
-            SnackBar?.Add(Loc["VerifyYourInputs"], Severity.Error);
+            SnackBar?.Add(_translator["VerifyYourInputs"], Severity.Error);
             return;
         }
 
@@ -104,11 +109,11 @@
         if (result)
         {
             navigation.NavigateTo("/");
-            SnackBar?.Add(Loc["AuthenticationSuccess"], Severity.Success);
+            SnackBar?.Add(_translator["AuthenticationSuccess"], Severity.Success);
         }
 
         else
-            SnackBar?.Add(Loc["AuthenticationFailed"], Severity.Error);
+            SnackBar?.Add(_translator["AuthenticationFailed"], Severity.Error);
 
         Busy = false;
     }

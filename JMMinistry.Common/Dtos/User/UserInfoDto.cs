@@ -17,13 +17,15 @@ namespace JMMinistry.Common.Dtos.User
 
         public string City { get; set; } = null!;
 
-        public string Locality { get; set; } = null!;
+        public string? Locality { get; set; }
 
         public string Neighborhood { get; set; } = null!;
 
         public string Address { get; set; } = null!;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
 
-        public DateOnly Birthday { get; set; }
+        public DateTime Birthday { get; set; }
 
         public MinistryStatus MinistryStatus { get; set; }
 

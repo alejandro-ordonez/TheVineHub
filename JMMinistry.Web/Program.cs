@@ -15,6 +15,7 @@ builder.Services.AddMudServices();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddLocalization();
 builder.Services.AddServices();
+builder.Services.AddMudServices();
 builder.Services.AddApiServices();
 
 var host = builder.Build();

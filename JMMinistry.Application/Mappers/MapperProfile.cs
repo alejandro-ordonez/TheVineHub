@@ -16,7 +16,11 @@ namespace JMMinistry.Application.Mappers
     {
         public MapperProfile()
         {
-            CreateMap<PersonalInfo, UserInfoDto>();
+            CreateMap<PersonalInfo, UserInfoDto>()
+                .ForMember(x => x.Document, cfg => cfg.MapFrom(model => model.Id));
+
+            CreateMap<UserInfoDto, PersonalInfo>()
+                .ForMember(x => x.Id, cfg => cfg.MapFrom(model => model.Document));
 
             CreateMap<School, SchoolDto>();
             CreateMap<SchoolDto, School>();

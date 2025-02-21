@@ -65,10 +65,10 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
 
                 var person = new PersonalInfo
                 {
+                    Id = document,
                     Name = name.ToCapitalCase(),
                     LastName = lastName.ToCapitalCase(),
                     Gender = string.IsNullOrEmpty(gender) ? null : GetGender(gender),
-                    Document = document,
                     Birthday = string.IsNullOrEmpty(birthday) ? null : DateOnly.Parse(birthday),
                     Phone = string.IsNullOrEmpty(phone) ? null : phone,
                     Email = string.IsNullOrEmpty(email) ? null : email,

@@ -95,13 +95,13 @@ namespace JMMinistry.Infrastructure.Persistence
 
                 var defaultUser = services.GetRequiredService<IOptions<DefaultUser>>().Value;
 
-                if (defaultUser != null &&  !await userManager.Users.AnyAsync(user => user.Document == defaultUser.Document))
+                if (defaultUser != null &&  !await userManager.Users.AnyAsync(user => user.Id == defaultUser.Document))
                 {
                     var userIdentity = new PersonalInfo
                     {
+                        Id = defaultUser.Document,
                         Name = defaultUser.Name,
                         LastName = defaultUser.LastName,
-                        Document = defaultUser.Document,
                         UserName = $"{defaultUser.Name.Split(' ')[0]}.{defaultUser.LastName.Split(' ')[0]}",
                     };
 

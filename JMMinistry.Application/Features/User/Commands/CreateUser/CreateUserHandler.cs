@@ -40,7 +40,7 @@ namespace JMMinistry.Application.Features.User.Commands.CreateUser
             if (result.Succeeded)
                 return;
 
-            var errors = string.Join("\n", result.Errors.Select(error => $"{error.Code}: {error.Description}";
+            var errors = string.Join("\n", result.Errors.Select(error => $"{error.Code}: {error.Description}"));
             throw new Exception(errors);
         }
     }
