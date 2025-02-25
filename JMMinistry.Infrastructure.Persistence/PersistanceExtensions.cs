@@ -25,7 +25,6 @@ namespace JMMinistry.Infrastructure.Persistence
 #if DEBUG
             services.AddDbContext<JmDbContext>(options =>
                 options.UseInMemoryDatabase($"{nameof(JMMinistry)}Db")
-
             );
             
 #else
@@ -37,6 +36,11 @@ namespace JMMinistry.Infrastructure.Persistence
 
             services.AddIdentity<PersonalInfo, Role>()
                 .AddEntityFrameworkStores<JmDbContext>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.";
+            });
 
             services.Configure<DefaultUser>(configuration.GetSection(nameof(DefaultUser)));
 
@@ -79,11 +83,10 @@ namespace JMMinistry.Infrastructure.Persistence
                         new Role { Name = Roles.Evangelism.ToString(), Description = "Coordinates the activities to evangelize"},
                         new Role { Name = Roles.Gain.ToString(), Description = "Manages the new ones invited to the ministry and the church"},
                         new Role { Name = Roles.Leader.ToString(), Description = "Manages their own cells" },
-                        new Role { Name = Roles.Regular.ToString(), Description = "Regular role" },
+                        new Role { Name = Roles.Regular.ToString(), Description = "Regular User" },
                         new Role { Name = Roles.SchoolDirector.ToString(), Description = "Manages the schools in the ministry"},
                         new Role { Name = Roles.Coordinator.ToString(), Description = "Coordinator of a given Ministry"},
                         new Role { Name = Roles.Assistant.ToString(), Description = "Assistant to the coordinator of a given ministry"},
-                        new Role { Name = Roles.Disciple.ToString(), Description = "Regular User"}
                     ];
 
                 // No need to populate already inserted.

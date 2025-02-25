@@ -1,9 +1,6 @@
 ﻿using JMMinistry.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace JMMinistry.Domain;
 
@@ -28,6 +25,11 @@ public partial class PersonalInfo: IdentityUser<string>
     public string? Address { get; set; }
 
     public string? Phone { get; set; }
+    public EducationalLevel? EducationalLevel { get; set; }
+    public string? Profession { get; set; }
+    public string? Occupation { get; set; }
+
+    public MaritalStatus MaritalStatus { get; set; }
 
     public DateOnly? Birthday { get; set; }
 

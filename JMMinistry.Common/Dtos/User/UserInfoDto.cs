@@ -24,10 +24,14 @@ namespace JMMinistry.Common.Dtos.User
         public string Address { get; set; } = null!;
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
+        public string Profession { get; set; } = string.Empty;
+        public string Occupation { get; set; } = string.Empty;
 
         public DateTime Birthday { get; set; }
 
-        public MinistryStatus MinistryStatus { get; set; }
+        public MinistryStatus? MinistryStatus { get; set; }
+        public MaritalStatus? MaritalStatus { get; set; }
+        public EducationalLevel? EducationalLevel { get; set; }
 
         public Gender Gender { get; set; }
     }

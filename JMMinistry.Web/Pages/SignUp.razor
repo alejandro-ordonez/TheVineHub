@@ -56,6 +56,64 @@
                             <MudSelectItem Value="Gender.Female">@_translator[Gender.Female.ToString()]</MudSelectItem>
                         </MudSelect>
 
+                        <MudSelect @bind-Value="UserInfo.MaritalStatus"
+                                   Label="@_translator[nameof(MaritalStatus)]"
+                                   Placeholder="@_translator["SelectAnOption"]"
+                                   Required="true"
+                                   RequiredError="@_translator["FieldRequired"]"
+                                   Variant="Variant.Outlined">
+
+                            @foreach (var maritalStatus in Enum.GetNames<MaritalStatus>())
+                            {
+                                <MudSelectItem Value="Gender.Male">@_translator[maritalStatus]</MudSelectItem>
+                            }
+                        </MudSelect>
+
+                        <MudSelect @bind-Value="UserInfo.EducationalLevel"
+                                   Label="@_translator[nameof(EducationalLevel)]"
+                                   Placeholder="@_translator["SelectAnOption"]"
+                                   Required="true"
+                                   RequiredError="@_translator["FieldRequired"]"
+                                   Variant="Variant.Outlined">
+
+                            @foreach (var level in Enum.GetNames<EducationalLevel>())
+                            {
+                                <MudSelectItem Value="Gender.Male">@_translator[level]</MudSelectItem>
+                            }
+                        </MudSelect>
+
+
+                        <MudTextField @bind-Value="UserInfo.Profession"
+                                      For="@(() => UserInfo.Profession)"
+                                      Immediate="true"
+                                      Required="true"
+                                      RequiredError="@_translator["FieldRequired"]"
+                                      Variant="Variant.Outlined"
+                                      Label="@_translator["Profession"]"
+                                      InputType="InputType.Text" />
+
+
+                        <MudTextField @bind-Value="UserInfo.Occupation"
+                                      For="@(() => UserInfo.Occupation)"
+                                      Immediate="true"
+                                      Required="true"
+                                      RequiredError="@_translator["FieldRequired"]"
+                                      Variant="Variant.Outlined"
+                                      Label="@_translator["Occupation"]"
+                                      InputType="InputType.Text" />
+                    </MudStep>
+
+                    <MudStep Title="@_translator["AddressInformation"]">
+
+                        <MudTextField @bind-Value="UserInfo.Email"
+                                      For="@(() => UserInfo.Email)"
+                                      Immediate="true"
+                                      Required="true"
+                                      RequiredError="@_translator["FieldRequired"]"
+                                      Variant="Variant.Outlined"
+                                      Label="@_translator["Email"]"
+                                      InputType="InputType.Email" />
+
                         <MudTextField @bind-Value="UserInfo.Phone"
                                       For="@(() => UserInfo.Phone)"
                                       Immediate="true"
@@ -63,10 +121,7 @@
                                       RequiredError="@_translator["FieldRequired"]"
                                       Variant="Variant.Outlined"
                                       Label="@_translator["Phone"]"
-                                      InputType="InputType.Text" />
-
-                    </MudStep>
-                    <MudStep Title="@_translator["AddressInformation"]">
+                                      InputType="InputType.Telephone" />
 
                         <MudTextField @bind-Value="UserInfo.City"
                                       For="@(() => UserInfo.City)"

@@ -1,16 +1,20 @@
-﻿using JMMinistry.Application.Services;
+﻿using JMMinistry.Application.Extensions;
+using JMMinistry.Application.Services;
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Domain;
 using JMMinistry.Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace JMMinistry.Application.Features.User.Commands.ImportUsers
 {
@@ -25,7 +29,7 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
             var lines = new List<string>();
 
             // Skip first line - Header
-            await reader.ReadLineAsync();
+            await reader.ReadLineAsync(cancellationToken);
 
             while (reader.Peek() >= 0)
             {
@@ -45,42 +49,55 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
                 var faulty = false;
                 var wrongFields = new List<string>();
 
-                faulty |= ValidateColumn(fields[0], out string name, nameof(name), wrongFields);
-                faulty |= ValidateColumn(fields[1], out string lastName, nameof(lastName), wrongFields);
-                faulty |= ValidateColumn(fields[4], out string document, nameof(document), wrongFields);
-
-
+                faulty |= fields.ExtractAndValidate(CsvOrdinals.Name, out string name, wrongFields);
+                faulty |= fields.ExtractAndValidate(CsvOrdinals.LastName, out string lastName, wrongFields);
+                faulty |= fields.ExtractAndValidate(CsvOrdinals.Document, out string document, wrongFields);
+                
                 if (faulty)
                 {
                     rejectedLines.Add(GetLineError(lineNumber + 1, wrongFields));
                     continue;
                 }
 
-                var gender = fields[2].Trim();
-                var birthday = fields[5].Trim();
-                var phone = fields[6].Trim();
-                var email = fields[7].Trim();
+                var birthdayString = fields.Extract(CsvOrdinals.Birthday);
+                var phone = fields.Extract(CsvOrdinals.Phone);
+                var neighborhood = fields.Extract(CsvOrdinals.Neighborhood);
+                var locality = fields.Extract(CsvOrdinals.Locality);
+                var email = fields.Extract(CsvOrdinals.Email);
+                var maritalStatus = fields.Extract(CsvOrdinals.MaritalStatus);
+                var educationalLevel = fields.Extract(CsvOrdinals.EducationalLevel);
+                var profession = fields.Extract(CsvOrdinals.Profession);
+                var occupation = fields.Extract(CsvOrdinals.Occupation);
+                var gender = fields.Extract(CsvOrdinals.Gender);
 
 
+                var nameSanitized = BuildPartialUserName(name);
+                var lastNameSanitized = BuildPartialUserName(lastName);
+                var userName = $"{nameSanitized}.{lastNameSanitized}";
 
                 var person = new PersonalInfo
                 {
                     Id = document,
                     Name = name.ToCapitalCase(),
                     LastName = lastName.ToCapitalCase(),
-                    Gender = string.IsNullOrEmpty(gender) ? null : GetGender(gender),
-                    Birthday = string.IsNullOrEmpty(birthday) ? null : DateOnly.Parse(birthday),
-                    Phone = string.IsNullOrEmpty(phone) ? null : phone,
-                    Email = string.IsNullOrEmpty(email) ? null : email,
-                    UserName = $"{name.ToLower().Split(' ')[0]}.{lastName.ToLower().Split(' ')[0]}",
-                    MinistryStatus = Domain.Enums.MinistryStatus.InACell
+                    UserName = userName,
+                    Birthday = string.IsNullOrEmpty(birthdayString) ? null : DateOnly.ParseExact(birthdayString, DateFormats, CultureInfo.InvariantCulture),
+                    Phone = phone,
+                    Email = email,
+                    Locality = locality,
+                    Neighborhood = neighborhood,
+                    EducationalLevel = Enum.Parse<Domain.Enums.EducationalLevel>(educationalLevel!),
+                    MaritalStatus = Enum.Parse<Domain.Enums.MaritalStatus>(maritalStatus!),
+                    MinistryStatus = Domain.Enums.MinistryStatus.InACell,
+                    Gender = Enum.Parse<Domain.Enums.Gender>(gender!)
                 };
 
-                
-                var result = await userManager.CreateAsync(person, document);
-
-                if(!result.Succeeded)
-                    logger.LogError("There was an error creating the users, errors {errors}", string.Join("\n\n", result.Errors));
+                var password = $"User.{person.Id}";
+                var result = await userManager.CreateAsync(person, password);
+                result.ThrowOnError();
+               
+                result = await userManager.AddToRoleAsync(person, Roles.Regular.ToString());
+                result.ThrowOnError();
             }
 
             reader.Close();
@@ -88,31 +105,20 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
             return "Ok";
         }
 
-        private static Domain.Enums.Gender? GetGender(string value) => value switch
-        {
-            "H" => Domain.Enums.Gender.Male,
-            "M" => Domain.Enums.Gender.Female,
-            _ => null
-        };
-
-        private static bool ValidateColumn(string value, out string output, string columnName, IList<string> wrongFields)
-        {
-            var trimmedValue = value.Trim();
-            var faulty = string.IsNullOrEmpty(trimmedValue);
-
-            if (faulty)
-            {
-                wrongFields.Add($"column: {columnName}");
-                output = string.Empty;
-                return faulty;
-            }
-
-            output = trimmedValue;
-
-            return false;
-        }
-
         private static string GetLineError(int lineNumber, IList<string> errors)
             => $"The line {lineNumber}, has the following errors: [{string.Join(", ", errors)}]";
+
+        private static readonly string[] DateFormats = { "d/M/yyyy", "dd/MM/yyyy" };
+
+        private static string BuildPartialUserName(string input)
+        {
+            var parts = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            return parts.Length switch
+            {
+                2 => $"{parts[0].ToLower().Sanitize()}{parts[1][0].ToString().ToLower().Sanitize()}",
+                _ => $"{parts[0].ToLower().Sanitize()}"
+            };
+        }
     }
 }
