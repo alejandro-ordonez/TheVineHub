@@ -1,4 +1,11 @@
-﻿<h3>Users</h3>
+﻿@attribute [Authorize(Roles = "Admin")]
+
+<h3>Users</h3>
+
+<UsersTable>
+
+</UsersTable>
+
 
 @code {
 

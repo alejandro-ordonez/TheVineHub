@@ -3,7 +3,6 @@ using JMMinistry.Application.Services;
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Domain;
-using JMMinistry.Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -86,10 +85,10 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
                     Email = email,
                     Locality = locality,
                     Neighborhood = neighborhood,
-                    EducationalLevel = Enum.Parse<Domain.Enums.EducationalLevel>(educationalLevel!),
-                    MaritalStatus = Enum.Parse<Domain.Enums.MaritalStatus>(maritalStatus!),
-                    MinistryStatus = Domain.Enums.MinistryStatus.InACell,
-                    Gender = Enum.Parse<Domain.Enums.Gender>(gender!)
+                    EducationalLevel = Enum.Parse<EducationalLevel>(educationalLevel!),
+                    MaritalStatus = Enum.Parse<MaritalStatus>(maritalStatus!),
+                    MinistryStatus = MinistryStatus.Unknown,
+                    Gender = Enum.Parse<Gender>(gender!)
                 };
 
                 var password = $"User.{person.Id}";

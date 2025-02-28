@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using JMMinistry.Common;
+using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 
 namespace JMMinistry.API.Extensions
@@ -46,6 +47,22 @@ namespace JMMinistry.API.Extensions
             var document = documentClaim?.Value;
 
             return document;
+        }
+
+        public static IEnumerable<string> GetRoles(this HttpContext httpContext)
+        {
+            var roleClaims = httpContext.User.Claims.Where(claim => claim.Type == ClaimTypes.Role);
+            var roles = roleClaims.Select(claim => claim.Value);
+
+            return roles;
+        }
+
+        public static bool UserHasRole(this HttpContext httpContext, Roles role)
+        {
+            var roleString = role.ToString();
+            return httpContext.User.Claims.Any(
+                claim => claim.Type == ClaimTypes.Role && claim.Value == roleString
+                );
         }
     }
 }

@@ -8,14 +8,12 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Common.Dtos.User
 {
-    public class UserCriteriaSearch: PagedRequest
+    public class UsersSearchCriteria: PagedRequest
     {
         public string? Name { get; set; }
         public string? LastName { get; set; }
         public string? Document { get; set; }
-        public bool? IsLeader { get; set; }
-        public MinistryStatus? MinistryStatus { get; set; }
-        public MemberType? MemberType { get; set; }
-
+        public string? Requestor { get; set; }
+        public List<MinistryStatus> MinistryStatus { get; set; } = [];
     }
 }

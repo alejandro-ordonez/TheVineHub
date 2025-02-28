@@ -2,13 +2,11 @@
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.User;
+using JMMinistry.Common.Dtos.User.Enums;
+using JMMinistry.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
 {
@@ -17,19 +15,11 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
         public async Task<PagedResponse<UserInfoDto>> Handle(GetUserInfoByCriteriaQuery request, CancellationToken cancellationToken)
         {
             var query = dbContext.PersonalInfo.AsQueryable();
-
-            if (!string.IsNullOrEmpty(request.Name))
-                query.Where(user => user.Name.StartsWith(request.Name.Trim()));
-
-            if (!string.IsNullOrEmpty(request.LastName))
-                query.Where(user => user.LastName.StartsWith(request.LastName.Trim()));
-
-            if (!string.IsNullOrEmpty(request.Document))
-                query.Where(user=> user.Id.StartsWith(request.Document.Trim()));
+            query = GetQuery(query, request);
 
             var totalCount = await query.CountAsync(cancellationToken);
 
-            var results = await query.OrderBy(user => user.LastName)
+            var results = await query.OrderBy(GetOrderMember(request.OrderByMember))
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
@@ -44,5 +34,42 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
             };
             
         }
+
+        private static IQueryable<PersonalInfo> GetQuery(IQueryable<PersonalInfo> query, GetUserInfoByCriteriaQuery request)
+        {
+            var newQuery = query;
+
+            if (request.MinistryStatus.Count > 0)
+            {
+                if (!string.IsNullOrEmpty(request.Requestor) && request.MinistryStatus.Contains(MinistryStatus.Gained))
+                {
+                    newQuery = newQuery
+                       .Include(user => user.GainedRecord)
+                       .Where(user => user.GainedRecord == null || user.GainedRecord!.InvitedById == request.Requestor);
+                }
+
+                newQuery = newQuery.Where(user => request.MinistryStatus.Contains(user.MinistryStatus));                
+            }
+
+            if (!string.IsNullOrEmpty(request.Name))
+                newQuery = newQuery.Where(user => user.Name.StartsWith(request.Name.Trim()));
+
+            if (!string.IsNullOrEmpty(request.LastName))
+                newQuery = newQuery.Where(user => user.LastName.StartsWith(request.LastName.Trim()));
+
+            if (!string.IsNullOrEmpty(request.Document))
+                newQuery = newQuery.Where(user => user.Id.StartsWith(request.Document.Trim()));
+
+            return newQuery;
+        }
+
+
+        private static Expression<Func<PersonalInfo, object?>> GetOrderMember(string? orderBy) => orderBy switch
+        {
+            "Document"          => info => info.Id,
+            "Name"              => info => info.Name,
+            "MinistryStatus"    => info => info.MinistryStatus,
+            _                   => info => info.Name
+        };
     }
 }

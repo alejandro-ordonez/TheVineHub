@@ -10,5 +10,8 @@ namespace JMMinistry.Common.Dtos.Common
     {
         public int Page { get; set; }
         public int PageSize { get; set; } = 12;
+
+        public string? OrderByMember { get; set; }
+        public string? OrderDirection { get; set; }
     }
 }

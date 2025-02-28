@@ -1,8 +1,6 @@
-﻿using Blazored.LocalStorage;
-using JMMinistry.Common;
+﻿using JMMinistry.Common;
 using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.User;
-using JMMinistry.Web.Services;
 using JMMinistry.Web.Shared;
 using System.Net.Http.Json;
 
@@ -28,9 +26,19 @@ namespace JMMinistry.Web.Api
             return response;
         }
 
-        public Task<Response<PagedResponse<UserInfoDto>>> GetUserByCriteria(UserCriteriaSearch userCriteriaSearch = null)
+        public async Task<Response<PagedResponse<UserInfoDto>>?> GetUserByCriteria(UsersSearchCriteria? userCriteriaSearch)
         {
-            throw new NotImplementedException();
+            var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            var result = await httpClient.PostAsJsonAsync($"{_userApi}/Search", userCriteriaSearch);
+
+            var response = await result.Content.ReadFromJsonAsync<Response<PagedResponse<UserInfoDto>>>();
+
+            if (!response?.Success ?? false)
+            {
+                logger.LogError("Failed to authenticate, reason: \n {Errors}", string.Join("\n", response?.Errors ?? []));
+            }
+            
+            return response;
         }
 
         public async Task<Response<UserInfoDto>?> GetUserInfo()

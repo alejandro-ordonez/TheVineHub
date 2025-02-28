@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using JMMinistry.Application.Extensions;
 using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.Class;
 using JMMinistry.Common.Dtos.School;
@@ -17,10 +18,12 @@ namespace JMMinistry.Application.Mappers
         public MapperProfile()
         {
             CreateMap<PersonalInfo, UserInfoDto>()
-                .ForMember(x => x.Document, cfg => cfg.MapFrom(model => model.Id));
+                .ForMember(x => x.Document, cfg => cfg.MapFrom(model => model.Id))
+                .ForMember(x => x.Birthday, cfg => cfg.MapFrom(model => model.Birthday.ToDateTime()));
 
             CreateMap<UserInfoDto, PersonalInfo>()
-                .ForMember(x => x.Id, cfg => cfg.MapFrom(model => model.Document));
+                .ForMember(model => model.Id, cfg => cfg.MapFrom(x => x.Document))
+                .ForMember(model => model.Birthday, cfg => cfg.MapFrom(x => DateOnly.FromDateTime(x.Birthday)));
 
             CreateMap<School, SchoolDto>();
             CreateMap<SchoolDto, School>();

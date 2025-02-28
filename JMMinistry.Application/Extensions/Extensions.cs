@@ -63,5 +63,13 @@ namespace JMMinistry.Application.Extensions
                 .Replace("ó", "o")
                 .Replace("ú", "u");
         }
+
+        public static DateTime? ToDateTime(this DateOnly? date)
+        {
+            if (!date.HasValue)
+                return null;
+
+            return date.Value.ToDateTime(TimeOnly.MinValue);
+        }
     }
 }

@@ -10,8 +10,12 @@ namespace JMMinistry.Common.Dtos.User.Enums
     {
         Unknown,
         Gained,
+        Baptized,
         InACell,
         Timothy,
+        /// <summary>
+        /// People who doesn't have a 
+        /// </summary>
         Sent,
         Leader
     }

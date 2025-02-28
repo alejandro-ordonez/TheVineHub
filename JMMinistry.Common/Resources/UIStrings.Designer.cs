@@ -124,6 +124,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cells.
+        /// </summary>
+        public static string Cells {
+            get {
+                return ResourceManager.GetString("Cells", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to City.
         /// </summary>
         public static string City {
@@ -205,6 +214,24 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gained.
+        /// </summary>
+        public static string Gained {
+            get {
+                return ResourceManager.GetString("Gained", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gained Users.
+        /// </summary>
+        public static string GainedUsers {
+            get {
+                return ResourceManager.GetString("GainedUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gender.
         /// </summary>
         public static string Gender {
@@ -214,11 +241,29 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In a cell.
+        /// </summary>
+        public static string InACell {
+            get {
+                return ResourceManager.GetString("InACell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last name.
         /// </summary>
         public static string LastName {
             get {
                 return ResourceManager.GetString("LastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Leader.
+        /// </summary>
+        public static string Leader {
+            get {
+                return ResourceManager.GetString("Leader", resourceCulture);
             }
         }
         
@@ -286,6 +331,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Cells registered, please create one..
+        /// </summary>
+        public static string NoCells {
+            get {
+                return ResourceManager.GetString("NoCells", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {
@@ -309,6 +363,15 @@ namespace JMMinistry.Common.Resources {
         public static string Profile {
             get {
                 return ResourceManager.GetString("Profile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Register a cell.
+        /// </summary>
+        public static string RegisterCell {
+            get {
+                return ResourceManager.GetString("RegisterCell", resourceCulture);
             }
         }
         
@@ -340,6 +403,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sent.
+        /// </summary>
+        public static string Sent {
+            get {
+                return ResourceManager.GetString("Sent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There was an error in our server, please contact the administrator to report the issue.
         /// </summary>
         public static string ServerError {
@@ -354,6 +426,24 @@ namespace JMMinistry.Common.Resources {
         public static string SessionExpired {
             get {
                 return ResourceManager.GetString("SessionExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Timothy.
+        /// </summary>
+        public static string Timothy {
+            get {
+                return ResourceManager.GetString("Timothy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown.
+        /// </summary>
+        public static string Unknown {
+            get {
+                return ResourceManager.GetString("Unknown", resourceCulture);
             }
         }
         

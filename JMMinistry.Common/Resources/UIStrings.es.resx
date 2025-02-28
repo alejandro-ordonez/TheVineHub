@@ -225,4 +225,34 @@
   <data name="Email" xml:space="preserve">
     <value>Email</value>
   </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Desconocido</value>
+  </data>
+  <data name="Gained" xml:space="preserve">
+    <value>Ganado</value>
+  </data>
+  <data name="InACell" xml:space="preserve">
+    <value>En célula</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Enviado</value>
+  </data>
+  <data name="Timothy" xml:space="preserve">
+    <value>Timoteo</value>
+  </data>
+  <data name="Leader" xml:space="preserve">
+    <value>Leader</value>
+  </data>
+  <data name="GainedUsers" xml:space="preserve">
+    <value>Personas Ganadas</value>
+  </data>
+  <data name="Cells" xml:space="preserve">
+    <value>Células</value>
+  </data>
+  <data name="NoCells" xml:space="preserve">
+    <value>No tienes células registradas, por favor registra una.</value>
+  </data>
+  <data name="RegisterCell" xml:space="preserve">
+    <value>Registro de célula</value>
+  </data>
 </root>

@@ -1,4 +1,5 @@
-﻿using JMMinistry.Domain.Enums;
+﻿using JMMinistry.Common.Dtos.Meetings.Enums;
+using JMMinistry.Common.Dtos.User.Enums;
 using System;
 using System.Collections.Generic;
 
@@ -8,7 +9,7 @@ public partial class MeetingAttendance
 {
     public int Id { get; set; }
     public DateOnly Date { get; set; }
-    public MeetingType MeetingType { get; set; }
+    public MeetingTypes MeetingType { get; set; }
 
     public string? PersonId { get; set; }
     public PersonalInfo Person { get; set; } = null!;

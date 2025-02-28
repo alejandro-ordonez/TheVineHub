@@ -1,12 +1,13 @@
 ﻿@page "/ministry"
 @using JMMinistry.Common.Dtos.Cell
 @using JMMinistry.Common.Dtos.User
+@using JMMinistry.Web.Pages.User;
 @using JMMinistry.Web.Api
 @attribute [Authorize]
 
 @inject IStringLocalizer<UIStrings> _translator;
 
-<HeaderPage Title="@_translator["Ministry"]">
+<Header Title="@_translator["Ministry"]">
     <ActionMenu>
         <MudFab StartIcon="@Icons.Material.Filled.Add"
                 Color="Color.Primary"
@@ -15,71 +16,113 @@
                 OnClick="() => OpenAddCell()">
         </MudFab>
     </ActionMenu>
-</HeaderPage>
+</Header>
 
-@if (!Cells.Any())
-{
-    <MudText Typo="Typo.h3">@_translator["NoCells"]</MudText>
-}
+<MudTabs Elevation="2" Rounded="true" Class="flex-grow-1" ApplyEffectsToContainer="true" PanelClass="pa-6">
+    <MudTabPanel Text="@_translator["Cells"]">
+        
+        @if (!Cells.Any())
+        {
+            <MudText Typo="Typo.h6">@_translator["NoCells"]</MudText>
+        }
 
-<MudExpansionPanels>
+        <MudExpansionPanels Style="">
 
-    @foreach (var cell in Cells)
-    {
-        <MudExpansionPanel>
-            <TitleContent>
-                <div class="d-flex">
-                    <MudIcon Icon="@Icons.Material.Filled.Info" class="mr-3"></MudIcon>
-                    <MudText>@cell.Name</MudText>
-                    <MudFab StartIcon="@Icons.Material.Filled.Add"
-                            Color="Color.Primary"
-                            Disabled="@AddDiscipleOpen"
-                            Size="Size.Small"
-                            OnClick="() => OpenAddDisciple(cell.Id)">
-                    </MudFab>
-                </div>
-            </TitleContent>
+            @foreach (var cell in Cells)
+            {
+                <MudExpansionPanel HideIcon="true" Expanded="true">
+                    <TitleContent>
+                        <div class="d-flex flex-row" style="justify-content: space-between; padding: 0px 1rem">
+                            <MudIcon Icon="@Icons.Material.Filled.Info" class="mr-3"></MudIcon>
+                            <MudText Typo="Typo.h5">@cell.Name</MudText>
+                            <MudFab StartIcon="@Icons.Material.Filled.Add"
+                                    Color="Color.Primary"
+                                    Disabled="@AddDiscipleOpen"
+                                    Size="Size.Small"
+                                    OnClick="() => OpenAddDisciple(cell.Id)">
+                            </MudFab>
+                        </div>
+                    </TitleContent>
 
-            <ChildContent>
+                    <ChildContent>
 
-                <MudTable Items="cell.Disciples">
-                    <HeaderContent>
-                        <MudTh>@_translator["Document"]</MudTh>
-                        <MudTh>@_translator["Name"]</MudTh>
-                        <MudTh>@_translator["LastName"]</MudTh>
-                        <MudTh>@_translator["Birthday"]</MudTh>
-                        <MudTh>@_translator["Locality"]</MudTh>
-                        <MudTh>@_translator["MinistryStatus"]</MudTh>
-                    </HeaderContent>
+                        <MudTable Items="cell.Disciples">
+                            <HeaderContent>
+                                <MudTh>@_translator["Document"]</MudTh>
+                                <MudTh>@_translator["Name"]</MudTh>
+                                <MudTh>@_translator["LastName"]</MudTh>
+                                <MudTh>@_translator["Birthday"]</MudTh>
+                                <MudTh>@_translator["Locality"]</MudTh>
+                                <MudTh>@_translator["MinistryStatus"]</MudTh>
+                            </HeaderContent>
 
-                    <RowTemplate>
-                        <MudTd DataLabel="@_translator["Document"]">@context.Document</MudTd>
-                        <MudTd DataLabel="@_translator["Name"]">@context.Name</MudTd>
-                        <MudTd DataLabel="@_translator["LastName"]">@context.LastName</MudTd>
-                        <MudTd DataLabel="@_translator["Birthday"]">@context.Birthday</MudTd>
-                        <MudTd DataLabel="@_translator["Locality"]">@context.Locality</MudTd>
-                        <MudTd DataLabel="@_translator["MinistryStatus"]">@context.MinistryStatus</MudTd>
-                    </RowTemplate>
-                </MudTable>
+                            <RowTemplate>
+                                <MudTd DataLabel="@_translator["Document"]">@context.Document</MudTd>
+                                <MudTd DataLabel="@_translator["Name"]">@context.Name</MudTd>
+                                <MudTd DataLabel="@_translator["LastName"]">@context.LastName</MudTd>
+                                <MudTd DataLabel="@_translator["Birthday"]">@context.Birthday</MudTd>
+                                <MudTd DataLabel="@_translator["Locality"]">@context.Locality</MudTd>
+                                <MudTd DataLabel="@_translator["MinistryStatus"]">@context.MinistryStatus</MudTd>
+                            </RowTemplate>
+                        </MudTable>
 
-            </ChildContent>
+                    </ChildContent>
 
-        </MudExpansionPanel>
-    }
-</MudExpansionPanels>
+                </MudExpansionPanel>
+            }
+        </MudExpansionPanels>
+
+
+    </MudTabPanel>
+
+
+    <MudTabPanel Text="@_translator["GainedUsers"]">
+        <MudText>Content Two</MudText>
+    </MudTabPanel>
+</MudTabs>
+
+
+
 
 <Popup Open="@AddDiscipleOpen">
     <Content>
 
-        <MudDivider />
+        <UsersTable DefaultUserCriteria="InitialCriteria" Selectable="true">
 
+        </UsersTable>
+       
     </Content>
+
+    <Actions>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="@(async () => await SubmitAddCell())">
+
+
+            @if (IsBusy)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                <MudText Class="ms-2">Processing</MudText>
+            }
+            else
+            {
+                <MudText>@_translator["Create"]</MudText>
+            }
+
+        </MudButton>
+
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Warning"
+                   OnClick="() => Cancel()">
+            <MudText>@_translator["Cancel"]</MudText>
+        </MudButton>
+    </Actions>
 </Popup>
 
 
 <Popup Open="@AddCellOpen">
     <Content>
-        <MudText Typo="Typo.h3">@_translator["CreateCell"]</MudText>
+        <MudText Typo="Typo.h6">@_translator["RegisterCell"]</MudText>
         <MudDivider />
 
         <MudForm Model="CreateCellDto" @ref="cellForm">
@@ -102,31 +145,33 @@
                           Variant="Variant.Outlined"
                           Label="@_translator["Description"]"
                           InputType="InputType.Text" />
-
-            <MudDivider />
-            <MudButton Variant="Variant.Filled"
-                       Color="Color.Primary"
-                       OnClick="@(async () => await SubmitAddCell())">
-
-
-                @if (IsBusy)
-                {
-                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                    <MudText Class="ms-2">Processing</MudText>
-                }
-                else
-                {
-                    <MudText>@_translator["Create"]</MudText>
-                }
-
-            </MudButton>
-
-            <MudButton Variant="Variant.Filled"
-                       Color="Color.Primary"
-                       OnClick="() => Cancel()">
-                <MudText>@_translator["Cancel"]</MudText>
-            </MudButton>
+            
         </MudForm>
 
     </Content>
+
+    <Actions>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   OnClick="@(async () => await SubmitAddCell())">
+
+
+            @if (IsBusy)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                <MudText Class="ms-2">Processing</MudText>
+            }
+            else
+            {
+                <MudText>@_translator["Create"]</MudText>
+            }
+
+        </MudButton>
+
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Warning"
+                   OnClick="() => Cancel()">
+            <MudText>@_translator["Cancel"]</MudText>
+        </MudButton>
+    </Actions>
 </Popup>

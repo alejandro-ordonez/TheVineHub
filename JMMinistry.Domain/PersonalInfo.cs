@@ -1,4 +1,4 @@
-﻿using JMMinistry.Domain.Enums;
+﻿using JMMinistry.Common.Dtos.User.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +35,7 @@ public partial class PersonalInfo: IdentityUser<string>
 
     public Gender? Gender { get; set; }
 
-    public MinistryStatus? MinistryStatus { get; set; }
+    public MinistryStatus MinistryStatus { get; set; }
 
     public DateTime? LastAccess { get; set; }
 

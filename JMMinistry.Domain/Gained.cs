@@ -4,9 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JMMinistry.Domain;
 
-public partial class Gained
+public class Gained
 {
     [Required]
+    [Key]
     public int GainedId { get; set; }
     public string PersonId { get; set; } = null!;
     public PersonalInfo Person { get; set; } = null!;

@@ -55,7 +55,7 @@ namespace JMMinistry.Application.Features.User.Commands.Authenticate
 
             for (int i = 0; i < roles.Count; i++)
             {
-                roleClaims.Add(new Claim("roles", roles[i]));
+                roleClaims.Add(new Claim(ClaimTypes.Role, roles[i]));
             }
 
             var claims = new[]
@@ -64,7 +64,7 @@ namespace JMMinistry.Application.Features.User.Commands.Authenticate
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email?? user.Id),
                 new Claim(ClaimTypes.Name, user.Name),
-                new Claim("uid", user.Id)
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
             }
                 .Union(userClaims)
                 .Union(roleClaims);

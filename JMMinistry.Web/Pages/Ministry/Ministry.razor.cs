@@ -1,12 +1,15 @@
 ﻿using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.User;
+using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Web.Api;
+using JMMinistry.Web.Services;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using System.Security.Claims;
 
 namespace JMMinistry.Web.Pages.Ministry
 {
-    public partial class Ministry(IMinistryApi ministryApi)
+    public partial class Ministry(IMinistryApi ministryApi, IAuthStateProvider authState)
     {
         IList<CellDto> Cells { get; set; } = [];
 
@@ -16,11 +19,11 @@ namespace JMMinistry.Web.Pages.Ministry
 
         int? TargetCellId { get; set; }
 
+        UsersSearchCriteria? InitialCriteria { get; set; }
+
         [SupplyParameterFromForm]
         CreateCellDto CreateCellDto { get; set; } = new CreateCellDto();
         MudForm? cellForm;
-
-        IList<UserInfoDto> SearchResults { get; set; } = [];
 
         protected override async Task OnInitializedAsync()
         {
@@ -28,6 +31,15 @@ namespace JMMinistry.Web.Pages.Ministry
 
             if (response?.Success ?? false)
                 Cells = response?.Data ?? [];
+
+            var state = await authState.GetAuthenticationStateAsync();
+            var id = state.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
+
+            InitialCriteria = new UsersSearchCriteria
+            {
+                Requestor = id?.Value,
+                MinistryStatus = [MinistryStatus.Unknown, MinistryStatus.Gained]
+            };
         }
 
         void OpenAddDisciple(int cellId)
@@ -50,6 +62,7 @@ namespace JMMinistry.Web.Pages.Ministry
                 Cells.Add(response.Data);
 
             IsBusy = false;
+            AddCellOpen = false;
         }
 
         void Cancel()
@@ -57,6 +70,5 @@ namespace JMMinistry.Web.Pages.Ministry
             AddCellOpen = false;
             AddDiscipleOpen = false;
         }
-
     }
 }

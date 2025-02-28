@@ -24,7 +24,7 @@ namespace JMMinistry.Web.Api
             var token = (await localStorage.GetItemAsync<TokenResult>(Constants.JwtToken, cancellationToken))?.Token;
 
             if (token != null)
-                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var response = await base.SendAsync(request, cancellationToken);
 

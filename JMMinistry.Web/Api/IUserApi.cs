@@ -8,6 +8,6 @@ namespace JMMinistry.Web.Api
     {
         Task<Response<TokenResult?>?> Authenticate(AuthenticateDto authenticateDto);
         Task<Response<UserInfoDto>?> GetUserInfo();
-        Task<Response<PagedResponse<UserInfoDto>>> GetUserByCriteria(UserCriteriaSearch userCriteriaSearch = null);
+        Task<Response<PagedResponse<UserInfoDto>>?> GetUserByCriteria(UsersSearchCriteria? userCriteriaSearch);
     }
 }

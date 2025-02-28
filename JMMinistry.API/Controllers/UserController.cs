@@ -4,6 +4,8 @@ using JMMinistry.Application.Features.User.Commands.CreateUser;
 using JMMinistry.Application.Features.User.Commands.ImportUsers;
 using JMMinistry.Application.Features.User.Queries;
 using JMMinistry.Application.Features.User.Queries.GetUserInfo;
+using JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria;
+using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Common.Dtos.User.Enums;
 using MediatR;
@@ -54,6 +56,14 @@ namespace JMMinistry.API.Controllers
 
             var userInfo = await mediator.Send(new GetUserInfoQuery { Document =  document });
             return Ok(userInfo);
+        }
+
+        [Authorize]
+        [HttpPost("Search")]
+        public async Task<ActionResult<PagedResponse<UserInfoDto>>> GetUsersByCriteria(GetUserInfoByCriteriaQuery criteria)
+        {
+            var result = await mediator.Send(criteria);
+            return Ok(result);
         }
     }
 }

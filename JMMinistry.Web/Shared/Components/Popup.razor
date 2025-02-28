@@ -1,8 +1,12 @@
-﻿<MudOverlay @bind-Visible="Open" DarkBackground="true" AutoClose="true" />
+﻿<MudOverlay @bind-Visible="Open" DarkBackground="true" AutoClose="false" />
 
-<MudPopover Open="@Open" Fixed="true" Class="popup px-4 pt-4" AnchorOrigin="Origin.CenterCenter" TransformOrigin="Origin.CenterCenter" Elevation="4">
-    <div class="d-flex flex-column">
+<MudPopover Open="@Open" Fixed="true" Class="px-4 pt-4 w-50" AnchorOrigin="Origin.CenterCenter" TransformOrigin="Origin.CenterCenter" Elevation="4">
+    <div class="d-flex flex-column p-5 popup-container">
         @Content
+    </div>
+
+    <div class="action-container">
+        @Actions
     </div>
 </MudPopover>
 
@@ -13,4 +17,7 @@
 
     [Parameter]
     public RenderFragment? Content { get; set; }
+
+    [Parameter]
+    public RenderFragment? Actions { get; set; }
 }

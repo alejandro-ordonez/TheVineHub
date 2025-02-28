@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Domain.Enums
+namespace JMMinistry.Common.Dtos.Meetings.Enums
 {
-    public enum MemberType
+    public enum MeetingTypes
     {
-        Coordinator,
-        Staff,
-        Assistant
+        One,
+        Rocks,
+        Family
     }
 }

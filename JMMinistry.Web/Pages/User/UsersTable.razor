@@ -1,0 +1,56 @@
+﻿@using JMMinistry.Common.Dtos.User;
+
+@inject IStringLocalizer<UIStrings> _translator;
+
+<MudTable ServerData="UserLoad" 
+          Dense="true" 
+          Hover="true" 
+          @ref="table" 
+          MultiSelection="Selectable"
+          SelectedItems="SelectedUsers">
+
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Periodic Elements</MudText>
+        <MudSpacer />
+        <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>
+            <MudTableSortLabel SortLabel="Document" T="UserInfoDto">@_translator["Document"]</MudTableSortLabel>
+        </MudTh>
+
+        <MudTh>
+            <MudTableSortLabel SortLabel="Name" T="UserInfoDto">@_translator["Name"]</MudTableSortLabel>
+        </MudTh>
+
+        <MudTh>
+            <MudTableSortLabel SortLabel="LastName" T="UserInfoDto">@_translator["LastName"]</MudTableSortLabel>
+        </MudTh>
+
+        <MudTh>
+            <MudTableSortLabel SortLabel="MinistryStatus" T="UserInfoDto">@_translator["MinistryStatus"]</MudTableSortLabel>
+        </MudTh>
+
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd DataLabel="Document">@context.Document</MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Last Name">@context.LastName</MudTd>
+        <MudTd DataLabel="MinistryStatus">@_translator[context.MinistryStatus?.ToString() ?? ""]</MudTd>
+        <MudTd DataLabel="Phone">@context.Phone</MudTd>
+    </RowTemplate>
+
+    <NoRecordsContent>
+        <MudText>No matching records found</MudText>
+    </NoRecordsContent>
+
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
