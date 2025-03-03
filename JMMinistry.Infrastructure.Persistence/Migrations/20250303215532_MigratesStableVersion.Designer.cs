@@ -3,6 +3,7 @@ using System;
 using JMMinistry.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JMMinistry.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(JmDbContext))]
-    partial class JmDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250303215532_MigratesStableVersion")]
+    partial class MigratesStableVersion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
