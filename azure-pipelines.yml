@@ -62,6 +62,7 @@ steps:
       JwtSettings__Issuer=$(JwtSettings__Issuer) \
       JwtSettings__Key=$(JwtSettings__Key) \
       POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) \
+      API_URL=$(SERVER_HOST)
       docker compose up -d --build
 
 
