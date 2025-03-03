@@ -8,5 +8,7 @@ namespace JMMinistry.Web.Api
         Task<Response<IList<CellDto>>?> GetAsync();
         Task<Response<CellDto>?> CreateCell(CreateCellDto cell);
         Task<Response<CellDto>?> AddDisciples(AddDisciplesDto addDisciples);
+
+        Task<Response<string>?> RemoveDiscipleFromCell(int cellId, string document);
     }
 }

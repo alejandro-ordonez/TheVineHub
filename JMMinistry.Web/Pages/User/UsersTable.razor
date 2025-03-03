@@ -2,12 +2,12 @@
 
 @inject IStringLocalizer<UIStrings> _translator;
 
-<MudTable ServerData="UserLoad" 
-          Dense="true" 
-          Hover="true" 
-          @ref="table" 
+<MudTable ServerData="UserLoad"
+          Dense="true"
+          Hover="true"
+          @ref="table"
           MultiSelection="Selectable"
-          SelectedItems="SelectedUsers">
+          SelectedItems="Selected">
 
     <ToolBarContent>
         <MudText Typo="Typo.h6">Periodic Elements</MudText>
@@ -32,6 +32,12 @@
             <MudTableSortLabel SortLabel="MinistryStatus" T="UserInfoDto">@_translator["MinistryStatus"]</MudTableSortLabel>
         </MudTh>
 
+        @if (AnyActions)
+        {
+            <MudTh>
+                @_translator["Actions"]
+            </MudTh>
+        }
     </HeaderContent>
 
     <RowTemplate>
@@ -40,6 +46,28 @@
         <MudTd DataLabel="Last Name">@context.LastName</MudTd>
         <MudTd DataLabel="MinistryStatus">@_translator[context.MinistryStatus?.ToString() ?? ""]</MudTd>
         <MudTd DataLabel="Phone">@context.Phone</MudTd>
+        <MudTd DataLabel="Actions">
+
+            @if (AnyActions)
+            {
+                <MudTd>
+                    <div class="actions">
+                        @if (EditUser.HasDelegate)
+                        {
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" 
+                                           OnClick="() => EditUser.InvokeAsync(new UserEventArgs { CellId = context.CellId, Document = context.Document })" />
+                        }
+
+                        @if (DeleteUser.HasDelegate)
+                        {
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                           Color="Color.Warning" 
+                                           OnClick="() => DeleteUser.InvokeAsync(new UserEventArgs { CellId = context.CellId, Document = context.Document })" />
+                        }
+                    </div>
+                </MudTd>
+            }
+        </MudTd>
     </RowTemplate>
 
     <NoRecordsContent>

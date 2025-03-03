@@ -27,6 +27,8 @@ namespace JMMinistry.Common.Dtos.User
         public string Profession { get; set; } = string.Empty;
         public string Occupation { get; set; } = string.Empty;
 
+        public int CellId { get; set; }
+
         public DateTime Birthday { get; set; }
 
         public MinistryStatus? MinistryStatus { get; set; }

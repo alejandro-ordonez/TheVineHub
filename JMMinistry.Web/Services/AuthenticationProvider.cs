@@ -23,13 +23,9 @@ namespace JMMinistry.Web.Services
             return authState;
         }
 
-        public void NotifyUserAuthenticated(string userId)
+        public void NotifyUserAuthenticated(ClaimsIdentity claims)
         {
-            var authUser = new ClaimsPrincipal(new ClaimsIdentity(
-                    [new Claim(ClaimTypes.Name, userId)], "jwt"
-                ));
-
-            var authState = new AuthenticationState(authUser);
+            var authState = new AuthenticationState(new ClaimsPrincipal(claims));
             NotifyAuthenticationStateChanged(Task.FromResult(authState));
         }
 

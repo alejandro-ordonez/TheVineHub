@@ -61,6 +61,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actions.
+        /// </summary>
+        public static string Actions {
+            get {
+                return ResourceManager.GetString("Actions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Address.
         /// </summary>
         public static string Address {
@@ -84,6 +93,15 @@ namespace JMMinistry.Common.Resources {
         public static string Administration {
             get {
                 return ResourceManager.GetString("Administration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to {0} this {1}: {2}?.
+        /// </summary>
+        public static string AreYouSure {
+            get {
+                return ResourceManager.GetString("AreYouSure", resourceCulture);
             }
         }
         
@@ -169,6 +187,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disciple.
+        /// </summary>
+        public static string Disciple {
+            get {
+                return ResourceManager.GetString("Disciple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Document.
         /// </summary>
         public static string Document {
@@ -237,6 +264,15 @@ namespace JMMinistry.Common.Resources {
         public static string Gender {
             get {
                 return ResourceManager.GetString("Gender", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        public static string Home {
+            get {
+                return ResourceManager.GetString("Home", resourceCulture);
             }
         }
         
@@ -340,6 +376,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string None {
+            get {
+                return ResourceManager.GetString("None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {
@@ -372,6 +417,15 @@ namespace JMMinistry.Common.Resources {
         public static string RegisterCell {
             get {
                 return ResourceManager.GetString("RegisterCell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
             }
         }
         

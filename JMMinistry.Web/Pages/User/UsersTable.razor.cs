@@ -11,13 +11,32 @@ namespace JMMinistry.Web.Pages.User
         private string _searchString = string.Empty;
         private MudTable<UserInfoDto>? table;
 
-        public HashSet<UserInfoDto> SelectedUsers { get; set; } = [];
-
         [Parameter]
         public UsersSearchCriteria? DefaultUserCriteria { get; set; }
 
         [Parameter]
         public bool Selectable { get; set; } = false;
+
+        [Parameter]
+        public bool UseServer { get; set; } = true;
+
+        [Parameter]
+        public IList<UserInfoDto> Users { get; set; } = [];
+
+        [Parameter]
+        public HashSet<UserInfoDto> Selected { get; set; } = [];
+
+        [Parameter]
+        public EventCallback<UserEventArgs> EditUser { get; set; }
+
+        [Parameter]
+        public EventCallback<UserEventArgs> DeleteUser { get; set; }
+
+        [Parameter]
+        public EventCallback<UserEventArgs> UserDetails { get; set; }
+
+        private bool AnyActions
+            => EditUser.HasDelegate || DeleteUser.HasDelegate || UserDetails.HasDelegate;
 
         private async Task<TableData<UserInfoDto>> UserLoad(TableState state, CancellationToken token)
         {

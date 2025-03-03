@@ -1,6 +1,7 @@
 using JMMinistry.API.Extensions;
 using JMMinistry.API.Middleware;
 using JMMinistry.Application;
+using JMMinistry.Application.Exceptions;
 using JMMinistry.Infrastructure.Persistence;
 using LettuceEncrypt;
 using Microsoft.OpenApi.Models;
@@ -34,9 +35,10 @@ builder.Services.AddSwagger();
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
+
 app.MapDefaultEndpoints();
 
-app.UseExceptionHandler();
 app.InitializeDb();
 
 // Configure the HTTP request pipeline.

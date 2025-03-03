@@ -3,64 +3,35 @@
 @inject IStringLocalizer<UIStrings> _translator
 @inject IAuthService authService
 
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">JMMinistry.Web</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Profile" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> @_translator["Profile"]
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Ministry">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> @_translator["MyMinistry"]
-            </NavLink>
-        </div>
+<MudNavMenu>
+    <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home" Href="/">
+        @_translator["Home"]
+    </MudNavLink>
 
+    <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.People" Href="/ministry">
+        @_translator["MyMinistry"]
+    </MudNavLink>
 
-        <div class="nav-item px-3">
-            <br/>
-        </div>
+    <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Person" Href="/profile">@_translator["Profile"]</MudNavLink>
 
-        <div class="nav-item px-3">
-            <h3 class="nav-link">@_translator["Administration"]</h3>
-        </div>
+    <AuthorizeView Roles="Admin">
+        <MudDivider />
+        <MudText Typo="Typo.h6"><MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings">@_translator["Administration"]</MudIcon>  </MudText>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Schools">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> @_translator["Schools"]
-            </NavLink>
-        </div>
-        
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" onclick="@(() => authService.LogOut())">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> @_translator["LogOut"]
-            </NavLink>
-        </div>
-    </nav>
-</div>
+        <MudNavLink Match="NavLinkMatch.All" Href="/users">@_translator["Users"]</MudNavLink>
+    </AuthorizeView>
+
+    <MudNavLink Icon="@Icons.Material.Filled.Logout" OnClick="() => authService.LogOut()">
+        @_translator["Logout"]
+    </MudNavLink>
+
+</MudNavMenu>
 
 @code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-
     protected override Task OnInitializedAsync()
     {
-
+        
         return base.OnInitializedAsync();
     }
 }

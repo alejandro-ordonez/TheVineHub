@@ -2,6 +2,7 @@
 using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.Cell;
+using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,10 @@ public class AddDisciplesHandler(IJmDbContext dbContext, IMapper mapper) :
             throw new NotFoundException<Cell>(request.CellId.ToString());
 
         foreach (var disciple in users)
+        {
+            disciple.MinistryStatus = MinistryStatus.InACell;
             cell.Disciples.Add(disciple);
+        }
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

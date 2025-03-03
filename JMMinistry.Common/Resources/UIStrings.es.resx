@@ -255,4 +255,22 @@
   <data name="RegisterCell" xml:space="preserve">
     <value>Registro de célula</value>
   </data>
+  <data name="None" xml:space="preserve">
+    <value>Ninguno</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="Actions" xml:space="preserve">
+    <value>Acciones</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Estás seguro que quieres {0} este {1}: {2}</value>
+  </data>
+  <data name="Disciple" xml:space="preserve">
+    <value>Discipulo</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remover</value>
+  </data>
 </root>

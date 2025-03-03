@@ -1,6 +1,7 @@
 ﻿using JMMinistry.API.Extensions;
 using JMMinistry.Application.Features.Cells.Commands.AddDisciples;
 using JMMinistry.Application.Features.Cells.Commands.CreateCell;
+using JMMinistry.Application.Features.Cells.Commands.RemoveDisciple;
 using JMMinistry.Application.Features.Cells.Queries.GetCells;
 using JMMinistry.Common.Dtos.Cell;
 using MediatR;
@@ -31,13 +32,21 @@ namespace JMMinistry.API.Controllers
             return Ok(cells);
         }
 
-        [HttpPost("{cellId}")]
+        [HttpPost("/disciples/{cellId}")]
         public async Task<ActionResult<CellDto>> AddDisciples(int cellId, [FromBody] AddDisciplesCommand addDisciples)
         {
             addDisciples.CellId = cellId;
 
             var cell = await mediator.Send(addDisciples);
             return cell;
+        }
+
+        [HttpDelete("/disciples/{cellId}/{discipleId}")]
+        public async Task<ActionResult<CellDto>> RemoveDisciple(int cellId, string discipleId)
+        {
+            var removeDiscipleCommand = new RemoveDiscipleCommand { CellId = cellId, Document = discipleId };
+            var result = await mediator.Send(removeDiscipleCommand);
+            return Ok(result);
         }
     }
 }

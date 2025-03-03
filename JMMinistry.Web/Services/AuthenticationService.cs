@@ -4,6 +4,8 @@ using JMMinistry.Common;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Web.Api;
 using JMMinistry.Web.Shared;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 
 namespace JMMinistry.Web.Services
 {
@@ -19,7 +21,9 @@ namespace JMMinistry.Web.Services
             var authResult = tokenResult?.Data;
             await localStorage.SetItemAsync(Constants.JwtToken, authResult);
 
-            authStateProvider.NotifyUserAuthenticated(authResult!.Document);
+            var claims = authResult?.Token.ParseClaimsFromJwt();
+            var claimsIdentity = new ClaimsIdentity(claims, "jwt");
+            authStateProvider.NotifyUserAuthenticated(claimsIdentity);
 
             return true;
         }

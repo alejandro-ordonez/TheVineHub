@@ -14,8 +14,8 @@ namespace JMMinistry.Application
         public static void AddApplicationLayer(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddExceptionHandler<GlobalExceptionHandler>();
-            services.AddAutoMapper(typeof(MapperProfile));
             services.AddProblemDetails();
+            services.AddAutoMapper(typeof(MapperProfile));
 
             services.Configure<JWTSettings>(configuration.GetSection(nameof(JWTSettings)));
             services.AddJwtAuthentication(configuration);
