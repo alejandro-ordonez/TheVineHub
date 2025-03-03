@@ -26,14 +26,14 @@ namespace JMMinistry.Web.Api
         public async Task<Response<CellDto>?> AddDisciples(AddDisciplesDto addDisciples)
         {
             using var client = clientFactory.CreateClient(Constants.ApiClient);
-            var response = await client.PostAsJsonAsync($"{_ministryApi}/{addDisciples.CellId}", addDisciples);
+            var response = await client.PostAsJsonAsync($"{_ministryApi}/disciples/{addDisciples.CellId}", addDisciples);
             return await response.Content.ReadFromJsonAsync<Response<CellDto>>();
         }
 
         public async Task<Response<string>?> RemoveDiscipleFromCell(int cellId, string document)
         {
             using var client = clientFactory.CreateClient(Constants.ApiClient);
-            var response = await client.DeleteAsync($"{_ministryApi}/{cellId}/{document}");
+            var response = await client.DeleteAsync($"{_ministryApi}/disciples/{cellId}/{document}");
             return await response.Content.ReadFromJsonAsync<Response<string>>();
         }
     }

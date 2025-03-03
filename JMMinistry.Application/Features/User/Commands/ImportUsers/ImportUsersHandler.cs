@@ -17,7 +17,7 @@ using System.Xml.Linq;
 
 namespace JMMinistry.Application.Features.User.Commands.ImportUsers
 {
-    public class ImportUsersHandler(UserManager<PersonalInfo> userManager, ILogger<ImportUsersHandler> logger) : IRequestHandler<ImportUsersCommand, string>
+    public class ImportUsersHandler(UserManager<PersonalInfo> userManager) : IRequestHandler<ImportUsersCommand, string>
     {
         public async Task<string> Handle(ImportUsersCommand request, CancellationToken cancellationToken)
         {
@@ -29,6 +29,7 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
 
             // Skip first line - Header
             await reader.ReadLineAsync(cancellationToken);
+            var counter = 0;
 
             while (reader.Peek() >= 0)
             {
@@ -97,11 +98,13 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
                
                 result = await userManager.AddToRoleAsync(person, Roles.Regular.ToString());
                 result.ThrowOnError();
+
+                counter++;
             }
 
             reader.Close();
 
-            return "Ok";
+            return $"{counter} Users were imported";
         }
 
         private static string GetLineError(int lineNumber, IList<string> errors)

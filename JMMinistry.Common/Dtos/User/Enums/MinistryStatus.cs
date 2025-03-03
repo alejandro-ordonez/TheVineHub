@@ -17,6 +17,7 @@ namespace JMMinistry.Common.Dtos.User.Enums
         /// People who doesn't have a 
         /// </summary>
         Sent,
-        Leader
+        Leader,
+        Admin
     }
 }

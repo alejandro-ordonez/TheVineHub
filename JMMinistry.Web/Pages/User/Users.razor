@@ -1,12 +1,53 @@
-﻿@attribute [Authorize(Roles = "Admin")]
+﻿@using JMMinistry.Web.Api
+@page "/users"
+
+@attribute [Authorize(Roles = "Admin")]
+
+@inject IUserApi userApi;
+@inject IStringLocalizer<UIStrings> translator;
+
+
 
 <h3>Users</h3>
 
-<UsersTable>
+<MudFileUpload T="IBrowserFile" Accept=".csv" FilesChanged="ImportUsers" MaximumFileCount="1">
+    <ActivatorContent>
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.CloudUpload">
+
+            @if (IsBusy)
+            {
+                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                <MudText Class="ms-2">@translator["Processing"]</MudText>
+            }
+            else
+            {
+                <MudText>@translator["ImportUsers"]</MudText>
+            }            
+        </MudButton>
+    </ActivatorContent>
+</MudFileUpload>
+
+
+<UsersTable @ref="usersTable">
 
 </UsersTable>
 
 
 @code {
+    private bool IsBusy { get; set; } = false;
 
+    UsersTable? usersTable;
+
+    private async Task ImportUsers(IBrowserFile file)
+    {
+        IsBusy = true;
+        await userApi.ImportUsers(file);
+        
+        if(usersTable != null)
+            await usersTable.RefreshData();
+
+        IsBusy = false;
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using JMMinistry.Application.Services;
 using JMMinistry.Common;
+using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Domain;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -106,6 +107,7 @@ namespace JMMinistry.Infrastructure.Persistence
                         Name = defaultUser.Name,
                         LastName = defaultUser.LastName,
                         UserName = $"{defaultUser.Name.Split(' ')[0]}.{defaultUser.LastName.Split(' ')[0]}",
+                        MinistryStatus = MinistryStatus.Admin
                     };
 
                     var createUserResult = await userManager.CreateAsync(userIdentity, defaultUser.Password);

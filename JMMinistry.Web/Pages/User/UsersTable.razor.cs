@@ -38,6 +38,11 @@ namespace JMMinistry.Web.Pages.User
         private bool AnyActions
             => EditUser.HasDelegate || DeleteUser.HasDelegate || UserDetails.HasDelegate;
 
+        public async Task RefreshData()
+        {
+            await table!.ReloadServerData();
+        }
+
         private async Task<TableData<UserInfoDto>> UserLoad(TableState state, CancellationToken token)
         {
             var criteria = DefaultUserCriteria ?? new UsersSearchCriteria();
@@ -47,7 +52,6 @@ namespace JMMinistry.Web.Pages.User
             criteria.OrderDirection = state.SortDirection.ToString();
             criteria.Page = state.Page;
             criteria.PageSize = state.PageSize;
-
 
             var results = await userApi.GetUserByCriteria(criteria);
 

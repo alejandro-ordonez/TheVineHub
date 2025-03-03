@@ -2,6 +2,8 @@
 using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Web.Shared;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace JMMinistry.Web.Api
@@ -13,7 +15,7 @@ namespace JMMinistry.Web.Api
 
         public async Task<Response<TokenResult?>?> Authenticate(AuthenticateDto authenticateDto)
         {
-            var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
             var result = await httpClient.PostAsJsonAsync($"{_userApi}/auth", authenticateDto);
 
             var response = await result.Content.ReadFromJsonAsync<Response<TokenResult?>?>();
@@ -28,7 +30,7 @@ namespace JMMinistry.Web.Api
 
         public async Task<Response<PagedResponse<UserInfoDto>>?> GetUserByCriteria(UsersSearchCriteria? userCriteriaSearch)
         {
-            var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
             var result = await httpClient.PostAsJsonAsync($"{_userApi}/Search", userCriteriaSearch);
 
             var response = await result.Content.ReadFromJsonAsync<Response<PagedResponse<UserInfoDto>>>();
@@ -43,9 +45,29 @@ namespace JMMinistry.Web.Api
 
         public async Task<Response<UserInfoDto>?> GetUserInfo()
         {
-            var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
             var result = await httpClient.GetFromJsonAsync<Response<UserInfoDto>>(_userApi);
             return result;
+        }
+
+        public async Task<Response<object>?> ImportUsers(IBrowserFile file)
+        {
+            using var content = new MultipartFormDataContent();
+
+            var fileContent = new StreamContent(file.OpenReadStream());
+
+            fileContent.Headers.ContentType =
+                new MediaTypeHeaderValue(file.ContentType);
+
+            content.Add(
+                content: fileContent,
+                name: "\"formFile\"",
+                fileName: file.Name);
+
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            var result = await httpClient.PostAsync($"{_userApi}/import", content);
+
+            return await result.Content.ReadFromJsonAsync<Response<object>>();
         }
     }
 }

@@ -35,14 +35,14 @@ namespace JMMinistry.API.Controllers
         }
 
         [Authorize]
-        [HttpPost("import/{importType}")]
-        public async Task<ActionResult> Import(IFormFile formFile, ImportUserType importType)
+        [HttpPost("import")]
+        public async Task<ActionResult<string>> Import([FromForm] IFormFile formFile)
         {
             if (formFile == null)
                 return BadRequest("File not submitted");
 
-            await mediator.Send(new ImportUsersCommand { File = formFile, ImportType = importType });
-            return Ok();
+            var result = await mediator.Send(new ImportUsersCommand { File = formFile });
+            return Ok(result);
         }
 
 

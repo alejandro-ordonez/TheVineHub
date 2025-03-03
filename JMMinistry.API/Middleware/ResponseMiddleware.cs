@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
+using System.Text;
 using System.Text.Json;
 
 namespace JMMinistry.API.Middleware
@@ -35,12 +36,26 @@ namespace JMMinistry.API.Middleware
 
                     swapStream.Seek(0, SeekOrigin.Begin);
 
-                    if (!context.Response.ContentType?.Contains(MediaTypeNames.Application.Json) ?? true ||
+                    object? currentBody;
+
+                    string[] contentTypes = [MediaTypeNames.Application.Json, MediaTypeNames.Text.Plain];
+
+                    if (!contentTypes.Any(contentType => context.Response.ContentType?.Contains(contentType) ?? false) ||
                         context.Response.StatusCode == StatusCodes.Status204NoContent)
                         return;
-                        
 
-                    var currentBody = await JsonSerializer.DeserializeAsync<object>(swapStream);
+                    if (context.Response.ContentType?.Contains(MediaTypeNames.Text.Plain) ?? false)
+                    {
+                        using var reader = new StreamReader(swapStream, Encoding.UTF8);
+                        currentBody = await reader.ReadToEndAsync();
+                        swapStream.Seek(0, SeekOrigin.Begin);
+                    }
+
+                    else if (swapStream.Length == 0)
+                        currentBody = null;
+
+                    else
+                        currentBody = await JsonSerializer.DeserializeAsync<object>(swapStream);
 
                     var result = new Response<object>
                     {

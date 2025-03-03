@@ -54,26 +54,6 @@
                                     EditUser="EditDisciple"
                                     DeleteUser="RemoveDisciple"/>
 
-                        <MudTable Items="cell.Disciples">
-                            <HeaderContent>
-                                <MudTh>@translator["Document"]</MudTh>
-                                <MudTh>@translator["Name"]</MudTh>
-                                <MudTh>@translator["LastName"]</MudTh>
-                                <MudTh>@translator["Birthday"]</MudTh>
-                                <MudTh>@translator["Locality"]</MudTh>
-                                <MudTh>@translator["MinistryStatus"]</MudTh>
-                            </HeaderContent>
-
-                            <RowTemplate>
-                                <MudTd DataLabel="@translator["Document"]">@context.Document</MudTd>
-                                <MudTd DataLabel="@translator["Name"]">@context.Name</MudTd>
-                                <MudTd DataLabel="@translator["LastName"]">@context.LastName</MudTd>
-                                <MudTd DataLabel="@translator["Birthday"]">@context.Birthday</MudTd>
-                                <MudTd DataLabel="@translator["Locality"]">@context.Locality</MudTd>
-                                <MudTd DataLabel="@translator["MinistryStatus"]">@translator[context.MinistryStatus?.ToString() ?? "None"]</MudTd>
-                            </RowTemplate>
-                        </MudTable>
-
                     </ChildContent>
 
                 </MudExpansionPanel>

@@ -2,7 +2,8 @@
 
 @inject IStringLocalizer<UIStrings> _translator;
 
-<MudTable ServerData="UserLoad"
+<MudTable ServerData="UseServer? UserLoad : null"
+          Items="UseServer? Users : null"
           Dense="true"
           Hover="true"
           @ref="table"
