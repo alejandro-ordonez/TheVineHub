@@ -17,7 +17,6 @@ namespace JMMinistry.Application.Features.Cells.Commands.RemoveDisciple
         public async Task<string> Handle(RemoveDiscipleCommand request, CancellationToken cancellationToken)
         {
             var disciple = await dbContext.PersonalInfo
-                .Include(disciple => disciple.Cell)
                 .FirstOrDefaultAsync(person => person.Id == request.Document, cancellationToken) ??
                 throw new NotFoundException<Cell>(request.Document);
 
@@ -27,11 +26,17 @@ namespace JMMinistry.Application.Features.Cells.Commands.RemoveDisciple
             if (disciple.CellId != request.CellId)
                 throw new Exception("This person does not belong to the given cell");
 
-            disciple.CellId = null;
-            disciple.Cell = null;
+            var cell = await dbContext.Cells
+                .Include(c => c.Disciples)
+                .FirstOrDefaultAsync(cell => cell.Id == request.CellId, cancellationToken) ?? throw new NotFoundException<Cell>(request.CellId.ToString());
+
             disciple.MinistryStatus = MinistryStatus.Unknown;
 
+            cell.Disciples.Remove(disciple);
+
             dbContext.PersonalInfo.Update(disciple);
+            dbContext.Cells.Update(cell);
+
             await dbContext.SaveChangesAsync(cancellationToken);
 
             return $"Disciple {request.Document} was removed successfully from cell {request.CellId}";

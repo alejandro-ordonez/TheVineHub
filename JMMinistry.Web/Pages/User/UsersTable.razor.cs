@@ -5,23 +5,14 @@ using MudBlazor;
 
 namespace JMMinistry.Web.Pages.User
 {
-    public partial class UsersTable(IUserApi userApi)
+    public partial class UsersTable
     {
 
         private string _searchString = string.Empty;
         private MudTable<UserInfoDto>? table;
 
         [Parameter]
-        public UsersSearchCriteria? DefaultUserCriteria { get; set; }
-
-        [Parameter]
         public bool Selectable { get; set; } = false;
-
-        [Parameter]
-        public bool UseServer { get; set; } = true;
-
-        [Parameter]
-        public IList<UserInfoDto> Users { get; set; } = [];
 
         [Parameter]
         public HashSet<UserInfoDto> Selected { get; set; } = [];
@@ -35,6 +26,9 @@ namespace JMMinistry.Web.Pages.User
         [Parameter]
         public EventCallback<UserEventArgs> UserDetails { get; set; }
 
+        [Parameter]
+        public required FetchUsers FetchUsers { get; set; }
+
         private bool AnyActions
             => EditUser.HasDelegate || DeleteUser.HasDelegate || UserDetails.HasDelegate;
 
@@ -45,23 +39,15 @@ namespace JMMinistry.Web.Pages.User
 
         private async Task<TableData<UserInfoDto>> UserLoad(TableState state, CancellationToken token)
         {
-            var criteria = DefaultUserCriteria ?? new UsersSearchCriteria();
+            var users = await FetchUsers(state, _searchString);
 
-            criteria.Document = _searchString;
-            criteria.OrderByMember = state.SortLabel;
-            criteria.OrderDirection = state.SortDirection.ToString();
-            criteria.Page = state.Page;
-            criteria.PageSize = state.PageSize;
-
-            var results = await userApi.GetUserByCriteria(criteria);
-
-            if (!results?.Success ?? false || results == null)
+            if(users == null)
                 return new TableData<UserInfoDto>();
 
             return new TableData<UserInfoDto>
             {
-                Items = results?.Data?.Results ?? [],
-                TotalItems = results?.Data?.Total ?? 0
+                Items = users?.Results ?? [],
+                TotalItems = users?.Total ?? 0
             };
         }
 

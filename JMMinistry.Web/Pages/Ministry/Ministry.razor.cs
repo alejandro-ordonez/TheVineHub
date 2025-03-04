@@ -1,4 +1,5 @@
 ﻿using JMMinistry.Common.Dtos.Cell;
+using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Common.Resources;
@@ -15,6 +16,7 @@ namespace JMMinistry.Web.Pages.Ministry
 {
     public partial class Ministry(
         IMinistryApi ministryApi, 
+        IUserApi userApi,
         IAuthStateProvider authState, 
         IStringLocalizer<UIStrings> translator, 
         IDialogService dialogService
@@ -32,6 +34,7 @@ namespace JMMinistry.Web.Pages.Ministry
         [CascadingParameter]
         public string? PageTitle { get; set; }
         Dictionary<int, CellDto> Cells { get; set; } = [];
+        Dictionary<int, UsersTable> CellsTables { get; set; } = [];
 
         bool AddDiscipleOpen { get; set; }
         bool AddCellOpen { get; set; }
@@ -39,7 +42,7 @@ namespace JMMinistry.Web.Pages.Ministry
 
         int TargetCellId { get; set; }
 
-        UsersSearchCriteria? InitialCriteria { get; set; }
+        string? UserId { get; set; }
 
         [SupplyParameterFromForm]
         CreateCellDto CreateCellDto { get; set; } = new CreateCellDto();
@@ -52,13 +55,7 @@ namespace JMMinistry.Web.Pages.Ministry
             await RefreshCells();
 
             var state = await authState.GetAuthenticationStateAsync();
-            var id = state.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier);
-
-            InitialCriteria = new UsersSearchCriteria
-            {
-                Requestor = id?.Value,
-                MinistryStatus = [MinistryStatus.Unknown, MinistryStatus.Gained]
-            };
+            UserId = state.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
         }
 
         async Task RefreshCells()
@@ -112,7 +109,12 @@ namespace JMMinistry.Web.Pages.Ministry
             var response = await ministryApi.AddDisciples(addDisciples);
 
             if (response != null && response.Success && response.Data != null)
+            {
                 Cells[response.Data.Id] = response.Data;
+
+                if(CellsTables.TryGetValue(response.Data.Id, out UsersTable? value))
+                    await value.RefreshData();
+            }
 
             IsBusy = false;
             AddDiscipleOpen = false;
@@ -124,6 +126,50 @@ namespace JMMinistry.Web.Pages.Ministry
             AddDiscipleOpen = false;
             IsBusy = false;
         }
+
+        Task<PagedResponse<UserInfoDto>> DummyFetchUsers(int cellId)
+        {
+            IList<UserInfoDto> users = [];
+
+            if (Cells.TryGetValue(cellId, out var cell))
+                users = cell.Disciples;
+
+            var pagedResponse = new PagedResponse<UserInfoDto>
+            {
+                Results = users,
+                Total = users.Count
+            };
+
+            return Task.FromResult(pagedResponse);
+        }
+
+        async Task<PagedResponse<UserInfoDto>> FetchUsers(TableState state, string searchString)
+        {
+            var criteria = new UsersSearchCriteria
+            {
+                Requestor = UserId,
+                MinistryStatus = [MinistryStatus.Unknown, MinistryStatus.Gained],
+                Document = searchString,
+                OrderByMember = state.SortLabel,
+                OrderDirection = state.SortDirection.ToString(),
+                Page = state.Page,
+                PageSize = state.PageSize
+            };
+
+
+            var results = await userApi.GetUserByCriteria(criteria);
+
+            PagedResponse<UserInfoDto> pagedResponse;
+
+            if (!results?.Success ?? true)
+                pagedResponse = new PagedResponse<UserInfoDto>();
+
+            else
+                pagedResponse = results?.Data ?? new PagedResponse<UserInfoDto>();
+
+            return pagedResponse;
+        }
+
 
         async Task EditDisciple(UserEventArgs eventArgs)
         {
@@ -147,7 +193,12 @@ namespace JMMinistry.Web.Pages.Ministry
                 var response = await ministryApi.RemoveDiscipleFromCell(eventArgs.CellId, eventArgs.Document);
 
                 if (response?.Success ?? false)
+                {
                     await RefreshCells();
+
+                    if (CellsTables.TryGetValue(eventArgs.CellId, out UsersTable? value))
+                        await value.RefreshData();
+                }
             }
         }
     }

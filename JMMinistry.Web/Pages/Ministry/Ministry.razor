@@ -49,8 +49,8 @@
 
                     <ChildContent>
 
-                        <UsersTable UseServer="false"
-                                    Users="cell.Disciples"
+                        <UsersTable FetchUsers="(state, searchString) => DummyFetchUsers(cell.Id)"
+                                    @ref="CellsTables[cell.Id]"
                                     EditUser="EditDisciple"
                                     DeleteUser="RemoveDisciple"/>
 
@@ -75,7 +75,9 @@
 <Popup Open="@AddDiscipleOpen">
     <Content>
 
-        <UsersTable DefaultUserCriteria="InitialCriteria" Selectable="true" Selected="DisciplesSelected">
+        <UsersTable FetchUsers="FetchUsers" 
+                    Selectable="true" 
+                    Selected="DisciplesSelected">
 
         </UsersTable>
        
@@ -94,7 +96,7 @@
             }
             else
             {
-                <MudText>@translator["Create"]</MudText>
+                <MudText>@translator["Add"]</MudText>
             }
 
         </MudButton>

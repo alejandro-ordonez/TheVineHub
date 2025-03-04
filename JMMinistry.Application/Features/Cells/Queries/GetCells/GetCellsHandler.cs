@@ -15,7 +15,9 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetCells
     {
         public async Task<IEnumerable<CellDto>> Handle(GetCellsCommand request, CancellationToken cancellationToken)
         {
-            var cells = await dbContext.Cells.Where(cell => cell.Leaders.Any(leader => leader.Id == request.Document))
+            var cells = await dbContext.Cells
+                .Include(cell => cell.Disciples)
+                .Where(cell => cell.Leaders.Any(leader => leader.Id == request.Document))
                 .ToListAsync(cancellationToken) ?? [];
 
             var dtos = mapper.Map<IEnumerable<CellDto>>(cells);

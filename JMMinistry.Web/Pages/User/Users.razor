@@ -1,4 +1,6 @@
-﻿@using JMMinistry.Web.Api
+﻿@using JMMinistry.Common.Dtos.Common
+@using JMMinistry.Common.Dtos.User
+@using JMMinistry.Web.Api
 @page "/users"
 
 @attribute [Authorize(Roles = "Admin")]
@@ -7,8 +9,11 @@
 @inject IStringLocalizer<UIStrings> translator;
 
 
+<PageTitle>
+    @translator["Users"]
+</PageTitle>
 
-<h3>Users</h3>
+<h3>@translator["Users"]</h3>
 
 <MudFileUpload T="IBrowserFile" Accept=".csv" FilesChanged="ImportUsers" MaximumFileCount="1">
     <ActivatorContent>
@@ -30,7 +35,7 @@
 </MudFileUpload>
 
 
-<UsersTable @ref="usersTable">
+<UsersTable @ref="usersTable" FetchUsers="FetchUsers">
 
 </UsersTable>
 
@@ -39,6 +44,29 @@
     private bool IsBusy { get; set; } = false;
 
     UsersTable? usersTable;
+
+    private async Task<PagedResponse<UserInfoDto>> FetchUsers(TableState state, string searchString)
+    {
+        var criteria = new UsersSearchCriteria();
+
+        criteria.Document = searchString;
+        criteria.OrderByMember = state.SortLabel;
+        criteria.OrderDirection = state.SortDirection.ToString();
+        criteria.Page = state.Page;
+        criteria.PageSize = state.PageSize;
+
+        var results = await userApi.GetUserByCriteria(criteria);
+
+        PagedResponse<UserInfoDto> pagedResponse;
+
+        if (!results?.Success ?? true)
+            pagedResponse = new PagedResponse<UserInfoDto>();
+
+        else
+            pagedResponse = results?.Data ?? new PagedResponse<UserInfoDto>();
+
+        return pagedResponse;
+    }
 
     private async Task ImportUsers(IBrowserFile file)
     {

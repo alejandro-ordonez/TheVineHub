@@ -4,25 +4,18 @@
 @inject IStringLocalizer<UIStrings> localizer
 @inject ILocalStorageService _localStorage
 
-<table class="table table-bordered table-striped">
-    <tbody>
-        <tr>
-            <td>
-                @*Placeholder for the Constant String for specific Culture read from Resources files*@
- 
-                @localizer["SelectCulture"]
-            </td>
-            <td>
-                <select class="form-control" @bind="UICulture" style="width:400px; margin-left:10px;">
-                    @foreach (var culture in UICultures)
-                    {
-                        <option value="@culture">@culture.DisplayName</option>
-                    }
-                </select>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<MudSelect @bind-Value="UICulture"
+           Label="@localizer["Language"]"
+           Placeholder="@localizer["SelectCulture"]"
+           Required="true"
+           RequiredError="@localizer["FieldRequired"]"
+           Variant="Variant.Outlined">
+
+    @foreach (var culture in UICultures)
+    {
+        <MudSelectItem Value="culture">@culture.DisplayName</MudSelectItem>
+    }
+</MudSelect>
  
  
 @code {

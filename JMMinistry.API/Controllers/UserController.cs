@@ -36,7 +36,7 @@ namespace JMMinistry.API.Controllers
 
         [Authorize]
         [HttpPost("import")]
-        public async Task<ActionResult<string>> Import([FromForm] IFormFile formFile)
+        public async Task<ActionResult<string>> Import(IFormFile formFile)
         {
             if (formFile == null)
                 return BadRequest("File not submitted");

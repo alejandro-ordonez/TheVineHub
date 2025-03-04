@@ -273,4 +273,25 @@
   <data name="Remove" xml:space="preserve">
     <value>Remover</value>
   </data>
+  <data name="Processing" xml:space="preserve">
+    <value>Procesando</value>
+  </data>
+  <data name="ImportUsers" xml:space="preserve">
+    <value>Importar usuarios</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Usuarios</value>
+  </data>
+  <data name="SelectCulture" xml:space="preserve">
+    <value>Selecciona el idioma</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="SignUp" xml:space="preserve">
+    <value>Registrarse</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Agregar</value>
+  </data>
 </root>

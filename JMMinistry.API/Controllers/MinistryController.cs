@@ -32,7 +32,7 @@ namespace JMMinistry.API.Controllers
             return Ok(cells);
         }
 
-        [HttpPost("/disciples/{cellId}")]
+        [HttpPost("disciples/{cellId}")]
         public async Task<ActionResult<CellDto>> AddDisciples(int cellId, [FromBody] AddDisciplesCommand addDisciples)
         {
             addDisciples.CellId = cellId;
@@ -41,7 +41,7 @@ namespace JMMinistry.API.Controllers
             return cell;
         }
 
-        [HttpDelete("/disciples/{cellId}/{discipleId}")]
+        [HttpDelete("disciples/{cellId}/{discipleId}")]
         public async Task<ActionResult<CellDto>> RemoveDisciple(int cellId, string discipleId)
         {
             var removeDiscipleCommand = new RemoveDiscipleCommand { CellId = cellId, Document = discipleId };

@@ -2,8 +2,7 @@
 
 @inject IStringLocalizer<UIStrings> _translator;
 
-<MudTable ServerData="UseServer? UserLoad : null"
-          Items="UseServer? Users : null"
+<MudTable ServerData="UserLoad"
           Dense="true"
           Hover="true"
           @ref="table"
@@ -11,7 +10,7 @@
           SelectedItems="Selected">
 
     <ToolBarContent>
-        <MudText Typo="Typo.h6">Periodic Elements</MudText>
+        <MudText Typo="Typo.h6">@_translator["Users"]</MudText>
         <MudSpacer />
         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="Search" Adornment="Adornment.Start"
                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
@@ -33,6 +32,10 @@
             <MudTableSortLabel SortLabel="MinistryStatus" T="UserInfoDto">@_translator["MinistryStatus"]</MudTableSortLabel>
         </MudTh>
 
+        <MudTh>
+           @_translator["Phone"]
+        </MudTh>
+
         @if (AnyActions)
         {
             <MudTh>
@@ -47,7 +50,6 @@
         <MudTd DataLabel="Last Name">@context.LastName</MudTd>
         <MudTd DataLabel="MinistryStatus">@_translator[context.MinistryStatus?.ToString() ?? ""]</MudTd>
         <MudTd DataLabel="Phone">@context.Phone</MudTd>
-        <MudTd DataLabel="Actions">
 
             @if (AnyActions)
             {
@@ -68,7 +70,6 @@
                     </div>
                 </MudTd>
             }
-        </MudTd>
     </RowTemplate>
 
     <NoRecordsContent>
