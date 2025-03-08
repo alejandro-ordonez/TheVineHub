@@ -1,5 +1,8 @@
 ﻿.popup-container{
-    min-width: 40%;
+    min-width: 50%;
+    max-height: 100%;
+    overflow: auto;
+    padding: 1rem 0px;
 }
 
 .action-container{

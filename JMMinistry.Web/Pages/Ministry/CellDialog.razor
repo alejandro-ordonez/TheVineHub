@@ -1,0 +1,55 @@
+﻿@using JMMinistry.Common.Dtos.Cell
+
+@inject IStringLocalizer<UIStrings> translator;
+
+<Dialog ResultType="CreateCellDto"
+        Result="CreateCellDto"
+        Color="Color.Primary"
+        ButtonText="@translator["Add"]">
+    <Content>
+
+        <MudText Typo="Typo.h6">@translator["RegisterCell"]</MudText>
+        <MudDivider />
+
+        <MudForm Model="CreateCellDto" @ref="cellForm">
+
+            <MudTextField @bind-Value="CreateCellDto.Name"
+                          For="@(() => CreateCellDto.Name)"
+                          Immediate="true"
+                          Required="true"
+                          RequiredError="@translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@translator["Name"]"
+                          InputType="InputType.Text" />
+
+            <MudTextField @bind-Value="CreateCellDto.Description"
+                          For="@(() => CreateCellDto.Description)"
+                          Immediate="true"
+                          Required="true"
+                          OnlyValidateIfDirty="true"
+                          RequiredError="@translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@translator["Description"]"
+                          InputType="InputType.Text" />
+
+
+            <MudTextField @bind-Value="CreateCellDto.Address"
+                          For="@(() => CreateCellDto.Address)"
+                          Immediate="true"
+                          Required="true"
+                          OnlyValidateIfDirty="true"
+                          RequiredError="@translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@translator["Address"]"
+                          InputType="InputType.Text" />
+
+        </MudForm>
+    </Content>
+</Dialog>
+
+@code {
+    [SupplyParameterFromForm]
+    CreateCellDto CreateCellDto { get; set; } = new CreateCellDto();
+
+    MudForm? cellForm;
+}

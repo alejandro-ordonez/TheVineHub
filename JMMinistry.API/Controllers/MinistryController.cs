@@ -3,7 +3,10 @@ using JMMinistry.Application.Features.Cells.Commands.AddDisciples;
 using JMMinistry.Application.Features.Cells.Commands.CreateCell;
 using JMMinistry.Application.Features.Cells.Commands.RemoveDisciple;
 using JMMinistry.Application.Features.Cells.Queries.GetCells;
+using JMMinistry.Application.Features.Cells.Queries.GetDisciples;
 using JMMinistry.Common.Dtos.Cell;
+using JMMinistry.Common.Dtos.Common;
+using JMMinistry.Common.Dtos.User;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +31,30 @@ namespace JMMinistry.API.Controllers
         {
             var document = HttpContext.GetDocumentClaim() ?? throw new ArgumentException("Missing document in token");
 
-            var cells = await mediator.Send(new GetCellsCommand { Document = document });
+            var cells = await mediator.Send(new GetCellsQuery { Document = document });
             return Ok(cells);
         }
+
+
+        [HttpGet("disciples/{cellId}")]
+        public async Task<ActionResult<PagedResponse<UserInfoDto>>> GetDisciples(int cellId, [FromQuery] PagedRequest pageRequest)
+        {
+            var document = HttpContext.GetDocumentClaim() ?? throw new ArgumentException("Missing document in token");
+            var query = new GetDisciplesQuery 
+            { 
+                CellId = cellId, 
+                DocumentLeader = document,
+                Page = pageRequest.Page,
+                PageSize = pageRequest.PageSize,
+                OrderByMember = pageRequest.OrderByMember,
+                OrderDirection = pageRequest.OrderDirection
+            };
+
+            var response = await mediator.Send(query);
+
+            return Ok(response);
+        }
+
 
         [HttpPost("disciples/{cellId}")]
         public async Task<ActionResult<CellDto>> AddDisciples(int cellId, [FromBody] AddDisciplesCommand addDisciples)
@@ -39,7 +63,7 @@ namespace JMMinistry.API.Controllers
 
             var cell = await mediator.Send(addDisciples);
             return cell;
-        }
+        }      
 
         [HttpDelete("disciples/{cellId}/{discipleId}")]
         public async Task<ActionResult<CellDto>> RemoveDisciple(int cellId, string discipleId)

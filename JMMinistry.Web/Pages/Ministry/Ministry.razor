@@ -12,7 +12,7 @@
         <ActionMenu>
             <MudFab StartIcon="@Icons.Material.Filled.Add"
                     Color="Color.Primary"
-                    Disabled="@AddDiscipleOpen"
+                    Disabled="@IsBusy"
                     Size="Size.Small"
                     OnClick="() => OpenAddCell()">
             </MudFab>
@@ -40,7 +40,7 @@
                             <MudText Typo="Typo.h5">@cell.Name</MudText>
                             <MudFab StartIcon="@Icons.Material.Filled.Add"
                                     Color="Color.Primary"
-                                    Disabled="@AddDiscipleOpen"
+                                    Disabled="@IsBusy"
                                     Size="Size.Small"
                                     OnClick="() => OpenAddDisciple(cell.Id)">
                             </MudFab>
@@ -49,7 +49,7 @@
 
                     <ChildContent>
 
-                        <UsersTable FetchUsers="(state, searchString) => DummyFetchUsers(cell.Id)"
+                        <UsersTable FetchUsers="(state, searchString) => FetchDisciples(state, searchString, cell.Id)"
                                     @ref="CellsTables[cell.Id]"
                                     EditUser="EditDisciple"
                                     DeleteUser="RemoveDisciple"/>
@@ -68,100 +68,3 @@
         <MudText>Content Two</MudText>
     </MudTabPanel>
 </MudTabs>
-
-
-
-
-<Popup Open="@AddDiscipleOpen">
-    <Content>
-
-        <UsersTable FetchUsers="FetchUsers" 
-                    Selectable="true" 
-                    Selected="DisciplesSelected">
-
-        </UsersTable>
-       
-    </Content>
-
-    <Actions>
-        <MudButton Variant="Variant.Filled"
-                   Color="Color.Primary"
-                   OnClick="@(async () => await SubmitAddDisciples())">
-
-
-            @if (IsBusy)
-            {
-                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                <MudText Class="ms-2">Processing</MudText>
-            }
-            else
-            {
-                <MudText>@translator["Add"]</MudText>
-            }
-
-        </MudButton>
-
-        <MudButton Variant="Variant.Filled"
-                   Color="Color.Warning"
-                   OnClick="() => Cancel()">
-            <MudText>@translator["Cancel"]</MudText>
-        </MudButton>
-    </Actions>
-</Popup>
-
-
-<Popup Open="@AddCellOpen">
-    <Content>
-        <MudText Typo="Typo.h6">@translator["RegisterCell"]</MudText>
-        <MudDivider />
-
-        <MudForm Model="CreateCellDto" @ref="cellForm">
-
-            <MudTextField @bind-Value="CreateCellDto.Name"
-                          For="@(() => CreateCellDto.Name)"
-                          Immediate="true"
-                          Required="true"
-                          RequiredError="@translator["FieldRequired"]"
-                          Variant="Variant.Outlined"
-                          Label="@translator["Name"]"
-                          InputType="InputType.Text" />
-
-            <MudTextField @bind-Value="CreateCellDto.Description"
-                          For="@(() => CreateCellDto.Description)"
-                          Immediate="true"
-                          Required="true"
-                          OnlyValidateIfDirty="true"
-                          RequiredError="@translator["FieldRequired"]"
-                          Variant="Variant.Outlined"
-                          Label="@translator["Description"]"
-                          InputType="InputType.Text" />
-            
-        </MudForm>
-
-    </Content>
-
-    <Actions>
-        <MudButton Variant="Variant.Filled"
-                   Color="Color.Primary"
-                   OnClick="@(async () => await SubmitAddCell())">
-
-
-            @if (IsBusy)
-            {
-                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                <MudText Class="ms-2">Processing</MudText>
-            }
-            else
-            {
-                <MudText>@translator["Create"]</MudText>
-            }
-
-        </MudButton>
-
-        <MudButton Variant="Variant.Filled"
-                   Color="Color.Warning"
-                   OnClick="() => Cancel()">
-            <MudText>@translator["Cancel"]</MudText>
-        </MudButton>
-    </Actions>
-</Popup>

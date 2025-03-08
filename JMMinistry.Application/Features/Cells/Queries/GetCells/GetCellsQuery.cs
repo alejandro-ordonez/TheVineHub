@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Features.Cells.Queries.GetCells
 {
-    public class GetCellsCommand: IRequest<IEnumerable<CellDto>>
+    public class GetCellsQuery: IRequest<IEnumerable<CellDto>>
     {
         public required string Document { get; set; }
     }

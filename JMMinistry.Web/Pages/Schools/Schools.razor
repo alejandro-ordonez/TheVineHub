@@ -9,7 +9,7 @@
 @page "/schools"
 @attribute [Authorize]
 
-<HeaderPage Title="@_translator["Schools"]">
+<Header Title="@_translator["Schools"]">
     <ActionMenu>
         <MudFab StartIcon="@Icons.Material.Filled.Add"
                 Color="Color.Primary"
@@ -18,7 +18,7 @@
                 OnClick="() => EditorOpen = !EditorOpen">
         </MudFab>
     </ActionMenu>
-</HeaderPage>
+</Header>
 
 <Popup Open="EditorOpen">
     <Content>

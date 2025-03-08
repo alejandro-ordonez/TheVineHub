@@ -1,9 +1,10 @@
 ﻿@inject IStringLocalizer<UIStrings> _translator;
 
+@typeparam ResultType;
 
-<MudDialog>
+<MudDialog >
     <DialogContent>
-        <MudText>@ContentText</MudText>
+        @Content
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="Cancel">@_translator["Cancel"]</MudButton>
@@ -11,20 +12,39 @@
     </DialogActions>
 </MudDialog>
 
-@code {
-    [CascadingParameter]
-    private IMudDialogInstance? MudDialog { get; set; }
 
-    [Parameter]
-    public string? ContentText { get; set; }
+@code{
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(MudDialog is not null)
+        {
+            var options = MudDialog.Options with
+            {
+                FullWidth =  true,
+                MaxWidth = MaxWidth.Large
+            };
+
+            await MudDialog.SetOptionsAsync(options);
+        }
+    }
+
+    [CascadingParameter]
+    protected IMudDialogInstance? MudDialog { get; set; }
 
     [Parameter]
     public string? ButtonText { get; set; }
 
     [Parameter]
+    public RenderFragment? Content { get; set; }
+
+    [Parameter]
     public Color Color { get; set; }
 
-    private void Submit() => MudDialog?.Close(DialogResult.Ok(true));
+    [Parameter]
+    public required ResultType Result { get; set; }
+
+    private void Submit() => MudDialog?.Close(DialogResult.Ok<ResultType>(Result));
 
     private void Cancel() => MudDialog?.Cancel();
 }

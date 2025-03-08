@@ -1,7 +1,6 @@
 ﻿using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.User;
-using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Common.Resources;
 using JMMinistry.Web.Api;
 using JMMinistry.Web.Pages.User;
@@ -15,8 +14,7 @@ using System.Security.Claims;
 namespace JMMinistry.Web.Pages.Ministry
 {
     public partial class Ministry(
-        IMinistryApi ministryApi, 
-        IUserApi userApi,
+        IMinistryApi ministryApi,
         IAuthStateProvider authState, 
         IStringLocalizer<UIStrings> translator, 
         IDialogService dialogService
@@ -36,19 +34,10 @@ namespace JMMinistry.Web.Pages.Ministry
         Dictionary<int, CellDto> Cells { get; set; } = [];
         Dictionary<int, UsersTable> CellsTables { get; set; } = [];
 
-        bool AddDiscipleOpen { get; set; }
         bool AddCellOpen { get; set; }
         bool IsBusy { get; set; }
 
-        int TargetCellId { get; set; }
-
         string? UserId { get; set; }
-
-        [SupplyParameterFromForm]
-        CreateCellDto CreateCellDto { get; set; } = new CreateCellDto();
-        MudForm? cellForm;
-
-        public HashSet<UserInfoDto> DisciplesSelected { get; set; } = [];
 
         protected override async Task OnInitializedAsync()
         {
@@ -66,44 +55,65 @@ namespace JMMinistry.Web.Pages.Ministry
                 Cells = response?.Data?.ToDictionary(cell => cell.Id, cell => cell) ?? [];
         }
 
-        void OpenAddDisciple(int cellId)
-        {
-            TargetCellId = cellId;
-            AddDiscipleOpen = true;
-        }
-
-        void OpenAddCell()
-        {
-            AddCellOpen = true;
-        }
-
-        async Task SubmitAddCell()
+        async Task OpenAddDisciple(int cellId)
         {
             IsBusy = true;
-            var response = await ministryApi.CreateCell(CreateCellDto);
+
+            var dialog = await dialogService.ShowAsync<AddDisciplesDialog>();
+            var result = await dialog.Result;
+
+            if (result is null || result.Canceled || result.Data is null)
+            {
+                IsBusy = false;
+                return;
+            }
+
+            HashSet<UserInfoDto> selectedDisciples = (HashSet<UserInfoDto>)result.Data;
+
+            await AddDisciplesAsync(selectedDisciples, cellId);
+
+            IsBusy = false;
+        }
+
+        async Task OpenAddCell()
+        {
+            IsBusy = true;
+
+            var dialog = await dialogService.ShowAsync<CellDialog>();
+            var result = await dialog.Result;
+
+            if (result is null || result.Canceled || result.Data is null)
+            {
+                IsBusy = false;
+                return;
+            }
+
+            await SubmitAddCell((CreateCellDto)result.Data);
+            IsBusy = false;
+        }
+
+        async Task SubmitAddCell(CreateCellDto cellDto)
+        {
+            var response = await ministryApi.CreateCell(cellDto);
 
             if (response != null && response.Success && response.Data != null)
                 Cells[response.Data.Id] = response.Data;
-
-            IsBusy = false;
-            AddCellOpen = false;
         }
 
-        async Task SubmitAddDisciples()
+        async Task AddDisciplesAsync(HashSet<UserInfoDto> disciples, int cellId)
         {
             IsBusy = true;
 
-            if(DisciplesSelected.Count == 0)
+            if(disciples.Count == 0)
             {
                 IsBusy = false;
-                AddDiscipleOpen = false;
                 return;
             }
 
             var addDisciples = new AddDisciplesDto
             {
-                Documents = [.. DisciplesSelected.Select(disciple => disciple.Document)],
-                CellId = TargetCellId
+                Documents = [.. disciples.Select(disciple => disciple.Document)],
+                CellId = cellId
             };
 
             var response = await ministryApi.AddDisciples(addDisciples);
@@ -117,57 +127,21 @@ namespace JMMinistry.Web.Pages.Ministry
             }
 
             IsBusy = false;
-            AddDiscipleOpen = false;
         }
 
-        void Cancel()
+        async Task<PagedResponse<UserInfoDto>> FetchDisciples(TableState state, string searchString, int cellId)
         {
-            AddCellOpen = false;
-            AddDiscipleOpen = false;
-            IsBusy = false;
-        }
-
-        Task<PagedResponse<UserInfoDto>> DummyFetchUsers(int cellId)
-        {
-            IList<UserInfoDto> users = [];
-
-            if (Cells.TryGetValue(cellId, out var cell))
-                users = cell.Disciples;
-
-            var pagedResponse = new PagedResponse<UserInfoDto>
+            var pagedRequest = new PagedRequest
             {
-                Results = users,
-                Total = users.Count
-            };
-
-            return Task.FromResult(pagedResponse);
-        }
-
-        async Task<PagedResponse<UserInfoDto>> FetchUsers(TableState state, string searchString)
-        {
-            var criteria = new UsersSearchCriteria
-            {
-                Requestor = UserId,
-                MinistryStatus = [MinistryStatus.Unknown, MinistryStatus.Gained],
-                Document = searchString,
-                OrderByMember = state.SortLabel,
-                OrderDirection = state.SortDirection.ToString(),
                 Page = state.Page,
-                PageSize = state.PageSize
+                PageSize = state.PageSize,
+                OrderByMember = state.SortLabel,
+                OrderDirection = state.SortDirection.ToString()
             };
 
+            var result = await ministryApi.GetDisciples(cellId, pagedRequest);
 
-            var results = await userApi.GetUserByCriteria(criteria);
-
-            PagedResponse<UserInfoDto> pagedResponse;
-
-            if (!results?.Success ?? true)
-                pagedResponse = new PagedResponse<UserInfoDto>();
-
-            else
-                pagedResponse = results?.Data ?? new PagedResponse<UserInfoDto>();
-
-            return pagedResponse;
+            return result?.Data ?? new PagedResponse<UserInfoDto> { Results = [] };
         }
 
 
@@ -178,14 +152,14 @@ namespace JMMinistry.Web.Pages.Ministry
 
         async Task RemoveDisciple(UserEventArgs eventArgs)
         {
-            var parameters = new DialogParameters<Dialog>
+            var parameters = new DialogParameters<ConfirmationDialog>
             {
                 {x => x.ButtonText, translator["Remove"] },
                 {x => x.ContentText, translator["AreYouSure", translator["Remove"], translator["Disciple"], eventArgs.Document] },
                 {x => x.Color, Color.Error },
             };
 
-            var dialog = await dialogService.ShowAsync<Dialog>(translator["Remove"], parameters);
+            var dialog = await dialogService.ShowAsync<ConfirmationDialog>(translator["Remove"], parameters);
             var result = await dialog.Result;
 
             if(!result?.Canceled ?? false)

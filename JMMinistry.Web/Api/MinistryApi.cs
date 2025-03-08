@@ -1,6 +1,10 @@
 ﻿using JMMinistry.Common;
 using JMMinistry.Common.Dtos.Cell;
+using JMMinistry.Common.Dtos.Common;
+using JMMinistry.Common.Dtos.User;
 using JMMinistry.Web.Shared;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Buffers.Text;
 using System.Net.Http.Json;
 
 namespace JMMinistry.Web.Api
@@ -35,6 +39,21 @@ namespace JMMinistry.Web.Api
             using var client = clientFactory.CreateClient(Constants.ApiClient);
             var response = await client.DeleteAsync($"{_ministryApi}/disciples/{cellId}/{document}");
             return await response.Content.ReadFromJsonAsync<Response<string>>();
+        }
+
+        public async Task<Response<PagedResponse<UserInfoDto>>?> GetDisciples(int cellId, PagedRequest pagedRequest)
+        {
+            using var client = clientFactory.CreateClient(Constants.ApiClient);
+
+            var queryParams = pagedRequest.GetType()
+            .GetProperties()
+            .ToDictionary(prop => prop.Name, prop => prop.GetValue(pagedRequest)?.ToString());
+
+            var api = $"{_ministryApi}/disciples/{cellId}";
+            var url = QueryHelpers.AddQueryString(api, queryParams);
+
+            var response = await client.GetFromJsonAsync<Response<PagedResponse<UserInfoDto>>?>(url);
+            return response;
         }
     }
 }

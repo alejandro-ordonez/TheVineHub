@@ -1,0 +1,66 @@
+﻿@using JMMinistry.Common.Dtos.Common
+@using JMMinistry.Common.Dtos.User
+@using JMMinistry.Common.Dtos.User.Enums
+@using JMMinistry.Web.Api
+@using JMMinistry.Web.Pages.User
+@using JMMinistry.Web.Services
+@using System.Security.Claims
+
+@inject IAuthStateProvider authState;
+@inject IUserApi userApi;
+@inject IStringLocalizer<UIStrings> translator; 
+
+<Dialog ResultType="HashSet<UserInfoDto>" 
+        Result="DisciplesSelected"
+        Color="Color.Primary"
+        ButtonText="@translator["Add"]">
+    <Content>
+        <UsersTable FetchUsers="FetchUsers"
+                    Selectable="true"
+                    Selected="DisciplesSelected">
+
+        </UsersTable>
+    </Content>
+</Dialog>
+
+
+
+@code{
+
+    string? UserId { get; set; }
+
+    public HashSet<UserInfoDto> DisciplesSelected { get; set; } = [];
+
+    protected override async Task OnAfterRenderAsync(bool firstTime)
+    {
+        var state = await authState.GetAuthenticationStateAsync();
+        UserId = state.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
+    }
+
+    async Task<PagedResponse<UserInfoDto>> FetchUsers(TableState state, string searchString)
+    {
+        var criteria = new UsersSearchCriteria
+        {
+            Requestor = UserId,
+            MinistryStatus = [MinistryStatus.Unknown, MinistryStatus.Gained],
+            Document = searchString,
+            OrderByMember = state.SortLabel,
+            OrderDirection = state.SortDirection.ToString(),
+            Page = state.Page,
+            PageSize = state.PageSize
+        };
+
+
+        var results = await userApi.GetUserByCriteria(criteria);
+
+        PagedResponse<UserInfoDto> pagedResponse;
+
+        if (!results?.Success ?? true)
+            pagedResponse = new PagedResponse<UserInfoDto>();
+
+        else
+            pagedResponse = results?.Data ?? new PagedResponse<UserInfoDto>();
+
+        return pagedResponse;
+    }
+}

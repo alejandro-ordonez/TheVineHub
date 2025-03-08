@@ -11,7 +11,6 @@ namespace JMMinistry.Common.Dtos.Cell
 {
     public class CellDto: CreateCellDto
     {
-        public IList<UserInfoDto> Disciples { get; set; } = [];
     }
 
 }

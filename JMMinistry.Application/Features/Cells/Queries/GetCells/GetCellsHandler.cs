@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Features.Cells.Queries.GetCells
 {
-    public class GetCellsHandler(IJmDbContext dbContext, IMapper mapper) : IRequestHandler<GetCellsCommand, IEnumerable<CellDto>>
+    public class GetCellsHandler(IJmDbContext dbContext, IMapper mapper) : IRequestHandler<GetCellsQuery, IEnumerable<CellDto>>
     {
-        public async Task<IEnumerable<CellDto>> Handle(GetCellsCommand request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<CellDto>> Handle(GetCellsQuery request, CancellationToken cancellationToken)
         {
             var cells = await dbContext.Cells
                 .Include(cell => cell.Disciples)
