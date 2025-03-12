@@ -13,9 +13,9 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetDisciples
             IJmDbContext dbContext,
             IMapper mapper
         )
-        : IRequestHandler<GetDisciplesQuery, PagedResponse<UserInfoDto>>
+        : IRequestHandler<GetDisciplesQuery, PagedResponse<PartialUserInfoDto>>
     {
-        public async Task<PagedResponse<UserInfoDto>> Handle(GetDisciplesQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<PartialUserInfoDto>> Handle(GetDisciplesQuery request, CancellationToken cancellationToken)
         {
             var cell = await dbContext.Cells
                 .Include(cell => cell.Leaders)
@@ -29,11 +29,11 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetDisciples
                 .Skip(request.Page * request.PageSize)
                 .Take(request.PageSize);
 
-            var response = new PagedResponse<UserInfoDto>
+            var response = new PagedResponse<PartialUserInfoDto>
             {
                 Page = request.Page,
                 Total = cell.Disciples.Count,
-                Results = mapper.Map<IList<UserInfoDto>>(disciples)
+                Results = mapper.Map<IList<PartialUserInfoDto>>(disciples)
             };
 
             return response;

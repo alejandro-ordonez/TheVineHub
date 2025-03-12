@@ -11,6 +11,6 @@ namespace JMMinistry.Web.Api
         Task<Response<CellDto>?> CreateCell(CreateCellDto cell);
         Task<Response<CellDto>?> AddDisciples(AddDisciplesDto addDisciples);
         Task<Response<string>?> RemoveDiscipleFromCell(int cellId, string document);
-        Task<Response<PagedResponse<UserInfoDto>>?> GetDisciples(int cellId, PagedRequest pagedRequest);
+        Task<Response<PagedResponse<PartialUserInfoDto>>?> GetDisciples(int cellId, PagedRequest pagedRequest);
     }
 }

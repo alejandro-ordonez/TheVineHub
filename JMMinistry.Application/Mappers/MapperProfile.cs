@@ -18,12 +18,13 @@ namespace JMMinistry.Application.Mappers
         public MapperProfile()
         {
             CreateMap<PersonalInfo, UserInfoDto>()
-                .ForMember(x => x.Document, cfg => cfg.MapFrom(model => model.Id))
-                .ForMember(x => x.Birthday, cfg => cfg.MapFrom(model => model.Birthday.ToDateTime()));
+                .ForMember(x => x.Document, cfg => cfg.MapFrom(model => model.Id));
+
+            CreateMap<PersonalInfo, PartialUserInfoDto>()
+                .ForMember(x => x.Document, cfg => cfg.MapFrom(model => model.Id));
 
             CreateMap<UserInfoDto, PersonalInfo>()
-                .ForMember(model => model.Id, cfg => cfg.MapFrom(x => x.Document))
-                .ForMember(model => model.Birthday, cfg => cfg.MapFrom(x => DateOnly.FromDateTime(x.Birthday)));
+                .ForMember(model => model.Id, cfg => cfg.MapFrom(x => x.Document));
 
             CreateMap<School, SchoolDto>();
             CreateMap<SchoolDto, School>();

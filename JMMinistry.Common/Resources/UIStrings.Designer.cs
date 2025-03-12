@@ -169,6 +169,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
@@ -219,6 +228,15 @@ namespace JMMinistry.Common.Resources {
         public static string Email {
             get {
                 return ResourceManager.GetString("Email", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was an unknown error trying to retrieve the resource.
+        /// </summary>
+        public static string ErrorFetching {
+            get {
+                return ResourceManager.GetString("ErrorFetching", resourceCulture);
             }
         }
         
@@ -367,6 +385,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to More info.
+        /// </summary>
+        public static string MoreInfo {
+            get {
+                return ResourceManager.GetString("MoreInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My ministry.
         /// </summary>
         public static string MyMinistry {
@@ -408,6 +435,15 @@ namespace JMMinistry.Common.Resources {
         public static string None {
             get {
                 return ResourceManager.GetString("None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not set.
+        /// </summary>
+        public static string NotSet {
+            get {
+                return ResourceManager.GetString("NotSet", resourceCulture);
             }
         }
         
@@ -588,6 +624,15 @@ namespace JMMinistry.Common.Resources {
         public static string Welcome {
             get {
                 return ResourceManager.GetString("Welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} years old.
+        /// </summary>
+        public static string YearsOld {
+            get {
+                return ResourceManager.GetString("YearsOld", resourceCulture);
             }
         }
     }

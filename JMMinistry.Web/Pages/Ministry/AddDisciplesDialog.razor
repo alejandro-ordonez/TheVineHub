@@ -10,10 +10,10 @@
 @inject IUserApi userApi;
 @inject IStringLocalizer<UIStrings> translator; 
 
-<Dialog ResultType="HashSet<UserInfoDto>" 
+<Dialog ResultType="HashSet<PartialUserInfoDto>"
         Result="DisciplesSelected"
         Color="Color.Primary"
-        ButtonText="@translator["Add"]">
+        PrimaryText="@translator["Add"]">
     <Content>
         <UsersTable FetchUsers="FetchUsers"
                     Selectable="true"
@@ -29,7 +29,7 @@
 
     string? UserId { get; set; }
 
-    public HashSet<UserInfoDto> DisciplesSelected { get; set; } = [];
+    public HashSet<PartialUserInfoDto> DisciplesSelected { get; set; } = [];
 
     protected override async Task OnAfterRenderAsync(bool firstTime)
     {
@@ -37,7 +37,7 @@
         UserId = state.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
     }
 
-    async Task<PagedResponse<UserInfoDto>> FetchUsers(TableState state, string searchString)
+    async Task<PagedResponse<PartialUserInfoDto>> FetchUsers(TableState state, string searchString)
     {
         var criteria = new UsersSearchCriteria
         {
@@ -53,13 +53,13 @@
 
         var results = await userApi.GetUserByCriteria(criteria);
 
-        PagedResponse<UserInfoDto> pagedResponse;
+        PagedResponse<PartialUserInfoDto> pagedResponse;
 
         if (!results?.Success ?? true)
-            pagedResponse = new PagedResponse<UserInfoDto>();
+            pagedResponse = new PagedResponse<PartialUserInfoDto>();
 
         else
-            pagedResponse = results?.Data ?? new PagedResponse<UserInfoDto>();
+            pagedResponse = results?.Data ?? new PagedResponse<PartialUserInfoDto>();
 
         return pagedResponse;
     }

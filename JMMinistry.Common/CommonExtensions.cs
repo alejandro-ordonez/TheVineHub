@@ -24,5 +24,17 @@ namespace JMMinistry.Common
 
             return string.Join(" ", words);
         }
+
+        public static int YearsElapsed(this DateOnly date)
+        {
+            var today = DateTime.Today;
+            var dateTime = date.ToDateTime(TimeOnly.MinValue);
+            var years = today.Year - dateTime.Year;
+
+            if (dateTime > today.AddYears(-years))
+                years--;
+
+            return years;
+        }
     }
 }

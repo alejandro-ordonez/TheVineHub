@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
 {
-    public class GetUserInfoByCriteriaQuery: UsersSearchCriteria, IRequest<PagedResponse<UserInfoDto>>
+    public class GetUserInfoByCriteriaQuery: UsersSearchCriteria, IRequest<PagedResponse<PartialUserInfoDto>>
     {
     }
 }

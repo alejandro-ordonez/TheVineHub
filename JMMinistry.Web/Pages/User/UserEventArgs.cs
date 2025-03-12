@@ -10,5 +10,5 @@ namespace JMMinistry.Web.Pages.User
         public required string Document { get; set; }
     }
 
-    public delegate Task<PagedResponse<UserInfoDto>> FetchUsers(TableState state, string searchString);
+    public delegate Task<PagedResponse<PartialUserInfoDto>> FetchUsers(TableState state, string searchString);
 }

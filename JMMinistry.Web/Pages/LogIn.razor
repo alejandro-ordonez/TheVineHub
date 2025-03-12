@@ -39,7 +39,11 @@
                                   RequiredError="@_translator["FieldRequired"]"
                                   Variant="Variant.Outlined"
                                   Label="@_translator["Password"]"
-                                  InputType="InputType.Password" />
+                                  Adornment="Adornment.End"
+                                  AdornmentIcon="@PasswordInputIcon"
+                                  OnAdornmentClick="ShowPassword"
+                                  AdornmentAriaLabel="Show Password"
+                                  InputType="PasswordInputType" />
 
                 </MudCardContent>
 
@@ -83,6 +87,10 @@
 
     public AuthenticateValidator AuthValidator = new AuthenticateValidator();
 
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+    InputType PasswordInputType = InputType.Password;
+    bool showPassword = false;
+
     [Inject]
     ISnackbar? SnackBar { get; set; }
 
@@ -118,5 +126,21 @@
             SnackBar?.Add(_translator["AuthenticationFailed"], Severity.Error);
 
         Busy = false;
+    }
+
+    void ShowPassword()
+    {
+        @if (showPassword)
+        {
+            showPassword = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInputType = InputType.Password;
+        }
+        else
+        {
+            showPassword = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInputType = InputType.Text;
+        }
     }
 }

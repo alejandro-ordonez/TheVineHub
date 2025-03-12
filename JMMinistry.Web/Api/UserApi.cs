@@ -28,12 +28,12 @@ namespace JMMinistry.Web.Api
             return response;
         }
 
-        public async Task<Response<PagedResponse<UserInfoDto>>?> GetUserByCriteria(UsersSearchCriteria? userCriteriaSearch)
+        public async Task<Response<PagedResponse<PartialUserInfoDto>>?> GetUserByCriteria(UsersSearchCriteria? userCriteriaSearch)
         {
             using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
             var result = await httpClient.PostAsJsonAsync($"{_userApi}/Search", userCriteriaSearch);
 
-            var response = await result.Content.ReadFromJsonAsync<Response<PagedResponse<UserInfoDto>>>();
+            var response = await result.Content.ReadFromJsonAsync<Response<PagedResponse<PartialUserInfoDto>>>();
 
             if (!response?.Success ?? false)
             {
@@ -43,10 +43,15 @@ namespace JMMinistry.Web.Api
             return response;
         }
 
-        public async Task<Response<UserInfoDto>?> GetUserInfo()
+        public async Task<Response<UserInfoDto>?> GetUserInfo(string? document = null)
         {
             using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
-            var result = await httpClient.GetFromJsonAsync<Response<UserInfoDto>>(_userApi);
+            var url = _userApi;
+
+            if (!string.IsNullOrEmpty(document))
+                url += $"/{document}";
+
+            var result = await httpClient.GetFromJsonAsync<Response<UserInfoDto>>(url);
             return result;
         }
 

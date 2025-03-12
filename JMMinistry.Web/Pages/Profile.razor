@@ -3,21 +3,26 @@
 @page "/profile"
 @using JMMinistry.Common.Dtos.User
 @using JMMinistry.Web.Api
+@using JMMinistry.Web.Pages.User
 
 @inject IUserApi _userApi
 
-<h3>Profile</h3>
+<UserCard UserInfo="UserInfo"/>
 
-
+<MudDivider Style="margin: 1rem 0px" />
 
 <LanguageSelector />
 
 @code {
-    UserInfoDto UserInfo { get; set; } = new UserInfoDto();
+
+    UserInfoDto? UserInfo { get; set; } = new UserInfoDto();
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         var result = await _userApi.GetUserInfo();
+
+        if (result is not null && result.Success)
+            UserInfo = result.Data;
     }
 }

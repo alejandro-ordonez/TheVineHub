@@ -8,9 +8,8 @@ namespace JMMinistry.Web.Api
     public interface IUserApi
     {
         Task<Response<TokenResult?>?> Authenticate(AuthenticateDto authenticateDto);
-        Task<Response<UserInfoDto>?> GetUserInfo();
-        Task<Response<PagedResponse<UserInfoDto>>?> GetUserByCriteria(UsersSearchCriteria? userCriteriaSearch);
-
+        Task<Response<UserInfoDto>?> GetUserInfo(string? document = null);
+        Task<Response<PagedResponse<PartialUserInfoDto>>?> GetUserByCriteria(UsersSearchCriteria? userCriteriaSearch);
         Task<Response<object>?> ImportUsers(IBrowserFile file);
     }
 }

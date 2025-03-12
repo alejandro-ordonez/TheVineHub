@@ -2,6 +2,7 @@
 using JMMinistry.Web.Api;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using static MudBlazor.CategoryTypes;
 
 namespace JMMinistry.Web.Pages.User
 {
@@ -9,13 +10,13 @@ namespace JMMinistry.Web.Pages.User
     {
 
         private string _searchString = string.Empty;
-        private MudTable<UserInfoDto>? table;
+        private MudTable<PartialUserInfoDto>? table;
 
         [Parameter]
         public bool Selectable { get; set; } = false;
 
         [Parameter]
-        public HashSet<UserInfoDto> Selected { get; set; } = [];
+        public HashSet<PartialUserInfoDto> Selected { get; set; } = [];
 
         [Parameter]
         public EventCallback<UserEventArgs> EditUser { get; set; }
@@ -37,14 +38,14 @@ namespace JMMinistry.Web.Pages.User
             await table!.ReloadServerData();
         }
 
-        private async Task<TableData<UserInfoDto>> UserLoad(TableState state, CancellationToken token)
+        private async Task<TableData<PartialUserInfoDto>> UserLoad(TableState state, CancellationToken token)
         {
             var users = await FetchUsers(state, _searchString);
 
             if(users == null)
-                return new TableData<UserInfoDto>();
+                return new TableData<PartialUserInfoDto>();
 
-            return new TableData<UserInfoDto>
+            return new TableData<PartialUserInfoDto>
             {
                 Items = users?.Results ?? [],
                 TotalItems = users?.Total ?? 0
@@ -55,6 +56,14 @@ namespace JMMinistry.Web.Pages.User
         {
             _searchString = text;
             table?.ReloadServerData();
+        }
+
+        async Task RowClicked(TableRowClickEventArgs<PartialUserInfoDto> args)
+        {
+            if (!UserDetails.HasDelegate || args.Item is null)
+                return;
+
+            await UserDetails.InvokeAsync(new UserEventArgs { CellId = 0, Document = args.Item.Document });
         }
     }
 }

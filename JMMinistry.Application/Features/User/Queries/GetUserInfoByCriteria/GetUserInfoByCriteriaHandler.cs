@@ -10,9 +10,9 @@ using System.Linq.Expressions;
 
 namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
 {
-    public class GetUserInfoByCriteriaHandler(IJmDbContext dbContext, IMapper mapper) : IRequestHandler<GetUserInfoByCriteriaQuery, PagedResponse<UserInfoDto>>
+    public class GetUserInfoByCriteriaHandler(IJmDbContext dbContext, IMapper mapper) : IRequestHandler<GetUserInfoByCriteriaQuery, PagedResponse<PartialUserInfoDto>>
     {
-        public async Task<PagedResponse<UserInfoDto>> Handle(GetUserInfoByCriteriaQuery request, CancellationToken cancellationToken)
+        public async Task<PagedResponse<PartialUserInfoDto>> Handle(GetUserInfoByCriteriaQuery request, CancellationToken cancellationToken)
         {
             var query = dbContext.PersonalInfo.AsQueryable();
             query = GetQuery(query, request);
@@ -24,9 +24,9 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var dtos = mapper.Map<IList<UserInfoDto>>(results);
+            var dtos = mapper.Map<IList<PartialUserInfoDto>>(results);
 
-            return new PagedResponse<UserInfoDto>
+            return new PagedResponse<PartialUserInfoDto>
             {
                 Page = request.Page,
                 Results = dtos,

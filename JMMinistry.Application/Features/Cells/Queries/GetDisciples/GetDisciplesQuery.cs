@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Features.Cells.Queries.GetDisciples
 {
-    public class GetDisciplesQuery: PagedRequest, IRequest<PagedResponse<UserInfoDto>>
+    public class GetDisciplesQuery: PagedRequest, IRequest<PagedResponse<PartialUserInfoDto>>
     {
         public required int CellId { get; set; }
         public required string DocumentLeader { get; set; }

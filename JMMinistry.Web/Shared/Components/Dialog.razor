@@ -7,8 +7,11 @@
         @Content
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">@_translator["Cancel"]</MudButton>
-        <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
+        <MudButton OnClick="Cancel">@_translator[SecondaryText ?? "Cancel"]</MudButton>
+        @if (PrimaryButton)
+        {
+            <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@PrimaryText</MudButton>
+        }
     </DialogActions>
 </MudDialog>
 
@@ -22,7 +25,7 @@
             var options = MudDialog.Options with
             {
                 FullWidth =  true,
-                MaxWidth = MaxWidth.Large
+                MaxWidth = MaxWidth
             };
 
             await MudDialog.SetOptionsAsync(options);
@@ -33,10 +36,19 @@
     protected IMudDialogInstance? MudDialog { get; set; }
 
     [Parameter]
-    public string? ButtonText { get; set; }
+    public MaxWidth MaxWidth { get; set; } = MaxWidth.Large;
 
     [Parameter]
     public RenderFragment? Content { get; set; }
+
+    [Parameter]
+    public bool PrimaryButton { get; set; } = true;
+
+    [Parameter]
+    public string? PrimaryText { get; set; }
+
+    [Parameter]
+    public string? SecondaryText { get; set; } = "Cancel";
 
     [Parameter]
     public Color Color { get; set; }

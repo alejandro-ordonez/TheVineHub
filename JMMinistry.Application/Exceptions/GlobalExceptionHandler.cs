@@ -36,6 +36,13 @@ namespace JMMinistry.Application.Exceptions
                 response.Errors = [exception.Message];
             }
 
+            else if (exception is NotAuthorizeException)
+            {
+                response.StatusCode = StatusCodes.Status401Unauthorized;
+                response.Details = "Not authorize to see this resource";
+                response.Errors = [exception.Message];
+            }
+
             else
                 response.Errors = [exception.Message];
 

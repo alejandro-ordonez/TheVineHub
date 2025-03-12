@@ -45,7 +45,7 @@
 
     UsersTable? usersTable;
 
-    private async Task<PagedResponse<UserInfoDto>> FetchUsers(TableState state, string searchString)
+    private async Task<PagedResponse<PartialUserInfoDto>> FetchUsers(TableState state, string searchString)
     {
         var criteria = new UsersSearchCriteria();
 
@@ -57,13 +57,13 @@
 
         var results = await userApi.GetUserByCriteria(criteria);
 
-        PagedResponse<UserInfoDto> pagedResponse;
+        PagedResponse<PartialUserInfoDto> pagedResponse;
 
         if (!results?.Success ?? true)
-            pagedResponse = new PagedResponse<UserInfoDto>();
+            pagedResponse = new PagedResponse<PartialUserInfoDto>();
 
         else
-            pagedResponse = results?.Data ?? new PagedResponse<UserInfoDto>();
+            pagedResponse = results?.Data ?? new PagedResponse<PartialUserInfoDto>();
 
         return pagedResponse;
     }

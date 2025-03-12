@@ -47,20 +47,26 @@ namespace JMMinistry.API.Controllers
 
 
         [Authorize]
-        [HttpGet]
-        public async Task<ActionResult<UserInfoDto>> GetUserInfo()
+        [HttpGet("{document?}")]
+        public async Task<ActionResult<UserInfoDto>> GetUserInfo(string? document = null)
         {
-            var document = HttpContext.GetDocumentClaim();
-            if (string.IsNullOrEmpty(document))
+            var requestorId = HttpContext.GetDocumentClaim();
+
+            if (string.IsNullOrEmpty(requestorId))
                 throw new ArgumentException("Your token must be included");
 
-            var userInfo = await mediator.Send(new GetUserInfoQuery { Document =  document });
+            var userInfo = await mediator.Send(new GetUserInfoQuery 
+            { 
+                Document =  document ?? requestorId,
+                RequestorDocument = requestorId
+            });
+
             return Ok(userInfo);
         }
 
         [Authorize]
         [HttpPost("Search")]
-        public async Task<ActionResult<PagedResponse<UserInfoDto>>> GetUsersByCriteria(GetUserInfoByCriteriaQuery criteria)
+        public async Task<ActionResult<PagedResponse<PartialUserInfoDto>>> GetUsersByCriteria(GetUserInfoByCriteriaQuery criteria)
         {
             var result = await mediator.Send(criteria);
             return Ok(result);

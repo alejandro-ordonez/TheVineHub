@@ -294,4 +294,19 @@
   <data name="Add" xml:space="preserve">
     <value>Agregar</value>
   </data>
+  <data name="YearsOld" xml:space="preserve">
+    <value>{0} años</value>
+  </data>
+  <data name="ErrorFetching" xml:space="preserve">
+    <value>Hubo un error desconocido al intententar obtener el recurso</value>
+  </data>
+  <data name="NotSet" xml:space="preserve">
+    <value>Sin configurar</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Cerrar</value>
+  </data>
+  <data name="MoreInfo" xml:space="preserve">
+    <value>Más información</value>
+  </data>
 </root>

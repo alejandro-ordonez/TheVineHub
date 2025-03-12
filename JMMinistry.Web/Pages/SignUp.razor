@@ -43,6 +43,7 @@
                                       RequiredError="@_translator["FieldRequired"]"
                                       Variant="Variant.Outlined"
                                       Label="@_translator["Birthday"]"
+                                      Converter="DateOnlyConverter"
                                       InputType="InputType.Date" />
 
 
@@ -204,4 +205,10 @@
 
     [SupplyParameterFromForm]
     CreateUserInfoDto UserInfo { get; set; } = new();
+
+    MudBlazor.Converter<DateOnly> DateOnlyConverter = new Converter<DateOnly>
+    {
+        SetFunc = value => value.ToShortDateString(),
+        GetFunc = text => DateOnly.Parse(text ?? "")
+    };
 }

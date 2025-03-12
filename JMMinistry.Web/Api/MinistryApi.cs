@@ -41,18 +41,18 @@ namespace JMMinistry.Web.Api
             return await response.Content.ReadFromJsonAsync<Response<string>>();
         }
 
-        public async Task<Response<PagedResponse<UserInfoDto>>?> GetDisciples(int cellId, PagedRequest pagedRequest)
+        public async Task<Response<PagedResponse<PartialUserInfoDto>>?> GetDisciples(int cellId, PagedRequest pagedRequest)
         {
             using var client = clientFactory.CreateClient(Constants.ApiClient);
 
             var queryParams = pagedRequest.GetType()
-            .GetProperties()
-            .ToDictionary(prop => prop.Name, prop => prop.GetValue(pagedRequest)?.ToString());
+                .GetProperties()
+                .ToDictionary(prop => prop.Name, prop => prop.GetValue(pagedRequest)?.ToString());
 
             var api = $"{_ministryApi}/disciples/{cellId}";
             var url = QueryHelpers.AddQueryString(api, queryParams);
 
-            var response = await client.GetFromJsonAsync<Response<PagedResponse<UserInfoDto>>?>(url);
+            var response = await client.GetFromJsonAsync<Response<PagedResponse<PartialUserInfoDto>>?>(url);
             return response;
         }
     }

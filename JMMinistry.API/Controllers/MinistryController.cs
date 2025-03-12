@@ -37,7 +37,7 @@ namespace JMMinistry.API.Controllers
 
 
         [HttpGet("disciples/{cellId}")]
-        public async Task<ActionResult<PagedResponse<UserInfoDto>>> GetDisciples(int cellId, [FromQuery] PagedRequest pageRequest)
+        public async Task<ActionResult<PagedResponse<PartialUserInfoDto>>> GetDisciples(int cellId, [FromQuery] PagedRequest pageRequest)
         {
             var document = HttpContext.GetDocumentClaim() ?? throw new ArgumentException("Missing document in token");
             var query = new GetDisciplesQuery 

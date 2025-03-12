@@ -52,6 +52,7 @@
                         <UsersTable FetchUsers="(state, searchString) => FetchDisciples(state, searchString, cell.Id)"
                                     @ref="CellsTables[cell.Id]"
                                     EditUser="EditDisciple"
+                                    UserDetails="ShowUserDetails"
                                     DeleteUser="RemoveDisciple"/>
 
                     </ChildContent>

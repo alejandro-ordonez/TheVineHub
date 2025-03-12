@@ -1,0 +1,53 @@
+﻿@using JMMinistry.Common.Dtos.User
+@using JMMinistry.Common.Dtos.User.Enums
+@using JMMinistry.Web.Api
+
+@inject IUserApi userApi;
+@inject ISnackbar snackbar;
+@inject IStringLocalizer<UIStrings> translator;
+
+<Dialog ResultType="bool" 
+    Result="true"
+    Color="Color.Primary"
+    PrimaryButton="AccessFullDetails"
+    PrimaryText="MoreInfo"
+    MaxWidth="MaxWidth.Medium"
+    SecondaryText="Close">
+
+    <Content>
+        <UserCard UserInfo="User"/>
+    </Content>
+
+</Dialog>
+
+
+@code {
+
+    [Parameter]
+    public required string Document { get; set; }
+
+    UserInfoDto? User { get; set; }
+
+    bool AccessFullDetails = false;
+
+    private static readonly AccessType[] AllowedAccessTypes = [AccessType.Admin, AccessType.Leader];
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var response = await userApi.GetUserInfo(Document);
+
+            if (response is not null && response.Success)
+            {
+                User = response.Data;
+                AccessFullDetails = AllowedAccessTypes.Contains(User?.AccessType ?? AccessType.Mate);
+            }
+
+            else
+                snackbar.Add(translator["ErrorFetching"]);
+
+            StateHasChanged();
+        }
+    }
+}

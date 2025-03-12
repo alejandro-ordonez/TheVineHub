@@ -7,14 +7,8 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Common.Dtos.User
 {
-    public class UserInfoDto
+    public class UserInfoDto: PartialUserInfoDto
     {
-        public string Document { get; set; } = null!;
-
-        public string Name { get; set; } = null!;
-
-        public string LastName { get; set; } = null!;
-
         public string City { get; set; } = null!;
 
         public string? Locality { get; set; }
@@ -23,18 +17,16 @@ namespace JMMinistry.Common.Dtos.User
 
         public string Address { get; set; } = null!;
         public string Email { get; set; } = string.Empty;
-        public string Phone { get; set; } = string.Empty;
         public string Profession { get; set; } = string.Empty;
         public string Occupation { get; set; } = string.Empty;
 
-        public int CellId { get; set; }
+        public DateOnly Birthday { get; set; }
 
-        public DateTime Birthday { get; set; }
-
-        public MinistryStatus? MinistryStatus { get; set; }
         public MaritalStatus? MaritalStatus { get; set; }
         public EducationalLevel? EducationalLevel { get; set; }
 
         public Gender Gender { get; set; }
+
+        public AccessType AccessType { get; set; }
     }
 }

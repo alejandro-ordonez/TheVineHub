@@ -17,7 +17,8 @@ namespace JMMinistry.Web.Pages.Ministry
         IMinistryApi ministryApi,
         IAuthStateProvider authState, 
         IStringLocalizer<UIStrings> translator, 
-        IDialogService dialogService
+        IDialogService dialogService,
+        IUserApi userApi
         )
     {
         protected override void OnInitialized()
@@ -68,7 +69,7 @@ namespace JMMinistry.Web.Pages.Ministry
                 return;
             }
 
-            HashSet<UserInfoDto> selectedDisciples = (HashSet<UserInfoDto>)result.Data;
+            HashSet<PartialUserInfoDto> selectedDisciples = (HashSet<PartialUserInfoDto>)result.Data;
 
             await AddDisciplesAsync(selectedDisciples, cellId);
 
@@ -100,7 +101,7 @@ namespace JMMinistry.Web.Pages.Ministry
                 Cells[response.Data.Id] = response.Data;
         }
 
-        async Task AddDisciplesAsync(HashSet<UserInfoDto> disciples, int cellId)
+        async Task AddDisciplesAsync(HashSet<PartialUserInfoDto> disciples, int cellId)
         {
             IsBusy = true;
 
@@ -129,7 +130,7 @@ namespace JMMinistry.Web.Pages.Ministry
             IsBusy = false;
         }
 
-        async Task<PagedResponse<UserInfoDto>> FetchDisciples(TableState state, string searchString, int cellId)
+        async Task<PagedResponse<PartialUserInfoDto>> FetchDisciples(TableState state, string searchString, int cellId)
         {
             var pagedRequest = new PagedRequest
             {
@@ -141,7 +142,7 @@ namespace JMMinistry.Web.Pages.Ministry
 
             var result = await ministryApi.GetDisciples(cellId, pagedRequest);
 
-            return result?.Data ?? new PagedResponse<UserInfoDto> { Results = [] };
+            return result?.Data ?? new PagedResponse<PartialUserInfoDto> { Results = [] };
         }
 
 
@@ -174,6 +175,16 @@ namespace JMMinistry.Web.Pages.Ministry
                         await value.RefreshData();
                 }
             }
+        }
+
+        async Task ShowUserDetails(UserEventArgs eventArgs)
+        {
+            var parameters = new DialogParameters<UserDetailsDialog>
+            {
+                {x => x.Document, eventArgs.Document }
+            };
+
+            var dialog = await dialogService.ShowAsync<UserDetailsDialog>(translator["Details"], parameters);
         }
     }
 }
