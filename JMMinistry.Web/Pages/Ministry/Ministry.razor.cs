@@ -18,7 +18,7 @@ namespace JMMinistry.Web.Pages.Ministry
         IAuthStateProvider authState, 
         IStringLocalizer<UIStrings> translator, 
         IDialogService dialogService,
-        IUserApi userApi
+        NavigationManager navigationManager
         )
     {
         protected override void OnInitialized()
@@ -185,6 +185,12 @@ namespace JMMinistry.Web.Pages.Ministry
             };
 
             var dialog = await dialogService.ShowAsync<UserDetailsDialog>(translator["Details"], parameters);
+            var result = await dialog.Result;
+
+            if (result?.Canceled ?? true)
+                return;
+
+            navigationManager.NavigateTo($"{Routes.User}/{eventArgs.Document}");
         }
     }
 }

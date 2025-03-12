@@ -1,7 +1,8 @@
 ﻿@using JMMinistry.Common.Dtos.Common
 @using JMMinistry.Common.Dtos.User
 @using JMMinistry.Web.Api
-@page "/users"
+
+@attribute [Route(Routes.UserManagement)]
 
 @attribute [Authorize(Roles = "Admin")]
 
