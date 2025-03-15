@@ -7,7 +7,7 @@
 
 @inject IUserApi _userApi
 
-<UserCard UserInfo="UserInfo"/>
+<UserSummary UserInfo="UserInfo"/>
 
 <MudDivider Style="margin: 1rem 0px" />
 
@@ -15,7 +15,7 @@
 
 @code {
 
-    UserInfoDto? UserInfo { get; set; } = new UserInfoDto();
+    UserInfoDto? UserInfo { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

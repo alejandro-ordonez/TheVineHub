@@ -2,17 +2,13 @@
 using JMMinistry.Application.Features.User.Commands.Authenticate;
 using JMMinistry.Application.Features.User.Commands.CreateUser;
 using JMMinistry.Application.Features.User.Commands.ImportUsers;
-using JMMinistry.Application.Features.User.Queries;
 using JMMinistry.Application.Features.User.Queries.GetUserInfo;
 using JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria;
 using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.User;
-using JMMinistry.Common.Dtos.User.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 
 namespace JMMinistry.API.Controllers
 {

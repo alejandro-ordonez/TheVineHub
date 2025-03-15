@@ -25,8 +25,8 @@ namespace JMMinistry.Common.Dtos.User
         public MaritalStatus? MaritalStatus { get; set; }
         public EducationalLevel? EducationalLevel { get; set; }
 
-        public Gender Gender { get; set; }
-
         public AccessType AccessType { get; set; }
+
+        public List<PartialUserInfoDto> Leaders { get; set; } = [];
     }
 }

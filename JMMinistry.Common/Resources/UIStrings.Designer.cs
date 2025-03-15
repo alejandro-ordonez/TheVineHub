@@ -151,6 +151,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cell mates.
+        /// </summary>
+        public static string CellMates {
+            get {
+                return ResourceManager.GetString("CellMates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cells.
         /// </summary>
         public static string Cells {

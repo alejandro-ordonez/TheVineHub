@@ -37,17 +37,14 @@ namespace JMMinistry.API.Controllers
 
 
         [HttpGet("disciples/{cellId}")]
-        public async Task<ActionResult<PagedResponse<PartialUserInfoDto>>> GetDisciples(int cellId, [FromQuery] PagedRequest pageRequest)
+        public async Task<ActionResult<List<PartialUserInfoDto>>> GetDisciples(int cellId)
         {
             var document = HttpContext.GetDocumentClaim() ?? throw new ArgumentException("Missing document in token");
+
             var query = new GetDisciplesQuery 
             { 
                 CellId = cellId, 
-                DocumentLeader = document,
-                Page = pageRequest.Page,
-                PageSize = pageRequest.PageSize,
-                OrderByMember = pageRequest.OrderByMember,
-                OrderDirection = pageRequest.OrderDirection
+                RequestorId = document
             };
 
             var response = await mediator.Send(query);
@@ -57,16 +54,16 @@ namespace JMMinistry.API.Controllers
 
 
         [HttpPost("disciples/{cellId}")]
-        public async Task<ActionResult<CellDto>> AddDisciples(int cellId, [FromBody] AddDisciplesCommand addDisciples)
+        public async Task<ActionResult<List<PartialUserInfoDto>>> AddDisciples(int cellId, [FromBody] AddDisciplesCommand addDisciples)
         {
             addDisciples.CellId = cellId;
 
             var cell = await mediator.Send(addDisciples);
-            return cell;
+            return Ok(cell);
         }      
 
         [HttpDelete("disciples/{cellId}/{discipleId}")]
-        public async Task<ActionResult<CellDto>> RemoveDisciple(int cellId, string discipleId)
+        public async Task<ActionResult<List<PartialUserInfoDto>>> RemoveDisciple(int cellId, string discipleId)
         {
             var removeDiscipleCommand = new RemoveDiscipleCommand { CellId = cellId, Document = discipleId };
             var result = await mediator.Send(removeDiscipleCommand);

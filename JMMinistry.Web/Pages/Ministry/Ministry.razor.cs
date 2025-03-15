@@ -33,15 +33,18 @@ namespace JMMinistry.Web.Pages.Ministry
         [CascadingParameter]
         public string? PageTitle { get; set; }
         Dictionary<int, CellDto> Cells { get; set; } = [];
-        Dictionary<int, UsersTable> CellsTables { get; set; } = [];
+        Dictionary<int, IList<PartialUserInfoDto>> Disciples { get; set; } = [];
 
         bool AddCellOpen { get; set; }
         bool IsBusy { get; set; }
 
         string? UserId { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            if (!firstRender)
+                return;
+
             await RefreshCells();
 
             var state = await authState.GetAuthenticationStateAsync();
@@ -54,6 +57,13 @@ namespace JMMinistry.Web.Pages.Ministry
 
             if (response?.Success ?? false)
                 Cells = response?.Data?.ToDictionary(cell => cell.Id, cell => cell) ?? [];
+
+            foreach(var cellId in Cells.Keys)
+            {
+                Disciples[cellId] = await FetchDisciples(cellId);
+            }
+
+            StateHasChanged();
         }
 
         async Task OpenAddDisciple(int cellId)
@@ -61,17 +71,15 @@ namespace JMMinistry.Web.Pages.Ministry
             IsBusy = true;
 
             var dialog = await dialogService.ShowAsync<AddDisciplesDialog>();
-            var result = await dialog.Result;
+            var result = await dialog.GetReturnValueAsync<DialogResult<HashSet<PartialUserInfoDto>>>();
 
-            if (result is null || result.Canceled || result.Data is null)
+            if (result is null || result.Data is null)
             {
                 IsBusy = false;
                 return;
             }
 
-            HashSet<PartialUserInfoDto> selectedDisciples = (HashSet<PartialUserInfoDto>)result.Data;
-
-            await AddDisciplesAsync(selectedDisciples, cellId);
+            await AddDisciplesAsync(result.Data, cellId);
 
             IsBusy = false;
         }
@@ -81,15 +89,15 @@ namespace JMMinistry.Web.Pages.Ministry
             IsBusy = true;
 
             var dialog = await dialogService.ShowAsync<CellDialog>();
-            var result = await dialog.Result;
+            var result = await dialog.GetReturnValueAsync<DialogResult<CreateCellDto>>();
 
-            if (result is null || result.Canceled || result.Data is null)
+            if (result is null || result.Data is null)
             {
                 IsBusy = false;
                 return;
             }
 
-            await SubmitAddCell((CreateCellDto)result.Data);
+            await SubmitAddCell(result.Data);
             IsBusy = false;
         }
 
@@ -121,34 +129,16 @@ namespace JMMinistry.Web.Pages.Ministry
 
             if (response != null && response.Success && response.Data != null)
             {
-                Cells[response.Data.Id] = response.Data;
-
-                if(CellsTables.TryGetValue(response.Data.Id, out UsersTable? value))
-                    await value.RefreshData();
+                Disciples[cellId] = response.Data;
             }
 
             IsBusy = false;
         }
 
-        async Task<PagedResponse<PartialUserInfoDto>> FetchDisciples(TableState state, string searchString, int cellId)
+        async Task<IList<PartialUserInfoDto>> FetchDisciples(int cellId)
         {
-            var pagedRequest = new PagedRequest
-            {
-                Page = state.Page,
-                PageSize = state.PageSize,
-                OrderByMember = state.SortLabel,
-                OrderDirection = state.SortDirection.ToString()
-            };
-
-            var result = await ministryApi.GetDisciples(cellId, pagedRequest);
-
-            return result?.Data ?? new PagedResponse<PartialUserInfoDto> { Results = [] };
-        }
-
-
-        async Task EditDisciple(UserEventArgs eventArgs)
-        {
-
+            var result = await ministryApi.GetDisciples(cellId);
+            return result?.Data ?? [];
         }
 
         async Task RemoveDisciple(UserEventArgs eventArgs)
@@ -169,28 +159,36 @@ namespace JMMinistry.Web.Pages.Ministry
 
                 if (response?.Success ?? false)
                 {
-                    await RefreshCells();
-
-                    if (CellsTables.TryGetValue(eventArgs.CellId, out UsersTable? value))
-                        await value.RefreshData();
+                    Disciples[eventArgs.CellId] = response?.Data ?? [];
                 }
             }
         }
 
-        async Task ShowUserDetails(UserEventArgs eventArgs)
+        async Task ShowUserDetails(UserEventArgs user)
         {
             var parameters = new DialogParameters<UserDetailsDialog>
             {
-                {x => x.Document, eventArgs.Document }
+                {x => x.Document, user.Document }
             };
 
             var dialog = await dialogService.ShowAsync<UserDetailsDialog>(translator["Details"], parameters);
-            var result = await dialog.Result;
+            var result = await dialog.GetReturnValueAsync<DialogResult<UserEventArgs>>();
 
-            if (result?.Canceled ?? true)
+            if (result is null || result.Data is null)
                 return;
 
-            navigationManager.NavigateTo($"{Routes.User}/{eventArgs.Document}");
+            switch(result.Option)
+            {
+                case DialogResultOption.PrimaryButton:
+                    navigationManager.NavigateTo($"{Routes.User}/{user.Document}");
+                    break;
+
+                case DialogResultOption.SecondaryButton:
+                    await RemoveDisciple(result.Data);
+                    break;
+            };
+
+            
         }
     }
 }

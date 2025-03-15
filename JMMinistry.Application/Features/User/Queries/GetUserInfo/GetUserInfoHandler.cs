@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JMMinistry.Application.Exceptions;
+using JMMinistry.Application.Features.User.Queries.CheckIfLeader;
 using JMMinistry.Application.Services;
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.User;
@@ -14,7 +15,8 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
     public class GetUserInfoHandler(
         IJmDbContext dbContext, 
         UserManager<PersonalInfo> userManager, 
-        IMapper mapper
+        IMapper mapper,
+        IMediator mediator
         ) : IRequestHandler<GetUserInfoQuery, UserInfoDto>
     {
         public async Task<UserInfoDto> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
@@ -29,6 +31,9 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
                 var userInfoDto = mapper.Map<UserInfoDto>(userInfo);
                 return userInfoDto;
             }
+
+            if (userInfo.CellId is null)
+                throw new Exception("The user is not assigned to any cell");
 
             // Check permissions
             var requestor = new PersonalInfo { Id = request.RequestorDocument };
@@ -61,12 +66,11 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
             }
 
             // Check if it is the leader requesting this information
-            var requestorIsTheLeader = await dbContext.Cells
-                .Include(cell => cell.Leaders)
-                .AnyAsync(cell =>
-                    cell.Id == userInfo.CellId &&
-                    cell.Leaders.Any(leader => leader.Id == request.RequestorDocument),
-                cancellationToken);
+            var requestorIsTheLeader = await mediator.Send(new CheckIfLeaderQuery
+            {
+                CellId = userInfo.CellId.Value,
+                LeaderId = request.RequestorDocument
+            }, cancellationToken);
 
             if (requestorIsTheLeader)
             {

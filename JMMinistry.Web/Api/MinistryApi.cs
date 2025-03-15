@@ -27,32 +27,27 @@ namespace JMMinistry.Web.Api
             return response;
         }
 
-        public async Task<Response<CellDto>?> AddDisciples(AddDisciplesDto addDisciples)
+        public async Task<Response<IList<PartialUserInfoDto>>?> AddDisciples(AddDisciplesDto addDisciples)
         {
             using var client = clientFactory.CreateClient(Constants.ApiClient);
             var response = await client.PostAsJsonAsync($"{_ministryApi}/disciples/{addDisciples.CellId}", addDisciples);
-            return await response.Content.ReadFromJsonAsync<Response<CellDto>>();
+            return await response.Content.ReadFromJsonAsync<Response<IList<PartialUserInfoDto>>>();
         }
 
-        public async Task<Response<string>?> RemoveDiscipleFromCell(int cellId, string document)
+        public async Task<Response<IList<PartialUserInfoDto>>?> RemoveDiscipleFromCell(int cellId, string document)
         {
             using var client = clientFactory.CreateClient(Constants.ApiClient);
             var response = await client.DeleteAsync($"{_ministryApi}/disciples/{cellId}/{document}");
-            return await response.Content.ReadFromJsonAsync<Response<string>>();
+            return await response.Content.ReadFromJsonAsync<Response<IList<PartialUserInfoDto>>>();
         }
 
-        public async Task<Response<PagedResponse<PartialUserInfoDto>>?> GetDisciples(int cellId, PagedRequest pagedRequest)
+        public async Task<Response<IList<PartialUserInfoDto>>?> GetDisciples(int cellId)
         {
             using var client = clientFactory.CreateClient(Constants.ApiClient);
 
-            var queryParams = pagedRequest.GetType()
-                .GetProperties()
-                .ToDictionary(prop => prop.Name, prop => prop.GetValue(pagedRequest)?.ToString());
+            var url = $"{_ministryApi}/disciples/{cellId}";
 
-            var api = $"{_ministryApi}/disciples/{cellId}";
-            var url = QueryHelpers.AddQueryString(api, queryParams);
-
-            var response = await client.GetFromJsonAsync<Response<PagedResponse<PartialUserInfoDto>>?>(url);
+            var response = await client.GetFromJsonAsync<Response<IList<PartialUserInfoDto>>?>(url);
             return response;
         }
     }

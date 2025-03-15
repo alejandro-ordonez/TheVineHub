@@ -23,7 +23,7 @@
 
 <MudTabs Elevation="2" Rounded="true" Class="flex-grow-1 ma-2" ApplyEffectsToContainer="true" PanelClass="pa-6">
     <MudTabPanel Text="@translator["Cells"]">
-        
+
         @if (!Cells.Any())
         {
             <MudText Typo="Typo.h6">@translator["NoCells"]</MudText>
@@ -39,21 +39,26 @@
                             <MudIcon Icon="@Icons.Material.Filled.Info" class="mr-3"></MudIcon>
                             <MudText Typo="Typo.h5">@cell.Name</MudText>
                             <MudFab StartIcon="@Icons.Material.Filled.Add"
-                                    Color="Color.Primary"
-                                    Disabled="@IsBusy"
-                                    Size="Size.Small"
-                                    OnClick="() => OpenAddDisciple(cell.Id)">
+                            Color="Color.Primary"
+                            Disabled="@IsBusy"
+                            Size="Size.Small"
+                            OnClick="() => OpenAddDisciple(cell.Id)">
                             </MudFab>
                         </div>
                     </TitleContent>
 
                     <ChildContent>
 
-                        <UsersTable FetchUsers="(state, searchString) => FetchDisciples(state, searchString, cell.Id)"
-                                    @ref="CellsTables[cell.Id]"
-                                    EditUser="EditDisciple"
-                                    UserDetails="ShowUserDetails"
-                                    DeleteUser="RemoveDisciple"/>
+                        <div class="disciples-grid">
+                            @if (Disciples.TryGetValue(cell.Id, out var disciples))
+                            {
+                                foreach (var disciple in disciples)
+                                {
+                                    <UserCard User="disciple" OnClick="EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails)" />
+                                }
+                            }
+                            
+                        </div>
 
                     </ChildContent>
 

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using JMMinistry.Common.Dtos.Cell;
+using JMMinistry.Common.Dtos.User;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Features.Cells.Commands.AddDisciples
 {
-    public class AddDisciplesCommand: AddDisciplesDto, IRequest<CellDto>
+    public class AddDisciplesCommand: AddDisciplesDto, IRequest<List<PartialUserInfoDto>>
     {
     }
 

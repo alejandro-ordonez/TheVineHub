@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using JMMinistry.Common.Dtos.User;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Features.Cells.Commands.RemoveDisciple
 {
-    public class RemoveDiscipleCommand: IRequest<string>
+    public class RemoveDiscipleCommand: IRequest<IList<PartialUserInfoDto>>
     {
         public required int CellId { get; set; }
         public required string Document { get; set; }

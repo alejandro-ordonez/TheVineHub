@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using JMMinistry.Application.Exceptions;
+using JMMinistry.Application.Features.User.Queries.CheckIfLeader;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.User;
+using JMMinistry.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,32 +13,37 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetDisciples
     public class GetDisciplesHandler 
         (
             IJmDbContext dbContext,
-            IMapper mapper
+            IMapper mapper,
+            IMediator mediator
         )
-        : IRequestHandler<GetDisciplesQuery, PagedResponse<PartialUserInfoDto>>
+        : IRequestHandler<GetDisciplesQuery, IEnumerable<PartialUserInfoDto>>
     {
-        public async Task<PagedResponse<PartialUserInfoDto>> Handle(GetDisciplesQuery request, CancellationToken cancellationToken)
+        public async Task<IEnumerable<PartialUserInfoDto>> Handle(GetDisciplesQuery request, CancellationToken cancellationToken)
         {
+
             var cell = await dbContext.Cells
-                .Include(cell => cell.Leaders)
                 .Include(cell => cell.Disciples)
-                .FirstOrDefaultAsync(cell =>
-                    cell.Id == request.CellId &&
-                    cell.Leaders.Any(leader => leader.Id == request.DocumentLeader), cancellationToken
-                    ) ?? throw new NotFoundException("The requested cell is not accessible to this user, or it does not exists");
+                .FirstOrDefaultAsync(cell =>  cell.Id == request.CellId, cancellationToken) ?? 
+                    throw new NotFoundException("The requested cell does not exists");
 
-            var disciples = cell.Disciples
-                .Skip(request.Page * request.PageSize)
-                .Take(request.PageSize);
+            if(cell.Disciples.Any(disciple => disciple.Id == request.RequestorId))
+                return mapper.Map<IEnumerable<PartialUserInfoDto>>(cell.Disciples);
 
-            var response = new PagedResponse<PartialUserInfoDto>
+            if (request.RequestorId is null)
+                throw new ArgumentException("No leader Id provided");
+
+            var checkIfLeader = new CheckIfLeaderQuery
             {
-                Page = request.Page,
-                Total = cell.Disciples.Count,
-                Results = mapper.Map<IList<PartialUserInfoDto>>(disciples)
+                CellId = request.CellId,
+                LeaderId = request.RequestorId
             };
 
-            return response;
+            var isLeader = await mediator.Send(checkIfLeader, cancellationToken);
+
+            if (!isLeader)
+                throw new NotAuthorizeException();
+
+            return mapper.Map<IEnumerable<PartialUserInfoDto>>(cell.Disciples);
         }
     }
 }

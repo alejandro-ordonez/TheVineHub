@@ -309,4 +309,7 @@
   <data name="MoreInfo" xml:space="preserve">
     <value>Más información</value>
   </data>
+  <data name="CellMates" xml:space="preserve">
+    <value>Consiervos</value>
+  </data>
 </root>

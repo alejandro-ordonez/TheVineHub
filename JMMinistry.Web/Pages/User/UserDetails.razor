@@ -1,13 +1,33 @@
-﻿@attribute [Route($"{Routes.UserManagement}/{{Document:string}}")]
+﻿@attribute [Route($"{Routes.User}/{{Document}}")]
 
+@using JMMinistry.Common
+@using JMMinistry.Common.Dtos.Common
 @using JMMinistry.Common.Dtos.User
 @using JMMinistry.Web.Api
 
 @inject IUserApi userApi;
+@inject IMinistryApi ministryApi;
 @inject ISnackbar snackbar;
 @inject IStringLocalizer<UIStrings> translator;
+@inject NavigationManager navigationManager;
 
-<h3>UserDetails</h3>
+<UserSummary UserInfo="User"/>
+
+@if(User is not null)
+{
+    <MudText Typo="Typo.h6">@translator["CellMates"]</MudText>
+    <MudDivider Style="margin: 0.5rem 0"/>
+
+    <div class="disciples-grid">
+        @foreach (var disciple in CellMates)
+        {
+            <UserCard User="disciple"
+            OnClick="@(User.AccessType.IsAdminOrLeader() ? EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails) : 
+                                    (EventCallback<UserEventArgs>?)null)" />
+        }
+    </div>
+
+}
 
 @code {
 
@@ -16,21 +36,44 @@
 
     UserInfoDto? User { get; set; }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
+    IList<PartialUserInfoDto> CellMates = [];
+
+    protected override async Task OnParametersSetAsync()
     {
-        if (firstRender)
+        var response = await userApi.GetUserInfo(Document);
+
+        if (response is not null && response.Success)
         {
-            var response = await userApi.GetUserInfo(Document);
+            User = response.Data;
 
-            if (response is not null && response.Success)
-            {
-                User = response.Data;
-            }
-
-            else
-                snackbar.Add(translator["ErrorFetching"]);
-
-            StateHasChanged();
+            if (User?.CellId is not null)
+                CellMates = await FetchCellMates(User.CellId, User.Document);
         }
+
+        else
+            snackbar.Add(translator["ErrorFetching"]);
+
+        StateHasChanged();
+    }
+
+    async Task<IList<PartialUserInfoDto>> FetchCellMates(int cellId, string document)
+    {
+        var result = await ministryApi.GetDisciples(cellId);
+
+        return result?.Data?.Where(user => user.Document != document).ToList() ?? [];
+    }
+
+    private EventCallback<UserEventArgs> GetClickHandler()
+    {
+        if (User is null || !User.AccessType.IsAdminOrLeader())
+            return new EventCallback<UserEventArgs>(null, null);
+
+        return EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails);
+    }
+
+
+    void ShowUserDetails(UserEventArgs user)
+    {
+        navigationManager.NavigateTo($"{Routes.User}/{user.Document}");
     }
 }

@@ -6,16 +6,16 @@
 @inject ISnackbar snackbar;
 @inject IStringLocalizer<UIStrings> translator;
 
-<Dialog ResultType="bool" 
-    Result="true"
-    Color="Color.Primary"
-    PrimaryButton="AccessFullDetails"
-    PrimaryText="MoreInfo"
-    MaxWidth="MaxWidth.Medium"
-    SecondaryText="Close">
+<Dialog Result="dialogResult"
+        Color="Color.Primary"
+        PrimaryButton="AccessFullDetails"
+        PrimaryText="MoreInfo"
+        MaxWidth="MaxWidth.Medium"
+        SecondaryButton="true"
+        SecondaryText="Remove">
 
     <Content>
-        <UserCard UserInfo="User"/>
+        <UserSummary UserInfo="User" />
     </Content>
 
 </Dialog>
@@ -29,6 +29,8 @@
     UserInfoDto? User { get; set; }
 
     bool AccessFullDetails = false;
+
+    UserEventArgs? dialogResult;
 
     private static readonly AccessType[] AllowedAccessTypes = [AccessType.Admin, AccessType.Leader];
 
@@ -46,6 +48,12 @@
 
             else
                 snackbar.Add(translator["ErrorFetching"]);
+
+            dialogResult = new UserEventArgs
+            {
+                Document = User?.Document ?? string.Empty,
+                CellId = User?.CellId ?? 0
+            };
 
             StateHasChanged();
         }

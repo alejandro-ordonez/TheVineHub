@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JMMinistry.Common.Dtos.User;
+using JMMinistry.Common.Dtos.User.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,5 +38,22 @@ namespace JMMinistry.Common
 
             return years;
         }
+
+        public static string GetFirsNameAndLastName(this PartialUserInfoDto? user)
+        {
+            if (user is null)
+                return "";
+
+            var name = user.Name.Split(" ")[0];
+            var lastName = user.LastName.Split(" ")[0];
+
+            return $"{name} {lastName}";
+        }
+
+        public static bool IsAdminOrLeader(this AccessType accessType) => accessType switch
+        {
+            AccessType.Admin or AccessType.Leader => true,
+            _ => false
+        };
     }
 }

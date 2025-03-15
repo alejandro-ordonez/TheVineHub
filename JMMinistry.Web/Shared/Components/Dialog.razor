@@ -1,16 +1,22 @@
 ﻿@inject IStringLocalizer<UIStrings> _translator;
 
-@typeparam ResultType;
+@typeparam ResultType where ResultType : class;
 
 <MudDialog >
     <DialogContent>
         @Content
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="Cancel">@_translator[SecondaryText ?? "Cancel"]</MudButton>
+        <MudButton OnClick="Cancel">@_translator[CancelText ?? "Cancel"]</MudButton>
+
+        @if (SecondaryButton)
+        {
+            <MudButton Color="Color.Secondary" Variant="Variant.Filled" OnClick="SecondaryAction">@_translator[SecondaryText ?? ""]</MudButton>
+        }
+
         @if (PrimaryButton)
         {
-            <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@PrimaryText</MudButton>
+            <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@_translator[PrimaryText ?? ""]</MudButton>
         }
     </DialogActions>
 </MudDialog>
@@ -48,7 +54,13 @@
     public string? PrimaryText { get; set; }
 
     [Parameter]
-    public string? SecondaryText { get; set; } = "Cancel";
+    public bool SecondaryButton { get; set; } = false;
+
+    [Parameter]
+    public string? SecondaryText { get; set; }
+
+    [Parameter]
+    public string? CancelText { get; set; } = "Cancel";
 
     [Parameter]
     public Color Color { get; set; }
@@ -56,7 +68,17 @@
     [Parameter]
     public required ResultType Result { get; set; }
 
-    private void Submit() => MudDialog?.Close(DialogResult.Ok<ResultType>(Result));
+    private void Submit() => MudDialog?.Close(new DialogResult<ResultType>
+    {
+        Option = DialogResultOption.PrimaryButton,
+        Data = Result
+    });
+
+    private void SecondaryAction() => MudDialog?.Close(new DialogResult<ResultType>
+    {
+        Option = DialogResultOption.SecondaryButton,
+        Data = Result
+    });
 
     private void Cancel() => MudDialog?.Cancel();
 }

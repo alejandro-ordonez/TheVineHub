@@ -1,61 +1,60 @@
 ﻿@using JMMinistry.Common
 @using JMMinistry.Common.Dtos.User
+@using JMMinistry.Web.Extensions
 
 @inject IStringLocalizer<UIStrings> translator;
+@inject NavigationManager navigationManager;
+@inject IDialogService dialogService;
 
-<div class="user-info-card">
-    <div>
-        <MudImage Src="/images/user.png" Fluid="true" Style="max-height: 200px; min-width: 150px; margin: 0.5rem;" />
-    </div>
+<MudPaper Style="padding: 0.5rem" Class="mud-ripple" 
+          onclick="@(() => OnClick?.InvokeAsync(new UserEventArgs{ CellId = User.CellId, Document = User.Document}))">
 
-    <div class="user-info">
-        <MudText Class="mx-4"Typo="Typo.h4">@($"{UserInfo?.Name} {UserInfo?.LastName}")</MudText>
-        <MudText Class="mx-4"Typo="Typo.h5">@($"{UserInfo?.Profession} {UserInfo?.Profession}")</MudText>
+    <div class="user-card">
+        <MudAvatar Class="avatar-icon" Color="UtilExtensions.GetRandomColor()">
+            @if (string.IsNullOrEmpty(User.Photo))
+            {
+                @User.Name[0]
+            }
 
-        <MudDivider Style="margin: 1rem 0px"/>
+            else
+            {
+                <MudImage Src="@User.Photo"></MudImage>
+            }
+        </MudAvatar>
 
-        <div class="grid-details">
-            <div class="grid-item">
-                <MudIcon Icon="@Icons.Material.Filled.Phone" />
-                <MudText Class="mx-4"Typo="Typo.body1">@UserInfo?.Phone</MudText>
-            </div>
+        <div class="user-details">
+            <MudText Typo="Typo.subtitle1" Class="text-icon-centered">
+                <MudIcon Icon="@User.Gender.GetGenderIcon()" Color="@User.Gender.GetGenderColor()" />
+                @User.GetFirsNameAndLastName()
+            </MudText>
 
-            <div class="grid-item">
-                <MudIcon Icon="@Icons.Material.Filled.Email" />
-                <MudText Class="mx-4"Typo="Typo.body1">@UserInfo?.Email</MudText>
-            </div>
+            <MudText Typo="Typo.body2" Class="text-icon-centered">
+                <MudIcon Icon="@Icons.Material.Filled.Church" Color="Color.Tertiary" />
+                @translator[User.MinistryStatus?.ToString() ?? ""]
+            </MudText>
 
-            <div class="grid-item">
-                <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" />
-                <MudText Class="mx-4"Typo="Typo.body1">@UserInfo?.Birthday</MudText>
-            </div>
+            <MudLink Typo="Typo.body2" Underline="Underline.None" Class="text-icon-centered" Href="@($"http://api.whatsapp.com/send?phone=57{User.Phone}")">
+                <MudIcon Icon="@Icons.Material.Filled.Phone" Size="Size.Small" />
+                @User.Phone
+            </MudLink>
 
-            <div class="grid-item">
-                <MudIcon Icon="@Icons.Material.Filled.Cake" />
-                <MudText Class="mx-4" Typo="Typo.body1">@translator["YearsOld", UserInfo?.Birthday is null ? "" : UserInfo.Birthday.YearsElapsed()]</MudText>
-            </div>
-
-            <div class="grid-item">
-                <MudIcon Icon="@Icons.Material.Filled.LocationCity" />
-                <MudText Class="mx-4"Typo="Typo.body1">@(UserInfo?.City ?? translator["NotSet"])</MudText>
-            </div>
-
-            <div class="grid-item">
-                <MudIcon Icon="@Icons.Material.Filled.Pin" />
-                <MudText Class="mx-4" Typo="Typo.body1">@(UserInfo?.Address ?? translator["NotSet"])</MudText>
-            </div>
-
-            <div class="grid-item">
-                <MudIcon Icon="@Icons.Material.Filled.LocationCity" />
-                <MudText Class="mx-4" Typo="Typo.body1">@(UserInfo?.Locality ?? translator["NotSet"])</MudText>
-            </div>
         </div>
+
+        @if(OnClick is not null || (OnClick?.HasDelegate ?? false))
+        {
+            <MudIcon Style="opacity: 0.4" Icon="@Icons.Material.Filled.ArrowForwardIos" Size="Size.Small" />
+        }
     </div>
-</div>
+</MudPaper>
+
+
 
 @code {
-    [Parameter]
-    public UserInfoDto? UserInfo { get; set; }
 
-    
+    [Parameter]
+    public required PartialUserInfoDto User { get; set; }
+
+    [Parameter]
+    public EventCallback<UserEventArgs>? OnClick { get; set; }
+
 }

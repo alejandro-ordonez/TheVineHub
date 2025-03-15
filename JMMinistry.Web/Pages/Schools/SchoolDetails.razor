@@ -14,7 +14,7 @@
 
 else
 {
-    <HeaderPage Title="@School?.Name" SubTitle="@School?.Description">
+    <Header Title="@School?.Name" SubTitle="@School?.Description">
         <ActionMenu>
             <MudFab StartIcon="@Icons.Material.Filled.Add"
                     Color="Color.Primary"
@@ -23,7 +23,7 @@ else
                     OnClick="() => EditorOpen = !EditorOpen">
             </MudFab>
         </ActionMenu>
-    </HeaderPage>
+    </Header>
 
     <div class="dynamic-grid">
         @foreach(var classDto in School?.Classes ?? [])
