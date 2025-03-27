@@ -1,0 +1,60 @@
+﻿@using JMMinistry.Common.Dtos.Gained
+@using JMMinistry.Common.Dtos.Gained.Enums
+@using JMMinistry.Common.Dtos.User
+@attribute [Route(Routes.Gained)]
+@attribute [Authorize]
+
+@layout MainLayout
+
+@inject IStringLocalizer<UIStrings> translator;
+@inject IDialogService dialogService;
+
+<MudPaper Class="ma-2">
+    <Header Title="@translator["Gained"]">
+        <ActionMenu>
+            <MudFab StartIcon="@Icons.Material.Filled.Add"
+                    Color="Color.Primary"
+                    Disabled="@IsBusy"
+                    Size="Size.Small"
+                    OnClick="() => OpenAddGainedUser()">
+            </MudFab>
+        </ActionMenu>
+    </Header>
+</MudPaper>
+
+<MudPaper>
+
+
+
+</MudPaper>
+
+@code {
+    bool IsBusy = false;
+
+    Dictionary<GainedEventType, PartialUserInfoDto> GainedUsers { get; set; } = [];
+
+    async Task OpenAddGainedUser()
+    {
+        IsBusy = true;
+
+        var dialog = await dialogService.ShowAsync<AddGainedDialog>(translator["GainedPerson"]);
+        var result = await dialog.GetReturnValueAsync<DialogResult<CreateGainedUser>>();
+
+        if (result is null || result.Data is null)
+        {
+            IsBusy = false;
+            return;
+        }
+
+        await AddGainedUser(result.Data);
+
+        IsBusy = false;
+    }
+
+
+    async Task AddGainedUser(CreateGainedUser user)
+    {
+        
+    }
+
+}

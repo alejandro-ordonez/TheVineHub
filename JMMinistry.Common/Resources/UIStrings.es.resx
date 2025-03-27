@@ -130,7 +130,7 @@
     <value>Error al cargar el recurso solicitado</value>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Iniciar Sesión</value>
+    <value>Iniciar sesión</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Administrar</value>
@@ -311,5 +311,17 @@
   </data>
   <data name="CellMates" xml:space="preserve">
     <value>Consiervos</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Configuraciones</value>
+  </data>
+  <data name="GainedPerson" xml:space="preserve">
+    <value>Persona ganada</value>
+  </data>
+  <data name="AddDisciples" xml:space="preserve">
+    <value>Agregar discipulos</value>
+  </data>
+  <data name="Petition" xml:space="preserve">
+    <value>Petición</value>
   </data>
 </root>

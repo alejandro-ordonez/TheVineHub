@@ -79,6 +79,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add disciples.
+        /// </summary>
+        public static string AddDisciples {
+            get {
+                return ResourceManager.GetString("AddDisciples", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Address.
         /// </summary>
         public static string Address {
@@ -286,6 +295,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gained person.
+        /// </summary>
+        public static string GainedPerson {
+            get {
+                return ResourceManager.GetString("GainedPerson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gained Users.
         /// </summary>
         public static string GainedUsers {
@@ -466,6 +484,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Petition.
+        /// </summary>
+        public static string Petition {
+            get {
+                return ResourceManager.GetString("Petition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phone.
         /// </summary>
         public static string Phone {
@@ -570,6 +597,15 @@ namespace JMMinistry.Common.Resources {
         public static string SessionExpired {
             get {
                 return ResourceManager.GetString("SessionExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
             }
         }
         

@@ -11,8 +11,8 @@
 @layout EmptyLayout
 
 <div class="page-container">
-    <section class="column content-section">
-        <MudCard Style="flex-grow: 0.7;">
+    <section class="column content-section login-form-card">
+        <MudCard Style="width: 100%">
             <MudForm Model="Model" @ref="form" Validation="AuthValidator.ValidateValue" ValidationDelay="3">
 
                 <MudCardHeader>
@@ -45,6 +45,8 @@
                                   AdornmentAriaLabel="Show Password"
                                   InputType="PasswordInputType" />
 
+                    <LanguageSelector />
+
                 </MudCardContent>
 
                 <MudCardActions Style="justify-content: space-evenly;">
@@ -72,7 +74,7 @@
                 </MudCardActions>
             </MudForm>
 
-            <LanguageSelector />
+            
         </MudCard>
     </section>
 

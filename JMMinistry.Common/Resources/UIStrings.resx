@@ -312,4 +312,16 @@
   <data name="CellMates" xml:space="preserve">
     <value>Cell mates</value>
   </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="GainedPerson" xml:space="preserve">
+    <value>Gained person</value>
+  </data>
+  <data name="AddDisciples" xml:space="preserve">
+    <value>Add disciples</value>
+  </data>
+  <data name="Petition" xml:space="preserve">
+    <value>Petition</value>
+  </data>
 </root>

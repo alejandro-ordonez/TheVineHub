@@ -8,6 +8,8 @@ namespace JMMinistry.Web.Services
         void NotifyUserAuthenticated(ClaimsIdentity claims);
         void NotifyUserLogOut();
 
+        public event AuthenticationStateChangedHandler? AuthenticationStateChanged;
+
         Task<AuthenticationState> GetAuthenticationStateAsync();
     }
 }

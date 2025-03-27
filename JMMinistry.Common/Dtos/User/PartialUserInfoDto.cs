@@ -16,6 +16,6 @@ namespace JMMinistry.Common.Dtos.User
         public MinistryStatus? MinistryStatus { get; set; }
         public Gender Gender { get; set; }
         public string? Photo { get; set; }
-        public int CellId { get; set; }
+        public int? CellId { get; set; }
     }
 }

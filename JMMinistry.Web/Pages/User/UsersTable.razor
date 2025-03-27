@@ -60,14 +60,14 @@
                         @if (EditUser.HasDelegate)
                         {
                             <MudIconButton Icon="@Icons.Material.Filled.Edit" 
-                                           OnClick="() => EditUser.InvokeAsync(new UserEventArgs { CellId = context.CellId, Document = context.Document })" />
+                                           OnClick="() => EditUser.InvokeAsync(new UserEventArgs { CellId = context.CellId ?? 0, Document = context.Document })" />
                         }
 
                         @if (DeleteUser.HasDelegate)
                         {
                             <MudIconButton Icon="@Icons.Material.Filled.Delete"
                                            Color="Color.Warning" 
-                                           OnClick="() => DeleteUser.InvokeAsync(new UserEventArgs { CellId = context.CellId, Document = context.Document })" />
+                                           OnClick="() => DeleteUser.InvokeAsync(new UserEventArgs { CellId = context.CellId ?? 0, Document = context.Document })" />
                         }
                     </div>
                 </MudTd>

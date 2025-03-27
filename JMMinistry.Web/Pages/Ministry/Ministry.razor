@@ -1,9 +1,11 @@
-﻿@page "/ministry"
-@using JMMinistry.Common.Dtos.Cell
+﻿@using JMMinistry.Common.Dtos.Cell
 @using JMMinistry.Common.Dtos.User
 @using JMMinistry.Web.Pages.User;
 @using JMMinistry.Web.Api
+
+@attribute [Route(Routes.Ministry)]
 @attribute [Authorize]
+@layout MainLayout
 
 <PageTitle>@PageTitle</PageTitle>
 
@@ -20,57 +22,44 @@
     </Header>
 </MudPaper>
 
+@if (!Cells.Any())
+{
+    <MudText Typo="Typo.h6">@translator["NoCells"]</MudText>
+}
 
-<MudTabs Elevation="2" Rounded="true" Class="flex-grow-1 ma-2" ApplyEffectsToContainer="true" PanelClass="pa-6">
-    <MudTabPanel Text="@translator["Cells"]">
+<MudExpansionPanels Style="">
 
-        @if (!Cells.Any())
-        {
-            <MudText Typo="Typo.h6">@translator["NoCells"]</MudText>
-        }
-
-        <MudExpansionPanels Style="">
-
-            @foreach (var cell in Cells.Values)
-            {
-                <MudExpansionPanel HideIcon="true" Expanded="true">
-                    <TitleContent>
-                        <div class="d-flex flex-row" style="justify-content: space-between; padding: 0px 1rem">
-                            <MudIcon Icon="@Icons.Material.Filled.Info" class="mr-3"></MudIcon>
-                            <MudText Typo="Typo.h5">@cell.Name</MudText>
-                            <MudFab StartIcon="@Icons.Material.Filled.Add"
+    @foreach (var cell in Cells.Values)
+    {
+        <MudExpansionPanel Class="ma-2" HideIcon="true" Expanded="true">
+            <TitleContent>
+                <div class="d-flex flex-row" style="justify-content: space-between; padding: 0px 1rem">
+                    <MudIcon Icon="@Icons.Material.Filled.Info" class="mr-3"></MudIcon>
+                    <MudText Typo="Typo.h5">@cell.Name</MudText>
+                    <MudFab StartIcon="@Icons.Material.Filled.Add"
                             Color="Color.Primary"
                             Disabled="@IsBusy"
                             Size="Size.Small"
                             OnClick="() => OpenAddDisciple(cell.Id)">
-                            </MudFab>
-                        </div>
-                    </TitleContent>
+                    </MudFab>
+                </div>
+            </TitleContent>
 
-                    <ChildContent>
+            <ChildContent>
 
-                        <div class="disciples-grid">
-                            @if (Disciples.TryGetValue(cell.Id, out var disciples))
-                            {
-                                foreach (var disciple in disciples)
-                                {
-                                    <UserCard User="disciple" OnClick="EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails)" />
-                                }
-                            }
-                            
-                        </div>
+                <div class="disciples-grid">
+                    @if (Disciples.TryGetValue(cell.Id, out var disciples))
+                    {
+                        foreach (var disciple in disciples)
+                        {
+                            <UserCard User="disciple" OnClick="EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails)" />
+                        }
+                    }
 
-                    </ChildContent>
+                </div>
 
-                </MudExpansionPanel>
-            }
-        </MudExpansionPanels>
+            </ChildContent>
 
-
-    </MudTabPanel>
-
-
-    <MudTabPanel Text="@translator["GainedUsers"]">
-        <MudText>Content Two</MudText>
-    </MudTabPanel>
-</MudTabs>
+        </MudExpansionPanel>
+    }
+</MudExpansionPanels>

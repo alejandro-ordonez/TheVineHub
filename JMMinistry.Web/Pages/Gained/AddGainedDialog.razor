@@ -1,0 +1,93 @@
+﻿@using JMMinistry.Common.Dtos.Gained
+@using JMMinistry.Common.Dtos.User.Enums
+@using JMMinistry.Web.Pages.User
+
+@inject IStringLocalizer<UIStrings> _translator;
+
+<Dialog Result="CreateGainedUser"
+        Color="Color.Primary"
+        PrimaryText="@_translator["Register"]">
+    <Content>
+        <MudForm>
+
+            <MudTextField @bind-Value="CreateGainedUser.Document"
+                          For="@(() => CreateGainedUser.Document)"
+                          Immediate="true"
+                          Required="true"
+                          RequiredError="@_translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@_translator["Document"]"
+                          InputType="InputType.Number" />
+
+            <MudTextField @bind-Value="CreateGainedUser.Name"
+                          For="@(() => CreateGainedUser.Name)"
+                          Immediate="true"
+                          Required="true"
+                          RequiredError="@_translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@_translator["Name"]"
+                          InputType="InputType.Text" />
+
+            <MudTextField @bind-Value="CreateGainedUser.LastName"
+                          For="@(() => CreateGainedUser.LastName)"
+                          Immediate="true"
+                          Required="true"
+                          RequiredError="@_translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@_translator["LastName"]"
+                          InputType="InputType.Text" />
+
+            <MudTextField @bind-Value="CreateGainedUser.Phone"
+                          For="@(() => CreateGainedUser.Phone)"
+                          Immediate="true"
+                          Required="true"
+                          RequiredError="@_translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@_translator["Phone"]"
+                          InputType="InputType.Telephone" />
+
+
+            <MudSelect @bind-Value="CreateGainedUser.Gender"
+                       Label="@_translator[nameof(Gender)]"
+                       Placeholder="@_translator["SelectAnOption"]"
+                       Required="true"
+                       RequiredError="@_translator["FieldRequired"]"
+                       Variant="Variant.Outlined">
+                <MudSelectItem Value="Gender.Male">@_translator[Gender.Male.ToString()]</MudSelectItem>
+                <MudSelectItem Value="Gender.Female">@_translator[Gender.Female.ToString()]</MudSelectItem>
+            </MudSelect>
+
+            <MudTextField @bind-Value="CreateGainedUser.Locality"
+                          For="@(() => CreateGainedUser.Locality)"
+                          Immediate="true"
+                          Required="true"
+                          RequiredError="@_translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@_translator["Locality"]"
+                          InputType="InputType.Text" />
+
+            <MudTextField @bind-Value="CreateGainedUser.Neighborhood"
+                          For="@(() => CreateGainedUser.Neighborhood)"
+                          Immediate="true"
+                          Required="true"
+                          RequiredError="@_translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@_translator["Neighborhood"]"
+                          InputType="InputType.Text" />
+
+            <MudTextField @bind-Value="CreateGainedUser.Petition"
+                          For="@(() => CreateGainedUser.Petition)"
+                          Immediate="true"
+                          Required="true"
+                          RequiredError="@_translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@_translator["Petition"]"
+                          InputType="InputType.Text" />
+
+        </MudForm>
+    </Content>
+</Dialog>
+
+@code {
+    CreateGainedUser CreateGainedUser { get; set; } = new();
+}

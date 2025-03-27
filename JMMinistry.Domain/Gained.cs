@@ -18,9 +18,5 @@ public class Gained
     [Required]
     public DateOnly Date { get; set; }
 
-    public bool Contacted { get; set; }
-
-    public string? Notes { get; set; }
-
-    public bool InACell { get; set; }
+    public List<GainedEvent> Events { get; set; } = [];
 }

@@ -2,7 +2,6 @@
 @using JMMinistry.Web.Services
 
 @inject IStringLocalizer<UIStrings> _translator
-@inject IAuthService authService
 
 
 <MudNavMenu>
@@ -14,7 +13,9 @@
         @_translator["MyMinistry"]
     </MudNavLink>
 
-    <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Person" Href="@Routes.Profile">@_translator["Profile"]</MudNavLink>
+    <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Add" Href="@Routes.Gained">
+        @_translator["GainedUsers"]
+    </MudNavLink>
 
     <AuthorizeView Roles="Admin">
         <MudDivider Style="margin: 1rem 0"/>
@@ -24,10 +25,6 @@
 
         <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.VerifiedUser" Href="@Routes.UserManagement">@_translator["Users"]</MudNavLink>
     </AuthorizeView>
-
-    <MudNavLink Icon="@Icons.Material.Filled.Logout" OnClick="() => authService.LogOut()">
-        @_translator["Logout"]
-    </MudNavLink>
 
 </MudNavMenu>
 

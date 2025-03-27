@@ -1,4 +1,6 @@
-﻿@attribute [Route($"{Routes.User}/{{Document}}")]
+﻿@attribute [Route($"{Routes.User}/{{Document?}}")]
+
+@layout MainLayout
 
 @using JMMinistry.Common
 @using JMMinistry.Common.Dtos.Common
@@ -46,8 +48,8 @@
         {
             User = response.Data;
 
-            if (User?.CellId is not null)
-                CellMates = await FetchCellMates(User.CellId, User.Document);
+            if (User?.CellId is not null && User?.CellId > 0)
+                CellMates = await FetchCellMates(User.CellId.Value, User.Document);
         }
 
         else
