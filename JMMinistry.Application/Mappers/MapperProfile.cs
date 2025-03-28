@@ -2,6 +2,7 @@
 using JMMinistry.Application.Extensions;
 using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.Class;
+using JMMinistry.Common.Dtos.Gained;
 using JMMinistry.Common.Dtos.School;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Domain;
@@ -35,6 +36,16 @@ namespace JMMinistry.Application.Mappers
 
             CreateMap<Cell, CellDto>();
             CreateMap<CreateCellDto, Cell>();
+
+            CreateMap<CreateGainedUser, PersonalInfo>()
+                .ForMember(model => model.Id, cfg => cfg.MapFrom(x => x.Document));
+
+            CreateMap<PersonalInfo, GainedUser>();
+            CreateMap<Gained, GainedUser>()
+                .IncludeMembers(src => src.Person);
+
+            CreateMap<Domain.GainedEvent, Common.Dtos.Gained.GainedEvent>();
+
         }
     }
 }

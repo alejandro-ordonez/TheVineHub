@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JMMinistry.Application.Features.Gained.Commands.RegisterGained
+namespace JMMinistry.Application.Features.Gain.Commands.RegisterGained
 {
-    public class RegisterGainedCommand : IRequest
+    public class RegisterGainedCommand : IRequest<PartialUserInfoDto>
     {
-        public required string GainedBy { get; set; }
+        public string? GainedBy { get; set; }
         public required CreateGainedUser GainedInfo { get; set; }
     }
 }

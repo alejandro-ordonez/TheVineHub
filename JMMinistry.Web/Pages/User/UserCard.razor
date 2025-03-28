@@ -7,7 +7,7 @@
 @inject IDialogService dialogService;
 
 <MudPaper Style="padding: 0.5rem" Class="mud-ripple" 
-          onclick="@(() => OnClick?.InvokeAsync(new UserEventArgs{ CellId = User.CellId ?? 0, Document = User.Document}))">
+onclick="@(() => HandleClick())">
 
     <div class="user-card">
         <MudAvatar Class="avatar-icon" Color="UtilExtensions.GetRandomColor()">
@@ -56,5 +56,13 @@
 
     [Parameter]
     public EventCallback<UserEventArgs>? OnClick { get; set; }
+
+    void HandleClick()
+    {
+        if (OnClick is null)
+            return;
+
+        OnClick?.InvokeAsync(new UserEventArgs { CellId = User.CellId ?? 0, Document = User.Document });
+    }
 
 }

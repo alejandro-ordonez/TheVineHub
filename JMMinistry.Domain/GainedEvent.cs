@@ -17,6 +17,7 @@ namespace JMMinistry.Domain
         public Gained? Gained { get; set; }
 
         public GainedEventType EventType { get; set; }
+        public DateOnly Date { get; set; }
         public string? Observations { get; set; }
     }
 }

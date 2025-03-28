@@ -1,6 +1,8 @@
 ﻿@using JMMinistry.Common.Dtos.Gained
 @using JMMinistry.Common.Dtos.Gained.Enums
 @using JMMinistry.Common.Dtos.User
+@using JMMinistry.Web.Api
+@using JMMinistry.Web.Pages.User
 @attribute [Route(Routes.Gained)]
 @attribute [Authorize]
 
@@ -8,8 +10,9 @@
 
 @inject IStringLocalizer<UIStrings> translator;
 @inject IDialogService dialogService;
+@inject IGainedUsersApi gainedUserApi;
 
-<MudPaper Class="ma-2">
+<MudPaper Class="ma-2" >
     <Header Title="@translator["Gained"]">
         <ActionMenu>
             <MudFab StartIcon="@Icons.Material.Filled.Add"
@@ -22,16 +25,32 @@
     </Header>
 </MudPaper>
 
-<MudPaper>
+<MudPaper Class="ma-2">
 
-
+    <div class="users-grid" style="padding: 1rem;">
+        @foreach (var gained in GainedUsers)
+        {
+            <UserCard User="gained" />
+        }
+    </div>
 
 </MudPaper>
 
 @code {
     bool IsBusy = false;
 
-    Dictionary<GainedEventType, PartialUserInfoDto> GainedUsers { get; set; } = [];
+    IList<GainedUser> GainedUsers { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await gainedUserApi.GetGainedUsers();
+
+        if (result is not null && result.Success && result.Data is not null)
+        {
+            GainedUsers = result.Data;
+        }
+    }
+
 
     async Task OpenAddGainedUser()
     {
@@ -54,7 +73,12 @@
 
     async Task AddGainedUser(CreateGainedUser user)
     {
-        
+        var result = await gainedUserApi.RegisterGainedPerson(user);
+
+        if(result is not null && result.Success && result.Data is not null)
+        {
+            GainedUsers.Add(result.Data);
+        }
     }
 
 }
