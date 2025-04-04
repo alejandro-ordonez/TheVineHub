@@ -1,0 +1,90 @@
+﻿@using JMMinistry.Common.Dtos.Meetings
+@using System.ComponentModel
+@using JMMinistry.Web.Extensions
+
+@inject IStringLocalizer<UIStrings> translator;
+
+
+<Dialog Result="Meeting"
+        Color="Color.Primary"
+        PrimaryText="@translator["Add"]">
+
+    <Content>
+
+        <MudForm Model="Meeting" @ref="cellForm">
+
+            <MudTextField @bind-Value="Meeting.Name"
+                          For="@(() => Meeting.Name)"
+                          Immediate="true"
+                          Required="true"
+                          RequiredError="@translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@translator["Name"]"
+                          InputType="InputType.Text" />
+
+            <MudTextField @bind-Value="Meeting.Start"
+                          For="@(() => Meeting.Start)"
+                          Immediate="true"
+                          Required="true"
+                          OnlyValidateIfDirty="true"
+                          RequiredError="@translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@translator["Start"]"
+                          InputType="InputType.Time" />
+
+            <MudTextField @bind-Value="Meeting.End"
+                          For="@(() => Meeting.End)"
+                          Immediate="true"
+                          Required="true"
+                          OnlyValidateIfDirty="true"
+                          RequiredError="@translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Label="@translator["End"]"
+                          InputType="InputType.Time" />
+
+
+            <MudCheckBox @bind-Value="Meeting.IsRecurrent"
+                         For="@(() => Meeting.IsRecurrent)"
+                         Label="@translator["IsRecurrent"]"/>
+
+            @if (Meeting.IsRecurrent)
+            {
+                <MudSelect @bind-Value="Meeting.Day"
+                           Label="@translator["Day"]"
+                           Placeholder="@translator["SelectDay"]"
+                           Required="Meeting.IsRecurrent"
+                           RequiredError="@translator["FieldRequired"]"
+                           Variant="Variant.Outlined">
+
+                    @foreach (var day in Enum.GetValues<DayOfWeek>())
+                    {
+                        <MudSelectItem T="DayOfWeek?" Value="day">@translator[day.ToString()]</MudSelectItem>
+                    }
+                </MudSelect>
+            }
+
+            else
+            {
+                <MudTextField @bind-Value="Meeting.Date"
+                              For="@(() => Meeting.Date)"
+                              Immediate="true"
+                              Required="!Meeting.IsRecurrent"
+                              OnlyValidateIfDirty="true"
+                              RequiredError="@translator["FieldRequired"]"
+                              Variant="Variant.Outlined"
+                              Label="@translator["Date"]"
+                              Converter="UIConverters.DateOnlyConverter"
+                              InputType="InputType.Date" />
+            }
+
+        </MudForm>
+
+    </Content>
+</Dialog>
+
+@code {
+
+    MudForm? cellForm;
+
+    public CreateMeetingDto Meeting { get; set; } = new();
+}

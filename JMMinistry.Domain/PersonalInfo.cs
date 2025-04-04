@@ -53,12 +53,16 @@ public partial class PersonalInfo: IdentityUser<string>
     public Cell? Cell { get; set; }
 
     public IList<Cell> Cells { get; set; } = [];
+
     public IList<MeetingAttendance> MeetingAttendances { get; set; } = [];
+    public IList<CellAttendance> CellAttendances { get; set; } = [];
     public IList<ClassAttendance> ClassAttendances { get; set; } = [];
+
+
     public IList<ClassStudent> Classes { get; set; } = [];
     public IList<ConventionAttendee> Conventions { get; set; } = [];
     public IList<ConventionAttendee> ConventionInvites { get; set; } = [];
-    public IList<CellAttendance> CellAttendances { get; set; } = [];
+    
 
     public virtual IList<PersonalInfoRole> UserRoles { get; set; } = [];
 

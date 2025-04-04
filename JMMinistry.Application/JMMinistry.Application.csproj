@@ -19,6 +19,7 @@
     <Folder Include="Common\" />
     <Folder Include="Features\Classes\EditClass\" />
     <Folder Include="Features\Classes\CreateClassSession\" />
+    <Folder Include="Features\Meetings\Commands\RegisterAttendance\" />
     <Folder Include="Features\User\Commands\EditUser\" />
   </ItemGroup>
 

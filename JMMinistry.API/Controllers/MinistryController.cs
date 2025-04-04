@@ -36,6 +36,7 @@ namespace JMMinistry.API.Controllers
         }
 
 
+
         [HttpGet("disciples/{cellId}")]
         public async Task<ActionResult<List<PartialUserInfoDto>>> GetDisciples(int cellId)
         {

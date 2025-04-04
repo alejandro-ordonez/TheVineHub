@@ -1,0 +1,82 @@
+﻿@using JMMinistry.Common.Dtos.Meetings
+@using JMMinistry.Web.Api
+@attribute [Authorize]
+@attribute [Route(Routes.Meetings)]
+
+@layout MainLayout
+
+
+@inject IStringLocalizer<UIStrings> translator;
+@inject IDialogService dialogService;
+@inject IMeetingApi meetingApi;
+
+
+<MudPaper Class="ma-2">
+    <Header Title="@translator["Meetings"]">
+        <ActionMenu>
+            <MudFab StartIcon="@Icons.Material.Filled.Add"
+                    Color="Color.Primary"
+                    Disabled="@IsBusy"
+                    Size="Size.Small"
+                    OnClick="() => OpenAddMeeting()">
+            </MudFab>
+        </ActionMenu>
+    </Header>
+</MudPaper>
+
+<MudPaper Class="2">
+    @foreach(var meeting in MeetingList)
+    {
+        <MudCard>
+            <MudCardContent>
+                <MudText Typo="Typo.h5">@meeting.Name</MudText>
+                @if (meeting.IsRecurrent)
+                {
+                    <MudText Typo="Typo.body2">@($"{meeting.Start.ToShortTimeString()} - {meeting.End.ToShortTimeString()}")</MudText>
+                    <MudText Typo="Typo.body2">@translator[meeting.Day?.ToString() ?? "Unknown"]</MudText>
+                }
+
+                else
+                {
+                    <MudText Typo="Typo.body2">@meeting.Date.ToShortDateString()</MudText>
+                }
+
+            </MudCardContent>
+        </MudCard>
+    }
+</MudPaper>
+
+
+
+@code {
+    bool IsBusy { get; set; }
+
+    List<MeetingDto> MeetingList { get; set; } = [];
+
+    async Task OpenAddMeeting()
+    {
+        IsBusy = true;
+
+        var dialog = await dialogService.ShowAsync<AddMeeting>();
+        var result = await dialog.GetReturnValueAsync<DialogResult<MeetingDto>>();
+
+
+        if (result is null || result.Data is null)
+        {
+            IsBusy = false;
+            return;
+        }
+
+        await SubmitCreateMeeting(result.Data);
+        IsBusy = false;
+    }
+
+    async Task SubmitCreateMeeting(MeetingDto meeting)
+    {
+        var response = await meetingApi.CreateMeeting(meeting);
+
+        if (response != null && response.Success && response.Data != null)
+            MeetingList.Add(response.Data);
+    }
+
+}

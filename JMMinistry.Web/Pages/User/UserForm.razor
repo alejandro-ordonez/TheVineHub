@@ -1,5 +1,6 @@
 ﻿@using JMMinistry.Common.Dtos.User
 @using JMMinistry.Common.Dtos.User.Enums
+@using JMMinistry.Web.Extensions
 
 @inject IStringLocalizer<UIStrings> _translator;
 
@@ -33,7 +34,7 @@
                           RequiredError="@_translator["FieldRequired"]"
                           Variant="Variant.Outlined"
                           Label="@_translator["Birthday"]"
-                          Converter="DateOnlyConverter"
+                          Converter="UIConverters.DateOnlyConverter"
                           InputType="InputType.Date" />
 
 
@@ -54,9 +55,9 @@
                        RequiredError="@_translator["FieldRequired"]"
                        Variant="Variant.Outlined">
 
-                @foreach (var maritalStatus in Enum.GetNames<MaritalStatus>())
+                @foreach (var maritalStatus in Enum.GetValues<MaritalStatus>())
                 {
-                    <MudSelectItem Value="Gender.Male">@_translator[maritalStatus]</MudSelectItem>
+                    <MudSelectItem Value="maritalStatus">@_translator[maritalStatus.ToString()]</MudSelectItem>
                 }
             </MudSelect>
 
@@ -67,9 +68,9 @@
                        RequiredError="@_translator["FieldRequired"]"
                        Variant="Variant.Outlined">
 
-                @foreach (var level in Enum.GetNames<EducationalLevel>())
+                @foreach (var level in Enum.GetValues<EducationalLevel>())
                 {
-                    <MudSelectItem Value="Gender.Male">@_translator[level]</MudSelectItem>
+                    <MudSelectItem Value="level">@_translator[level.ToString()]</MudSelectItem>
                 }
             </MudSelect>
 
@@ -186,10 +187,4 @@
 @code {
     [SupplyParameterFromForm]
     CreateUserInfoDto UserInfo { get; set; } = new();
-
-    MudBlazor.Converter<DateOnly> DateOnlyConverter = new Converter<DateOnly>
-    {
-        SetFunc = value => value.ToShortDateString(),
-        GetFunc = text => DateOnly.Parse(text ?? "")
-    };
 }

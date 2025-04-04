@@ -8,8 +8,9 @@ namespace JMMinistry.Common.Dtos.Meetings.Enums
 {
     public enum MeetingTypes
     {
-        One,
+        WeAreOne,
         Rocks,
-        Family
+        Family,
+        Other
     }
 }

@@ -10,6 +10,7 @@ namespace JMMinistry.Domain
     public class CellAttendance
     {
         public int Id { get; set; }
+
         [Required]
         public int CellId { get; set; }
         public Cell Cell { get; set; } = null!;

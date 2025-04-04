@@ -38,12 +38,10 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
             // Check permissions
             var requestor = new PersonalInfo { Id = request.RequestorDocument };
 
-            var isAdmin = userManager.IsInRoleAsync(requestor, Roles.Admin.ToString());
-            var isManager = userManager.IsInRoleAsync(requestor, Roles.Coordinator.ToString());
+            var userRoles = await userManager.GetRolesAsync(requestor);
+            var allowed = userRoles.Any(role => role == Roles.Admin.ToString() || role == Roles.Coordinator.ToString());
 
-            var allowed = await Task.WhenAll(isAdmin, isManager);
-
-            if(allowed.Any(task => task))
+            if(allowed)
             {
                 var userInfoDto = mapper.Map<UserInfoDto>(userInfo);
                 userInfoDto.AccessType = AccessType.Admin;

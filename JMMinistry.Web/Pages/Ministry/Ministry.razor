@@ -36,12 +36,22 @@
                 <div class="d-flex flex-row" style="justify-content: space-between; padding: 0px 1rem">
                     <MudIcon Icon="@Icons.Material.Filled.Info" class="mr-3"></MudIcon>
                     <MudText Typo="Typo.h5">@cell.Name</MudText>
-                    <MudFab StartIcon="@Icons.Material.Filled.Add"
-                            Color="Color.Primary"
-                            Disabled="@IsBusy"
-                            Size="Size.Small"
-                            OnClick="() => OpenAddDisciple(cell.Id)">
-                    </MudFab>
+                    
+                    <div>
+                        <MudFab StartIcon="@Icons.Material.Filled.Add"
+                                Color="Color.Primary"
+                                Disabled="@IsBusy"
+                                Size="Size.Small"
+                                OnClick="() => OpenAddDisciple(cell.Id)">
+                        </MudFab>
+
+                        <MudFab StartIcon="@Icons.Material.Filled.Add"
+                                Color="Color.Primary"
+                                Disabled="@IsBusy"
+                                Size="Size.Small"
+                                OnClick="() => OpenAddDisciple(cell.Id)">
+                        </MudFab>
+                    </div>
                 </div>
             </TitleContent>
 

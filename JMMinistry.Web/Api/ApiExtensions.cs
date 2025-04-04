@@ -37,6 +37,7 @@ namespace JMMinistry.Web.Api
             services.AddTransient<ISchoolApi, SchoolApi>();
             services.AddTransient<IMinistryApi, MinistryApi>();
             services.AddTransient<IGainedUsersApi, GainedUserApi>();
+            services.AddTransient<IMeetingApi, MeetingApi>();
         }
 
         public static IConfigurationRoot GetConfiguration()

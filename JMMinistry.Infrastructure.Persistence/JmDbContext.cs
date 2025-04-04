@@ -38,6 +38,8 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
 
     public virtual DbSet<Gained> Gained { get; set; }
 
+
+    public virtual DbSet<Meeting> Meetings { get; set; }
     public virtual DbSet<MeetingAttendance> MeetingAttendances { get; set; }
 
     public virtual DbSet<Role> Ministries { get; set; }
@@ -46,16 +48,18 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
 
     public virtual DbSet<School> Schools { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
+    
 
-        modelBuilder
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        builder
             .HasPostgresEnum("meeting_type", ["one", "rocks", "family"])
             .HasPostgresEnum("member_type", ["coordinator", "staff", "assistant"])
             .HasPostgresEnum("ministry_status", ["guess", "gained", "consolidating", "disciple", "leader"]);
 
-        modelBuilder.Entity<PersonalInfo>(user =>
+        builder.Entity<PersonalInfo>(user =>
         {
             user.HasMany(e => e.UserRoles)
                 .WithOne(e => e.PersonalInfo)
@@ -65,7 +69,7 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
             user.ToTable(nameof(PersonalInfo));
         });
 
-        modelBuilder.Entity<Role>(b =>
+        builder.Entity<Role>(b =>
         {
             // Each Role can have many entries in the UserRole join table
             b.HasMany(role => role.UserRoles)
@@ -76,34 +80,30 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
             b.ToTable(nameof(Role));
         });
 
-        modelBuilder.Entity<Cell>()
+        builder.Entity<Cell>()
             .HasMany(c => c.Disciples)
             .WithOne(p => p.Cell)
             .HasForeignKey(p => p.CellId);
 
 
-        modelBuilder.Entity<ConventionAttendee>()
+        builder.Entity<ConventionAttendee>()
             .HasOne(c => c.InvitedBy)
             .WithMany(p => p.ConventionInvites)
             .HasForeignKey(c => c.InvitedById);
 
-        modelBuilder.Entity<ConventionAttendee>()
+        builder.Entity<ConventionAttendee>()
             .HasOne(c => c.Attendee)
             .WithMany(p => p.Conventions)
             .HasForeignKey(c => c.AttendeeId);
 
-        modelBuilder.Entity<Gained>()
+        builder.Entity<Gained>()
             .HasOne(g => g.Person)
             .WithOne(p => p.GainedRecord)
             .HasForeignKey<PersonalInfo>(p => p.GainedId);
 
-        modelBuilder.Entity<Gained>()
+        builder.Entity<Gained>()
             .HasOne(g => g.InvitedBy)
             .WithMany(p => p.Gained)
             .HasForeignKey(g => g.InvitedById);
-
-        OnModelCreatingPartial(modelBuilder);
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

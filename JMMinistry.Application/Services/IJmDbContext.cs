@@ -30,6 +30,8 @@ namespace JMMinistry.Application.Services
 
         DbSet<Gained> Gained { get; set; }
 
+        DbSet<Meeting> Meetings { get; set; }
+
         DbSet<MeetingAttendance> MeetingAttendances { get; set; }
 
         DbSet<Role> Ministries { get; set; }

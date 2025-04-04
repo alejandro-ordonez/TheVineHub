@@ -14,8 +14,13 @@
         // Ministry
         public const string Ministry = $"/{nameof(Ministry)}";
 
-        // Ministry
+        // Gained
         public const string Gained = $"/{nameof(Gained)}";
+
+        // Meetings
+        public const string Meetings = $"/{nameof(Meetings)}";
+
+
 
         // Settings
         public const string Settings = $"/{nameof(Settings)}";
