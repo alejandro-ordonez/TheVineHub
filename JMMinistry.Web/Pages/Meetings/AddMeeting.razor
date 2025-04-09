@@ -1,6 +1,6 @@
 ﻿@using JMMinistry.Common.Dtos.Meetings
-@using System.ComponentModel
 @using JMMinistry.Web.Extensions
+@using JMMinistry.Web.Shared.Converters
 
 @inject IStringLocalizer<UIStrings> translator;
 
@@ -30,6 +30,7 @@
                           RequiredError="@translator["FieldRequired"]"
                           Variant="Variant.Outlined"
                           Label="@translator["Start"]"
+                          Converter="timeOnlyConverter"
                           InputType="InputType.Time" />
 
             <MudTextField @bind-Value="Meeting.End"
@@ -40,6 +41,7 @@
                           RequiredError="@translator["FieldRequired"]"
                           Variant="Variant.Outlined"
                           Label="@translator["End"]"
+                          Converter="timeOnlyConverter"
                           InputType="InputType.Time" />
 
 
@@ -49,7 +51,7 @@
 
             @if (Meeting.IsRecurrent)
             {
-                <MudSelect @bind-Value="Meeting.Day"
+                <MudSelect @bind-Value="Meeting.DayOfWeek"
                            Label="@translator["Day"]"
                            Placeholder="@translator["SelectDay"]"
                            Required="Meeting.IsRecurrent"
@@ -73,7 +75,7 @@
                               RequiredError="@translator["FieldRequired"]"
                               Variant="Variant.Outlined"
                               Label="@translator["Date"]"
-                              Converter="UIConverters.DateOnlyConverter"
+                              Converter="dateOnlyConverter"
                               InputType="InputType.Date" />
             }
 
@@ -85,6 +87,9 @@
 @code {
 
     MudForm? cellForm;
+    readonly DateOnlyConverter dateOnlyConverter = new DateOnlyConverter();
+    readonly TimeOnlyConverter timeOnlyConverter = new TimeOnlyConverter();
 
+    [SupplyParameterFromForm]
     public CreateMeetingDto Meeting { get; set; } = new();
 }

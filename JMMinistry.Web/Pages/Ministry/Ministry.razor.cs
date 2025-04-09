@@ -1,5 +1,4 @@
 ﻿using JMMinistry.Common.Dtos.Cell;
-using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Common.Resources;
 using JMMinistry.Web.Api;

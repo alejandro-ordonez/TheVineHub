@@ -1,6 +1,8 @@
-﻿using JMMinistry.Application.Features.Meetings.Queries.GetMeetings;
+﻿using JMMinistry.Application.Features.Meetings.Commands.CreateMeeting;
+using JMMinistry.Application.Features.Meetings.Queries.GetMeetings;
 using JMMinistry.Common.Dtos.Meetings;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace JMMinistry.API.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class MeetingsController(IMediator mediator) : ControllerBase
     {
@@ -30,8 +33,10 @@ namespace JMMinistry.API.Controllers
 
         // POST api/<MeetingsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<MeetingDto>> Create(CreateMeetingCommand meetingDto)
         {
+            var result = await mediator.Send(meetingDto);
+            return Ok(result);
         }
 
         // PUT api/<MeetingsController>/5

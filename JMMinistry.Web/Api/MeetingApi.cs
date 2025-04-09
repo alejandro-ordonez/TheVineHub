@@ -15,7 +15,7 @@ namespace JMMinistry.Web.Api
 
     public class MeetingApi(IHttpClientFactory clientFactory) : IMeetingApi
     {
-        private const string _meetinApi = "api/Ministry";
+        private const string _meetinApi = "api/Meetings";
 
         public async Task<Response<MeetingDto>?> CreateMeeting(CreateMeetingDto meeting)
         {

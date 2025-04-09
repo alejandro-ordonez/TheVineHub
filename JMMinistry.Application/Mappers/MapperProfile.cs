@@ -3,6 +3,7 @@ using JMMinistry.Application.Extensions;
 using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.Class;
 using JMMinistry.Common.Dtos.Gained;
+using JMMinistry.Common.Dtos.Meetings;
 using JMMinistry.Common.Dtos.School;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Domain;
@@ -46,6 +47,8 @@ namespace JMMinistry.Application.Mappers
 
             CreateMap<Domain.GainedEvent, Common.Dtos.Gained.GainedEvent>();
 
+            CreateMap<CreateMeetingDto, Meeting>();
+            CreateMap<Meeting, MeetingDto>();
         }
     }
 }
