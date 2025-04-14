@@ -8,6 +8,7 @@ namespace JMMinistry.Web.Api
     public interface IMinistryApi
     {
         Task<Response<IList<CellDto>>?> GetAsync();
+        Task<Response<CellDto>?> GetAsync(int cellId);
         Task<Response<CellDto>?> CreateCell(CreateCellDto cell);
         Task<Response<IList<PartialUserInfoDto>>?> AddDisciples(AddDisciplesDto addDisciples);
         Task<Response<IList<PartialUserInfoDto>>?> RemoveDiscipleFromCell(int cellId, string document);

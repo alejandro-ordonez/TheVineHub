@@ -15,6 +15,7 @@ namespace JMMinistry.Application.Services
         DbSet<Assignment> Assignments { get; set; }
 
         DbSet<Cell> Cells { get; set; }
+        DbSet<CellAttendance> CellAttendances { get; set; }
 
         DbSet<Class> Classes { get; set; }
 

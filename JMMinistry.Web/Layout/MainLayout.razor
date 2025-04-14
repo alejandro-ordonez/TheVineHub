@@ -1,16 +1,20 @@
-﻿@using JMMinistry.Common.Dtos.User
+﻿@using Fluxor
+@using Fluxor.Blazor.Web.Components
+@using JMMinistry.Common.Dtos.User
 @using JMMinistry.Common
 @using JMMinistry.Web.Api
 @using JMMinistry.Web.Extensions
 @using JMMinistry.Web.Pages
 @using JMMinistry.Web.Services
+@using JMMinistry.Web.Store.PageUseCase
 
-@inherits LayoutComponentBase
+@inherits FluxorLayout
 
 @inject IStringLocalizer<UIStrings> translator;
 @inject IUserApi userApi;
 @inject IAuthService authService;
 @inject IAuthStateProvider authStateProvider;
+@inject NavigationManager navigationManager;
 
 <MudThemeProvider IsDarkMode="true"/>
 <MudPopoverProvider />
@@ -21,8 +25,13 @@
     <MudAppBar Elevation="1">
 
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@ToggleDrawer" />
-        <MudText Typo="Typo.h6">@PageTitle</MudText>
+
         <MudSpacer />
+            
+        <MudText Typo="Typo.h6">@State.Value.Title</MudText>
+
+        <MudSpacer />
+
         <div>
             <MudAvatar Class="avatar-icon" Color="Color.Secondary" onclick="@(() =>ToggleUserPopoverOpen())">
                 @if (string.IsNullOrEmpty(User?.Photo))
@@ -56,14 +65,17 @@
     </MudDrawer>
     <MudMainContent>
         <MudContainer Class="mt-6">
-            <CascadingValue Value="PageTitle">
-                @Body
-            </CascadingValue>
+            @Body
         </MudContainer>
     </MudMainContent>
 </MudLayout>
 
 @code{
+
+    [Inject]
+    public required IState<PageState> State { get; set; }
+
+
     private bool _open = true;
     bool _userPopoverOpen = false;
 
@@ -71,6 +83,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await base.OnInitializedAsync();
+
         var result = await userApi.GetUserInfo();
 
         if(result is not null && result.Success)
@@ -78,15 +92,9 @@
             User = result.Data;
             StateHasChanged();
         }
-
     }
 
-    private string _test = string.Empty;
-
-    public string PageTitle { 
-        get => _test; 
-        set => _test = value; 
-    }
+    public string PageTitle { get; set; } = string.Empty;
 
     private void ToggleDrawer()
     {
@@ -97,5 +105,4 @@
     {
         _userPopoverOpen = !_userPopoverOpen;
     }
-
 }

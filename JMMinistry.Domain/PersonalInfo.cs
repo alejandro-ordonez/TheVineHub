@@ -47,10 +47,14 @@ public partial class PersonalInfo: IdentityUser<string>
 
 
     public int? CellId { get; set; }
+
     /// <summary>
     /// Cell to which the person belongs to
     /// </summary>
     public Cell? Cell { get; set; }
+
+    public DateTime? CellEnrollmentDate { get; set; }
+
 
     public IList<Cell> Cells { get; set; } = [];
 

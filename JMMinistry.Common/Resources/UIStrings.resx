@@ -247,7 +247,7 @@
     <value>Gained Users</value>
   </data>
   <data name="Cells" xml:space="preserve">
-    <value>Cells</value>
+    <value>Cells {0}</value>
   </data>
   <data name="NoCells" xml:space="preserve">
     <value>No Cells registered, please create one.</value>
@@ -323,5 +323,8 @@
   </data>
   <data name="Petition" xml:space="preserve">
     <value>Petition</value>
+  </data>
+  <data name="Disciples" xml:space="preserve">
+    <value>Disciples {0}</value>
   </data>
 </root>

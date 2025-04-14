@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using JMMinistry.Application.Exceptions;
+using JMMinistry.Application.Features.Cells.Queries.CellCheckIsAuthorized;
 using JMMinistry.Application.Features.User.Queries.CheckIfLeader;
 using JMMinistry.Application.Services;
 using JMMinistry.Common;
@@ -64,10 +65,10 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
             }
 
             // Check if it is the leader requesting this information
-            var requestorIsTheLeader = await mediator.Send(new CheckIfLeaderQuery
+            var requestorIsTheLeader = await mediator.Send(new CellCheckIsAuthorizedQuery
             {
                 CellId = userInfo.CellId.Value,
-                LeaderId = request.RequestorDocument
+                RequestorId = request.RequestorDocument
             }, cancellationToken);
 
             if (requestorIsTheLeader)
@@ -77,7 +78,7 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
                 return userInfoDto;
             }
 
-            throw new NotAuthorizeException();
+            throw new NotAuthorizedException();
         }
     }
 }

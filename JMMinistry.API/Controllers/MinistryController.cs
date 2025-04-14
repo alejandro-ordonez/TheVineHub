@@ -2,13 +2,12 @@
 using JMMinistry.Application.Features.Cells.Commands.AddDisciples;
 using JMMinistry.Application.Features.Cells.Commands.CreateCell;
 using JMMinistry.Application.Features.Cells.Commands.RemoveDisciple;
+using JMMinistry.Application.Features.Cells.Queries.GetCell;
 using JMMinistry.Application.Features.Cells.Queries.GetCells;
 using JMMinistry.Application.Features.Cells.Queries.GetDisciples;
 using JMMinistry.Common.Dtos.Cell;
-using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.User;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JMMinistry.API.Controllers
@@ -32,6 +31,15 @@ namespace JMMinistry.API.Controllers
             var document = HttpContext.GetDocumentClaim() ?? throw new ArgumentException("Missing document in token");
 
             var cells = await mediator.Send(new GetCellsQuery { Document = document });
+            return Ok(cells);
+        }
+
+        [HttpGet("{cellId}")]
+        public async Task<ActionResult<CellDto>> GetCell(int cellId)
+        {
+            var document = HttpContext.GetDocumentClaim() ?? throw new ArgumentException("Missing document in token");
+
+            var cells = await mediator.Send(new GetCellQuery { RequestorId = document, CellId = cellId });
             return Ok(cells);
         }
 

@@ -20,7 +20,7 @@ public class AddDisciplesHandler(IJmDbContext dbContext, IMapper mapper) :
             .ToListAsync(cancellationToken);
 
         if (users.Count != request.Documents.Count)
-            throw new Exception("There were users that do not exists");
+            throw new ArgumentException("There were users that do not exists");
 
         var cell = await dbContext.Cells
             .FirstOrDefaultAsync(cell => cell.Id == request.CellId, cancellationToken) ??
@@ -28,6 +28,7 @@ public class AddDisciplesHandler(IJmDbContext dbContext, IMapper mapper) :
 
         foreach (var disciple in users)
         {
+            disciple.CellEnrollmentDate = DateTime.Now;
             disciple.MinistryStatus = MinistryStatus.InACell;
             cell.Disciples.Add(disciple);
         }

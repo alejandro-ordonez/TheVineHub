@@ -1,0 +1,26 @@
+﻿@using JMMinistry.Web.Pages.User
+
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@inject IStringLocalizer<UIStrings> translator;
+
+
+
+<MudPaper Style="margin: 1rem 0px">
+    <MudToolBar>
+        <MudText Typo="Typo.subtitle1">@translator["Disciples", State.Value.Disciples.Count]</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Tertiary" OnClick="OpenAddDisciple" />
+    </MudToolBar>
+</MudPaper>
+
+
+<div class="users-grid">
+    @foreach (var disciple in State.Value.Disciples)
+    {
+        <UserCard User="disciple" OnClick="EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails)" />
+    }
+
+</div>
+
+

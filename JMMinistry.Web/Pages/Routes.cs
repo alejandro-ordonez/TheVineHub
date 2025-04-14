@@ -13,6 +13,7 @@
 
         // Ministry
         public const string Ministry = $"/{nameof(Ministry)}";
+        public const string CellDetails = $"/{nameof(CellDetails)}";
 
         // Gained
         public const string Gained = $"/{nameof(Gained)}";

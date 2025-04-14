@@ -27,6 +27,13 @@ namespace JMMinistry.Web.Api
             return response;
         }
 
+        public async Task<Response<CellDto>?> GetAsync(int cellId)
+        {
+            using var client = clientFactory.CreateClient(Constants.ApiClient);
+            var response = await client.GetFromJsonAsync<Response<CellDto>?>($"{_ministryApi}/{cellId}");
+            return response;
+        }
+
         public async Task<Response<IList<PartialUserInfoDto>>?> AddDisciples(AddDisciplesDto addDisciples)
         {
             using var client = clientFactory.CreateClient(Constants.ApiClient);
@@ -50,5 +57,7 @@ namespace JMMinistry.Web.Api
             var response = await client.GetFromJsonAsync<Response<IList<PartialUserInfoDto>>?>(url);
             return response;
         }
+
+       
     }
 }

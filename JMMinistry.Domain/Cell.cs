@@ -8,8 +8,10 @@ public partial class Cell
 {
     public int Id { get; set; }
     public required string Name { get; set; }
+    public string? Description { get; set; }
     public bool MainCell { get; set; }
     public required string Address { get; set; }
+    public required string Locality { get; set; }
 
     [MaxLength(2)]
     public IList<PersonalInfo> Leaders { get; set; } = [];

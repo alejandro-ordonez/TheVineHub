@@ -49,6 +49,8 @@ namespace JMMinistry.Application.Mappers
 
             CreateMap<CreateMeetingDto, Meeting>();
             CreateMap<Meeting, MeetingDto>();
+
+            CreateMap<CellAttendance, CellAttendanceDto>();
         }
     }
 }

@@ -1,0 +1,41 @@
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@inject IStringLocalizer<UIStrings> translator;
+
+
+<MudPaper Style="margin: 1rem 0px">
+    <MudToolBar>
+        <MudText Typo="Typo.subtitle1">@translator["Cells", CellsState?.Value?.Cells?.Count ?? 0]</MudText>
+        <MudSpacer />
+        <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Tertiary" OnClick="OpenAddCell" />
+    </MudToolBar>
+</MudPaper>
+
+
+@if (CellsState?.Value?.IsLoading ?? false)
+{
+    <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
+}
+
+else
+{
+    @if(CellsState?.Value?.Cells?.Count == 0)
+    {
+        <MudText Typo="Typo.h6">@translator["NoCells"]</MudText>
+    }
+
+
+    <div class="cards-grid">
+        @foreach (var cell in CellsState?.Value?.Cells ?? [])
+        {
+            <MudCard Class="mud-ripple" onclick="@(() => OpenCellDetails(cell.Id))">
+                <MudCardContent>
+                    <MudText Typo="Typo.h5">@cell.Name</MudText>
+                    <MudText Typo="Typo.body2">@cell.Description</MudText>
+                    <MudText Typo="Typo.body2">@cell.Locality</MudText>
+                    <MudText Typo="Typo.body2">@cell.Address</MudText>
+                </MudCardContent>
+            </MudCard>
+        }
+    </div>
+}

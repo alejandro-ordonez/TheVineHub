@@ -169,7 +169,7 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cells.
+        ///   Looks up a localized string similar to Cells {0}.
         /// </summary>
         public static string Cells {
             get {
@@ -228,6 +228,15 @@ namespace JMMinistry.Common.Resources {
         public static string Disciple {
             get {
                 return ResourceManager.GetString("Disciple", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disciples {0}.
+        /// </summary>
+        public static string Disciples {
+            get {
+                return ResourceManager.GetString("Disciples", resourceCulture);
             }
         }
         

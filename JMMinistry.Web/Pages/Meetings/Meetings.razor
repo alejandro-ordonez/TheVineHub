@@ -33,7 +33,7 @@
                 @if (meeting.IsRecurrent)
                 {
                     <MudText Typo="Typo.body2">@($"{meeting.Start.ToShortTimeString()} - {meeting.End.ToShortTimeString()}")</MudText>
-                    <MudText Typo="Typo.body2">@translator[meeting.Day?.ToString() ?? "Unknown"]</MudText>
+                    <MudText Typo="Typo.body2">@translator[meeting.DayOfWeek?.ToString() ?? "Unknown"]</MudText>
                 }
 
                 else

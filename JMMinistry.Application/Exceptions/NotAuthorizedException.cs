@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Exceptions
 {
-    public class NotAuthorizeException: Exception
+    public class NotAuthorizedException: Exception
     {
     }
 }

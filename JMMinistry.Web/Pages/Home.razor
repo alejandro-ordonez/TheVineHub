@@ -5,6 +5,8 @@
 @layout MainLayout
 
 @using System.Diagnostics
+@using Fluxor
+@using JMMinistry.Web.Store.PageUseCase
 
 
 
@@ -17,6 +19,19 @@ Welcome to your new app.
 @code{
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationState { get; set; }
+
+    [Inject]
+    public required IDispatcher Dispatcher { get; set; }
+
+    [Inject]
+    public required IStringLocalizer<UIStrings> Translator { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        Dispatcher.Dispatch(new SetTitleAction { Title = Translator[nameof(Home)] });
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

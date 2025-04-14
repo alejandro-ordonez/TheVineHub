@@ -11,5 +11,6 @@ namespace JMMinistry.Common.Dtos.Cell
     {
         public bool MainCell { get; set; }
         public string Address { get; set; } = string.Empty;
+        public string Locality { get; set; } = string.Empty;
     }
 }
