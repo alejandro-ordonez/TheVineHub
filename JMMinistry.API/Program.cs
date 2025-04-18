@@ -16,8 +16,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: CORSPolicy,
                       policy =>
                       {
-                          policy.WithOrigins("https://app.jm-ministry.org", "http://localhost")
-                            .SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost")
+                          policy.SetIsOriginAllowed(origin =>
+                                origin == "https://app.jm-ministry.org" || new Uri(origin).Host == "localhost"
+                             )
                             .AllowAnyMethod()
                             .AllowAnyHeader();
                       });
