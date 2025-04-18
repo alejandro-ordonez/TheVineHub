@@ -2,7 +2,7 @@
 {
     public record CellAttendancesState
     {
-        public int cellId { get; set; }
-        public IList<CellAtten MyProperty { get; set; }
+        public int CellId { get; set; }
+        //public IList<CellAt MyProperty { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Cells.Queries.CellCheckIsAuthorized;
-using JMMinistry.Application.Features.User.Queries.CheckIfLeader;
 using JMMinistry.Application.Services;
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.User;
@@ -34,7 +33,7 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
             }
 
             if (userInfo.CellId is null)
-                throw new Exception("The user is not assigned to any cell");
+                throw new ArgumentException("The user is not assigned to any cell");
 
             // Check permissions
             var requestor = new PersonalInfo { Id = request.RequestorDocument };

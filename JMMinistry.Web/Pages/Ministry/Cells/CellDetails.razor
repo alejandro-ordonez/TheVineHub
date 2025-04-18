@@ -22,20 +22,21 @@
 
 else
 {
-    <MudPaper Style="margin: 1rem 0px">
+    <MudPaper Style="margin: 1rem 0px; padding: 1rem;">
         <MudText Typo="Typo.h5">@State.Value.Cell?.Name</MudText>
+        <MudDivider Style="margin: 0.5rem 0"/>
         <MudText Typo="Typo.subtitle1">@State.Value.Cell?.Description</MudText>
         <MudText Typo="Typo.subtitle1">@State.Value.Cell?.Address</MudText>
     </MudPaper>
 
 
     <MudTabs Outlined="true">
-        <MudTabPanel Text="@translator["Disciples"]" Icon="@Icons.Material.Filled.Api">
+        <MudTabPanel Text="@translator["Disciples"]" Icon="@Icons.Material.Filled.Person">
             <Disciples CellId="CellId" />
         </MudTabPanel>
 
 
-        <MudTabPanel Text="Asistencias" Icon="@Icons.Material.Filled.Build">
+        <MudTabPanel Text="Asistencias" Icon="@Icons.Material.Filled.Check">
 
 
         </MudTabPanel>

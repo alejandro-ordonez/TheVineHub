@@ -24,6 +24,8 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
 
     public virtual DbSet<Cell> Cells { get; set; }
 
+    public DbSet<CellAttendance> CellAttendances { get; set; }
+
     public virtual DbSet<Class> Classes { get; set; }
 
     public virtual DbSet<ClassAttendance> ClassAttendances { get; set; }

@@ -1,7 +1,9 @@
 ﻿using JMMinistry.API.Extensions;
+using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Cells.Commands.AddDisciples;
 using JMMinistry.Application.Features.Cells.Commands.CreateCell;
 using JMMinistry.Application.Features.Cells.Commands.RemoveDisciple;
+using JMMinistry.Application.Features.Cells.Commands.RecordAttendance;
 using JMMinistry.Application.Features.Cells.Queries.GetCell;
 using JMMinistry.Application.Features.Cells.Queries.GetCells;
 using JMMinistry.Application.Features.Cells.Queries.GetDisciples;
@@ -20,7 +22,7 @@ namespace JMMinistry.API.Controllers
         [HttpPost]
         public async Task<ActionResult<CellDto>> CreateCell(CreateCellCommand createCellCommand)
         {
-            createCellCommand.Document = HttpContext.GetDocumentClaim() ?? throw new ArgumentException("Missing document in token");
+            createCellCommand.Document = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
             var cell = await mediator.Send(createCellCommand);
             return Created(string.Empty, cell);
         }
@@ -28,7 +30,7 @@ namespace JMMinistry.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CellDto>>> GetCells()
         {
-            var document = HttpContext.GetDocumentClaim() ?? throw new ArgumentException("Missing document in token");
+            var document = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
 
             var cells = await mediator.Send(new GetCellsQuery { Document = document });
             return Ok(cells);
@@ -37,18 +39,34 @@ namespace JMMinistry.API.Controllers
         [HttpGet("{cellId}")]
         public async Task<ActionResult<CellDto>> GetCell(int cellId)
         {
-            var document = HttpContext.GetDocumentClaim() ?? throw new ArgumentException("Missing document in token");
+            var document = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
 
             var cells = await mediator.Send(new GetCellQuery { RequestorId = document, CellId = cellId });
             return Ok(cells);
         }
 
 
+        [HttpPost("{cellId}")]
+        public async Task<ActionResult> RecordCellAttendance(int cellId, IList<string> attendees)
+        {
+            var document = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
+
+            var command = new RecordAttendanceCommand
+            {
+                CellId = cellId,
+                RequestorId = document,
+                Attendees = attendees
+            };
+
+            await mediator.Send(command);
+            return Created();
+        }
+
 
         [HttpGet("disciples/{cellId}")]
         public async Task<ActionResult<List<PartialUserInfoDto>>> GetDisciples(int cellId)
         {
-            var document = HttpContext.GetDocumentClaim() ?? throw new ArgumentException("Missing document in token");
+            var document = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
 
             var query = new GetDisciplesQuery 
             { 

@@ -31,6 +31,11 @@ namespace JMMinistry.API.Controllers
             return Ok(schools);
         }
 
+
+        [HttpGet("attendance")]
+
+
+
         [HttpPost]
         public async Task<ActionResult<Response<SchoolDto>>> CreateSchool(SchoolDto schoolDto)
         {

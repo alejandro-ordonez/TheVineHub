@@ -5,7 +5,7 @@
 
 <MudPaper Style="margin: 1rem 0px">
     <MudToolBar>
-        <MudText Typo="Typo.subtitle1">@translator["Cells", CellsState?.Value?.Cells?.Count ?? 0]</MudText>
+        <MudText Typo="Typo.subtitle1">@translator["Total", CellsState?.Value?.Cells?.Count ?? 0]</MudText>
         <MudSpacer />
         <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Tertiary" OnClick="OpenAddCell" />
     </MudToolBar>

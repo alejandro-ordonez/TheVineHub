@@ -124,6 +124,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attendances.
+        /// </summary>
+        public static string Attendances {
+            get {
+                return ResourceManager.GetString("Attendances", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Authentication failed, verify your credentials.
         /// </summary>
         public static string AuthenticationFailed {
@@ -169,7 +178,7 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cells {0}.
+        ///   Looks up a localized string similar to Cells.
         /// </summary>
         public static string Cells {
             get {
@@ -232,7 +241,7 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disciples {0}.
+        ///   Looks up a localized string similar to Disciples.
         /// </summary>
         public static string Disciples {
             get {
@@ -633,6 +642,15 @@ namespace JMMinistry.Common.Resources {
         public static string Timothy {
             get {
                 return ResourceManager.GetString("Timothy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total: {0}.
+        /// </summary>
+        public static string Total {
+            get {
+                return ResourceManager.GetString("Total", resourceCulture);
             }
         }
         

@@ -2,7 +2,5 @@
 {
     public partial class CellAttendances
     {
-
-        []
     }
 }

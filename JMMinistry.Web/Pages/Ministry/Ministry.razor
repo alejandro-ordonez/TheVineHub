@@ -9,18 +9,17 @@
 @layout MainLayout
 
 
+@inject IStringLocalizer<UIStrings> translator;
+
 <MudTabs Outlined="true">
-    <MudTabPanel Text="Cells" Icon="@Icons.Material.Filled.Api" >
+    <MudTabPanel Text="@translator["Cells"]" Icon="@Icons.Material.Filled.Group" >
         <Cells />
     </MudTabPanel>
 
 
-    <MudTabPanel Text="Asistencias" Icon="@Icons.Material.Filled.Build">
+    <MudTabPanel Text="@translator["Attendances"]" Icon="@Icons.Material.Filled.Build">
 
 
     </MudTabPanel>
-    
-    
-    <MudTabPanel Text="Bug Report" Icon="@Icons.Material.Filled.BugReport" />
-
+   
 </MudTabs>
