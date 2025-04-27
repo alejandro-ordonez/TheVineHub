@@ -2,7 +2,7 @@
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Domain;
-using Microsoft.AspNetCore.Builder;
+using JMMinistry.Domain.Location;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,12 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.Web.CodeGeneration.Design;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JMMinistry.Infrastructure.Persistence
 {
@@ -27,7 +21,7 @@ namespace JMMinistry.Infrastructure.Persistence
             services.AddDbContext<JmDbContext>(options =>
                 options.UseInMemoryDatabase($"{nameof(JMMinistry)}Db")
             );
-            
+
 #else
             services.AddDbContext<JmDbContext>(options =>
                 options.UseNpgsql(
@@ -48,7 +42,7 @@ namespace JMMinistry.Infrastructure.Persistence
             services.AddScoped<IJmDbContext, JmDbContext>();
         }
 
-        public static async void InitializeDb(this IHost app)
+        public static async Task InitializeDb(this IHost app)
         {
             using var scope = app.Services.CreateScope();
 
@@ -64,11 +58,13 @@ namespace JMMinistry.Infrastructure.Persistence
                 using var dbContext = services.GetRequiredService<JmDbContext>();
 
                 if (dbContext.Database.IsRelational())
-                    dbContext.Database.Migrate();
+                    await dbContext.Database.MigrateAsync();
 
                 logger.LogInformation("DB migrated to latest state");
 
-            
+                // Seed Cities and Localities
+                await FeedCities(dbContext);
+
                 //Seed Default Users
                 logger.LogInformation("Seeding initial values...");
                 var userManager = services.GetRequiredService<UserManager<PersonalInfo>>();
@@ -91,7 +87,7 @@ namespace JMMinistry.Infrastructure.Persistence
                     ];
 
                 // No need to populate already inserted.
-                if (!roleManager.Roles.Any())
+                if (!await roleManager.Roles.AnyAsync())
                 {
                     foreach (var ministry in ministries)
                         await roleManager.CreateAsync(ministry);
@@ -99,7 +95,7 @@ namespace JMMinistry.Infrastructure.Persistence
 
                 var defaultUser = services.GetRequiredService<IOptions<DefaultUser>>().Value;
 
-                if (defaultUser != null &&  !await userManager.Users.AnyAsync(user => user.Id == defaultUser.Document))
+                if (defaultUser != null && !await userManager.Users.AnyAsync(user => user.Id == defaultUser.Document))
                 {
                     var userIdentity = new PersonalInfo
                     {
@@ -114,7 +110,7 @@ namespace JMMinistry.Infrastructure.Persistence
 
                     if (!createUserResult.Succeeded)
                     {
-                        logger.LogError("There was an error creating the default user, errors {errors}", string.Join("\n", createUserResult.Errors.Select(error => $"{error.Code} : {error.Description}")));
+                        logger.LogError("There was an error creating the default user, errors {Errors}", string.Join("\n", createUserResult.Errors.Select(error => $"{error.Code} : {error.Description}")));
                         return;
                     }
 
@@ -122,7 +118,7 @@ namespace JMMinistry.Infrastructure.Persistence
 
                     if (!addRolesResult.Succeeded)
                     {
-                        logger.LogError("There was an error creating the default user, errors {errors}", string.Join("\n", addRolesResult.Errors.Select(error => $"{error.Code} : {error.Description}")));
+                        logger.LogError("There was an error creating the default user, errors {Errors}", string.Join("\n", addRolesResult.Errors.Select(error => $"{error.Code} : {error.Description}")));
                         return;
                     }
                 }
@@ -132,6 +128,53 @@ namespace JMMinistry.Infrastructure.Persistence
                 logger.LogError(ex, "An error occurred seeding the DB.");
             }
 
+        }
+
+        private static async Task FeedCities(JmDbContext dbContext)
+        {
+            if (await dbContext.Cities.AnyAsync())
+                return;
+
+            List<string> localities = [
+                "Usaquén",
+                "Chapinero",
+                "Santa Fe",
+                "San Cristóbal",
+                "Usme",
+                "Tunjuelito",
+                "Bosa",
+                "Kennedy",
+                "Fontibón",
+                "Engativá",
+                "Suba",
+                "Barrios Unidos",
+                "Teusaquillo",
+                "Los Mártires",
+                "Antonio Nariño",
+                "Puente Aranda",
+                "La Candelaria",
+                "Rafael Uribe Uribe",
+                "Ciudad Bolívar",
+                "Sumapaz"
+            ];
+
+            var cities = new List<City>
+                {
+                    new()
+                    {
+                        Name = "Bogotá",
+                        Localities = localities.Select(locality => new Locality {Name = locality}).ToList()
+                    },
+
+                    new()
+                    {
+                        Name = "Soacha",
+                        Localities = []
+                    }
+                };
+
+            dbContext.Cities.AddRange(cities);
+            await dbContext.SaveChangesAsync();
         }
     }
 }

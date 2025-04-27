@@ -2,16 +2,16 @@
 using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Cells.Commands.AddDisciples;
 using JMMinistry.Application.Features.Cells.Commands.CreateCell;
-using JMMinistry.Application.Features.Cells.Commands.RemoveDisciple;
 using JMMinistry.Application.Features.Cells.Commands.RecordAttendance;
+using JMMinistry.Application.Features.Cells.Commands.RemoveDisciple;
 using JMMinistry.Application.Features.Cells.Queries.GetCell;
 using JMMinistry.Application.Features.Cells.Queries.GetCells;
 using JMMinistry.Application.Features.Cells.Queries.GetDisciples;
 using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.User;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace JMMinistry.API.Controllers
 {
@@ -22,7 +22,7 @@ namespace JMMinistry.API.Controllers
     {
 
         [HttpPost]
-        public async Task<ActionResult<CellDto>> CreateCell(CreateCellCommand createCellCommand)
+        public async Task<ActionResult<CellDto>> CreateCell(UpsertCellCommand createCellCommand)
         {
             createCellCommand.Document = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
             var cell = await mediator.Send(createCellCommand);
@@ -64,15 +64,23 @@ namespace JMMinistry.API.Controllers
             return Created();
         }
 
+        [HttpPut]
+        public async Task<ActionResult> UpdateCell(UpsertCellCommand upsertCellCommand)
+        {
+            upsertCellCommand.Document = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
+            var cell = await mediator.Send(upsertCellCommand);
+            return Ok(cell);
+        }
+
 
         [HttpGet("disciples/{cellId}")]
         public async Task<ActionResult<List<PartialUserInfoDto>>> GetDisciples(int cellId)
         {
             var document = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
 
-            var query = new GetDisciplesQuery 
-            { 
-                CellId = cellId, 
+            var query = new GetDisciplesQuery
+            {
+                CellId = cellId,
                 RequestorId = document
             };
 
@@ -89,7 +97,7 @@ namespace JMMinistry.API.Controllers
 
             var cell = await mediator.Send(addDisciples);
             return Ok(cell);
-        }      
+        }
 
         [HttpDelete("disciples/{cellId}/{discipleId}")]
         public async Task<ActionResult<List<PartialUserInfoDto>>> RemoveDisciple(int cellId, string discipleId)

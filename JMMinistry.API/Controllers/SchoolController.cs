@@ -5,9 +5,7 @@ using JMMinistry.Common;
 using JMMinistry.Common.Dtos.School;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace JMMinistry.API.Controllers
 {

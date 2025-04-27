@@ -1,13 +1,11 @@
-﻿
-using Blazored.LocalStorage;
-using JMMinistry.Common;
+﻿using JMMinistry.Common;
 using JMMinistry.Common.Dtos.School;
 using JMMinistry.Web.Shared;
 using System.Net.Http.Json;
 
 namespace JMMinistry.Web.Api
 {
-    public class SchoolApi(IHttpClientFactory clientFactory): ISchoolApi
+    public class SchoolApi(IHttpClientFactory clientFactory) : ISchoolApi
     {
         private const string _schoolApi = "api/School";
 
@@ -16,7 +14,7 @@ namespace JMMinistry.Web.Api
             var httpClient = clientFactory.CreateClient(Constants.ApiClient);
             var response = await httpClient.PostAsJsonAsync(_schoolApi, schoolDto, cancellationToken);
 
-            if(response == null || !response.IsSuccessStatusCode)
+            if (response == null || !response.IsSuccessStatusCode)
                 return null;
 
             var dto = await response.Content.ReadFromJsonAsync<Response<SchoolDto>?>();

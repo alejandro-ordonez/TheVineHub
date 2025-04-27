@@ -333,4 +333,34 @@
   <data name="Attendances" xml:space="preserve">
     <value>Asistencias</value>
   </data>
+  <data name="EditEntity" xml:space="preserve">
+    <value>Editar {0}</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="FailedTo" xml:space="preserve">
+    <value>Error al intentar {0}</value>
+  </data>
+  <data name="FetchCellAction" xml:space="preserve">
+    <value>obtener los datos de la célula</value>
+  </data>
+  <data name="UpdateCellAction" xml:space="preserve">
+    <value>actualizar la célula</value>
+  </data>
+  <data name="AddDisciplesAction" xml:space="preserve">
+    <value>agregar discípulos a la célula</value>
+  </data>
+  <data name="FetchDisciplesAction" xml:space="preserve">
+    <value>obtener los discípulos de la célula</value>
+  </data>
+  <data name="RemoveDiscipleAction" xml:space="preserve">
+    <value>remover discípulo de la célula</value>
+  </data>
+  <data name="CreateCellAction" xml:space="preserve">
+    <value>crear la célula</value>
+  </data>
+  <data name="FetchCellsAction" xml:space="preserve">
+    <value>obtener las células de tu ministerio</value>
+  </data>
 </root>

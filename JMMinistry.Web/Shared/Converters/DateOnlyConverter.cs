@@ -2,7 +2,7 @@
 
 namespace JMMinistry.Web.Shared.Converters
 {
-    public class DateOnlyConverter: Converter<DateOnly>
+    public class DateOnlyConverter : Converter<DateOnly>
     {
         public DateOnlyConverter()
         {

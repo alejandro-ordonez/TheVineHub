@@ -1,10 +1,6 @@
 ﻿using JMMinistry.Domain;
+using JMMinistry.Domain.Location;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Services
 {
@@ -40,6 +36,8 @@ namespace JMMinistry.Application.Services
         DbSet<PersonalInfo> PersonalInfo { get; set; }
 
         DbSet<School> Schools { get; set; }
+
+        DbSet<City> Cities { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

@@ -7,6 +7,8 @@ namespace JMMinistry.Web.Store.CellUseCase.Actions
         public required int CellId { get; set; }
     }
 
+    public record ResetCellAction();
+
     public record FetchCellResultAction
     {
         public required CellDto? Cell { get; set; }

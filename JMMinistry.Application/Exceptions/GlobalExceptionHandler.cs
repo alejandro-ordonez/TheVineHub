@@ -9,7 +9,7 @@ namespace JMMinistry.Application.Exceptions
     public class GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger) : IExceptionHandler
     {
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
-    {
+        {
             var response = new Response<object>
             {
                 Details = $"Request: {httpContext.Request.Path}"

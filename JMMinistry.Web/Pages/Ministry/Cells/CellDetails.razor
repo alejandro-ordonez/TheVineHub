@@ -23,10 +23,20 @@
 else
 {
     <MudPaper Style="margin: 1rem 0px; padding: 1rem;">
-        <MudText Typo="Typo.h5">@State.Value.Cell?.Name</MudText>
+        <div class="d-flex flex-row">
+            <MudText Typo="Typo.h5">@State.Value.Cell?.Name</MudText>
+            <MudSpacer />
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Tertiary" OnClick="EditCellDetails"/>
+        </div>
         <MudDivider Style="margin: 0.5rem 0"/>
+
         <MudText Typo="Typo.subtitle1">@State.Value.Cell?.Description</MudText>
-        <MudText Typo="Typo.subtitle1">@State.Value.Cell?.Address</MudText>
+        <div class="dynamic-grid">
+            <MudText Typo="Typo.subtitle1">@translator[State.Value.Cell?.City?.Name ?? "Unknown"]</MudText>
+            <MudText Typo="Typo.subtitle1">@translator[State.Value.Cell?.Locality?.Name ?? "Unknown"]</MudText>
+            <MudText Typo="Typo.subtitle1">@State.Value.Cell?.Address</MudText>
+            <MudText Typo="Typo.subtitle1">@translator[State.Value.Cell?.Day?.ToString() ?? "Unknown"]</MudText>
+        </div>
     </MudPaper>
 
 

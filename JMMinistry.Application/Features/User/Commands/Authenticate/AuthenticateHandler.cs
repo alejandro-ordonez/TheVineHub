@@ -20,7 +20,7 @@ namespace JMMinistry.Application.Features.User.Commands.Authenticate
     {
         public async Task<TokenResult> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
         {
-            var user = await userManager.FindByIdAsync(request.Document) ?? 
+            var user = await userManager.FindByIdAsync(request.Document) ??
                 throw new AuthenticationException("User not found");
 
             if (!await userManager.HasPasswordAsync(user))
@@ -32,7 +32,7 @@ namespace JMMinistry.Application.Features.User.Commands.Authenticate
             user.LastAccess = DateTime.UtcNow;
             await userManager.UpdateAsync(user);
 
-            var expiration = DateTime.UtcNow.AddSeconds(jwtSettings.Value.DurationInMinutes);
+            var expiration = DateTime.UtcNow.AddMinutes(jwtSettings.Value.DurationInMinutes);
             var token = await CreateJwtToken(user, expiration);
 
 

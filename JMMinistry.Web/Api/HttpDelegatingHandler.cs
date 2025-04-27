@@ -8,15 +8,14 @@ using JMMinistry.Web.Shared;
 using JMMinistry.Web.Store;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
-using MudBlazor;
 using System.Net;
 using System.Net.Http.Headers;
 
 namespace JMMinistry.Web.Api
 {
-    public class HttpDelegatingHandler(NavigationManager navigationManager, 
-        IAuthService authenticationService, 
-        IDispatcher dispatcher, 
+    public class HttpDelegatingHandler(NavigationManager navigationManager,
+        IAuthService authenticationService,
+        IDispatcher dispatcher,
         IStringLocalizer<UIStrings> localizer,
         ILocalStorageService localStorage) : DelegatingHandler
     {
@@ -30,7 +29,7 @@ namespace JMMinistry.Web.Api
 
             var response = await base.SendAsync(request, cancellationToken);
 
-            if(response.StatusCode == HttpStatusCode.Unauthorized)
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 // Removes the token so next request will redirect to login
                 dispatcher.Dispatch(new FailedAction<HttpDelegatingHandler> { ErrorKey = localizer["SessionExpired"] });
@@ -38,7 +37,7 @@ namespace JMMinistry.Web.Api
                 navigationManager.NavigateTo("/auth");
             }
 
-            if(response.StatusCode == HttpStatusCode.InternalServerError)
+            if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
                 dispatcher.Dispatch(new FailedAction<HttpDelegatingHandler> { ErrorKey = localizer["ServerError"] });
             }

@@ -1,19 +1,19 @@
 ﻿using Fluxor;
 using JMMinistry.Common.Dtos.Cell;
 
-namespace JMMinistry.Web.Store.CellsUseCase
+namespace JMMinistry.Web.Store.MinistryUseCase
 {
     [FeatureState]
-    public record CellsState: BaseState
+    public record MinistryState : BaseState
     {
         public IList<CellDto> Cells { get; set; }
 
-        public CellsState() 
+        public MinistryState()
         {
             Cells = [];
         }
 
-        public CellsState(bool isLoading, IList<CellDto> cells)
+        public MinistryState(bool isLoading, IList<CellDto> cells)
         {
             IsLoading = isLoading;
             Cells = cells;

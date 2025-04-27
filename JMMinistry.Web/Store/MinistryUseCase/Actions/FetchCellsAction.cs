@@ -1,6 +1,6 @@
 ﻿using JMMinistry.Common.Dtos.Cell;
 
-namespace JMMinistry.Web.Store.CellsUseCase.Actions
+namespace JMMinistry.Web.Store.MinistryUseCase.Actions
 {
     public partial record FetchCellsAction
     {

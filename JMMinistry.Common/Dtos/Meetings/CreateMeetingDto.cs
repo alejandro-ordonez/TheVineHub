@@ -1,9 +1,4 @@
 ﻿using JMMinistry.Common.Dtos.Meetings.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JMMinistry.Common.Dtos.Meetings
 {

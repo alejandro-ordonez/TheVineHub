@@ -2,22 +2,18 @@
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Common.Resources;
 using JMMinistry.Web.Api;
-using JMMinistry.Web.Extensions;
-using JMMinistry.Web.Shared;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.JsonWebTokens;
 using MudBlazor;
-using System.Globalization;
 using System.Security.Claims;
-using System.Text.Json;
 using static JMMinistry.Web.Shared.Constants;
 
 namespace JMMinistry.Web.Services
 {
     public class AuthenticationProvider(
-        ILocalStorageService localStorage, 
-        ISnackbar snackbar, 
+        ILocalStorageService localStorage,
+        ISnackbar snackbar,
         IStringLocalizer<UIStrings> translator
         ) : AuthenticationStateProvider, IAuthStateProvider
     {
@@ -36,8 +32,8 @@ namespace JMMinistry.Web.Services
                 claimsIdentity = new ClaimsIdentity(claims, "jwt");
             }
 
-                
-            var authState =  new AuthenticationState(new ClaimsPrincipal(claimsIdentity));
+
+            var authState = new AuthenticationState(new ClaimsPrincipal(claimsIdentity));
             return authState;
         }
 
@@ -63,7 +59,7 @@ namespace JMMinistry.Web.Services
             var token = savedToken.Token.ParseClaimsFromJwt();
             var expirationClaim = token.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Exp);
 
-            if(expirationClaim is null)
+            if (expirationClaim is null)
             {
                 await RemoveToken();
                 return null;

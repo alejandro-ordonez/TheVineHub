@@ -1,19 +1,10 @@
 ﻿using JMMinistry.Application.Extensions;
-using JMMinistry.Application.Services;
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Domain;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace JMMinistry.Application.Features.User.Commands.ImportUsers
 {
@@ -52,7 +43,7 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
                 faulty |= fields.ExtractAndValidate(CsvOrdinals.Name, out string name, wrongFields);
                 faulty |= fields.ExtractAndValidate(CsvOrdinals.LastName, out string lastName, wrongFields);
                 faulty |= fields.ExtractAndValidate(CsvOrdinals.Document, out string document, wrongFields);
-                
+
                 if (faulty)
                 {
                     rejectedLines.Add(GetLineError(lineNumber + 1, wrongFields));
@@ -95,7 +86,7 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
                 var password = $"User.{person.Id}";
                 var result = await userManager.CreateAsync(person, password);
                 result.ThrowOnError();
-               
+
                 result = await userManager.AddToRoleAsync(person, Roles.Regular.ToString());
                 result.ThrowOnError();
 

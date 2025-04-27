@@ -51,9 +51,9 @@ namespace JMMinistry.API.Controllers
             if (string.IsNullOrEmpty(requestorId))
                 throw new ArgumentException("Your token must be included");
 
-            var userInfo = await mediator.Send(new GetUserInfoQuery 
-            { 
-                Document =  document ?? requestorId,
+            var userInfo = await mediator.Send(new GetUserInfoQuery
+            {
+                Document = document ?? requestorId,
                 RequestorDocument = requestorId
             });
 

@@ -1,13 +1,8 @@
 ﻿using JMMinistry.Common.Dtos.User.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JMMinistry.Common.Dtos.User
 {
-    public class UserInfoDto: PartialUserInfoDto
+    public class UserInfoDto : PartialUserInfoDto
     {
         public string City { get; set; } = null!;
 

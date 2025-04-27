@@ -9,12 +9,12 @@ namespace JMMinistry.Web.Store
     {
         public override void BeforeDispatch(object action)
         {
-            if(action.GetType().IsGenericType && action.GetType().GetGenericTypeDefinition() == typeof(FailedAction<>))
+            if (action.GetType().IsGenericType && action.GetType().GetGenericTypeDefinition() == typeof(FailedAction<>))
             {
                 var errorKeyProperty = action.GetType().GetProperty(nameof(FailedAction<object>.ErrorKey));
                 var errorKey = errorKeyProperty?.GetValue(action);
 
-                snackbar.Add(translator[errorKey?.ToString() ?? "Unknown"], Severity.Error);
+                snackbar.Add(translator["Failed to ", translator[errorKey?.ToString() ?? "Unknown"]], Severity.Error);
             }
         }
     }

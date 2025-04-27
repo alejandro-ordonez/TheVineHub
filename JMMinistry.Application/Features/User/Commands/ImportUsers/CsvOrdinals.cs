@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace JMMinistry.Application.Features.User.Commands.ImportUsers
+﻿namespace JMMinistry.Application.Features.User.Commands.ImportUsers
 {
     public enum CsvOrdinals
     {
@@ -12,7 +6,7 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
         LastName = 3,
         Document = 4,
         Phone = 5,
-        Birthday= 6,
+        Birthday = 6,
         Neighborhood = 7,
         Locality = 8,
         Email = 9,

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace JMMinistry.Application.Exceptions
+﻿namespace JMMinistry.Application.Exceptions
 {
-    public class NotAuthorizedException: Exception
+    public class NotAuthorizedException : Exception
     {
     }
 }

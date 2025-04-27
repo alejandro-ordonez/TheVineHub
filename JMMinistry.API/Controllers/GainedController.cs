@@ -3,7 +3,6 @@ using JMMinistry.Application.Features.Gain.Commands.RegisterGained;
 using JMMinistry.Application.Features.Gain.Queries.GetGained;
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.Gained;
-using JMMinistry.Common.Dtos.User;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +12,7 @@ namespace JMMinistry.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class GainedController (IMediator mediator) : ControllerBase
+    public class GainedController(IMediator mediator) : ControllerBase
     {
         [HttpGet]
         public async Task<ActionResult<Response<IList<GainedUser>>>> GetGainedUsers()

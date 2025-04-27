@@ -25,7 +25,7 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetCellAttendances
                 .OrderBy(cellAttendance => cellAttendance.Date)
                 .Take(40)
                 .ToListAsync(cancellationToken);
-            
+
             return mapper.Map<IList<CellAttendanceDto>>(attendances);
         }
     }

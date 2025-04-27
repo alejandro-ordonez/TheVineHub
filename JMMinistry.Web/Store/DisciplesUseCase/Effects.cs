@@ -12,7 +12,7 @@ namespace JMMinistry.Web.Store.DisciplesUseCase
         {
             var result = await ministryApi.GetDisciples(action.CellId);
 
-            if(result is null || !result.Success || result.Data is null)
+            if (result is null || !result.Success || result.Data is null)
                 dispatcher.Dispatch(new FailedAction<FetchDisciplesAction>());
 
             dispatcher.Dispatch(new FetchDisciplesResultAction { Disciples = result?.Data ?? [] });

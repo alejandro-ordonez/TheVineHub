@@ -28,7 +28,6 @@ else
     <div class="dynamic-grid">
         @foreach(var classDto in School?.Classes ?? [])
         {
-            <CardComponent BasePath="/class" CardModel="classDto" ModelType="int"/>
         }
     </div>
 }

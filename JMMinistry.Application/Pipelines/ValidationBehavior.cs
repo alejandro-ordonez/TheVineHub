@@ -1,20 +1,12 @@
 ﻿using FluentValidation;
-using JMMinistry.Common;
 using MediatR;
-using MediatR.Pipeline;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Pipelines
 {
     public class ValidationBehavior<TRequest, TResponse>(
         IEnumerable<IValidator<TRequest>> validators,
-        ILogger<ValidationBehavior<TRequest, TResponse>> logger) 
+        ILogger<ValidationBehavior<TRequest, TResponse>> logger)
         : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
     {
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)

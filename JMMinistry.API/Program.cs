@@ -1,10 +1,7 @@
 using JMMinistry.API.Extensions;
 using JMMinistry.API.Middleware;
 using JMMinistry.Application;
-using JMMinistry.Application.Exceptions;
 using JMMinistry.Infrastructure.Persistence;
-using LettuceEncrypt;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,12 +37,12 @@ app.UseExceptionHandler();
 
 app.MapDefaultEndpoints();
 
-app.InitializeDb();
+await app.InitializeDb();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    
+
 }
 
 app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuilder =>

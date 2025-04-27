@@ -4,11 +4,6 @@ using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.School;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Features.Schools.Queries.GetSchoolById
 {
@@ -21,7 +16,7 @@ namespace JMMinistry.Application.Features.Schools.Queries.GetSchoolById
                 .FirstOrDefaultAsync(school => school.Id == request.SchoolId, cancellationToken) ?? throw new NotFoundException(request.SchoolId.ToString());
 
             var schoolDto = mapper.Map<SchoolWithClassesDto>(school);
-            
+
             return schoolDto;
         }
     }

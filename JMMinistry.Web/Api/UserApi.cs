@@ -8,7 +8,7 @@ using System.Net.Http.Json;
 
 namespace JMMinistry.Web.Api
 {
-    public class UserApi(IHttpClientFactory clientFactory, ILogger<UserApi> logger): IUserApi
+    public class UserApi(IHttpClientFactory clientFactory, ILogger<UserApi> logger) : IUserApi
     {
         private const string _userApi = "api/User";
         private readonly ILogger<UserApi> logger = logger;
@@ -39,7 +39,7 @@ namespace JMMinistry.Web.Api
             {
                 logger.LogError("Failed to authenticate, reason: \n {Errors}", string.Join("\n", response?.Errors ?? []));
             }
-            
+
             return response;
         }
 

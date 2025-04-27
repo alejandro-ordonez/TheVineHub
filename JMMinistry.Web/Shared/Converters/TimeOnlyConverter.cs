@@ -2,7 +2,7 @@
 
 namespace JMMinistry.Web.Shared.Converters
 {
-    public class TimeOnlyConverter: Converter<TimeOnly>
+    public class TimeOnlyConverter : Converter<TimeOnly>
     {
         public TimeOnlyConverter()
         {

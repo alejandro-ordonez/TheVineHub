@@ -1,15 +1,19 @@
-﻿@using JMMinistry.Common.Dtos.Cell
+﻿@using Fluxor
+@using JMMinistry.Common.Dtos.Cell
+@using JMMinistry.Common.Dtos.Common
+@using JMMinistry.Web.Api
+@using JMMinistry.Web.Store.CellUseCase
 
 @inject IStringLocalizer<UIStrings> translator;
+@inject ILocationApi locationApi;
+
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent;
 
 <Dialog Result="CreateCellDto"
         Color="Color.Primary"
-        PrimaryText="@translator["Add"]">
+        PrimaryText="@PrimaryButtonText"
+        IsFormValid="cellForm?.IsValid">
     <Content>
-
-        <MudText Typo="Typo.h6">@translator["RegisterCell"]</MudText>
-        <MudDivider />
-
         <MudForm Model="CreateCellDto" @ref="cellForm">
 
             <MudTextField @bind-Value="CreateCellDto.Name"
@@ -31,6 +35,22 @@
                           Label="@translator["Description"]"
                           InputType="InputType.Text" />
 
+            <MudAutocomplete T="CityDto" Label="@translator["City"]" @bind-Value="CreateCellDto.City"
+                             SearchFunc="@((searchTerm, token) => locationApi.GetCities(searchTerm))" 
+                             ToStringFunc="@(e=> e==null?null : e.Name)"
+                             Required="true"
+                             Variant="Variant.Outlined"
+                             ShowProgressIndicator="true" />
+
+            @if(CreateCellDto.City is not null && CreateCellDto.City.Localities.Count > 0)
+            {
+                <MudAutocomplete T="LocalityDto" Label="@translator["Locality"]" @bind-Value="CreateCellDto.Locality"
+                                 SearchFunc="@((searchTerm, token) => Task.FromResult(CreateCellDto.City?.GetLocalities(searchTerm)))"
+                                 ToStringFunc="@(e=> e==null?null : e.Name)"
+                                 Variant="Variant.Outlined"
+                                 ShowProgressIndicator="true" />
+            }
+
 
             <MudTextField @bind-Value="CreateCellDto.Address"
                           For="@(() => CreateCellDto.Address)"
@@ -42,13 +62,52 @@
                           Label="@translator["Address"]"
                           InputType="InputType.Text" />
 
+            <MudSelect @bind-Value="CreateCellDto.Day"
+                       For="@(() => CreateCellDto.Day)"
+                       Label="@translator["Day"]"
+                       Placeholder="@translator["SelectDay"]"
+                       Required="true"
+                       RequiredError="@translator["FieldRequired"]"
+                       Variant="Variant.Outlined">
+
+                @foreach (var day in Enum.GetValues<DayOfWeek>())
+                {
+                    <MudSelectItem T="DayOfWeek?" Value="day">@translator[day.ToString()]</MudSelectItem>
+                }
+            </MudSelect>
+
         </MudForm>
     </Content>
 </Dialog>
 
 @code {
     [SupplyParameterFromForm]
-    CreateCellDto CreateCellDto { get; set; } = new CreateCellDto();
+    CellDto CreateCellDto { get; set; } = new CellDto();
+
+    [Parameter]
+    public string? PrimaryButtonText { get; set; }
 
     MudForm? cellForm;
+
+    [Inject]
+    IState<CellState>? CurrentCell { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        if(CurrentCell?.Value?.Cell is not null)
+        {
+            CreateCellDto = new CellDto
+            {
+                Id = CurrentCell.Value.Cell.Id,
+                Name = CurrentCell.Value.Cell.Name,
+                Description = CurrentCell.Value.Cell.Description,
+                Address = CurrentCell.Value.Cell.Address,
+                City = CurrentCell.Value.Cell.City,
+                Locality = CurrentCell.Value.Cell.Locality,
+                Day = CurrentCell.Value.Cell.Day,
+            };
+        }
+    }
 }

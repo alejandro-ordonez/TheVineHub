@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace JMMinistry.Infrastructure.Persistence
+﻿namespace JMMinistry.Infrastructure.Persistence
 {
     internal class DbDefaultSeed
     {

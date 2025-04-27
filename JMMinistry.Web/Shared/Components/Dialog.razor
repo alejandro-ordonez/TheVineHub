@@ -16,7 +16,7 @@
 
         @if (PrimaryButton)
         {
-            <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@_translator[PrimaryText ?? ""]</MudButton>
+            <MudButton Color="@Color" Disabled="@(!IsFormValid ?? false)" Variant="Variant.Filled" OnClick="Submit">@_translator[PrimaryText ?? ""]</MudButton>
         }
     </DialogActions>
 </MudDialog>
@@ -67,6 +67,9 @@
 
     [Parameter]
     public required ResultType Result { get; set; }
+
+    [Parameter]
+    public bool? IsFormValid { get; set; } = true;
 
     private void Submit() => MudDialog?.Close(new DialogResult<ResultType>
     {

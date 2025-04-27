@@ -6,7 +6,7 @@ using static JMMinistry.Web.Shared.Constants;
 namespace JMMinistry.Web.Extensions
 {
     public static class CultureExtensions
-    { 
+    {
         public async static Task SetDefaultUICulture(this WebAssemblyHost host)
         {
             // 1. Read the ILocalStorageService to read the LocalStorage

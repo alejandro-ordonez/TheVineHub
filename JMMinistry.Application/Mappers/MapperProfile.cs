@@ -1,21 +1,17 @@
 ﻿using AutoMapper;
-using JMMinistry.Application.Extensions;
 using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.Class;
+using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.Gained;
 using JMMinistry.Common.Dtos.Meetings;
 using JMMinistry.Common.Dtos.School;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using JMMinistry.Domain.Location;
 
 namespace JMMinistry.Application.Mappers
 {
-    public class MapperProfile: Profile
+    public class MapperProfile : Profile
     {
         public MapperProfile()
         {
@@ -36,7 +32,7 @@ namespace JMMinistry.Application.Mappers
             CreateMap<Class, ClassDto>();
 
             CreateMap<Cell, CellDto>();
-            CreateMap<CreateCellDto, Cell>();
+            CreateMap<CellDto, Cell>();
 
             CreateMap<CreateGainedUser, PersonalInfo>()
                 .ForMember(model => model.Id, cfg => cfg.MapFrom(x => x.Document));
@@ -51,6 +47,11 @@ namespace JMMinistry.Application.Mappers
             CreateMap<Meeting, MeetingDto>();
 
             CreateMap<CellAttendance, CellAttendanceDto>();
+
+            CreateMap<City, CityDto>();
+            CreateMap<CityDto, City>();
+            CreateMap<Locality, LocalityDto>();
+            CreateMap<LocalityDto, Locality>();
         }
     }
 }

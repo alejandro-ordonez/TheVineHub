@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Application.Features.Cells.Queries.GetDisciples
 {
-    public class GetDisciplesHandler 
+    public class GetDisciplesHandler
         (
             IJmDbContext dbContext,
             IMapper mapper,
@@ -20,8 +20,8 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetDisciples
         {
             var cell = await dbContext.Cells
                 .Include(cell => cell.Disciples)
-                .FirstOrDefaultAsync(cell =>  cell.Id == request.CellId, cancellationToken) ?? 
-                    throw new NotFoundException("The requested cell does not exists");            
+                .FirstOrDefaultAsync(cell => cell.Id == request.CellId, cancellationToken) ??
+                    throw new NotFoundException("The requested cell does not exists");
 
             if (cell.Disciples.Any(disciple => disciple.Id == request.RequestorId))
                 return mapper.Map<IEnumerable<PartialUserInfoDto>>(cell.Disciples);

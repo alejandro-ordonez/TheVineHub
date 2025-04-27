@@ -59,7 +59,6 @@
 
     @foreach(var school in SchoolList)
     {
-        <CardComponent ModelType="int" CardModel="school" BasePath="/Schools" OnEdit="EditSchool"/>
     }
 
 </div>
@@ -86,7 +85,7 @@
         SchoolList = (await _api.GetSchools())?.Data ?? [];
     }
 
-    void EditSchool(CardModel<int> school)
+    void EditSchool(CardModel school)
     {
         SchoolToEdit = (SchoolDto)school;
         EditorOpen = true;

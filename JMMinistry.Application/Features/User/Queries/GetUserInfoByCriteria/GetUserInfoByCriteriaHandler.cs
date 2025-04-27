@@ -32,7 +32,7 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
                 Results = dtos,
                 Total = totalCount
             };
-            
+
         }
 
         private static IQueryable<PersonalInfo> GetQuery(IQueryable<PersonalInfo> query, GetUserInfoByCriteriaQuery request)
@@ -48,7 +48,7 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
                        .Where(user => user.GainedRecord == null || user.GainedRecord!.InvitedById == request.Requestor);
                 }
 
-                newQuery = newQuery.Where(user => request.MinistryStatus.Contains(user.MinistryStatus));                
+                newQuery = newQuery.Where(user => request.MinistryStatus.Contains(user.MinistryStatus));
             }
 
             if (!string.IsNullOrEmpty(request.Name))
@@ -66,10 +66,10 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
 
         private static Expression<Func<PersonalInfo, object?>> GetOrderMember(string? orderBy) => orderBy switch
         {
-            "Document"          => info => info.Id,
-            "Name"              => info => info.Name,
-            "MinistryStatus"    => info => info.MinistryStatus,
-            _                   => info => info.Name
+            "Document" => info => info.Id,
+            "Name" => info => info.Name,
+            "MinistryStatus" => info => info.MinistryStatus,
+            _ => info => info.Name
         };
     }
 }

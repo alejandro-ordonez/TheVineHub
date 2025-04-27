@@ -1,8 +1,6 @@
 ﻿using JMMinistry.Common.Dtos.User;
-using JMMinistry.Web.Api;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using static MudBlazor.CategoryTypes;
 
 namespace JMMinistry.Web.Pages.User
 {
@@ -42,7 +40,7 @@ namespace JMMinistry.Web.Pages.User
         {
             var users = await FetchUsers(state, _searchString);
 
-            if(users == null)
+            if (users == null)
                 return new TableData<PartialUserInfoDto>();
 
             return new TableData<PartialUserInfoDto>

@@ -1,20 +1,15 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JMMinistry.Common.Models
 {
-    public class CardModel<T> where T : IConvertible
+    public class CardModel
     {
-        public T? Id { get; set; } = default;
+        public int? Id { get; set; } = default;
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
     }
 
-    public class CardModelValidator<T> : BaseValidator<CardModel<T>> where T : IConvertible
+    public class CardModelValidator<T> : BaseValidator<CardModel> where T : IConvertible
     {
         public CardModelValidator()
         {

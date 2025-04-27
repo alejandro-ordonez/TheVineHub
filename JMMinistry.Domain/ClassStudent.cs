@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace JMMinistry.Domain;
+﻿namespace JMMinistry.Domain;
 
 public partial class ClassStudent
 {

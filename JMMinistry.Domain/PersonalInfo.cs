@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace JMMinistry.Domain;
 
 [Index(nameof(Name), nameof(LastName))]
-public partial class PersonalInfo: IdentityUser<string>
+public partial class PersonalInfo : IdentityUser<string>
 {
     public PersonalInfo()
     {
@@ -66,7 +66,7 @@ public partial class PersonalInfo: IdentityUser<string>
     public IList<ClassStudent> Classes { get; set; } = [];
     public IList<ConventionAttendee> Conventions { get; set; } = [];
     public IList<ConventionAttendee> ConventionInvites { get; set; } = [];
-    
+
 
     public virtual IList<PersonalInfoRole> UserRoles { get; set; } = [];
 
@@ -74,7 +74,7 @@ public partial class PersonalInfo: IdentityUser<string>
     /// Gained by the person
     /// </summary>
     public IList<Gained> Gained { get; set; } = [];
-    
+
 
 
 }

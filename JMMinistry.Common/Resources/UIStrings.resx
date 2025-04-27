@@ -333,4 +333,35 @@
   <data name="Attendances" xml:space="preserve">
     <value>Attendances</value>
   </data>
+  <data name="EditEntity" xml:space="preserve">
+    <value>Edit {0}</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="FailedTo" xml:space="preserve">
+    <value>Failed to {0}</value>
+  </data>
+  <data name="FetchCellAction" xml:space="preserve">
+    <value>fetch cell details</value>
+    <comment>Use with FailedTo</comment>
+  </data>
+  <data name="UpdateCellAction" xml:space="preserve">
+    <value>Update cell</value>
+  </data>
+  <data name="AddDisciplesAction" xml:space="preserve">
+    <value>add disciples to cell</value>
+  </data>
+  <data name="FetchDisciplesAction" xml:space="preserve">
+    <value>fetch disciples in cell</value>
+  </data>
+  <data name="RemoveDiscipleAction" xml:space="preserve">
+    <value>remove disciple from cell</value>
+  </data>
+  <data name="CreateCellAction" xml:space="preserve">
+    <value>create new cell</value>
+  </data>
+  <data name="FetchCellsAction" xml:space="preserve">
+    <value>fetch the cells in your ministry</value>
+  </data>
 </root>

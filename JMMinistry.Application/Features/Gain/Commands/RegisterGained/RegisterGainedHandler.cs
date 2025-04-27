@@ -7,15 +7,10 @@ using JMMinistry.Common.Dtos.User;
 using JMMinistry.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Features.Gain.Commands.RegisterGained
 {
-    public class RegisterGainedHandler (IJmDbContext dbContext, IMapper mapper) : IRequestHandler<RegisterGainedCommand, PartialUserInfoDto>
+    public class RegisterGainedHandler(IJmDbContext dbContext, IMapper mapper) : IRequestHandler<RegisterGainedCommand, PartialUserInfoDto>
     {
         public async Task<PartialUserInfoDto> Handle(RegisterGainedCommand request, CancellationToken cancellationToken)
         {

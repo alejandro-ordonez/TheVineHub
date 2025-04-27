@@ -1,5 +1,4 @@
 ﻿using JMMinistry.Common;
-using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.Meetings;
 using JMMinistry.Web.Shared;
 using System.Net.Http.Json;

@@ -88,6 +88,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to add disciples to cell.
+        /// </summary>
+        public static string AddDisciplesAction {
+            get {
+                return ResourceManager.GetString("AddDisciplesAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Address.
         /// </summary>
         public static string Address {
@@ -214,6 +223,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to create new cell.
+        /// </summary>
+        public static string CreateCellAction {
+            get {
+                return ResourceManager.GetString("CreateCellAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create new {0}.
         /// </summary>
         public static string CreateNew {
@@ -259,6 +277,24 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string Edit {
+            get {
+                return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit {0}.
+        /// </summary>
+        public static string EditEntity {
+            get {
+                return ResourceManager.GetString("EditEntity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email.
         /// </summary>
         public static string Email {
@@ -277,6 +313,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to {0}.
+        /// </summary>
+        public static string FailedTo {
+            get {
+                return ResourceManager.GetString("FailedTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to load resource.
         /// </summary>
         public static string FailedToLoadResource {
@@ -291,6 +336,33 @@ namespace JMMinistry.Common.Resources {
         public static string Female {
             get {
                 return ResourceManager.GetString("Female", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to fetch cell details.
+        /// </summary>
+        public static string FetchCellAction {
+            get {
+                return ResourceManager.GetString("FetchCellAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to fetch the cells in your ministry.
+        /// </summary>
+        public static string FetchCellsAction {
+            get {
+                return ResourceManager.GetString("FetchCellsAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to fetch disciples in cell.
+        /// </summary>
+        public static string FetchDisciplesAction {
+            get {
+                return ResourceManager.GetString("FetchDisciplesAction", resourceCulture);
             }
         }
         
@@ -556,6 +628,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to remove disciple from cell.
+        /// </summary>
+        public static string RemoveDiscipleAction {
+            get {
+                return ResourceManager.GetString("RemoveDiscipleAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to School Name.
         /// </summary>
         public static string SchoolName {
@@ -660,6 +741,15 @@ namespace JMMinistry.Common.Resources {
         public static string Unknown {
             get {
                 return ResourceManager.GetString("Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update cell.
+        /// </summary>
+        public static string UpdateCellAction {
+            get {
+                return ResourceManager.GetString("UpdateCellAction", resourceCulture);
             }
         }
         

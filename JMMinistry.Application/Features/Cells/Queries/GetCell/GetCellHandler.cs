@@ -12,6 +12,8 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetCell
         {
             var cell = await dbContext.Cells
                 .Include(cell => cell.Leaders)
+                .Include(cell => cell.City)
+                .Include(cell => cell.Locality)
                 .FirstOrDefaultAsync(cell => cell.Id == request.CellId, cancellationToken);
 
             return mapper.Map<CellDto>(cell);

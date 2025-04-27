@@ -1,14 +1,8 @@
 ﻿using FluentValidation;
-using JMMinistry.Common.Dtos.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JMMinistry.Common
 {
-    public abstract class BaseValidator<T>: AbstractValidator<T>
+    public abstract class BaseValidator<T> : AbstractValidator<T>
     {
         public Func<object, string, Task<IEnumerable<string>>> ValidateValue => async (model, propertyName) =>
         {

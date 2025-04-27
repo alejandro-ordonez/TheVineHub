@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Services;
-using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Domain;
@@ -10,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Application.Features.Cells.Commands.AddDisciples;
 
-public class AddDisciplesHandler(IJmDbContext dbContext, IMapper mapper) : 
+public class AddDisciplesHandler(IJmDbContext dbContext, IMapper mapper) :
     IRequestHandler<AddDisciplesCommand, List<PartialUserInfoDto>>
 {
     public async Task<List<PartialUserInfoDto>> Handle(AddDisciplesCommand request, CancellationToken cancellationToken)

@@ -1,10 +1,10 @@
 ﻿using JMMinistry.Common.Dtos.Cell;
 
-namespace JMMinistry.Web.Store.CellsUseCase.Actions
+namespace JMMinistry.Web.Store.MinistryUseCase.Actions
 {
-    public class CreateCellAction(CreateCellDto cell)
+    public class CreateCellAction(CellDto cell)
     {
-        public CreateCellDto CellDto { get; } = cell;
+        public CellDto CellDto { get; } = cell;
     }
 
     public class CreateCellResultAction(CellDto cell)

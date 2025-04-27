@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using JMMinistry.Application.Services;
+﻿using JMMinistry.Application.Services;
 using JMMinistry.Domain;
+using JMMinistry.Domain.Location;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,21 +22,17 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
     public virtual DbSet<Assignment> Assignments { get; set; }
 
     public virtual DbSet<Cell> Cells { get; set; }
-
-    public DbSet<CellAttendance> CellAttendances { get; set; }
+    public virtual DbSet<CellAttendance> CellAttendances { get; set; }
 
     public virtual DbSet<Class> Classes { get; set; }
-
     public virtual DbSet<ClassAttendance> ClassAttendances { get; set; }
 
     public virtual DbSet<ClassStudent> ClassStudents { get; set; }
 
     public virtual DbSet<Convention> Conventions { get; set; }
-
     public virtual DbSet<ConventionAttendee> ConventionAttendees { get; set; }
 
     public virtual DbSet<Event> Events { get; set; }
-
     public virtual DbSet<Gained> Gained { get; set; }
 
 
@@ -50,7 +45,7 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
 
     public virtual DbSet<School> Schools { get; set; }
 
-    
+    public virtual DbSet<City> Cities { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

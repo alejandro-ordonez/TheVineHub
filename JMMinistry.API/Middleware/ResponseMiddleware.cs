@@ -1,8 +1,4 @@
 ﻿using JMMinistry.Common;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Net;
-using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
@@ -58,7 +54,7 @@ namespace JMMinistry.API.Middleware
                         currentBody = await JsonSerializer.DeserializeAsync<object>(swapStream);
 
                     // Gets here when token expired
-                    if(context.Response.StatusCode == StatusCodes.Status401Unauthorized)
+                    if (context.Response.StatusCode == StatusCodes.Status401Unauthorized)
                     {
                         swapStream.Seek(0, SeekOrigin.Begin);
                         await swapStream.CopyToAsync(originalResponseBody);
@@ -82,9 +78,9 @@ namespace JMMinistry.API.Middleware
                 {
                     context.Response.Body = originalResponseBody;
                 }
-                
-            }                      
-            
+
+            }
+
             _logger.LogInformation("The operation was completed with status: {Status}", context.Response.StatusCode);
         }
     }

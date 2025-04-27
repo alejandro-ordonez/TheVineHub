@@ -13,8 +13,8 @@ using Microsoft.EntityFrameworkCore;
 namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
 {
     public class GetUserInfoHandler(
-        IJmDbContext dbContext, 
-        UserManager<PersonalInfo> userManager, 
+        IJmDbContext dbContext,
+        UserManager<PersonalInfo> userManager,
         IMapper mapper,
         IMediator mediator
         ) : IRequestHandler<GetUserInfoQuery, UserInfoDto>
@@ -41,7 +41,7 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
             var userRoles = await userManager.GetRolesAsync(requestor);
             var allowed = userRoles.Any(role => role == Roles.Admin.ToString() || role == Roles.Coordinator.ToString());
 
-            if(allowed)
+            if (allowed)
             {
                 var userInfoDto = mapper.Map<UserInfoDto>(userInfo);
                 userInfoDto.AccessType = AccessType.Admin;

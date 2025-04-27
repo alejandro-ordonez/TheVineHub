@@ -5,11 +5,6 @@ using JMMinistry.Common.Dtos.School;
 using JMMinistry.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JMMinistry.Application.Features.Schools.Commands.CreateSchool
 {
@@ -19,8 +14,8 @@ namespace JMMinistry.Application.Features.Schools.Commands.CreateSchool
         {
             School school = mapper.Map<School>(request);
 
-            if(request.Id == default)
-            {                
+            if (request.Id == default)
+            {
                 dbContext.Schools.Add(school);
                 await dbContext.SaveChangesAsync(cancellationToken);
             }
@@ -29,7 +24,7 @@ namespace JMMinistry.Application.Features.Schools.Commands.CreateSchool
             {
                 var found = await dbContext.Schools.AnyAsync(school => school.Id == request.Id, cancellationToken);
 
-                if(!found)
+                if (!found)
                 {
                     throw new NotFoundException(school.Id.ToString());
                 }

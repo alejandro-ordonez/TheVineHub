@@ -1,8 +1,8 @@
 ﻿using Fluxor;
 using JMMinistry.Web.Api;
-using JMMinistry.Web.Store.CellsUseCase.Actions;
+using JMMinistry.Web.Store.MinistryUseCase.Actions;
 
-namespace JMMinistry.Web.Store.CellsUseCase
+namespace JMMinistry.Web.Store.MinistryUseCase
 {
     public class Effects(IMinistryApi ministryApi)
     {

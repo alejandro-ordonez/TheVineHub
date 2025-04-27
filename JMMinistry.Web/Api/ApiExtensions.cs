@@ -1,14 +1,7 @@
 ﻿using JMMinistry.Web.Extensions;
+using JMMinistry.Web.Shared;
 using System.Security.Claims;
 using System.Text.Json;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using JMMinistry.Web.Shared;
-using Blazored.LocalStorage;
-using JMMinistry.Common.Dtos.User;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.IdentityModel.Tokens;
 
 namespace JMMinistry.Web.Api
 {
@@ -40,6 +33,7 @@ namespace JMMinistry.Web.Api
             services.AddTransient<IMinistryApi, MinistryApi>();
             services.AddTransient<IGainedUsersApi, GainedUserApi>();
             services.AddTransient<IMeetingApi, MeetingApi>();
+            services.AddTransient<ILocationApi, LocationApi>();
         }
 
         public static IConfigurationRoot GetConfiguration()
@@ -47,7 +41,7 @@ namespace JMMinistry.Web.Api
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json");
 
-            return builder.Build(); 
+            return builder.Build();
         }
 
 
