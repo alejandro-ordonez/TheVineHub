@@ -7,6 +7,8 @@ using JMMinistry.Web.Shared;
 using Blazored.LocalStorage;
 using JMMinistry.Common.Dtos.User;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JMMinistry.Web.Api
 {

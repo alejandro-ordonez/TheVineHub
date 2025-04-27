@@ -52,6 +52,7 @@
                 <MudCardActions Style="justify-content: space-evenly;">
                     <MudButton Variant="Variant.Filled"
                                Color="Color.Primary"
+                               Disabled="!form?.IsValid ?? false"
                                OnClick="@(async () => await Submit())">
 
 

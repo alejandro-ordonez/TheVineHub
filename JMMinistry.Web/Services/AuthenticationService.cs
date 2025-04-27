@@ -1,25 +1,20 @@
-﻿
-using Blazored.LocalStorage;
-using JMMinistry.Common;
-using JMMinistry.Common.Dtos.User;
+﻿using JMMinistry.Common.Dtos.User;
 using JMMinistry.Web.Api;
-using JMMinistry.Web.Shared;
-using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 
 namespace JMMinistry.Web.Services
 {
-    public class AuthenticationService(IUserApi userApi, ILocalStorageService localStorage, IAuthStateProvider authStateProvider) : IAuthService
+    public class AuthenticationService(IUserApi userApi, IAuthStateProvider authStateProvider) : IAuthService
     {
         public async Task<bool> LogIn(AuthenticateDto authenticateDto)
         {
             var tokenResult = await userApi.Authenticate(authenticateDto);
 
-            if (tokenResult == null || !tokenResult.Success || !(tokenResult?.Data?.IsAuthenticated ?? false))
+            if (tokenResult == null || !tokenResult.Success || tokenResult.Data is null || !(tokenResult?.Data?.IsAuthenticated ?? false))
                 return false;
 
-            var authResult = tokenResult?.Data;
-            await localStorage.SetItemAsync(Constants.JwtToken, authResult);
+            var authResult = tokenResult.Data;
+            await authStateProvider.SetTokenAsync(authResult);
 
             var claims = authResult?.Token.ParseClaimsFromJwt();
             var claimsIdentity = new ClaimsIdentity(claims, "jwt");
@@ -31,7 +26,7 @@ namespace JMMinistry.Web.Services
 
         public async Task LogOut()
         {
-            await localStorage.RemoveItemAsync(Constants.JwtToken);
+            await authStateProvider.RemoveToken();
             authStateProvider.NotifyUserLogOut();
         }
     }

@@ -2,6 +2,6 @@
 {
     public record FailedAction<TAction>
     {
-        public string ErrorKey => typeof(TAction).Name;
+        public string ErrorKey { get; set; } = typeof(TAction).Name;
     }
 }

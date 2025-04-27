@@ -31,22 +31,22 @@ namespace JMMinistry.Web.Api
             if (response == null || !response.IsSuccessStatusCode)
                 return null;
 
-            var dto = await response.Content.ReadFromJsonAsync<Response<SchoolDto>?>();
+            var dto = await response.Content.ReadFromJsonAsync<Response<SchoolDto>?>(cancellationToken);
             return dto;
         }
 
         public async Task<Response<SchoolWithClassesDto>?> GetSchool(int schoolId, CancellationToken cancellationToken = default)
         {
             var httpClient = clientFactory.CreateClient(Constants.ApiClient);
-            var response = await httpClient.GetFromJsonAsync<Response<SchoolWithClassesDto>?>($"{_schoolApi}/{schoolId}", cancellationToken);
-            return response;
+            var response = await httpClient.GetAsync($"{_schoolApi}/{schoolId}", cancellationToken);
+            return await response.Content.ReadFromJsonAsync<Response<SchoolWithClassesDto>?>(cancellationToken);
         }
 
         public async Task<Response<IEnumerable<SchoolDto>>?> GetSchools(CancellationToken cancellationToken = default)
         {
             var httpClient = clientFactory.CreateClient(Constants.ApiClient);
-            var response = await httpClient.GetFromJsonAsync<Response<IEnumerable<SchoolDto>>>(_schoolApi, cancellationToken);
-            return response;
+            var response = await httpClient.GetAsync(_schoolApi, cancellationToken);
+            return await response.Content.ReadFromJsonAsync<Response<IEnumerable<SchoolDto>>>(cancellationToken);
         }
     }
 }

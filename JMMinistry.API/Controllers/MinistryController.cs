@@ -11,11 +11,13 @@ using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.User;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JMMinistry.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MinistryController(IMediator mediator) : ControllerBase
     {
 

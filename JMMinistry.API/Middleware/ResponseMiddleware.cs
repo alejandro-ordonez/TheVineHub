@@ -22,7 +22,7 @@ namespace JMMinistry.API.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            _logger.LogInformation("Processing request for: {request}", context.Request.Path);
+            _logger.LogInformation("Processing request for: {Request}", context.Request.Path);
 
             var originalResponseBody = context.Response.Body;
             using (var swapStream = new MemoryStream())
@@ -57,15 +57,25 @@ namespace JMMinistry.API.Middleware
                     else
                         currentBody = await JsonSerializer.DeserializeAsync<object>(swapStream);
 
-                    var result = new Response<object>
+                    // Gets here when token expired
+                    if(context.Response.StatusCode == StatusCodes.Status401Unauthorized)
                     {
-                        Data = currentBody,
-                        Success = true,
-                        StatusCode = context.Response.StatusCode,
-                        Details = $"Operation success: {context.Request.Path}"
-                    };
+                        swapStream.Seek(0, SeekOrigin.Begin);
+                        await swapStream.CopyToAsync(originalResponseBody);
+                    }
 
-                    await JsonSerializer.SerializeAsync(originalResponseBody, result);
+                    else
+                    {
+                        var result = new Response<object>
+                        {
+                            Data = currentBody,
+                            Success = true,
+                            StatusCode = context.Response.StatusCode,
+                            Details = $"Operation success: {context.Request.Path}"
+                        };
+
+                        await JsonSerializer.SerializeAsync(originalResponseBody, result);
+                    }
                 }
 
                 finally
@@ -75,7 +85,7 @@ namespace JMMinistry.API.Middleware
                 
             }                      
             
-            _logger.LogInformation("The operation was completed with status: {status}", context.Response.StatusCode);
+            _logger.LogInformation("The operation was completed with status: {Status}", context.Response.StatusCode);
         }
     }
 

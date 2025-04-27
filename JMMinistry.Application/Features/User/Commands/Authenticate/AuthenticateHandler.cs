@@ -31,22 +31,20 @@ namespace JMMinistry.Application.Features.User.Commands.Authenticate
 
             user.LastAccess = DateTime.UtcNow;
             await userManager.UpdateAsync(user);
-            
 
-            var token = await CreateJwtToken(user);
+            var expiration = DateTime.UtcNow.AddSeconds(jwtSettings.Value.DurationInMinutes);
+            var token = await CreateJwtToken(user, expiration);
 
 
             return new TokenResult
             {
-                Document = request.Document,
                 IsAuthenticated = true,
-                Email = user.Email ?? string.Empty,
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                Roles = [.. (await userManager.GetRolesAsync(user))]
+                Expiration = expiration
             };
         }
 
-        private async Task<JwtSecurityToken> CreateJwtToken(PersonalInfo user)
+        private async Task<JwtSecurityToken> CreateJwtToken(PersonalInfo user, DateTime expiration)
         {
             var userClaims = await userManager.GetClaimsAsync(user);
             var roles = await userManager.GetRolesAsync(user);
@@ -76,7 +74,7 @@ namespace JMMinistry.Application.Features.User.Commands.Authenticate
                 issuer: jwtSettings.Value.Issuer,
                 audience: jwtSettings.Value.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(jwtSettings.Value.DurationInMinutes),
+                expires: expiration,
                 signingCredentials: signingCredentials);
 
             return jwtSecurityToken;

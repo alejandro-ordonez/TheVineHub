@@ -27,8 +27,8 @@ namespace JMMinistry.Web.Api
         public async Task<Response<IList<MeetingDto>>?> GetMeetings()
         {
             using var client = clientFactory.CreateClient(Constants.ApiClient);
-            var response = await client.GetFromJsonAsync<Response<IList<MeetingDto>>?>(_meetinApi);
-            return response;
+            var response = await client.GetAsync(_meetinApi);
+            return await response.Content.ReadFromJsonAsync<Response<IList<MeetingDto>>?>();
         }
     }
 }

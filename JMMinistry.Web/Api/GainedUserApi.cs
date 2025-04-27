@@ -12,8 +12,8 @@ namespace JMMinistry.Web.Api
         public async Task<Response<IList<GainedUser>>?> GetGainedUsers()
         {
             using var client = clientFactory.CreateClient(Constants.ApiClient);
-            var response = await client.GetFromJsonAsync<Response<IList<GainedUser>>>(_gainedUsersApi);
-            return response;
+            var response = await client.GetAsync(_gainedUsersApi);
+            return await response.Content.ReadFromJsonAsync<Response<IList<GainedUser>>>();
         }
 
         public async Task<Response<GainedUser>?> RegisterGainedPerson(CreateGainedUser createGained)

@@ -51,8 +51,9 @@ namespace JMMinistry.Web.Api
             if (!string.IsNullOrEmpty(document))
                 url += $"/{document}";
 
-            var result = await httpClient.GetFromJsonAsync<Response<UserInfoDto>>(url);
-            return result;
+            var result = await httpClient.GetAsync(url);
+
+            return await result.Content.ReadFromJsonAsync<Response<UserInfoDto>>();
         }
 
         public async Task<Response<object>?> ImportUsers(IBrowserFile file)

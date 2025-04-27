@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Authorization;
+﻿using JMMinistry.Common.Dtos.User;
+using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 
 namespace JMMinistry.Web.Services
@@ -8,7 +9,9 @@ namespace JMMinistry.Web.Services
         void NotifyUserAuthenticated(ClaimsIdentity claims);
         void NotifyUserLogOut();
 
-        public event AuthenticationStateChangedHandler? AuthenticationStateChanged;
+        Task<TokenResult?> GetTokenAsync();
+        Task SetTokenAsync(TokenResult token);
+        Task RemoveToken();
 
         Task<AuthenticationState> GetAuthenticationStateAsync();
     }

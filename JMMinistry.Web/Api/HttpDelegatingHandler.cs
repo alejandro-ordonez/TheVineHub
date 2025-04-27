@@ -1,9 +1,11 @@
 ﻿
 using Blazored.LocalStorage;
+using Fluxor;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Common.Resources;
 using JMMinistry.Web.Services;
 using JMMinistry.Web.Shared;
+using JMMinistry.Web.Store;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using MudBlazor;
@@ -14,7 +16,7 @@ namespace JMMinistry.Web.Api
 {
     public class HttpDelegatingHandler(NavigationManager navigationManager, 
         IAuthService authenticationService, 
-        ISnackbar snackBar, 
+        IDispatcher dispatcher, 
         IStringLocalizer<UIStrings> localizer,
         ILocalStorageService localStorage) : DelegatingHandler
     {
@@ -31,14 +33,14 @@ namespace JMMinistry.Web.Api
             if(response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 // Removes the token so next request will redirect to login
-                snackBar.Add(localizer["SessionExpired"], Severity.Error);
+                dispatcher.Dispatch(new FailedAction<HttpDelegatingHandler> { ErrorKey = localizer["SessionExpired"] });
                 await authenticationService.LogOut();
-                navigationManager.NavigateTo("/");
+                navigationManager.NavigateTo("/auth");
             }
 
             if(response.StatusCode == HttpStatusCode.InternalServerError)
             {
-                snackBar.Add(localizer["ServerError"], Severity.Error);
+                dispatcher.Dispatch(new FailedAction<HttpDelegatingHandler> { ErrorKey = localizer["ServerError"] });
             }
 
             return response;

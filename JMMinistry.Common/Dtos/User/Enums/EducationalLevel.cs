@@ -12,6 +12,6 @@ namespace JMMinistry.Common.Dtos.User.Enums
         HighSchool,
         Bachelor,
         Master,
-        Doctor
+        Doctorate
     }
 }

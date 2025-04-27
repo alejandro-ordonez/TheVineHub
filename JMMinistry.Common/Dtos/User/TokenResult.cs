@@ -8,11 +8,8 @@ namespace JMMinistry.Common.Dtos.User
 {
     public class TokenResult
     {
-        public string Message { get; set; } = string.Empty;
         public bool IsAuthenticated { get; set; } = false;
-        public string Document { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public List<string> Roles { get; set; } = [];
+        public DateTime Expiration { get; set; }
         public string Token { get; set; } = string.Empty;
     }
 }
