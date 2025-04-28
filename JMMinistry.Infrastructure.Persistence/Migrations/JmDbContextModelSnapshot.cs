@@ -133,17 +133,12 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("CityId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Day")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int>("LocalityId")
-                        .HasColumnType("integer");
+                    b.Property<string>("Locality")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("MainCell")
                         .HasColumnType("boolean");
@@ -153,10 +148,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("LocalityId");
 
                     b.ToTable("Cells");
                 });
@@ -406,45 +397,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.HasIndex("GainedId");
 
                     b.ToTable("GainedEvent");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.Location.City", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Cities");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.Location.Locality", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CityId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.ToTable("Locality");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.Meeting", b =>
@@ -872,25 +824,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Navigation("School");
                 });
 
-            modelBuilder.Entity("JMMinistry.Domain.Cell", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.Location.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JMMinistry.Domain.Location.Locality", "Locality")
-                        .WithMany()
-                        .HasForeignKey("LocalityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("City");
-
-                    b.Navigation("Locality");
-                });
-
             modelBuilder.Entity("JMMinistry.Domain.CellAttendance", b =>
                 {
                     b.HasOne("JMMinistry.Domain.Cell", "Cell")
@@ -984,13 +917,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Gained");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.Location.Locality", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.Location.City", null)
-                        .WithMany("Localities")
-                        .HasForeignKey("CityId");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.MeetingAttendance", b =>
@@ -1105,11 +1031,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Person")
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.Location.City", b =>
-                {
-                    b.Navigation("Localities");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.Meeting", b =>
