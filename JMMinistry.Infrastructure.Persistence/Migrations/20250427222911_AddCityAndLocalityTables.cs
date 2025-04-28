@@ -11,29 +11,12 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Locality",
-                table: "Cells");
-
-            migrationBuilder.AddColumn<int>(
-                name: "CityId",
-                table: "Cells",
-                type: "integer",
-                nullable: false,
-                defaultValue: 0);
 
             migrationBuilder.AddColumn<int>(
                 name: "Day",
                 table: "Cells",
                 type: "integer",
                 nullable: true);
-
-            migrationBuilder.AddColumn<int>(
-                name: "LocalityId",
-                table: "Cells",
-                type: "integer",
-                nullable: false,
-                defaultValue: 0);
 
             migrationBuilder.CreateTable(
                 name: "Cities",
@@ -68,35 +51,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cells_CityId",
-                table: "Cells",
-                column: "CityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cells_LocalityId",
-                table: "Cells",
-                column: "LocalityId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Locality_CityId",
                 table: "Locality",
                 column: "CityId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Cells_Cities_CityId",
-                table: "Cells",
-                column: "CityId",
-                principalTable: "Cities",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Cells_Locality_LocalityId",
-                table: "Cells",
-                column: "LocalityId",
-                principalTable: "Locality",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
@@ -125,15 +82,7 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 table: "Cells");
 
             migrationBuilder.DropColumn(
-                name: "CityId",
-                table: "Cells");
-
-            migrationBuilder.DropColumn(
                 name: "Day",
-                table: "Cells");
-
-            migrationBuilder.DropColumn(
-                name: "LocalityId",
                 table: "Cells");
 
             migrationBuilder.AddColumn<string>(
