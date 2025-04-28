@@ -3,6 +3,7 @@ using System;
 using JMMinistry.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JMMinistry.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(JmDbContext))]
-    partial class JmDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250428170112_AddNewCityAndLocalityTables")]
+    partial class AddNewCityAndLocalityTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,17 +136,11 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("CityId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("Day")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
-
-                    b.Property<int?>("LocalityId")
-                        .HasColumnType("integer");
 
                     b.Property<bool>("MainCell")
                         .HasColumnType("boolean");
@@ -153,10 +150,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("LocalityId");
 
                     b.ToTable("Cells");
                 });
@@ -870,21 +863,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .HasForeignKey("SchoolId");
 
                     b.Navigation("School");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.Cell", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.Location.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId");
-
-                    b.HasOne("JMMinistry.Domain.Location.Locality", "Locality")
-                        .WithMany()
-                        .HasForeignKey("LocalityId");
-
-                    b.Navigation("City");
-
-                    b.Navigation("Locality");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.CellAttendance", b =>

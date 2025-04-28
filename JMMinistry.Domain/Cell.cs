@@ -10,10 +10,10 @@ public partial class Cell
     public string? Description { get; set; }
     public bool MainCell { get; set; }
 
-    public int CityId { get; set; }
+    public int? CityId { get; set; }
     public City? City { get; set; }
 
-    public int LocalityId { get; set; }
+    public int? LocalityId { get; set; }
     public Locality? Locality { get; set; }
 
     public required string Address { get; set; }
