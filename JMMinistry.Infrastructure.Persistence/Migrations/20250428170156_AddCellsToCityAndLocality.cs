@@ -10,6 +10,11 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "Locality",
+                table: "Cells");
+
+
             migrationBuilder.AddColumn<int>(
                 name: "CityId",
                 table: "Cells",
