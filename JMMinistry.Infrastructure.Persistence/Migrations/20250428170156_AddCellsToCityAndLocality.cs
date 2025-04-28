@@ -37,7 +37,8 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 table: "Cells",
                 column: "CityId",
                 principalTable: "Cities",
-                principalColumn: "Id");
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Cells_Locality_LocalityId",
