@@ -14,7 +14,7 @@ namespace JMMinistry.Web.Store
                 var errorKeyProperty = action.GetType().GetProperty(nameof(FailedAction<object>.ErrorKey));
                 var errorKey = errorKeyProperty?.GetValue(action);
 
-                snackbar.Add(translator["Failed to ", translator[errorKey?.ToString() ?? "Unknown"]], Severity.Error);
+                snackbar.Add(translator["FailedTo", translator[errorKey?.ToString() ?? "Unknown"]], Severity.Error);
             }
         }
     }

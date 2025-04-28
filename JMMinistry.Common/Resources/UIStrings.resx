@@ -347,7 +347,7 @@
     <comment>Use with FailedTo</comment>
   </data>
   <data name="UpdateCellAction" xml:space="preserve">
-    <value>Update cell</value>
+    <value>update cell</value>
   </data>
   <data name="AddDisciplesAction" xml:space="preserve">
     <value>add disciples to cell</value>

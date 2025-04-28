@@ -6,22 +6,32 @@
 @inject NavigationManager navigationManager;
 @inject IDialogService dialogService;
 
-<MudPaper Style="padding: 0.5rem" Class="mud-ripple" 
-onclick="@(() => HandleClick())">
+<MudPaper Style="padding: 0.5rem" Class="@(OnClick is null ? "" : "mud-ripple")" 
+          onclick="@(() => HandleClick())">
 
     <div class="user-card">
-        <MudAvatar Class="avatar-icon" Color="UtilExtensions.GetRandomColor()">
-            @if (string.IsNullOrEmpty(User.Photo))
-            {
-                @User.Name[0]
-            }
 
-            else
-            {
-                <MudImage Src="@User.Photo"></MudImage>
-            }
-        </MudAvatar>
+        @if (EnableSelection ?? false)
+        {
+            <MudCheckBox Color="Color.Primary" @bind-Value="Selected" />
+        }
 
+        else
+        {
+            <MudAvatar Class="avatar-icon" Color="UtilExtensions.GetRandomColor()">
+
+                @if (string.IsNullOrEmpty(User.Photo))
+                {
+                    @User.Name[0]
+                }
+
+                else
+                {
+                    <MudImage Src="@User.Photo"></MudImage>
+                }
+            </MudAvatar>
+        }
+        
         <div class="user-details">
             <MudText Typo="Typo.subtitle1" Class="text-icon-centered">
                 <MudIcon Icon="@User.Gender.GetGenderIcon()" Color="@User.Gender.GetGenderColor()" />
@@ -53,6 +63,12 @@ onclick="@(() => HandleClick())">
 
     [Parameter]
     public required PartialUserInfoDto User { get; set; }
+
+    [Parameter]
+    public bool? EnableSelection { get; set; }
+
+    [Parameter]
+    public bool Selected { get; set; }
 
     [Parameter]
     public EventCallback<UserEventArgs>? OnClick { get; set; }

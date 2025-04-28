@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using JMMinistry.Common.Dtos.Cell;
+using JMMinistry.Web.Shared.Components;
 using JMMinistry.Web.Store.CellUseCase;
 using JMMinistry.Web.Store.CellUseCase.Actions;
 using Microsoft.AspNetCore.Components;
@@ -36,10 +37,14 @@ namespace JMMinistry.Web.Pages.Ministry.Cells
             };
 
             var dialog = await dialogService.ShowAsync<CellDialog>(translator["Edit"], parameters);
-            var result = await dialog.GetReturnValueAsync<CellDto>();
+            var result = await dialog.GetReturnValueAsync<DialogResult<CellDto>>();
 
-            if (result is not null)
-                Dispatcher?.Dispatch(new UpdateCellAction { Cell = result });
+
+
+            if (result is null || result.Data is null)
+                return;
+
+            Dispatcher?.Dispatch(new UpdateCellAction { Cell = result.Data });
         }
     }
 }

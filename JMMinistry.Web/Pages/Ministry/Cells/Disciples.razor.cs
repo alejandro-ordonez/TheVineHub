@@ -2,6 +2,7 @@
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Web.Pages.User;
 using JMMinistry.Web.Shared.Components;
+using JMMinistry.Web.Store.CellAttendances.Actions;
 using JMMinistry.Web.Store.DisciplesUseCase;
 using JMMinistry.Web.Store.DisciplesUseCase.Actions;
 using Microsoft.AspNetCore.Components;
@@ -27,9 +28,33 @@ namespace JMMinistry.Web.Pages.Ministry.Cells
         [Inject]
         public required NavigationManager NavigationManager { get; set; }
 
+        private Dictionary<string, UserCard> UserCards { get; set; } = [];
+
+
+#pragma warning disable S2376 // Write-only properties should not be used
+        UserCard? ComponentRef { set => UserCards[value!.User.Document] = value; }
+#pragma warning restore S2376 // Write-only properties should not be used
+
+        private bool AddAttendanceEnabled { get; set; } = false;
+
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
+            Dispatcher.Dispatch(new FetchDisciplesAction { CellId = CellId });
+        }
+
+        void AddAttendance()
+        {
+            var disciples = UserCards.Where(card => card.Value.Selected)
+                .Select(card => card.Key)
+                .ToList();
+
+            if (disciples.Count == 0)
+                return;
+
+            Dispatcher.Dispatch(new AddCellAttendanceAction { CellId = CellId, Documents = disciples });
+
+            AddAttendanceEnabled = false;
         }
 
         async Task OpenAddDisciple()

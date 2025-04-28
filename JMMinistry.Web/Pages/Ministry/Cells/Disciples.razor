@@ -11,6 +11,11 @@
         <MudText Typo="Typo.subtitle1">@translator["Total", State.Value.Disciples.Count]</MudText>
         <MudSpacer />
         <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Tertiary" OnClick="OpenAddDisciple" />
+        
+        @if (State.Value.Disciples.Count > 0)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Checklist" Color="Color.Tertiary" OnClick="@(() => { AddAttendanceEnabled = !AddAttendanceEnabled; })" />
+        }
     </MudToolBar>
 </MudPaper>
 
@@ -18,9 +23,17 @@
 <div class="users-grid">
     @foreach (var disciple in State.Value.Disciples)
     {
-        <UserCard User="disciple" OnClick="EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails)" />
+        <UserCard User="disciple" 
+                  OnClick="EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails)" 
+                  EnableSelection="AddAttendanceEnabled"
+                  @ref="ComponentRef" />
     }
 
 </div>
+
+@if (AddAttendanceEnabled)
+{
+    <MudButton Style="margin: 0px 1rem;" Color="Color.Primary" OnClick="AddAttendance">@translator["Add"]</MudButton>
+}
 
 

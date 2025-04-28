@@ -15,9 +15,6 @@ public class UpsertCellHandler(IJmDbContext dbContext, IMapper mapper) :
     {
         var model = mapper.Map<Cell>(request);
 
-        if (request.Id is not null && await dbContext.Cells.AnyAsync(cell => cell.Id == request.Id, cancellationToken))
-            throw new EntityAlreadyExistsException<Cell>();
-
         var user = await dbContext.PersonalInfo.FirstOrDefaultAsync(user => user.Id == request.Document, cancellationToken) ??
             throw new NotFoundException(request.Document);
 

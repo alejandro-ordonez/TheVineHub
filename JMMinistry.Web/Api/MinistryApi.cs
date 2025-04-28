@@ -62,5 +62,24 @@ namespace JMMinistry.Web.Api
             var response = await client.GetAsync(url);
             return await response.Content.ReadFromJsonAsync<Response<IList<PartialUserInfoDto>>?>();
         }
+
+        public async Task<Response<object>?> RecordCellAttendance(int cellId, IList<string> disciples)
+        {
+            using var client = clientFactory.CreateClient(Constants.ApiClient);
+
+            var url = $"{_ministryApi}/attendances/{cellId}";
+            var response = await client.PostAsJsonAsync(url, disciples);
+            return await response.Content.ReadFromJsonAsync<Response<object>?>();
+        }
+
+        public async Task<Response<IList<CellAttendanceDto>>?> GetCellAttendances(int cellId)
+        {
+            using var client = clientFactory.CreateClient(Constants.ApiClient);
+
+            var url = $"{_ministryApi}/attendances/{cellId}";
+
+            var response = await client.GetAsync(url);
+            return await response.Content.ReadFromJsonAsync<Response<IList<CellAttendanceDto>>?>();
+        }
     }
 }

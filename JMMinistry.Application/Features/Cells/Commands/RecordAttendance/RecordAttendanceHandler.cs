@@ -1,16 +1,18 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using FluentValidation;
 using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Cells.Queries.CellCheckIsAuthorized;
 using JMMinistry.Application.Services;
+using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Application.Features.Cells.Commands.RecordAttendance
 {
-    public class RecordAttendanceHandler(IJmDbContext dbContext, IMediator mediator) : IRequestHandler<RecordAttendanceCommand>
+    public class RecordAttendanceHandler(IJmDbContext dbContext, IMediator mediator, IMapper mapper) : IRequestHandler<RecordAttendanceCommand, CellAttendanceDto>
     {
-        public async Task Handle(RecordAttendanceCommand request, CancellationToken cancellationToken)
+        public async Task<CellAttendanceDto> Handle(RecordAttendanceCommand request, CancellationToken cancellationToken)
         {
             var checkCommand = new CellCheckIsAuthorizedQuery { CellId = request.CellId, RequestorId = request.RequestorId };
             var isAuthorized = await mediator.Send(checkCommand, cancellationToken);
@@ -18,12 +20,16 @@ namespace JMMinistry.Application.Features.Cells.Commands.RecordAttendance
             if (!isAuthorized)
                 throw new NotAuthorizedException();
 
-            var disciplesIds = await dbContext.Cells
+            var cell = await dbContext.Cells
                 .Include(cell => cell.Disciples)
-                .Where(cell => cell.Id == request.CellId)
-                .SelectMany(cell => cell.Disciples)
-                .Select(disciples => disciples.Id)
-                .ToListAsync(cancellationToken);
+                .FirstOrDefaultAsync(cell => cell.Id == request.CellId, cancellationToken);
+
+            var disciples = cell?.Disciples ?? [];
+
+            if (disciples.Count == 0)
+                throw new ArgumentException("This cell doesn't have any disciples registered");
+
+            var disciplesIds = disciples.Select(disciple => disciple.Id);
 
             var allValidDisciples = request.Attendees.All(disciplesIds.Contains);
 
@@ -33,11 +39,14 @@ namespace JMMinistry.Application.Features.Cells.Commands.RecordAttendance
             var record = new CellAttendance
             {
                 CellId = request.CellId,
-                Attendees = [.. request.Attendees.Select(document => new PersonalInfo { Id = document })]
+                Attendees = [.. disciples.Where(disciple => request.Attendees.Contains(disciple.Id))],
+                Date = DateTime.Now
             };
 
             dbContext.CellAttendances.Add(record);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            return mapper.Map<CellAttendanceDto>(record);
         }
     }
 }

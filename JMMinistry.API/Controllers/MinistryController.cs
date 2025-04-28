@@ -5,6 +5,7 @@ using JMMinistry.Application.Features.Cells.Commands.CreateCell;
 using JMMinistry.Application.Features.Cells.Commands.RecordAttendance;
 using JMMinistry.Application.Features.Cells.Commands.RemoveDisciple;
 using JMMinistry.Application.Features.Cells.Queries.GetCell;
+using JMMinistry.Application.Features.Cells.Queries.GetCellAttendances;
 using JMMinistry.Application.Features.Cells.Queries.GetCells;
 using JMMinistry.Application.Features.Cells.Queries.GetDisciples;
 using JMMinistry.Common.Dtos.Cell;
@@ -26,7 +27,7 @@ namespace JMMinistry.API.Controllers
         {
             createCellCommand.Document = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
             var cell = await mediator.Send(createCellCommand);
-            return Created(string.Empty, cell);
+            return Ok(cell);
         }
 
         [HttpGet]
@@ -48,7 +49,18 @@ namespace JMMinistry.API.Controllers
         }
 
 
-        [HttpPost("{cellId}")]
+        [HttpGet("attendances/{cellId}")]
+        public async Task<ActionResult> GetCellAttendances(int cellId)
+        {
+            var document = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
+
+            var query = new GetCellAttendancesQuery { CellId = cellId, RequestorId = document };
+            var result = await mediator.Send(query);
+            return Ok(result);
+        }
+
+
+        [HttpPost("attendances/{cellId}")]
         public async Task<ActionResult> RecordCellAttendance(int cellId, IList<string> attendees)
         {
             var document = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
@@ -60,8 +72,8 @@ namespace JMMinistry.API.Controllers
                 Attendees = attendees
             };
 
-            await mediator.Send(command);
-            return Created();
+            var result = await mediator.Send(command);
+            return Ok(result);
         }
 
         [HttpPut]

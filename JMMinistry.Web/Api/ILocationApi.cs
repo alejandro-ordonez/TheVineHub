@@ -22,7 +22,7 @@ namespace JMMinistry.Web.Api
             var path = _locationApi;
 
             if (!string.IsNullOrEmpty(searchTerm)) 
-                path += "?searchTerm" + searchTerm;
+                path += "?searchTerm=" + searchTerm;
 
             var response = await client.GetAsync(path);
             return await response.Content.ReadFromJsonAsync<Response<IList<CityDto>>?>();

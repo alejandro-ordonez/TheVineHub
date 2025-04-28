@@ -13,5 +13,8 @@ namespace JMMinistry.Web.Api
         Task<Response<IList<PartialUserInfoDto>>?> RemoveDiscipleFromCell(int cellId, string document);
         Task<Response<IList<PartialUserInfoDto>>?> GetDisciples(int cellId);
         Task<Response<object>?> UpdateCellAsync(CellDto cell);
+
+        Task<Response<object>?> RecordCellAttendance(int cellId, IList<string> disciples);
+        Task<Response<IList<CellAttendanceDto>>?> GetCellAttendances(int cellId);
     }
 }

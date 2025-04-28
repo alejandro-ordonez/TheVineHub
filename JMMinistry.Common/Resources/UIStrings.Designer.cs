@@ -745,7 +745,7 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update cell.
+        ///   Looks up a localized string similar to update cell.
         /// </summary>
         public static string UpdateCellAction {
             get {
