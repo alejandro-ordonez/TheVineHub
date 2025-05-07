@@ -124,6 +124,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Announcements.
+        /// </summary>
+        public static string Announcements {
+            get {
+                return ResourceManager.GetString("Announcements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to {0} this {1}: {2}?.
         /// </summary>
         public static string AreYouSure {

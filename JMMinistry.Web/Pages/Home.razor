@@ -4,17 +4,20 @@
 
 @layout MainLayout
 
+
 @using System.Diagnostics
 @using Fluxor
 @using JMMinistry.Web.Store.PageUseCase
 
+@inject IStringLocalizer<UIStrings> translations;
 
+<MudText Typo="Typo.h5">@translations["Welcome"]</MudText>
 
-<PageTitle>Home</PageTitle>
-
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
+<MudPaper>
+    <MudToolBar>
+        <MudText Typo="Typo.h5">@translations["Announcements"]</MudText>
+    </MudToolBar>
+</MudPaper>
 
 @code{
     [CascadingParameter]

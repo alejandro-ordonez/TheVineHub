@@ -402,4 +402,7 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancelar</value>
   </data>
+  <data name="Announcements" xml:space="preserve">
+    <value>Anuncios</value>
+  </data>
 </root>
