@@ -17,7 +17,7 @@ COPY ["JMMinistry.Web/JMMinistry.Web.csproj", "JMMinistry.Web/"]
 RUN dotnet restore "./JMMinistry.Web/JMMinistry.Web.csproj"
 COPY . .
 WORKDIR "/src/JMMinistry.Web"
-RUN dotnet build "./JMMinistry.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./JMMinistry.Web.csproj" -c $BUILD_CONFIGURATION -o /app/build /m:3
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
@@ -25,7 +25,7 @@ ARG API_URL
 ENV API_URL=$API_URL
 ARG BUILD_CONFIGURATION=Release
 RUN sed -i "s|__SERVER_HOST__|${API_URL}|g" ./wwwroot/appsettings.json
-RUN dotnet publish "./JMMinistry.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish
+RUN dotnet publish "./JMMinistry.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /m:3
 
 FROM nginx:alpine AS final
 RUN mkdir /var/www
