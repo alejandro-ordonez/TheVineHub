@@ -1,0 +1,49 @@
+﻿@using JMMinistry.Common.Dtos.Cell
+@using JMMinistry.Web.Pages.User
+
+@inject IStringLocalizer<UIStrings> translator;
+
+<Dialog ResultType="object"
+        PrimaryButton="false">
+
+    <Content>
+        @if (!string.IsNullOrEmpty(Attendance.Notes))
+        {
+            <div class="ma-4">
+                <MudText Typo="Typo.body1">@Attendance.Notes</MudText>
+            </div>
+        }
+
+        <div class="ma-4">
+            <MudText Typo="Typo.subtitle2">@translator["Attendees", Attendance.Attendees.Count]</MudText>
+            <MudDivider />
+        </div>
+
+        <div class="dynamic-grid">
+            @foreach (var disciple in Attendance.Attendees)
+            {
+                <UserCard User="disciple" />
+            }
+        </div>
+
+
+        <div class="ma-4">
+            <MudText Typo="Typo.subtitle2">@translator["Missing", Attendance.Attendees.Count]</MudText>
+            <MudDivider />
+        </div>
+
+        <div class="dynamic-grid">
+            @foreach (var disciple in Attendance.MissingAttendees)
+            {
+                <UserCard User="disciple" />
+            }
+        </div>
+    </Content>
+
+</Dialog>
+
+
+@code {
+    [Parameter]
+    public required CellAttendanceDto Attendance { get; set; }
+}

@@ -133,11 +133,29 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attendance {0}.
+        /// </summary>
+        public static string Attendance {
+            get {
+                return ResourceManager.GetString("Attendance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attendances.
         /// </summary>
         public static string Attendances {
             get {
                 return ResourceManager.GetString("Attendances", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attendees: {0}.
+        /// </summary>
+        public static string Attendees {
+            get {
+                return ResourceManager.GetString("Attendees", resourceCulture);
             }
         }
         
@@ -498,6 +516,15 @@ namespace JMMinistry.Common.Resources {
         public static string Manage {
             get {
                 return ResourceManager.GetString("Manage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing: {0}.
+        /// </summary>
+        public static string Missing {
+            get {
+                return ResourceManager.GetString("Missing", resourceCulture);
             }
         }
         

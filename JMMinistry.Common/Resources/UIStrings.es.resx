@@ -363,4 +363,13 @@
   <data name="FetchCellsAction" xml:space="preserve">
     <value>obtener las células de tu ministerio</value>
   </data>
+  <data name="Attendees" xml:space="preserve">
+    <value>Asistentes: {0}</value>
+  </data>
+  <data name="Missing" xml:space="preserve">
+    <value>Faltantes: {0}</value>
+  </data>
+  <data name="Attendance" xml:space="preserve">
+    <value>Asistencia {0}</value>
+  </data>
 </root>

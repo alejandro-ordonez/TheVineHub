@@ -61,7 +61,7 @@ namespace JMMinistry.API.Controllers
 
 
         [HttpPost("attendances/{cellId}")]
-        public async Task<ActionResult> RecordCellAttendance(int cellId, IList<string> attendees)
+        public async Task<ActionResult> RecordCellAttendance(int cellId, AddCellAttendanceDto cellAttendance)
         {
             var document = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
 
@@ -69,7 +69,8 @@ namespace JMMinistry.API.Controllers
             {
                 CellId = cellId,
                 RequestorId = document,
-                Attendees = attendees
+                Attendees = cellAttendance.Disciples,
+                Notes = cellAttendance.Notes
             };
 
             var result = await mediator.Send(command);

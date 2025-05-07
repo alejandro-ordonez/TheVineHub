@@ -10,6 +10,8 @@ namespace JMMinistry.Domain
         public int CellId { get; set; }
         public Cell Cell { get; set; } = null!;
 
+        public string? Notes { get; set; }
+
         [Required]
         public DateTime Date { get; set; }
 

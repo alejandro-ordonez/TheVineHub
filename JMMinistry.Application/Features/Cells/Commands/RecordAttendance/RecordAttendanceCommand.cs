@@ -9,6 +9,7 @@ namespace JMMinistry.Application.Features.Cells.Commands.RecordAttendance
         public required int CellId { get; set; }
         public required string RequestorId { get; set; }
         public IList<string> Attendees { get; set; } = [];
+        public string? Notes { get; set; }
     }
 
     public class RecordAttendanceValidator : AbstractValidator<RecordAttendanceCommand>

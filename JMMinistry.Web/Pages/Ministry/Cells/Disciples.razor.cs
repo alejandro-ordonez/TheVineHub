@@ -30,6 +30,8 @@ namespace JMMinistry.Web.Pages.Ministry.Cells
 
         private Dictionary<string, UserCard> UserCards { get; set; } = [];
 
+        private string? AttendanceNotes { get; set; }
+
 
 #pragma warning disable S2376 // Write-only properties should not be used
         UserCard? ComponentRef { set => UserCards[value!.User.Document] = value; }
@@ -52,7 +54,7 @@ namespace JMMinistry.Web.Pages.Ministry.Cells
             if (disciples.Count == 0)
                 return;
 
-            Dispatcher.Dispatch(new AddCellAttendanceAction { CellId = CellId, Documents = disciples });
+            Dispatcher.Dispatch(new AddCellAttendanceAction { CellId = CellId, Documents = disciples, Notes = AttendanceNotes });
 
             AddAttendanceEnabled = false;
         }

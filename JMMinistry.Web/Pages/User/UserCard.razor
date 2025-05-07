@@ -6,7 +6,7 @@
 @inject NavigationManager navigationManager;
 @inject IDialogService dialogService;
 
-<MudPaper Style="padding: 0.5rem" Class="@(OnClick is null ? "" : "mud-ripple")" 
+<MudPaper Style="padding: 0.5rem" Class="@(OnClick is null || (EnableSelection ?? false) ? "" : "mud-ripple")"
           onclick="@(() => HandleClick())">
 
     <div class="user-card">
@@ -50,7 +50,7 @@
 
         </div>
 
-        @if(OnClick is not null || (OnClick?.HasDelegate ?? false))
+        @if((EnableSelection ?? false) && (OnClick is not null || (OnClick?.HasDelegate ?? false)))
         {
             <MudIcon Style="opacity: 0.4" Icon="@Icons.Material.Filled.ArrowForwardIos" Size="Size.Small" />
         }
@@ -75,7 +75,7 @@
 
     void HandleClick()
     {
-        if (OnClick is null)
+        if (OnClick is null || (EnableSelection ?? false))
             return;
 
         OnClick?.InvokeAsync(new UserEventArgs { CellId = User.CellId ?? 0, Document = User.Document });

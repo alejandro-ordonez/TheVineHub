@@ -4,8 +4,6 @@
 
 @inject IStringLocalizer<UIStrings> translator;
 
-
-
 <MudPaper Style="margin: 1rem 0px">
     <MudToolBar>
         <MudText Typo="Typo.subtitle1">@translator["Total", State.Value.Disciples.Count]</MudText>
@@ -33,7 +31,16 @@
 
 @if (AddAttendanceEnabled)
 {
-    <MudButton Style="margin: 0px 1rem;" Color="Color.Primary" OnClick="AddAttendance">@translator["Add"]</MudButton>
+    <MudPaper Style="margin: 1rem 0px">
+        <MudToolBar>
+            <MudTextField Style="flex-grow: 1" 
+                          @bind-Value="AttendanceNotes" 
+                          Typo="Typo.body1"/>
+
+            <MudButton Style="margin: 0px 1rem;" Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => { AddAttendanceEnabled = false; })">@translator["Cancel"]</MudButton>
+            <MudButton Style="margin: 0px 1rem;" Variant="Variant.Filled" Color="Color.Primary" OnClick="AddAttendance">@translator["Add"]</MudButton>
+        </MudToolBar>
+    </MudPaper>
 }
 
 

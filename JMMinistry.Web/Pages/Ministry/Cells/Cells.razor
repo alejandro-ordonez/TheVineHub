@@ -28,7 +28,7 @@ else
     <div class="cards-grid">
         @foreach (var cell in CellsState?.Value?.Cells ?? [])
         {
-            <MudCard Class="mud-ripple" onclick="@(() => OpenCellDetails(cell.Id!.Value))">
+            <MudCard Class="mud-ripple" @onclick="@(() => OpenCellDetails(cell.Id!.Value))">
                 <MudCardContent>
                     <MudText Typo="Typo.h5">@cell.Name</MudText>
                     <MudText Typo="Typo.body2">@cell.Description</MudText>

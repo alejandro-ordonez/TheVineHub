@@ -3,6 +3,7 @@ using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Cells.Queries.CellCheckIsAuthorized;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.Cell;
+using JMMinistry.Common.Dtos.User;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,7 +27,26 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetCellAttendances
                 .Take(40)
                 .ToListAsync(cancellationToken);
 
-            return mapper.Map<IList<CellAttendanceDto>>(attendances);
+            var cell = await dbContext.Cells
+                .Include(cell => cell.Disciples)
+                .FirstOrDefaultAsync(cell => cell.Id == request.CellId, cancellationToken);
+
+            var disciples = cell?.Disciples ?? [];
+
+            var attendancesDto = new List<CellAttendanceDto>();
+
+            foreach (var attendance in attendances)
+            {
+                var missingAttendees = disciples
+                    .Where(disciple => disciple.CellEnrollmentDate < attendance.Date)
+                    .Except(attendance.Attendees);
+
+                var dto = mapper.Map<CellAttendanceDto>(attendance);
+                dto.MissingAttendees = mapper.Map<IList<PartialUserInfoDto>>(missingAttendees);
+                attendancesDto.Add(dto);
+            }
+
+            return attendancesDto;
         }
     }
 }
