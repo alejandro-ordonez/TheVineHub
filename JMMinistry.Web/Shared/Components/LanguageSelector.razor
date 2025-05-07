@@ -1,0 +1,44 @@
+﻿@using System.Globalization
+@using Blazored.LocalStorage
+@inject NavigationManager NavManager
+@inject IStringLocalizer<UIStrings> localizer
+@inject ILocalStorageService _localStorage
+
+<MudSelect @bind-Value="UICulture"
+           Label="@localizer["Language"]"
+           Placeholder="@localizer["SelectCulture"]"
+           Required="true"
+           RequiredError="@localizer["FieldRequired"]"
+           Variant="Variant.Outlined">
+
+    @foreach (var culture in UICultures)
+    {
+        <MudSelectItem Value="culture">@culture.DisplayName</MudSelectItem>
+    }
+</MudSelect>
+
+
+@code {
+    readonly CultureInfo[] UICultures = new[]
+    {
+        // default cultures supported by the application
+        new CultureInfo("es-ES"),
+        new CultureInfo("en-US")
+    };
+
+    CultureInfo UICulture
+    {
+        get => CultureInfo.CurrentCulture;
+        set
+        {
+            if (CultureInfo.CurrentCulture != value)
+            {
+                // Set the culture in LocalStorage
+                _localStorage.SetItemAsync(CurrentCulture, value.Name);
+
+                // Load the Current URL
+                NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
+            }
+        }
+    }
+}
