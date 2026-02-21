@@ -406,4 +406,16 @@
   <data name="Announcements" xml:space="preserve">
     <value>Announcements</value>
   </data>
+  <data name="OpeningDate" xml:space="preserve">
+    <value>Opening date</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>{0} {1} already exists without a cell. Add as disciple?</value>
+  </data>
+  <data name="UserHasCell" xml:space="preserve">
+    <value>{0} {1} already belongs to a cell</value>
+  </data>
 </root>

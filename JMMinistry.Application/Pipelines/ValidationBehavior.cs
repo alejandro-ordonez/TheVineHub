@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using MediatR;
+using FluentValidation;
+using Mediator;
 using Microsoft.Extensions.Logging;
 
 namespace JMMinistry.Application.Pipelines
@@ -7,9 +7,9 @@ namespace JMMinistry.Application.Pipelines
     public class ValidationBehavior<TRequest, TResponse>(
         IEnumerable<IValidator<TRequest>> validators,
         ILogger<ValidationBehavior<TRequest, TResponse>> logger)
-        : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+        : IPipelineBehavior<TRequest, TResponse> where TRequest : IMessage
     {
-        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+        public async ValueTask<TResponse> Handle(TRequest message, MessageHandlerDelegate<TRequest, TResponse> next, CancellationToken cancellationToken)
         {
             logger.LogInformation("Running validations for request: {RequestName}", typeof(TRequest).Name);
 
@@ -17,7 +17,7 @@ namespace JMMinistry.Application.Pipelines
 
             if (validators.Any())
             {
-                var context = new ValidationContext<TRequest>(request);
+                var context = new ValidationContext<TRequest>(message);
 
                 var validationResults = await Task.WhenAll(
                     validators.Select(v =>
@@ -33,7 +33,7 @@ namespace JMMinistry.Application.Pipelines
             }
 
             logger.LogInformation("Validations succeeded");
-            return await next().ConfigureAwait(false);
+            return await next(message, cancellationToken).ConfigureAwait(false);
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using JMMinistry.Common.Dtos.Common;
-using MediatR;
+using Mediator;
 
 namespace JMMinistry.Application.Features.Location.GetLocationData
 {
-    public class GetLocationDataQuery : IRequest<IList<CityDto>>
+    public class GetLocationDataQuery : IQuery<IList<CityDto>>
     {
     }
 }

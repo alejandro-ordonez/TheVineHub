@@ -1,0 +1,45 @@
+@using JMMinistry.Common.Dtos.User
+@inject IStringLocalizer<UIStrings> translator;
+
+<Dialog Result="UserCreated"
+        Color="Color.Primary"
+        PrimaryButton="false"
+        PrimaryText="@translator["Add"]">
+    <Content>
+        <UserForm UserInfo="UserCreated" OnCompleted="OnFormCompleted" OnExistingUserSelected="OnExistingUser" />
+    </Content>
+</Dialog>
+
+@code {
+    [CascadingParameter]
+    IMudDialogInstance? MudDialog { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnExistingUserSelected { get; set; }
+
+    [SupplyParameterFromForm]
+    CreateUserInfoDto UserCreated { get; set; } = new();
+
+    private void OnFormCompleted(CreateUserInfoDto user)
+    {
+        MudDialog?.Close(new DialogResult<CreateUserInfoDto>
+        {
+            Option = DialogResultOption.PrimaryButton,
+            Data = user
+        });
+    }
+
+    private async Task OnExistingUser(string document)
+    {
+        if (OnExistingUserSelected.HasDelegate)
+        {
+            await OnExistingUserSelected.InvokeAsync(document);
+        }
+
+        MudDialog?.Close(new DialogResult<CreateUserInfoDto>
+        {
+            Option = DialogResultOption.SecondaryButton,
+            Data = new CreateUserInfoDto { Document = document }
+        });
+    }
+}

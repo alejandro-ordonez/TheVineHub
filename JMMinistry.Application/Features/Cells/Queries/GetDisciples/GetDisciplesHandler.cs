@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using JMMinistry.Application.Exceptions;
+﻿using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Cells.Queries.CellCheckIsAuthorized;
+using JMMinistry.Application.Mappers;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.User;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Application.Features.Cells.Queries.GetDisciples
@@ -11,12 +11,12 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetDisciples
     public class GetDisciplesHandler
         (
             IJmDbContext dbContext,
-            IMapper mapper,
+            AppMapper mapper,
             IMediator mediator
         )
-        : IRequestHandler<GetDisciplesQuery, IEnumerable<PartialUserInfoDto>>
+        : IQueryHandler<GetDisciplesQuery, IEnumerable<PartialUserInfoDto>>
     {
-        public async Task<IEnumerable<PartialUserInfoDto>> Handle(GetDisciplesQuery request, CancellationToken cancellationToken)
+        public async ValueTask<IEnumerable<PartialUserInfoDto>> Handle(GetDisciplesQuery request, CancellationToken cancellationToken)
         {
             var cell = await dbContext.Cells
                 .Include(cell => cell.Disciples)
@@ -24,7 +24,7 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetDisciples
                     throw new NotFoundException("The requested cell does not exists");
 
             if (cell.Disciples.Any(disciple => disciple.Id == request.RequestorId))
-                return mapper.Map<IEnumerable<PartialUserInfoDto>>(cell.Disciples);
+                return mapper.PersonalInfoCollectionToPartialUserInfoDtoList(cell.Disciples);
 
             var checkIfLeader = new CellCheckIsAuthorizedQuery
             {
@@ -37,7 +37,7 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetDisciples
             if (!isLeader)
                 throw new NotAuthorizedException();
 
-            return mapper.Map<IEnumerable<PartialUserInfoDto>>(cell.Disciples);
+            return mapper.PersonalInfoCollectionToPartialUserInfoDtoList(cell.Disciples);
         }
     }
 }

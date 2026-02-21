@@ -1,18 +1,18 @@
-﻿using AutoMapper;
+﻿using JMMinistry.Application.Mappers;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Domain;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
 {
-    public class GetUserInfoByCriteriaHandler(IJmDbContext dbContext, IMapper mapper) : IRequestHandler<GetUserInfoByCriteriaQuery, PagedResponse<PartialUserInfoDto>>
+    public class GetUserInfoByCriteriaHandler(IJmDbContext dbContext, AppMapper mapper) : IQueryHandler<GetUserInfoByCriteriaQuery, PagedResponse<PartialUserInfoDto>>
     {
-        public async Task<PagedResponse<PartialUserInfoDto>> Handle(GetUserInfoByCriteriaQuery request, CancellationToken cancellationToken)
+        public async ValueTask<PagedResponse<PartialUserInfoDto>> Handle(GetUserInfoByCriteriaQuery request, CancellationToken cancellationToken)
         {
             var query = dbContext.PersonalInfo.AsQueryable();
             query = GetQuery(query, request);
@@ -24,7 +24,7 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
                 .Take(request.PageSize)
                 .ToListAsync(cancellationToken);
 
-            var dtos = mapper.Map<IList<PartialUserInfoDto>>(results);
+            var dtos = mapper.PersonalInfoListToPartialUserInfoDtoList(results);
 
             return new PagedResponse<PartialUserInfoDto>
             {

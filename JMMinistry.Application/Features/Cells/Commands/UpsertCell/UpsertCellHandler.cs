@@ -1,19 +1,19 @@
-﻿using AutoMapper;
-using JMMinistry.Application.Exceptions;
+﻿using JMMinistry.Application.Exceptions;
+using JMMinistry.Application.Mappers;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Domain;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Application.Features.Cells.Commands.CreateCell;
 
-public class UpsertCellHandler(IJmDbContext dbContext, IMapper mapper) :
-    IRequestHandler<UpsertCellCommand, CellDto>
+public class UpsertCellHandler(IJmDbContext dbContext, AppMapper mapper) :
+    ICommandHandler<UpsertCellCommand, CellDto>
 {
-    public async Task<CellDto> Handle(UpsertCellCommand request, CancellationToken cancellationToken)
+    public async ValueTask<CellDto> Handle(UpsertCellCommand request, CancellationToken cancellationToken)
     {
-        var model = mapper.Map<Cell>(request);
+        var model = mapper.CellDtoToCell(request);
 
         var user = await dbContext.PersonalInfo.FirstOrDefaultAsync(user => user.Id == request.Document, cancellationToken) ??
             throw new NotFoundException(request.Document);
@@ -29,7 +29,7 @@ public class UpsertCellHandler(IJmDbContext dbContext, IMapper mapper) :
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        var dto = mapper.Map<CellDto>(model);
+        var dto = mapper.CellToCellDto(model);
         return dto;
     }
 }

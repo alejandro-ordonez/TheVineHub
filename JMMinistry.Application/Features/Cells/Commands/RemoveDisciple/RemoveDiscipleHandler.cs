@@ -1,17 +1,17 @@
-﻿using AutoMapper;
-using JMMinistry.Application.Exceptions;
+﻿using JMMinistry.Application.Exceptions;
+using JMMinistry.Application.Mappers;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Domain;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Application.Features.Cells.Commands.RemoveDisciple
 {
-    public class RemoveDiscipleHandler(IJmDbContext dbContext, IMapper mapper) : IRequestHandler<RemoveDiscipleCommand, IList<PartialUserInfoDto>>
+    public class RemoveDiscipleHandler(IJmDbContext dbContext, AppMapper mapper) : ICommandHandler<RemoveDiscipleCommand, IList<PartialUserInfoDto>>
     {
-        public async Task<IList<PartialUserInfoDto>> Handle(RemoveDiscipleCommand request, CancellationToken cancellationToken)
+        public async ValueTask<IList<PartialUserInfoDto>> Handle(RemoveDiscipleCommand request, CancellationToken cancellationToken)
         {
             var disciple = await dbContext.PersonalInfo
                 .FirstOrDefaultAsync(person => person.Id == request.Document, cancellationToken) ??
@@ -36,7 +36,7 @@ namespace JMMinistry.Application.Features.Cells.Commands.RemoveDisciple
 
             await dbContext.SaveChangesAsync(cancellationToken);
 
-            return mapper.Map<IList<PartialUserInfoDto>>(cell.Disciples);
+            return mapper.PersonalInfoCollectionToPartialUserInfoDtoList(cell.Disciples);
         }
     }
 }

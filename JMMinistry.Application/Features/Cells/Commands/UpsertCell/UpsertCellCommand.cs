@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using JMMinistry.Common.Dtos.Cell;
-using MediatR;
+using Mediator;
 
 namespace JMMinistry.Application.Features.Cells.Commands.CreateCell
 {
-    public class UpsertCellCommand : CellDto, IRequest<CellDto>
+    public class UpsertCellCommand : CellDto, ICommand<CellDto>
     {
         public string Document { get; set; } = string.Empty;
     }

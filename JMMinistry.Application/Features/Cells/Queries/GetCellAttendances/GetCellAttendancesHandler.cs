@@ -1,17 +1,17 @@
-﻿using AutoMapper;
-using JMMinistry.Application.Exceptions;
+﻿using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Cells.Queries.CellCheckIsAuthorized;
+using JMMinistry.Application.Mappers;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.User;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Application.Features.Cells.Queries.GetCellAttendances
 {
-    public class GetCellAttendancesHandler(IJmDbContext dbContext, IMediator mediator, IMapper mapper) : IRequestHandler<GetCellAttendancesQuery, IList<CellAttendanceDto>>
+    public class GetCellAttendancesHandler(IJmDbContext dbContext, IMediator mediator, AppMapper mapper) : IQueryHandler<GetCellAttendancesQuery, IList<CellAttendanceDto>>
     {
-        public async Task<IList<CellAttendanceDto>> Handle(GetCellAttendancesQuery request, CancellationToken cancellationToken)
+        public async ValueTask<IList<CellAttendanceDto>> Handle(GetCellAttendancesQuery request, CancellationToken cancellationToken)
         {
             var checkAuthorizedCommand = new CellCheckIsAuthorizedQuery { CellId = request.CellId, RequestorId = request.RequestorId };
 
@@ -41,8 +41,8 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetCellAttendances
                     .Where(disciple => disciple.CellEnrollmentDate < attendance.Date)
                     .Except(attendance.Attendees);
 
-                var dto = mapper.Map<CellAttendanceDto>(attendance);
-                dto.MissingAttendees = mapper.Map<IList<PartialUserInfoDto>>(missingAttendees);
+                var dto = mapper.CellAttendanceToCellAttendanceDto(attendance);
+                dto.MissingAttendees = mapper.PersonalInfoListToPartialUserInfoDtoList(missingAttendees);
                 attendancesDto.Add(dto);
             }
 

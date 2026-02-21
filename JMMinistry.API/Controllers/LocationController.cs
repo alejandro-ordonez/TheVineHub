@@ -1,5 +1,5 @@
 ﻿using JMMinistry.Application.Features.Location.GetLocationData;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +7,6 @@ namespace JMMinistry.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class LocationController(IMediator mediator) : ControllerBase
     {
         [HttpGet]

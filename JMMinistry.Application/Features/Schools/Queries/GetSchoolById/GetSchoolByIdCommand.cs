@@ -1,9 +1,9 @@
 ﻿using JMMinistry.Common.Dtos.School;
-using MediatR;
+using Mediator;
 
 namespace JMMinistry.Application.Features.Schools.Queries.GetSchoolById
 {
-    public class GetSchoolByIdCommand : IRequest<SchoolWithClassesDto>
+    public class GetSchoolByIdCommand : IQuery<SchoolWithClassesDto>
     {
         public int SchoolId { get; set; }
     }

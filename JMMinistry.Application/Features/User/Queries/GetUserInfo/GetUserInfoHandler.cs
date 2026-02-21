@@ -1,12 +1,12 @@
-﻿using AutoMapper;
-using JMMinistry.Application.Exceptions;
+﻿using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Cells.Queries.CellCheckIsAuthorized;
 using JMMinistry.Application.Services;
+using JMMinistry.Application.Mappers;
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Domain;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +15,11 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
     public class GetUserInfoHandler(
         IJmDbContext dbContext,
         UserManager<PersonalInfo> userManager,
-        IMapper mapper,
+        AppMapper mapper,
         IMediator mediator
-        ) : IRequestHandler<GetUserInfoQuery, UserInfoDto>
+        ) : IQueryHandler<GetUserInfoQuery, UserInfoDto>
     {
-        public async Task<UserInfoDto> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
+        public async ValueTask<UserInfoDto> Handle(GetUserInfoQuery request, CancellationToken cancellationToken)
         {
             var userInfo = await dbContext.PersonalInfo
                 .FirstOrDefaultAsync(user => user.Id == request.Document, cancellationToken) ??
@@ -28,7 +28,7 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
             // Requesting self information
             if (request.RequestorDocument == request.Document)
             {
-                var userInfoDto = mapper.Map<UserInfoDto>(userInfo);
+                var userInfoDto = mapper.PersonalInfoToUserInfoDto(userInfo);
                 return userInfoDto;
             }
 
@@ -43,7 +43,7 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
 
             if (allowed)
             {
-                var userInfoDto = mapper.Map<UserInfoDto>(userInfo);
+                var userInfoDto = mapper.PersonalInfoToUserInfoDto(userInfo);
                 userInfoDto.AccessType = AccessType.Admin;
                 return userInfoDto;
             }
@@ -58,7 +58,7 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
 
             if (areMates)
             {
-                var userInfoDto = mapper.Map<UserInfoDto>(userInfo);
+                var userInfoDto = mapper.PersonalInfoToUserInfoDto(userInfo);
                 userInfoDto.AccessType = AccessType.Mate;
                 return userInfoDto;
             }
@@ -72,7 +72,7 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
 
             if (requestorIsTheLeader)
             {
-                var userInfoDto = mapper.Map<UserInfoDto>(userInfo);
+                var userInfoDto = mapper.PersonalInfoToUserInfoDto(userInfo);
                 userInfoDto.AccessType = AccessType.Leader;
                 return userInfoDto;
             }

@@ -1,7 +1,7 @@
 ﻿using JMMinistry.Application.Configuration;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Domain;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -16,9 +16,9 @@ namespace JMMinistry.Application.Features.User.Commands.Authenticate
     public class AuthenticateHandler(
         UserManager<PersonalInfo> userManager,
         IOptions<JWTSettings> jwtSettings)
-        : IRequestHandler<AuthenticateCommand, TokenResult>
+        : ICommandHandler<AuthenticateCommand, TokenResult>
     {
-        public async Task<TokenResult> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
+        public async ValueTask<TokenResult> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
         {
             var user = await userManager.FindByIdAsync(request.Document) ??
                 throw new AuthenticationException("User not found");

@@ -75,5 +75,28 @@ namespace JMMinistry.Web.Api
 
             return await result.Content.ReadFromJsonAsync<Response<object>>();
         }
+
+        public async Task<Response<object>?> CreateUser(CreateUserInfoDto createUserDto)
+        {
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            var result = await httpClient.PostAsJsonAsync($"{_userApi}/register", createUserDto);
+
+            var response = await result.Content.ReadFromJsonAsync<Response<object>?>();
+
+            if (!response?.Success ?? false)
+            {
+                logger.LogError("Failed to create user, reason: \n {Errors}", string.Join("\n", response?.Errors ?? []));
+            }
+
+            return response;
+        }
+
+        public async Task<Response<DocumentCheckResultDto>?> CheckDocumentExists(string document)
+        {
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            var result = await httpClient.GetAsync($"{_userApi}/Check/{document}");
+
+            return await result.Content.ReadFromJsonAsync<Response<DocumentCheckResultDto>>();
+        }
     }
 }

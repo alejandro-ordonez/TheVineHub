@@ -4,6 +4,7 @@ using JMMinistry.Application.Configuration;
 using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Mappers;
 using JMMinistry.Application.Pipelines;
+using Mediator;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,17 +16,17 @@ namespace JMMinistry.Application
         {
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
-            services.AddAutoMapper(typeof(MapperProfile));
+            services.AddSingleton<AppMapper>();
 
             services.Configure<JWTSettings>(configuration.GetSection(nameof(JWTSettings)));
             services.AddJwtAuthentication(configuration);
 
-            services.AddMediatR(cfg =>
+            services.AddMediator(options =>
             {
-                cfg.RegisterServicesFromAssembly(typeof(ApplicationExtensions).Assembly);
-                cfg.AddOpenBehavior(typeof(LoggingBehavior<,>));
-                cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+                options.ServiceLifetime = ServiceLifetime.Scoped;
             });
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             services.AddValidatorsFromAssembly(typeof(ApplicationExtensions).Assembly);
         }

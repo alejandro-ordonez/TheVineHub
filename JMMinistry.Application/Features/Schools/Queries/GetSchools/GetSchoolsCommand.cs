@@ -1,9 +1,9 @@
 ﻿using JMMinistry.Common.Dtos.School;
-using MediatR;
+using Mediator;
 
 namespace JMMinistry.Application.Features.Schools.Queries.GetSchools
 {
-    public class GetSchoolsCommand : IRequest<IEnumerable<SchoolDto>>
+    public class GetSchoolsCommand : IQuery<IEnumerable<SchoolDto>>
     {
     }
 }

@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using JMMinistry.Common.Dtos.User;
-using MediatR;
+using Mediator;
 
 namespace JMMinistry.Application.Features.Cells.Queries.GetDisciples
 {
-    public class GetDisciplesQuery : IRequest<IEnumerable<PartialUserInfoDto>>
+    public class GetDisciplesQuery : IQuery<IEnumerable<PartialUserInfoDto>>
     {
         public required int CellId { get; set; }
         public required string RequestorId { get; set; }

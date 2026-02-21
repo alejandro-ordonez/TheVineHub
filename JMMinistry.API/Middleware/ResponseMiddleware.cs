@@ -70,6 +70,8 @@ namespace JMMinistry.API.Middleware
                             Details = $"Operation success: {context.Request.Path}"
                         };
 
+                        context.Response.Headers.ContentLength = null;
+                        context.Response.ContentType = MediaTypeNames.Application.Json;
                         await JsonSerializer.SerializeAsync(originalResponseBody, result);
                     }
                 }

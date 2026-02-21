@@ -2,13 +2,15 @@
 using JMMinistry.Application.Features.User.Commands.Authenticate;
 using JMMinistry.Application.Features.User.Commands.CreateUser;
 using JMMinistry.Application.Features.User.Commands.ImportUsers;
+using JMMinistry.Application.Features.User.Queries.CheckDocumentExists;
 using JMMinistry.Application.Features.User.Queries.GetUserInfo;
 using JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria;
 using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.User;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
 
 namespace JMMinistry.API.Controllers
 {
@@ -24,10 +26,10 @@ namespace JMMinistry.API.Controllers
 
 
         [HttpPost("register")]
-        public async Task<ActionResult> Register(CreateUserCommand createUserCommand)
+        public async Task<ActionResult<string>> Register(CreateUserCommand createUserCommand)
         {
-            await mediator.Send(createUserCommand);
-            return Created();
+            var result = await mediator.Send(createUserCommand);
+            return new ContentResult { Content = result, StatusCode = StatusCodes.Status201Created, ContentType = MediaTypeNames.Text.Plain };
         }
 
         [Authorize]
@@ -58,6 +60,14 @@ namespace JMMinistry.API.Controllers
             });
 
             return Ok(userInfo);
+        }
+
+        [Authorize]
+        [HttpGet("Check/{document}")]
+        public async Task<ActionResult<DocumentCheckResultDto>> CheckDocumentExists(string document)
+        {
+            var result = await mediator.Send(new CheckDocumentExistsQuery { Document = document });
+            return Ok(result);
         }
 
         [Authorize]

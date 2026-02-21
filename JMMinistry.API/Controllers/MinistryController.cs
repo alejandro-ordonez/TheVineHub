@@ -10,7 +10,7 @@ using JMMinistry.Application.Features.Cells.Queries.GetCells;
 using JMMinistry.Application.Features.Cells.Queries.GetDisciples;
 using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.User;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

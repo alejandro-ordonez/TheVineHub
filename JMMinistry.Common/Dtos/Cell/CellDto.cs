@@ -10,6 +10,7 @@ namespace JMMinistry.Common.Dtos.Cell
         public CityDto? City { get; set; }
         public LocalityDto? Locality { get; set; }
         public DayOfWeek? Day { get; set; }
+        public DateOnly? OpeningDate { get; set; }
 
     }
 }

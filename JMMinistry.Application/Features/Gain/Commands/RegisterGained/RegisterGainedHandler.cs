@@ -1,20 +1,20 @@
-﻿using AutoMapper;
-using JMMinistry.Application.Exceptions;
+﻿using JMMinistry.Application.Exceptions;
+using JMMinistry.Application.Mappers;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.Gained;
 using JMMinistry.Common.Dtos.Gained.Enums;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Domain;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Application.Features.Gain.Commands.RegisterGained
 {
-    public class RegisterGainedHandler(IJmDbContext dbContext, IMapper mapper) : IRequestHandler<RegisterGainedCommand, PartialUserInfoDto>
+    public class RegisterGainedHandler(IJmDbContext dbContext, AppMapper mapper) : ICommandHandler<RegisterGainedCommand, PartialUserInfoDto>
     {
-        public async Task<PartialUserInfoDto> Handle(RegisterGainedCommand request, CancellationToken cancellationToken)
+        public async ValueTask<PartialUserInfoDto> Handle(RegisterGainedCommand request, CancellationToken cancellationToken)
         {
-            var model = mapper.Map<PersonalInfo>(request.GainedInfo);
+            var model = mapper.CreateGainedUserToPersonalInfo(request.GainedInfo);
 
             if (await dbContext.PersonalInfo.AnyAsync(person => person.Id == request.GainedInfo.Document, cancellationToken))
                 throw new EntityAlreadyExistsException<PersonalInfo>(request.GainedInfo.Document);
@@ -39,7 +39,7 @@ namespace JMMinistry.Application.Features.Gain.Commands.RegisterGained
 
             await dbContext.SaveChangesAsync(cancellationToken);
 
-            return mapper.Map<GainedUser>(gained);
+            return mapper.GainedToGainedUser(gained);
         }
     }
 }

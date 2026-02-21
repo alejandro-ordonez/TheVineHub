@@ -1,36 +1,25 @@
-﻿using MudBlazor;
+using MudBlazor;
 
 namespace JMMinistry.Web.Shared.Converters
 {
-    public class TimeOnlyConverter : Converter<TimeOnly>
+    public class TimeOnlyConverter : IConverter<TimeOnly, string>
     {
-        public TimeOnlyConverter()
+        private const string DefaultFormat = "HH:mm:ss";
+
+        public string Convert(TimeOnly value)
         {
-            SetFunc = ConvertToString;
-            GetFunc = ConvertFromString;
-            Format = "HH:mm:ss";
+            return value.ToString(DefaultFormat);
         }
 
-        protected virtual TimeOnly ConvertFromString(string? value)
+        public TimeOnly ConvertBack(string? value)
         {
             if (string.IsNullOrEmpty(value))
                 return default;
 
-            try
-            {
-                return TimeOnly.ParseExact(value, Format ?? Culture.DateTimeFormat.ShortDatePattern, Culture);
-            }
-            catch (FormatException ex)
-            {
-                UpdateGetError(ex.ToString());
-                return default;
-            }
-        }
+            if (TimeOnly.TryParseExact(value, DefaultFormat, null, System.Globalization.DateTimeStyles.None, out var result))
+                return result;
 
-
-        protected virtual string ConvertToString(TimeOnly arg)
-        {
-            return arg.ToString(Format);
+            return default;
         }
     }
 }

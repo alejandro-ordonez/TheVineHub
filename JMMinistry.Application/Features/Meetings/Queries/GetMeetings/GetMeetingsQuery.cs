@@ -1,9 +1,9 @@
 ﻿using JMMinistry.Common.Dtos.Meetings;
-using MediatR;
+using Mediator;
 
 namespace JMMinistry.Application.Features.Meetings.Queries.GetMeetings
 {
-    public class GetMeetingsQuery : IRequest<IList<MeetingDto>>
+    public class GetMeetingsQuery : IQuery<IList<MeetingDto>>
     {
         public bool IsRecurrent { get; set; }
     }

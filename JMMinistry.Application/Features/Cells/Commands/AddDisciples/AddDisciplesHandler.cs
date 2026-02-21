@@ -1,18 +1,18 @@
-﻿using AutoMapper;
-using JMMinistry.Application.Exceptions;
+﻿using JMMinistry.Application.Exceptions;
+using JMMinistry.Application.Mappers;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Domain;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Application.Features.Cells.Commands.AddDisciples;
 
-public class AddDisciplesHandler(IJmDbContext dbContext, IMapper mapper) :
-    IRequestHandler<AddDisciplesCommand, List<PartialUserInfoDto>>
+public class AddDisciplesHandler(IJmDbContext dbContext, AppMapper mapper) :
+    ICommandHandler<AddDisciplesCommand, List<PartialUserInfoDto>>
 {
-    public async Task<List<PartialUserInfoDto>> Handle(AddDisciplesCommand request, CancellationToken cancellationToken)
+    public async ValueTask<List<PartialUserInfoDto>> Handle(AddDisciplesCommand request, CancellationToken cancellationToken)
     {
         var users = await dbContext.PersonalInfo
             .Where(user => request.Documents.Contains(user.Id))
@@ -34,6 +34,6 @@ public class AddDisciplesHandler(IJmDbContext dbContext, IMapper mapper) :
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return mapper.Map<List<PartialUserInfoDto>>(cell.Disciples);
+        return mapper.PersonalInfoCollectionToPartialUserInfoDtoListConcrete(cell.Disciples);
     }
 }

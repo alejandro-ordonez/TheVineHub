@@ -12,6 +12,7 @@
 
 <Dialog Result="DisciplesSelected"
         Color="Color.Primary"
+        PrimaryButton="@(DisciplesSelected.Count > 0)"
         PrimaryText="@translator["Add"]">
     <Content>
         <UsersTable FetchUsers="FetchUsers"

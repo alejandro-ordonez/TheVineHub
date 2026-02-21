@@ -14,6 +14,13 @@
     <ToolBarContent>
         <MudText Typo="Typo.h6">@_translator["Users"]</MudText>
         <MudSpacer />
+        <MudButton StartIcon="@Icons.Material.Filled.Add"
+                   Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   OnClick="OpenAddUser">
+            @_translator["Add"]
+        </MudButton>
+        <MudSpacer />
         <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="@_translator["Search"]" Adornment="Adornment.Start"
                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>

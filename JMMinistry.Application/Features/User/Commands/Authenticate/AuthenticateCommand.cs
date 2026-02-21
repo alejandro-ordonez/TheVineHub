@@ -1,9 +1,9 @@
 ﻿using JMMinistry.Common.Dtos.User;
-using MediatR;
+using Mediator;
 
 namespace JMMinistry.Application.Features.User.Commands.Authenticate
 {
-    public class AuthenticateCommand : AuthenticateDto, IRequest<TokenResult>
+    public class AuthenticateCommand : AuthenticateDto, ICommand<TokenResult>
     {
     }
 }

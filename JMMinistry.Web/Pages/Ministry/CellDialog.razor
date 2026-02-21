@@ -2,6 +2,7 @@
 @using JMMinistry.Common.Dtos.Cell
 @using JMMinistry.Common.Dtos.Common
 @using JMMinistry.Web.Api
+@using JMMinistry.Web.Extensions
 @using JMMinistry.Web.Store.CellUseCase
 
 @inject IStringLocalizer<UIStrings> translator;
@@ -75,6 +76,14 @@
                 }
             </MudSelect>
 
+            <MudTextField @bind-Value="CreateCellDto.OpeningDate"
+                          For="@(() => CreateCellDto.OpeningDate)"
+                          Immediate="true"
+                          Variant="Variant.Outlined"
+                          Label="@translator["OpeningDate"]"
+                          Converter="UIConverters.NullableDateOnlyConverter"
+                          InputType="InputType.Date" />
+
         </MudForm>
     </Content>
 </Dialog>
@@ -106,6 +115,7 @@
                 City = CurrentCell.Value.Cell.City,
                 Locality = CurrentCell.Value.Cell.Locality,
                 Day = CurrentCell.Value.Cell.Day,
+                OpeningDate = CurrentCell.Value.Cell.OpeningDate,
             };
         }
     }

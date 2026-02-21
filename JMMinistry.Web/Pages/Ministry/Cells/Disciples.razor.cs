@@ -1,5 +1,6 @@
 ﻿using Fluxor;
 using JMMinistry.Common.Dtos.User;
+using JMMinistry.Web.Api;
 using JMMinistry.Web.Pages.User;
 using JMMinistry.Web.Shared.Components;
 using JMMinistry.Web.Store.CellAttendances.Actions;
@@ -27,6 +28,9 @@ namespace JMMinistry.Web.Pages.Ministry.Cells
 
         [Inject]
         public required NavigationManager NavigationManager { get; set; }
+
+        [Inject]
+        public required IUserApi UserApi { get; set; }
 
         private Dictionary<string, UserCard> UserCards { get; set; } = [];
 
@@ -61,13 +65,24 @@ namespace JMMinistry.Web.Pages.Ministry.Cells
 
         async Task OpenAddDisciple()
         {
-            var dialog = await DialogService.ShowAsync<AddDisciplesDialog>();
-            var result = await dialog.GetReturnValueAsync<DialogResult<HashSet<PartialUserInfoDto>>>();
+            var dialog = await DialogService.ShowAsync<AddUserDialog>(translator["AddDisciples"]);
+            var result = await dialog.GetReturnValueAsync<DialogResult<CreateUserInfoDto>>();
 
-            if (result is null || result.Data is null)
+            if (result?.Data is null)
                 return;
 
-            Dispatcher.Dispatch(new AddDisciplesAction { CellId = CellId, Documents = result.Data.Select(user => user.Document).ToList() });
+            if (result.Option == DialogResultOption.SecondaryButton)
+            {
+                Dispatcher.Dispatch(new AddDisciplesAction { CellId = CellId, Documents = [result.Data.Document] });
+                return;
+            }
+
+            var response = await UserApi.CreateUser(result.Data);
+
+            if (response?.Success ?? false)
+            {
+                Dispatcher.Dispatch(new AddDisciplesAction { CellId = CellId, Documents = [result.Data.Document] });
+            }
         }
 
         async Task ShowUserDetails(UserEventArgs user)

@@ -3,7 +3,7 @@ using JMMinistry.Application.Features.Schools.Queries.GetSchoolById;
 using JMMinistry.Application.Features.Schools.Queries.GetSchools;
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.School;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

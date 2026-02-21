@@ -2,15 +2,15 @@
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.User.Enums;
 using JMMinistry.Domain;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using System.Globalization;
 
 namespace JMMinistry.Application.Features.User.Commands.ImportUsers
 {
-    public class ImportUsersHandler(UserManager<PersonalInfo> userManager) : IRequestHandler<ImportUsersCommand, string>
+    public class ImportUsersHandler(UserManager<PersonalInfo> userManager) : ICommandHandler<ImportUsersCommand, string>
     {
-        public async Task<string> Handle(ImportUsersCommand request, CancellationToken cancellationToken)
+        public async ValueTask<string> Handle(ImportUsersCommand request, CancellationToken cancellationToken)
         {
             if (request.File == null)
                 throw new ArgumentNullException(nameof(request), "The file cannot be empty");

@@ -1,9 +1,9 @@
 ﻿using JMMinistry.Common.Dtos.School;
-using MediatR;
+using Mediator;
 
 namespace JMMinistry.Application.Features.Schools.Commands.CreateSchool
 {
-    public class UpsertSchoolCommand : SchoolDto, IRequest<SchoolDto>
+    public class UpsertSchoolCommand : SchoolDto, ICommand<SchoolDto>
     {
     }
 }

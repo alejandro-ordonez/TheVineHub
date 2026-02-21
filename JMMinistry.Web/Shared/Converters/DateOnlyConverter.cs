@@ -1,36 +1,25 @@
-﻿using MudBlazor;
+using MudBlazor;
 
 namespace JMMinistry.Web.Shared.Converters
 {
-    public class DateOnlyConverter : Converter<DateOnly>
+    public class DateOnlyConverter : IConverter<DateOnly, string>
     {
-        public DateOnlyConverter()
+        private const string DefaultFormat = "yyyy-MM-dd";
+
+        public string Convert(DateOnly value)
         {
-            SetFunc = ConvertToString;
-            GetFunc = ConvertFromString;
-            Format = "yyyy-MM-dd";
+            return value.ToString(DefaultFormat);
         }
 
-        protected virtual DateOnly ConvertFromString(string? value)
+        public DateOnly ConvertBack(string? value)
         {
             if (string.IsNullOrEmpty(value))
                 return default;
 
-            try
-            {
-                return DateOnly.ParseExact(value, Format ?? Culture.DateTimeFormat.ShortDatePattern, Culture);
-            }
-            catch (FormatException)
-            {
-                UpdateGetError("Failed to parse the given date");
-                return default;
-            }
-        }
+            if (DateOnly.TryParseExact(value, DefaultFormat, null, System.Globalization.DateTimeStyles.None, out var result))
+                return result;
 
-
-        protected virtual string ConvertToString(DateOnly arg)
-        {
-            return arg.ToString(Format);
+            return default;
         }
     }
 }

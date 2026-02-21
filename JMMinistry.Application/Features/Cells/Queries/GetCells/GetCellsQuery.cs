@@ -1,9 +1,9 @@
 ﻿using JMMinistry.Common.Dtos.Cell;
-using MediatR;
+using Mediator;
 
 namespace JMMinistry.Application.Features.Cells.Queries.GetCells
 {
-    public class GetCellsQuery : IRequest<IEnumerable<CellDto>>
+    public class GetCellsQuery : IQuery<IEnumerable<CellDto>>
     {
         public required string Document { get; set; }
     }

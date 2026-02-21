@@ -1,9 +1,9 @@
 ﻿using JMMinistry.Common.Dtos.Meetings;
-using MediatR;
+using Mediator;
 
 namespace JMMinistry.Application.Features.Meetings.Commands.CreateMeeting
 {
-    public class CreateMeetingCommand : CreateMeetingDto, IRequest<MeetingDto>
+    public class CreateMeetingCommand : CreateMeetingDto, ICommand<MeetingDto>
     {
     }
 }

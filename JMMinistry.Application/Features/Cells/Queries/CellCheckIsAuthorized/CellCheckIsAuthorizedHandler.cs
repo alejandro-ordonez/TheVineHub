@@ -2,15 +2,15 @@
 using JMMinistry.Application.Services;
 using JMMinistry.Common;
 using JMMinistry.Domain;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Application.Features.Cells.Queries.CellCheckIsAuthorized
 {
-    public class CellCheckIsAuthorizedHandler(IJmDbContext dbContext, UserManager<PersonalInfo> userManager) : IRequestHandler<CellCheckIsAuthorizedQuery, bool>
+    public class CellCheckIsAuthorizedHandler(IJmDbContext dbContext, UserManager<PersonalInfo> userManager) : IQueryHandler<CellCheckIsAuthorizedQuery, bool>
     {
-        public async Task<bool> Handle(CellCheckIsAuthorizedQuery request, CancellationToken cancellationToken)
+        public async ValueTask<bool> Handle(CellCheckIsAuthorizedQuery request, CancellationToken cancellationToken)
         {
             IList<Roles> authorizedRoles = [.. request.AllowedRoles, Roles.Admin, Roles.Attendance, Roles.Cells];
 

@@ -12,6 +12,17 @@ networks:
     #driver: bridge
 
 services:
+    aspire-dashboard:
+        image: mcr.microsoft.com/dotnet/aspire-dashboard:latest
+        container_name: aspire-dashboard
+        restart: unless-stopped
+        environment:
+            - DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS=true
+        ports:
+            - 18888:18888
+        networks:
+            - jm-backend
+
     database:
         # Official Postgres image from DockerHub (we use the last version)
         image: 'postgres:latest'
@@ -56,6 +67,8 @@ services:
             - DefaultUser__Name
             - DefaultUser__LastName
             - DefaultUser__Document
+            - OTEL_EXPORTER_OTLP_ENDPOINT=http://aspire-dashboard:18889
+            - OTEL_SERVICE_NAME=jmministry-api
         ports:
             - 62421:8080
         networks:
@@ -64,6 +77,7 @@ services:
             - jm-frontend 
         depends_on:
             - database
+            - aspire-dashboard
 
     jmministry.web:
        container_name: jmministry-web

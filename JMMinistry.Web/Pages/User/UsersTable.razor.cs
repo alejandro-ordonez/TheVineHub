@@ -1,5 +1,8 @@
 ﻿using JMMinistry.Common.Dtos.User;
+using JMMinistry.Web.Api;
+using JMMinistry.Web.Shared.Components;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Localization;
 using MudBlazor;
 
 namespace JMMinistry.Web.Pages.User
@@ -27,6 +30,12 @@ namespace JMMinistry.Web.Pages.User
 
         [Parameter]
         public required FetchUsers FetchUsers { get; set; }
+
+        [Inject]
+        public required IDialogService DialogService { get; set; }
+
+        [Inject]
+        public required IUserApi UserApi { get; set; }
 
         private bool AnyActions
             => EditUser.HasDelegate || DeleteUser.HasDelegate || UserDetails.HasDelegate;
@@ -62,6 +71,22 @@ namespace JMMinistry.Web.Pages.User
                 return;
 
             await UserDetails.InvokeAsync(new UserEventArgs { CellId = 0, Document = args.Item.Document });
+        }
+
+        async Task OpenAddUser()
+        {
+            var dialog = await DialogService.ShowAsync<AddUserDialog>(_translator["AddUser"]);
+            var result = await dialog.GetReturnValueAsync<DialogResult<CreateUserInfoDto>>();
+
+            if (result?.Data is null)
+                return;
+
+            var response = await UserApi.CreateUser(result.Data);
+
+            if (response?.Success ?? false)
+            {
+                await RefreshData();
+            }
         }
     }
 }

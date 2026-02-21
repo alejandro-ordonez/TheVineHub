@@ -3,7 +3,7 @@ using JMMinistry.Application.Features.Gain.Commands.RegisterGained;
 using JMMinistry.Application.Features.Gain.Queries.GetGained;
 using JMMinistry.Common;
 using JMMinistry.Common.Dtos.Gained;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

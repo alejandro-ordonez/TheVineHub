@@ -1,7 +1,7 @@
 ﻿using JMMinistry.Application.Features.Meetings.Commands.CreateMeeting;
 using JMMinistry.Application.Features.Meetings.Queries.GetMeetings;
 using JMMinistry.Common.Dtos.Meetings;
-using MediatR;
+using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using JMMinistry.Common.Dtos.User;
-using MediatR;
+using Mediator;
 
 namespace JMMinistry.Application.Features.Cells.Commands.RemoveDisciple
 {
-    public class RemoveDiscipleCommand : IRequest<IList<PartialUserInfoDto>>
+    public class RemoveDiscipleCommand : ICommand<IList<PartialUserInfoDto>>
     {
         public required int CellId { get; set; }
         public required string Document { get; set; }

@@ -1,10 +1,10 @@
 ﻿using JMMinistry.Common.Dtos.Gained;
 using JMMinistry.Common.Dtos.User;
-using MediatR;
+using Mediator;
 
 namespace JMMinistry.Application.Features.Gain.Commands.RegisterGained
 {
-    public class RegisterGainedCommand : IRequest<PartialUserInfoDto>
+    public class RegisterGainedCommand : ICommand<PartialUserInfoDto>
     {
         public string? GainedBy { get; set; }
         public required CreateGainedUser GainedInfo { get; set; }

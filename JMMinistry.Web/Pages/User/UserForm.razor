@@ -1,101 +1,147 @@
-﻿@using JMMinistry.Common.Dtos.User
+@using JMMinistry.Common.Dtos.Common
+@using JMMinistry.Common.Dtos.User
 @using JMMinistry.Common.Dtos.User.Enums
+@using JMMinistry.Web.Api
 @using JMMinistry.Web.Extensions
 
 @inject IStringLocalizer<UIStrings> _translator;
+@inject ILocationApi locationApi;
+@inject IUserApi userApi;
 
-<MudForm>
-    <MudStepper Vertical="false" ShowResetButton>
+<MudStepper Vertical="false" ShowResetButton OnPreviewInteraction="OnPreviewInteraction">
 
-        <MudStep Title="@_translator["BasicInformation"]">
+    <MudStep Title="@_translator["BasicInformation"]" @bind-HasError="_basicInfoHasError">
+        <MudForm @ref="_basicInfoForm">
 
-            <MudTextField @bind-Value="UserInfo.Name"
-                          For="@(() => UserInfo.Name)"
-                          Immediate="true"
-                          Required="true"
-                          RequiredError="@_translator["FieldRequired"]"
-                          Variant="Variant.Outlined"
-                          Label="@_translator["Name"]"
-                          InputType="InputType.Text" />
+            <MudStack Row AlignItems="AlignItems.Center">
+                <MudTextField Value="@UserInfo.Document"
+                              ValueChanged="OnDocumentChanged"
+                              T="string"
+                              For="@(() => UserInfo.Document)"
+                              Immediate="true"
+                              Required="true"
+                              RequiredError="@_translator["FieldRequired"]"
+                              Variant="Variant.Outlined"
+                              Label="@_translator["Document"]"
+                              InputType="InputType.Number" />
 
-            <MudTextField @bind-Value="UserInfo.LastName"
-                          For="@(() => UserInfo.LastName)"
-                          Immediate="true"
-                          Required="true"
-                          RequiredError="@_translator["FieldRequired"]"
-                          Variant="Variant.Outlined"
-                          Label="@_translator["LastName"]"
-                          InputType="InputType.Text" />
-
-            <MudTextField @bind-Value="UserInfo.Birthday"
-                          For="@(() => UserInfo.Birthday)"
-                          Immediate="true"
-                          Required="true"
-                          RequiredError="@_translator["FieldRequired"]"
-                          Variant="Variant.Outlined"
-                          Label="@_translator["Birthday"]"
-                          Converter="UIConverters.DateOnlyConverter"
-                          InputType="InputType.Date" />
-
-
-            <MudSelect @bind-Value="UserInfo.Gender"
-                       Label="@_translator[nameof(Gender)]"
-                       Placeholder="@_translator["SelectAnOption"]"
-                       Required="true"
-                       RequiredError="@_translator["FieldRequired"]"
-                       Variant="Variant.Outlined">
-                <MudSelectItem Value="Gender.Male">@_translator[Gender.Male.ToString()]</MudSelectItem>
-                <MudSelectItem Value="Gender.Female">@_translator[Gender.Female.ToString()]</MudSelectItem>
-            </MudSelect>
-
-            <MudSelect @bind-Value="UserInfo.MaritalStatus"
-                       Label="@_translator[nameof(MaritalStatus)]"
-                       Placeholder="@_translator["SelectAnOption"]"
-                       Required="true"
-                       RequiredError="@_translator["FieldRequired"]"
-                       Variant="Variant.Outlined">
-
-                @foreach (var maritalStatus in Enum.GetValues<MaritalStatus>())
+                @if (!_formUnlocked)
                 {
-                    <MudSelectItem Value="maritalStatus">@_translator[maritalStatus.ToString()]</MudSelectItem>
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               OnClick="CheckDocument"
+                               Disabled="@(string.IsNullOrWhiteSpace(UserInfo.Document) || _checking)">
+                        @if (_checking)
+                        {
+                            <MudProgressCircular Size="Size.Small" Indeterminate />
+                        }
+                        else
+                        {
+                            @_translator["CheckDocument"]
+                        }
+                    </MudButton>
                 }
-            </MudSelect>
+            </MudStack>
 
-            <MudSelect @bind-Value="UserInfo.EducationalLevel"
-                       Label="@_translator[nameof(EducationalLevel)]"
-                       Placeholder="@_translator["SelectAnOption"]"
-                       Required="true"
-                       RequiredError="@_translator["FieldRequired"]"
-                       Variant="Variant.Outlined">
+            @if (!string.IsNullOrEmpty(_infoMessage))
+            {
+                <MudAlert Severity="@_infoSeverity" Class="mt-2">@_infoMessage</MudAlert>
+            }
 
-                @foreach (var level in Enum.GetValues<EducationalLevel>())
-                {
-                    <MudSelectItem Value="level">@_translator[level.ToString()]</MudSelectItem>
-                }
-            </MudSelect>
+            @if (_formUnlocked)
+            {
+                <MudTextField @bind-Value="UserInfo.Name"
+                              For="@(() => UserInfo.Name)"
+                              Immediate="true"
+                              Required="true"
+                              RequiredError="@_translator["FieldRequired"]"
+                              Variant="Variant.Outlined"
+                              Label="@_translator["Name"]"
+                              InputType="InputType.Text" />
+
+                <MudTextField @bind-Value="UserInfo.LastName"
+                              For="@(() => UserInfo.LastName)"
+                              Immediate="true"
+                              Required="true"
+                              RequiredError="@_translator["FieldRequired"]"
+                              Variant="Variant.Outlined"
+                              Label="@_translator["LastName"]"
+                              InputType="InputType.Text" />
+
+                <MudTextField @bind-Value="UserInfo.Birthday"
+                              For="@(() => UserInfo.Birthday)"
+                              Immediate="true"
+                              Required="true"
+                              RequiredError="@_translator["FieldRequired"]"
+                              Variant="Variant.Outlined"
+                              Label="@_translator["Birthday"]"
+                              Converter="UIConverters.DateOnlyConverter"
+                              InputType="InputType.Date" />
 
 
-            <MudTextField @bind-Value="UserInfo.Profession"
-                          For="@(() => UserInfo.Profession)"
-                          Immediate="true"
-                          Required="true"
-                          RequiredError="@_translator["FieldRequired"]"
-                          Variant="Variant.Outlined"
-                          Label="@_translator["Profession"]"
-                          InputType="InputType.Text" />
+                <MudSelect @bind-Value="UserInfo.Gender"
+                           Label="@_translator[nameof(Gender)]"
+                           Placeholder="@_translator["SelectAnOption"]"
+                           Required="true"
+                           RequiredError="@_translator["FieldRequired"]"
+                           Variant="Variant.Outlined">
+                    @foreach (var gender in Enum.GetValues<Gender>())
+                    {
+                        <MudSelectItem Value="gender">@_translator[gender.ToString()]</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudSelect @bind-Value="UserInfo.MaritalStatus"
+                           Label="@_translator[nameof(MaritalStatus)]"
+                           Placeholder="@_translator["SelectAnOption"]"
+                           Required="true"
+                           RequiredError="@_translator["FieldRequired"]"
+                           Variant="Variant.Outlined">
+
+                    @foreach (var maritalStatus in Enum.GetValues<MaritalStatus>())
+                    {
+                        <MudSelectItem T="MaritalStatus?" Value="maritalStatus">@_translator[maritalStatus.ToString()]</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudSelect @bind-Value="UserInfo.EducationalLevel"
+                           Label="@_translator[nameof(EducationalLevel)]"
+                           Placeholder="@_translator["SelectAnOption"]"
+                           Required="true"
+                           RequiredError="@_translator["FieldRequired"]"
+                           Variant="Variant.Outlined">
+
+                    @foreach (var level in Enum.GetValues<EducationalLevel>())
+                    {
+                        <MudSelectItem T="EducationalLevel?" Value="level">@_translator[level.ToString()]</MudSelectItem>
+                    }
+                </MudSelect>
 
 
-            <MudTextField @bind-Value="UserInfo.Occupation"
-                          For="@(() => UserInfo.Occupation)"
-                          Immediate="true"
-                          Required="true"
-                          RequiredError="@_translator["FieldRequired"]"
-                          Variant="Variant.Outlined"
-                          Label="@_translator["Occupation"]"
-                          InputType="InputType.Text" />
-        </MudStep>
+                <MudTextField @bind-Value="UserInfo.Profession"
+                              For="@(() => UserInfo.Profession)"
+                              Immediate="true"
+                              Required="true"
+                              RequiredError="@_translator["FieldRequired"]"
+                              Variant="Variant.Outlined"
+                              Label="@_translator["Profession"]"
+                              InputType="InputType.Text" />
 
-        <MudStep Title="@_translator["AddressInformation"]">
+
+                <MudTextField @bind-Value="UserInfo.Occupation"
+                              For="@(() => UserInfo.Occupation)"
+                              Immediate="true"
+                              Required="true"
+                              RequiredError="@_translator["FieldRequired"]"
+                              Variant="Variant.Outlined"
+                              Label="@_translator["Occupation"]"
+                              InputType="InputType.Text" />
+            }
+        </MudForm>
+    </MudStep>
+
+    <MudStep Title="@_translator["AddressInformation"]" @bind-HasError="_addressInfoHasError">
+        <MudForm @ref="_addressInfoForm">
 
             <MudTextField @bind-Value="UserInfo.Email"
                           For="@(() => UserInfo.Email)"
@@ -115,23 +161,22 @@
                           Label="@_translator["Phone"]"
                           InputType="InputType.Telephone" />
 
-            <MudTextField @bind-Value="UserInfo.City"
-                          For="@(() => UserInfo.City)"
-                          Immediate="true"
-                          Required="true"
-                          RequiredError="@_translator["FieldRequired"]"
-                          Variant="Variant.Outlined"
-                          Label="@_translator["City"]"
-                          InputType="InputType.Text" />
+            <MudAutocomplete T="CityDto" Label="@_translator["City"]" @bind-Value="SelectedCity"
+                             SearchFunc="@((searchTerm, token) => locationApi.GetCities(searchTerm))"
+                             ToStringFunc="@(e => e == null ? null : e.Name)"
+                             Required="true"
+                             RequiredError="@_translator["FieldRequired"]"
+                             Variant="Variant.Outlined"
+                             ShowProgressIndicator="true" />
 
-            <MudTextField @bind-Value="UserInfo.Locality"
-                          For="@(() => UserInfo.Locality)"
-                          Immediate="true"
-                          Required="true"
-                          RequiredError="@_translator["FieldRequired"]"
-                          Variant="Variant.Outlined"
-                          Label="@_translator["Locality"]"
-                          InputType="InputType.Text" />
+            @if (SelectedCity is not null && SelectedCity.Localities.Count > 0)
+            {
+                <MudAutocomplete T="LocalityDto" Label="@_translator["Locality"]" @bind-Value="SelectedLocality"
+                                 SearchFunc="@((searchTerm, token) => Task.FromResult(SelectedCity?.GetLocalities(searchTerm)))"
+                                 ToStringFunc="@(e => e == null ? null : e.Name)"
+                                 Variant="Variant.Outlined"
+                                 ShowProgressIndicator="true" />
+            }
 
             <MudTextField @bind-Value="UserInfo.Neighborhood"
                           For="@(() => UserInfo.Neighborhood)"
@@ -151,40 +196,157 @@
                           Label="@_translator["Address"]"
                           InputType="InputType.Text" />
 
+        </MudForm>
+    </MudStep>
 
-        </MudStep>
-        <MudStep Title="@_translator["Credentials"]">
-            <MudTextField @bind-Value="UserInfo.Document"
-                          For="@(() => UserInfo.Document)"
-                          Immediate="true"
-                          Required="true"
-                          RequiredError="@_translator["FieldRequired"]"
-                          Variant="Variant.Outlined"
-                          Label="@_translator["Document"]"
-                          InputType="InputType.Number" />
-
-            <MudTextField @bind-Value="UserInfo.Password"
-                          For="@(() => UserInfo.Password)"
-                          Immediate="true"
-                          Required="true"
-                          RequiredError="@_translator["FieldRequired"]"
-                          Variant="Variant.Outlined"
-                          Label="@_translator["Password"]"
-                          InputType="InputType.Number" />
-
-            <MudTextField @bind-Value="UserInfo.Email"
-                          For="@(() => UserInfo.Email)"
-                          Immediate="true"
-                          Required="true"
-                          RequiredError="@_translator["FieldRequired"]"
-                          Variant="Variant.Outlined"
-                          Label="@_translator["Email"]"
-                          InputType="InputType.Number" />
-        </MudStep>
-    </MudStepper>
-</MudForm>
+</MudStepper>
 
 @code {
-    [SupplyParameterFromForm]
-    CreateUserInfoDto UserInfo { get; set; } = new();
+    [Parameter]
+    public CreateUserInfoDto UserInfo { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<CreateUserInfoDto> OnCompleted { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnExistingUserSelected { get; set; }
+
+    MudForm? _basicInfoForm;
+    MudForm? _addressInfoForm;
+
+    bool _basicInfoHasError;
+    bool _addressInfoHasError;
+
+    bool _formUnlocked;
+    bool _checking;
+    string? _lastCheckedDocument;
+    string? _infoMessage;
+    Severity _infoSeverity;
+
+    private void OnDocumentChanged(string newValue)
+    {
+        UserInfo.Document = newValue;
+
+        if (newValue != _lastCheckedDocument)
+        {
+            _formUnlocked = false;
+            _infoMessage = null;
+        }
+    }
+
+    private async Task CheckDocument()
+    {
+        if (string.IsNullOrWhiteSpace(UserInfo.Document))
+            return;
+
+        _checking = true;
+        _infoMessage = null;
+
+        var response = await userApi.CheckDocumentExists(UserInfo.Document);
+        var result = response?.Data;
+
+        if (result is null || !result.Exists)
+        {
+            _formUnlocked = true;
+            _lastCheckedDocument = UserInfo.Document;
+        }
+        else if (result.Exists && !result.HasCell)
+        {
+            _infoMessage = _translator["UserAlreadyExists", result.Name ?? "", result.LastName ?? ""];
+            _infoSeverity = Severity.Info;
+
+            if (OnExistingUserSelected.HasDelegate)
+            {
+                await OnExistingUserSelected.InvokeAsync(UserInfo.Document);
+            }
+        }
+        else
+        {
+            _infoMessage = _translator["UserHasCell", result.Name ?? "", result.LastName ?? ""];
+            _infoSeverity = Severity.Warning;
+        }
+
+        _checking = false;
+    }
+
+    private MudForm? GetFormForStep(int stepIndex) => stepIndex switch
+    {
+        0 => _basicInfoForm,
+        1 => _addressInfoForm,
+        _ => null
+    };
+
+    private void SetStepError(int stepIndex, bool hasError)
+    {
+        switch (stepIndex)
+        {
+            case 0: _basicInfoHasError = hasError; break;
+            case 1: _addressInfoHasError = hasError; break;
+        }
+    }
+
+    private const int LastStepIndex = 1;
+
+    private async Task OnPreviewInteraction(StepperInteractionEventArgs args)
+    {
+        if (args.Action == StepAction.Complete)
+        {
+            await ValidateStep(args);
+
+            if (!args.Cancel && args.StepIndex == LastStepIndex && OnCompleted.HasDelegate)
+            {
+                await OnCompleted.InvokeAsync(UserInfo);
+            }
+        }
+        else if (args.Action == StepAction.Activate)
+        {
+            await ValidateStep(args);
+        }
+    }
+
+    private async Task ValidateStep(StepperInteractionEventArgs args)
+    {
+        if (!_formUnlocked)
+        {
+            args.Cancel = true;
+            SetStepError(args.StepIndex, true);
+            return;
+        }
+
+        var form = GetFormForStep(args.StepIndex);
+        if (form is not null)
+        {
+            await form.Validate();
+            if (!form.IsValid)
+            {
+                SetStepError(args.StepIndex, true);
+                args.Cancel = true;
+                return;
+            }
+            SetStepError(args.StepIndex, false);
+        }
+    }
+
+    private CityDto? _selectedCity;
+    private CityDto? SelectedCity
+    {
+        get => _selectedCity;
+        set
+        {
+            _selectedCity = value;
+            UserInfo.City = value?.Name ?? string.Empty;
+            SelectedLocality = null;
+        }
+    }
+
+    private LocalityDto? _selectedLocality;
+    private LocalityDto? SelectedLocality
+    {
+        get => _selectedLocality;
+        set
+        {
+            _selectedLocality = value;
+            UserInfo.Locality = value?.Name;
+        }
+    }
 }

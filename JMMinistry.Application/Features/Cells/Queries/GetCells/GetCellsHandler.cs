@@ -1,21 +1,21 @@
-﻿using AutoMapper;
+﻿using JMMinistry.Application.Mappers;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.Cell;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Application.Features.Cells.Queries.GetCells
 {
-    public class GetCellsHandler(IJmDbContext dbContext, IMapper mapper) : IRequestHandler<GetCellsQuery, IEnumerable<CellDto>>
+    public class GetCellsHandler(IJmDbContext dbContext, AppMapper mapper) : IQueryHandler<GetCellsQuery, IEnumerable<CellDto>>
     {
-        public async Task<IEnumerable<CellDto>> Handle(GetCellsQuery request, CancellationToken cancellationToken)
+        public async ValueTask<IEnumerable<CellDto>> Handle(GetCellsQuery request, CancellationToken cancellationToken)
         {
             var cells = await dbContext.Cells
                 .Include(cell => cell.Disciples)
                 .Where(cell => cell.Leaders.Any(leader => leader.Id == request.Document))
                 .ToListAsync(cancellationToken) ?? [];
 
-            var dtos = mapper.Map<IEnumerable<CellDto>>(cells);
+            var dtos = mapper.CellListToCellDtoList(cells);
 
             return dtos;
         }

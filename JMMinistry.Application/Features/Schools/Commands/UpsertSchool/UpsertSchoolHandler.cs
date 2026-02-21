@@ -1,18 +1,18 @@
-﻿using AutoMapper;
-using JMMinistry.Application.Exceptions;
+﻿using JMMinistry.Application.Exceptions;
+using JMMinistry.Application.Mappers;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.School;
 using JMMinistry.Domain;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Application.Features.Schools.Commands.CreateSchool
 {
-    public class UpsertSchoolHandler(IJmDbContext dbContext, IMapper mapper) : IRequestHandler<UpsertSchoolCommand, SchoolDto>
+    public class UpsertSchoolHandler(IJmDbContext dbContext, AppMapper mapper) : ICommandHandler<UpsertSchoolCommand, SchoolDto>
     {
-        public async Task<SchoolDto> Handle(UpsertSchoolCommand request, CancellationToken cancellationToken)
+        public async ValueTask<SchoolDto> Handle(UpsertSchoolCommand request, CancellationToken cancellationToken)
         {
-            School school = mapper.Map<School>(request);
+            School school = mapper.SchoolDtoToSchool(request);
 
             if (request.Id == default)
             {
@@ -33,7 +33,7 @@ namespace JMMinistry.Application.Features.Schools.Commands.CreateSchool
                 await dbContext.SaveChangesAsync(cancellationToken);
 
             }
-            var schoolDto = mapper.Map<SchoolDto>(school);
+            var schoolDto = mapper.SchoolToSchoolDto(school);
             return schoolDto;
         }
     }

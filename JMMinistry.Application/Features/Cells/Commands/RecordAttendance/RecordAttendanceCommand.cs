@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using JMMinistry.Common.Dtos.Cell;
-using MediatR;
+using Mediator;
 
 namespace JMMinistry.Application.Features.Cells.Commands.RecordAttendance
 {
-    public class RecordAttendanceCommand : IRequest<CellAttendanceDto>
+    public class RecordAttendanceCommand : ICommand<CellAttendanceDto>
     {
         public required int CellId { get; set; }
         public required string RequestorId { get; set; }

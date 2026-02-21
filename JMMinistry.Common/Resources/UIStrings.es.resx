@@ -405,4 +405,16 @@
   <data name="Announcements" xml:space="preserve">
     <value>Anuncios</value>
   </data>
+  <data name="OpeningDate" xml:space="preserve">
+    <value>Fecha de apertura</value>
+  </data>
+  <data name="CheckDocument" xml:space="preserve">
+    <value>Verificar</value>
+  </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>{0} {1} ya existe sin célula. ¿Agregar como discípulo?</value>
+  </data>
+  <data name="UserHasCell" xml:space="preserve">
+    <value>{0} {1} ya pertenece a una célula</value>
+  </data>
 </root>

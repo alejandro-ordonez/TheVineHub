@@ -18,6 +18,7 @@ public partial class Cell
 
     public required string Address { get; set; }
     public required DayOfWeek? Day { get; set; }
+    public DateOnly? OpeningDate { get; set; }
 
     [MaxLength(2)]
     public IList<PersonalInfo> Leaders { get; set; } = [];

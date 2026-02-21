@@ -1,12 +1,10 @@
 ﻿using JMMinistry.Common.Dtos.User;
-using MediatR;
+using Mediator;
 using System.ComponentModel.DataAnnotations;
 
 namespace JMMinistry.Application.Features.User.Commands.CreateUser
 {
-    public class CreateUserCommand : UserInfoDto, IRequest
+    public class CreateUserCommand : CreateUserInfoDto, ICommand<string>
     {
-        [Required]
-        public string Password { get; set; } = string.Empty;
     }
 }

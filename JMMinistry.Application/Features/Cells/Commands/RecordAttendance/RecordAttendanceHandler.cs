@@ -1,18 +1,18 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Cells.Queries.CellCheckIsAuthorized;
+using JMMinistry.Application.Mappers;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Domain;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 namespace JMMinistry.Application.Features.Cells.Commands.RecordAttendance
 {
-    public class RecordAttendanceHandler(IJmDbContext dbContext, IMediator mediator, IMapper mapper) : IRequestHandler<RecordAttendanceCommand, CellAttendanceDto>
+    public class RecordAttendanceHandler(IJmDbContext dbContext, IMediator mediator, AppMapper mapper) : ICommandHandler<RecordAttendanceCommand, CellAttendanceDto>
     {
-        public async Task<CellAttendanceDto> Handle(RecordAttendanceCommand request, CancellationToken cancellationToken)
+        public async ValueTask<CellAttendanceDto> Handle(RecordAttendanceCommand request, CancellationToken cancellationToken)
         {
             var checkCommand = new CellCheckIsAuthorizedQuery { CellId = request.CellId, RequestorId = request.RequestorId };
             var isAuthorized = await mediator.Send(checkCommand, cancellationToken);
@@ -47,7 +47,7 @@ namespace JMMinistry.Application.Features.Cells.Commands.RecordAttendance
             dbContext.CellAttendances.Add(record);
             await dbContext.SaveChangesAsync(cancellationToken);
 
-            return mapper.Map<CellAttendanceDto>(record);
+            return mapper.CellAttendanceToCellAttendanceDto(record);
         }
     }
 }
