@@ -20,6 +20,12 @@ namespace JMMinistry.API.Middleware
         {
             _logger.LogInformation("Processing request for: {Request}", context.Request.Path);
 
+            if (context.Request.Method == HttpMethods.Options)
+            {
+                await _next(context);
+                return;
+            }
+
             var originalResponseBody = context.Response.Body;
             using (var swapStream = new MemoryStream())
             {
@@ -38,7 +44,11 @@ namespace JMMinistry.API.Middleware
 
                     if (!contentTypes.Any(contentType => context.Response.ContentType?.Contains(contentType) ?? false) ||
                         context.Response.StatusCode == StatusCodes.Status204NoContent)
+                    {
+                        swapStream.Seek(0, SeekOrigin.Begin);
+                        await swapStream.CopyToAsync(originalResponseBody);
                         return;
+                    }
 
                     if (context.Response.ContentType?.Contains(MediaTypeNames.Text.Plain) ?? false)
                     {
