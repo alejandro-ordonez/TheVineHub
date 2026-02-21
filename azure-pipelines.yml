@@ -15,6 +15,19 @@ pool:
 
 steps:  
 - task: CmdLine@2
+  displayName: 'Clean Docker if disk usage above 50%'
+  inputs:
+    script: |
+      USAGE=$(df / | awk 'NR==2 {gsub("%",""); print $5}')
+      echo "Current disk usage: ${USAGE}%"
+      if [ "$USAGE" -ge 50 ]; then
+        echo "Disk usage is ${USAGE}%, running docker system prune..."
+        docker system prune -af --volumes
+      else
+        echo "Disk usage is ${USAGE}%, no cleanup needed."
+      fi
+
+- task: CmdLine@2
   displayName: 'Stop containers'
   inputs:
     script: 'docker compose down'

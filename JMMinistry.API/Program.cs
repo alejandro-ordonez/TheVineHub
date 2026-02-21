@@ -45,6 +45,8 @@ if (app.Environment.IsDevelopment())
 
 }
 
+app.UseCors(CORSPolicy);
+
 app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuilder =>
 {
     appBuilder.UseResponseMiddleware();
@@ -53,8 +55,6 @@ app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuild
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.UseCors(CORSPolicy);
 
 app.UseAuthentication();
 app.UseAuthorization();
