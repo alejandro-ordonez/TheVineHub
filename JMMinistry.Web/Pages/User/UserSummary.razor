@@ -34,7 +34,7 @@
 
             <div class="grid-item">
                 <MudIcon Icon="@Icons.Material.Filled.Cake" />
-                <MudText Class="mx-4" Typo="Typo.body1">@translator["YearsOld", UserInfo?.Birthday is null ? "" : UserInfo.Birthday.YearsElapsed()]</MudText>
+                <MudText Class="mx-4" Typo="Typo.body1">@translator["YearsOld", UserInfo?.Birthday is null ? "" : UserInfo.Birthday.Value.YearsElapsed()]</MudText>
             </div>
 
             <div class="grid-item">

@@ -15,7 +15,7 @@ namespace JMMinistry.Common.Dtos.User
         public string Profession { get; set; } = string.Empty;
         public string Occupation { get; set; } = string.Empty;
 
-        public DateOnly Birthday { get; set; }
+        public DateOnly? Birthday { get; set; }
 
         public MaritalStatus? MaritalStatus { get; set; }
         public EducationalLevel? EducationalLevel { get; set; }
