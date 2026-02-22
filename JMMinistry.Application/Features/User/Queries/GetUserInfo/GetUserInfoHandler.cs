@@ -32,9 +32,6 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
                 return userInfoDto;
             }
 
-            if (userInfo.CellId is null)
-                throw new ArgumentException("The user is not assigned to any cell");
-
             // Check permissions
             var requestor = new PersonalInfo { Id = request.RequestorDocument };
 
@@ -47,6 +44,9 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfo
                 userInfoDto.AccessType = AccessType.Admin;
                 return userInfoDto;
             }
+
+            if (userInfo.CellId is null)
+                throw new ArgumentException("The user is not assigned to any cell");
 
             // Check if they are in the same cell
             var areMates = await dbContext.Cells

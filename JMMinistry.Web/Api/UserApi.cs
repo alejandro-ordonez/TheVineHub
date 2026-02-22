@@ -91,6 +91,21 @@ namespace JMMinistry.Web.Api
             return response;
         }
 
+        public async Task<Response<object>?> UpdateUser(CreateUserInfoDto dto)
+        {
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            var result = await httpClient.PutAsJsonAsync(_userApi, dto);
+
+            var response = await result.Content.ReadFromJsonAsync<Response<object>?>();
+
+            if (!response?.Success ?? false)
+            {
+                logger.LogError("Failed to update user, reason: \n {Errors}", string.Join("\n", response?.Errors ?? []));
+            }
+
+            return response;
+        }
+
         public async Task<Response<DocumentCheckResultDto>?> CheckDocumentExists(string document)
         {
             using var httpClient = clientFactory.CreateClient(Constants.ApiClient);

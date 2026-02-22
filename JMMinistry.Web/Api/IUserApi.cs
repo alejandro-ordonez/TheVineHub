@@ -12,6 +12,7 @@ namespace JMMinistry.Web.Api
         Task<Response<PagedResponse<PartialUserInfoDto>>?> GetUserByCriteria(UsersSearchCriteria? userCriteriaSearch);
         Task<Response<object>?> ImportUsers(IBrowserFile file);
         Task<Response<object>?> CreateUser(CreateUserInfoDto createUserDto);
+        Task<Response<object>?> UpdateUser(CreateUserInfoDto dto);
         Task<Response<DocumentCheckResultDto>?> CheckDocumentExists(string document);
     }
 }

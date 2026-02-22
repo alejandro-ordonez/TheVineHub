@@ -2,6 +2,7 @@
 using JMMinistry.Application.Features.User.Commands.Authenticate;
 using JMMinistry.Application.Features.User.Commands.CreateUser;
 using JMMinistry.Application.Features.User.Commands.ImportUsers;
+using JMMinistry.Application.Features.User.Commands.UpdateUser;
 using JMMinistry.Application.Features.User.Queries.CheckDocumentExists;
 using JMMinistry.Application.Features.User.Queries.GetUserInfo;
 using JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria;
@@ -67,6 +68,14 @@ namespace JMMinistry.API.Controllers
         public async Task<ActionResult<DocumentCheckResultDto>> CheckDocumentExists(string document)
         {
             var result = await mediator.Send(new CheckDocumentExistsQuery { Document = document });
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPut]
+        public async Task<ActionResult<string>> UpdateUser(UpdateUserCommand command)
+        {
+            var result = await mediator.Send(command);
             return Ok(result);
         }
 

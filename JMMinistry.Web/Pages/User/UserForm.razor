@@ -23,9 +23,10 @@
                               RequiredError="@_translator["FieldRequired"]"
                               Variant="Variant.Outlined"
                               Label="@_translator["Document"]"
-                              InputType="InputType.Number" />
+                              InputType="InputType.Number"
+                              ReadOnly="@_isUpdateMode" />
 
-                @if (!_formUnlocked)
+                @if (!_formUnlocked && !_isUpdateMode)
                 {
                     <MudButton Variant="Variant.Filled"
                                Color="Color.Primary"
@@ -208,9 +209,6 @@
     [Parameter]
     public EventCallback<CreateUserInfoDto> OnCompleted { get; set; }
 
-    [Parameter]
-    public EventCallback<string> OnExistingUserSelected { get; set; }
-
     MudForm? _basicInfoForm;
     MudForm? _addressInfoForm;
 
@@ -219,6 +217,7 @@
 
     bool _formUnlocked;
     bool _checking;
+    bool _isUpdateMode;
     string? _lastCheckedDocument;
     string? _infoMessage;
     Severity _infoSeverity;
@@ -255,9 +254,42 @@
             _infoMessage = _translator["UserAlreadyExists", result.Name ?? "", result.LastName ?? ""];
             _infoSeverity = Severity.Info;
 
-            if (OnExistingUserSelected.HasDelegate)
+            var userResponse = await userApi.GetUserInfo(UserInfo.Document);
+            if (userResponse?.Success == true && userResponse.Data is not null)
             {
-                await OnExistingUserSelected.InvokeAsync(UserInfo.Document);
+                var data = userResponse.Data;
+                UserInfo.Name = data.Name;
+                UserInfo.LastName = data.LastName;
+                UserInfo.Phone = data.Phone;
+                UserInfo.Email = data.Email;
+                UserInfo.Birthday = data.Birthday;
+                UserInfo.Gender = data.Gender;
+                UserInfo.MaritalStatus = data.MaritalStatus;
+                UserInfo.EducationalLevel = data.EducationalLevel;
+                UserInfo.Profession = data.Profession;
+                UserInfo.Occupation = data.Occupation;
+                UserInfo.City = data.City;
+                UserInfo.Locality = data.Locality;
+                UserInfo.Neighborhood = data.Neighborhood;
+                UserInfo.Address = data.Address;
+
+                if (!string.IsNullOrEmpty(data.City))
+                {
+                    var cities = await locationApi.GetCities(data.City);
+                    var city = cities.FirstOrDefault(c => c.Name == data.City);
+                    if (city is not null)
+                    {
+                        _selectedCity = city;
+                        if (!string.IsNullOrEmpty(data.Locality))
+                        {
+                            _selectedLocality = city.Localities.FirstOrDefault(l => l.Name == data.Locality);
+                        }
+                    }
+                }
+
+                _isUpdateMode = true;
+                _formUnlocked = true;
+                _lastCheckedDocument = UserInfo.Document;
             }
         }
         else
@@ -295,6 +327,7 @@
 
             if (!args.Cancel && args.StepIndex == LastStepIndex && OnCompleted.HasDelegate)
             {
+                UserInfo.IsUpdate = _isUpdateMode;
                 await OnCompleted.InvokeAsync(UserInfo);
             }
         }

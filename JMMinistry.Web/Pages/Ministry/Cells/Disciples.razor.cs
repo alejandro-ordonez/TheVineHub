@@ -71,17 +71,21 @@ namespace JMMinistry.Web.Pages.Ministry.Cells
             if (result?.Data is null)
                 return;
 
-            if (result.Option == DialogResultOption.SecondaryButton)
+            if (result.Data.IsUpdate)
             {
-                Dispatcher.Dispatch(new AddDisciplesAction { CellId = CellId, Documents = [result.Data.Document] });
-                return;
+                var response = await UserApi.UpdateUser(result.Data);
+                if (response?.Success ?? false)
+                {
+                    Dispatcher.Dispatch(new AddDisciplesAction { CellId = CellId, Documents = [result.Data.Document] });
+                }
             }
-
-            var response = await UserApi.CreateUser(result.Data);
-
-            if (response?.Success ?? false)
+            else
             {
-                Dispatcher.Dispatch(new AddDisciplesAction { CellId = CellId, Documents = [result.Data.Document] });
+                var response = await UserApi.CreateUser(result.Data);
+                if (response?.Success ?? false)
+                {
+                    Dispatcher.Dispatch(new AddDisciplesAction { CellId = CellId, Documents = [result.Data.Document] });
+                }
             }
         }
 

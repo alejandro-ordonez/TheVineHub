@@ -81,7 +81,9 @@ namespace JMMinistry.Web.Pages.User
             if (result?.Data is null)
                 return;
 
-            var response = await UserApi.CreateUser(result.Data);
+            var response = result.Data.IsUpdate
+                ? await UserApi.UpdateUser(result.Data)
+                : await UserApi.CreateUser(result.Data);
 
             if (response?.Success ?? false)
             {
