@@ -43,11 +43,12 @@ services:
             - POSTGRES_DB=jm-db # The PostgreSQL default database (automatically created at first launch)
 
         volumes:
-            # In this example, we share the folder `db-data` in our root repository, with the default PostgreSQL data path
-            # It means that every time the repository is modifying the data inside
-            # of `/var/lib/postgresql/data/`, automatically the change will appear in `db-data`
-            # You don't need to create the `db-data` folder. Docker Compose will do it for you
             - /app-data/db/:/var/lib/postgresql/
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U jm-db"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
         networks:
             - jm-db
 
@@ -76,8 +77,10 @@ services:
             - jm-db
             - jm-frontend 
         depends_on:
-            - database
-            - aspire-dashboard
+            database:
+                condition: service_healthy
+            aspire-dashboard:
+                condition: service_started
 
     jmministry.web:
        container_name: jmministry-web

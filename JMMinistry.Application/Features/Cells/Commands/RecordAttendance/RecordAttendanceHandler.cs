@@ -40,7 +40,7 @@ namespace JMMinistry.Application.Features.Cells.Commands.RecordAttendance
             {
                 CellId = request.CellId,
                 Attendees = [.. disciples.Where(disciple => request.Attendees.Contains(disciple.Id))],
-                Date = DateTime.Now,
+                Date = DateTime.UtcNow,
                 Notes = request.Notes
             };
 

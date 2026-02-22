@@ -27,7 +27,7 @@ public class AddDisciplesHandler(IJmDbContext dbContext, AppMapper mapper) :
 
         foreach (var disciple in users)
         {
-            disciple.CellEnrollmentDate = DateTime.Now;
+            disciple.CellEnrollmentDate = DateTime.UtcNow;
             disciple.MinistryStatus = MinistryStatus.InACell;
             cell.Disciples.Add(disciple);
         }
