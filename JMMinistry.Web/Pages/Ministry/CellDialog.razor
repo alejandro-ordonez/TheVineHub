@@ -40,14 +40,20 @@
                              ToStringFunc="@(e=> e==null?null : e.Name)"
                              Required="true"
                              Variant="Variant.Outlined"
+                             CoerceText="true"
+                             CoerceValue="true"
                              ShowProgressIndicator="true" />
 
             @if(CreateCellDto.City is not null && CreateCellDto.City.Localities.Count > 0)
             {
                 <MudAutocomplete T="LocalityDto" Label="@translator["Locality"]" @bind-Value="CreateCellDto.Locality"
-                                 SearchFunc="@((searchTerm, token) => Task.FromResult(CreateCellDto.City?.GetLocalities(searchTerm)))"
+                                 SearchFunc="@((searchTerm, token) => Task.FromResult<IEnumerable<LocalityDto>>(CreateCellDto.City?.GetLocalities(searchTerm) ?? []))"
                                  ToStringFunc="@(e=> e==null?null : e.Name)"
                                  Variant="Variant.Outlined"
+                                 DebounceInterval="400"
+                                 CoerceText="true"
+                                 CoerceValue="true"
+                                 MaxItems="22"
                                  ShowProgressIndicator="true" />
             }
 

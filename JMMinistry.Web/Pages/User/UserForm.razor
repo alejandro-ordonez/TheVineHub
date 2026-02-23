@@ -167,6 +167,8 @@
                              Required="true"
                              RequiredError="@_translator["FieldRequired"]"
                              Variant="Variant.Outlined"
+                             CoerceText="true"
+                             CoerceValue="true"
                              ShowProgressIndicator="true" />
 
             @if (SelectedCity is not null && SelectedCity.Localities.Count > 0)
@@ -175,6 +177,10 @@
                                  SearchFunc="@((searchTerm, token) => Task.FromResult(SelectedCity?.GetLocalities(searchTerm)))"
                                  ToStringFunc="@(e => e == null ? null : e.Name)"
                                  Variant="Variant.Outlined"
+                                 DebounceInterval="400"
+                                 CoerceText="true"
+                                 CoerceValue="true"
+                                 MaxItems="22"
                                  ShowProgressIndicator="true" />
             }
 
