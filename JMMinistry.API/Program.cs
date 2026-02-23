@@ -29,6 +29,7 @@ builder.Services.AddControllers();
 builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Services.AddApplicationLayer(builder.Configuration);
 
+builder.Services.AddOutputCache();
 builder.Services.AddSwagger();
 
 var app = builder.Build();
@@ -55,6 +56,8 @@ app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuild
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseOutputCache();
 
 app.UseAuthentication();
 app.UseAuthorization();

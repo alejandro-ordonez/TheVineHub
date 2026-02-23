@@ -102,5 +102,8 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
             .HasOne(g => g.InvitedBy)
             .WithMany(p => p.Gained)
             .HasForeignKey(g => g.InvitedById);
+
+        builder.Entity<Locality>()
+            .ToTable("Localities");
     }
 }

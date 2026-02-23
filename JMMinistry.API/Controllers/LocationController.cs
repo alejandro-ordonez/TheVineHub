@@ -2,6 +2,7 @@
 using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace JMMinistry.API.Controllers
 {
@@ -10,6 +11,7 @@ namespace JMMinistry.API.Controllers
     public class LocationController(IMediator mediator) : ControllerBase
     {
         [HttpGet]
+        [OutputCache(Duration = 86400)]
         public async Task<ActionResult> GetLocationData()
         {
             var result = await mediator.Send(new GetLocationDataQuery());

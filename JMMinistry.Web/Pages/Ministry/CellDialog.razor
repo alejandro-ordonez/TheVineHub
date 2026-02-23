@@ -18,8 +18,7 @@
 
             <MudTextField @bind-Value="CreateCellDto.Name"
                           For="@(() => CreateCellDto.Name)"
-                          Immediate="true"
-                          DebounceInterval="300"
+
                           Required="true"
                           RequiredError="@translator["FieldRequired"]"
                           Variant="Variant.Outlined"
@@ -28,8 +27,7 @@
 
             <MudTextField @bind-Value="CreateCellDto.Description"
                           For="@(() => CreateCellDto.Description)"
-                          Immediate="true"
-                          DebounceInterval="300"
+
                           Required="true"
                           OnlyValidateIfDirty="true"
                           RequiredError="@translator["FieldRequired"]"
@@ -56,8 +54,7 @@
 
             <MudTextField @bind-Value="CreateCellDto.Address"
                           For="@(() => CreateCellDto.Address)"
-                          Immediate="true"
-                          DebounceInterval="300"
+
                           Required="true"
                           OnlyValidateIfDirty="true"
                           RequiredError="@translator["FieldRequired"]"
@@ -81,8 +78,7 @@
 
             <MudTextField @bind-Value="CreateCellDto.OpeningDate"
                           For="@(() => CreateCellDto.OpeningDate)"
-                          Immediate="true"
-                          DebounceInterval="300"
+
                           Variant="Variant.Outlined"
                           Label="@translator["OpeningDate"]"
                           Converter="UIConverters.NullableDateOnlyConverter"

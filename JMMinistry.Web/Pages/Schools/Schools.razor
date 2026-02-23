@@ -29,8 +29,7 @@
 
             <MudTextField @bind-Value="SchoolToEdit!.Name"
                           For="@(() => SchoolToEdit!.Name)"
-                          Immediate="true"
-                          DebounceInterval="300"
+
                           Required="true"
                           RequiredError="@_translator["FieldRequired"]"
                           Variant="Variant.Outlined"
@@ -39,8 +38,7 @@
 
             <MudTextField @bind-Value="SchoolToEdit!.Description"
                           For="@(() => SchoolToEdit!.Description)"
-                          Immediate="true"
-                          DebounceInterval="300"
+
                           Required="true"
                           RequiredError="@_translator["FieldRequired"]"
                           Variant="Variant.Outlined"
@@ -49,7 +47,7 @@
 
 
             <MudDivider />
-            <MudButton OnClick="SaveSchool" Disabled="!schoolForm?.IsValid ?? true" Class="ml-auto mr-n3 mb-1" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Save">@_translator["Save"]</MudButton>
+            <MudButton OnClick="SaveSchool" Class="ml-auto mr-n3 mb-1" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Save">@_translator["Save"]</MudButton>
             <MudButton OnClick="Cancel" Class="ml-auto mr-n3 mb-1" Color="Color.Primary" EndIcon="@Icons.Material.Filled.Save">@_translator["Cancel"]</MudButton>
         </MudForm>
 

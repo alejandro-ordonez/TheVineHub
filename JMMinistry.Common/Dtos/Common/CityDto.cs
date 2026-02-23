@@ -12,7 +12,7 @@
             if (string.IsNullOrEmpty(searchTerm))
                 return Localities;
 
-            return Localities.Where(l => l.Name == searchTerm);
+            return Localities.Where(l => l.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
         }
     }
 

@@ -21,7 +21,7 @@
             @_translator["Add"]
         </MudButton>
         <MudSpacer />
-        <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder="@_translator["Search"]" Adornment="Adornment.Start"
+        <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Immediate="true" DebounceInterval="500" Placeholder="@_translator["Search"]" Adornment="Adornment.Start"
                       AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>

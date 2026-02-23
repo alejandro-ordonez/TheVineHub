@@ -18,8 +18,6 @@
                               ValueChanged="OnDocumentChanged"
                               T="string"
                               For="@(() => UserInfo.Document)"
-                              Immediate="true"
-                              DebounceInterval="300"
                               Required="true"
                               RequiredError="@_translator["FieldRequired"]"
                               Variant="Variant.Outlined"
@@ -54,8 +52,7 @@
             {
                 <MudTextField @bind-Value="UserInfo.Name"
                               For="@(() => UserInfo.Name)"
-                              Immediate="true"
-                              DebounceInterval="300"
+
                               Required="true"
                               RequiredError="@_translator["FieldRequired"]"
                               Variant="Variant.Outlined"
@@ -64,8 +61,7 @@
 
                 <MudTextField @bind-Value="UserInfo.LastName"
                               For="@(() => UserInfo.LastName)"
-                              Immediate="true"
-                              DebounceInterval="300"
+
                               Required="true"
                               RequiredError="@_translator["FieldRequired"]"
                               Variant="Variant.Outlined"
@@ -74,8 +70,7 @@
 
                 <MudTextField @bind-Value="UserInfo.Birthday"
                               For="@(() => UserInfo.Birthday)"
-                              Immediate="true"
-                              DebounceInterval="300"
+
                               Required="true"
                               RequiredError="@_translator["FieldRequired"]"
                               Variant="Variant.Outlined"
@@ -125,8 +120,7 @@
 
                 <MudTextField @bind-Value="UserInfo.Profession"
                               For="@(() => UserInfo.Profession)"
-                              Immediate="true"
-                              DebounceInterval="300"
+
                               Required="true"
                               RequiredError="@_translator["FieldRequired"]"
                               Variant="Variant.Outlined"
@@ -136,8 +130,7 @@
 
                 <MudTextField @bind-Value="UserInfo.Occupation"
                               For="@(() => UserInfo.Occupation)"
-                              Immediate="true"
-                              DebounceInterval="300"
+
                               Required="true"
                               RequiredError="@_translator["FieldRequired"]"
                               Variant="Variant.Outlined"
@@ -152,8 +145,7 @@
 
             <MudTextField @bind-Value="UserInfo.Email"
                           For="@(() => UserInfo.Email)"
-                          Immediate="true"
-                              DebounceInterval="300"
+
                           Required="true"
                           RequiredError="@_translator["FieldRequired"]"
                           Variant="Variant.Outlined"
@@ -162,8 +154,7 @@
 
             <MudTextField @bind-Value="UserInfo.Phone"
                           For="@(() => UserInfo.Phone)"
-                          Immediate="true"
-                              DebounceInterval="300"
+
                           Required="true"
                           RequiredError="@_translator["FieldRequired"]"
                           Variant="Variant.Outlined"
@@ -189,8 +180,7 @@
 
             <MudTextField @bind-Value="UserInfo.Neighborhood"
                           For="@(() => UserInfo.Neighborhood)"
-                          Immediate="true"
-                              DebounceInterval="300"
+
                           Required="true"
                           RequiredError="@_translator["FieldRequired"]"
                           Variant="Variant.Outlined"
@@ -199,8 +189,7 @@
 
             <MudTextField @bind-Value="UserInfo.Address"
                           For="@(() => UserInfo.Address)"
-                          Immediate="true"
-                              DebounceInterval="300"
+
                           Required="true"
                           RequiredError="@_translator["FieldRequired"]"
                           Variant="Variant.Outlined"

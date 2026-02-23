@@ -24,8 +24,7 @@
                 <MudCardContent>
                     <MudTextField @bind-Value="Model!.Document"
                                   For="@(() => Model!.Document)"
-                                  Immediate="true"
-                                  DebounceInterval="300"
+
                                   Required="true"
                                   RequiredError="@_translator["FieldRequired"]"
                                   Variant="Variant.Outlined"
@@ -34,8 +33,7 @@
 
                     <MudTextField @bind-Value="Model!.Password"
                                   For="@(() => Model!.Password)"
-                                  Immediate="true"
-                                  DebounceInterval="300"
+
                                   Required="true"
                                   OnlyValidateIfDirty="true"
                                   RequiredError="@_translator["FieldRequired"]"
@@ -54,7 +52,8 @@
                 <MudCardActions Style="justify-content: space-evenly;">
                     <MudButton Variant="Variant.Filled"
                                Color="Color.Primary"
-                               Disabled="!form?.IsValid ?? false"
+
+
                                OnClick="@(async () => await Submit())">
 
 
