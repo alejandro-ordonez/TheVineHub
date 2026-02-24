@@ -1,5 +1,6 @@
-﻿using JMMinistry.Application.Services;
+using JMMinistry.Application.Services;
 using JMMinistry.Domain;
+using JMMinistry.Domain.Discipleship;
 using JMMinistry.Domain.Location;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,9 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
     public virtual DbSet<Convention> Conventions { get; set; }
     public virtual DbSet<ConventionAttendee> ConventionAttendees { get; set; }
 
+    public virtual DbSet<DiscipleshipNote> DiscipleshipNotes { get; set; }
+    public virtual DbSet<DiscipleshipNoteEntry> DiscipleshipNoteEntries { get; set; }
+
     public virtual DbSet<Event> Events { get; set; }
     public virtual DbSet<Gained> Gained { get; set; }
 
@@ -46,6 +50,11 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
     public virtual DbSet<School> Schools { get; set; }
 
     public virtual DbSet<City> Cities { get; set; }
+
+    public async Task<T?> ExecuteScalarFunctionAsync<T>(string functionCall, CancellationToken ct, params object[] parameters)
+    {
+        return await Database.SqlQueryRaw<T>(functionCall, parameters).FirstOrDefaultAsync(ct);
+    }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -105,5 +114,31 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
 
         builder.Entity<Locality>()
             .ToTable("Localities");
+
+        builder.Entity<DiscipleshipNote>(note =>
+        {
+            note.HasOne(n => n.Disciple)
+                .WithMany()
+                .HasForeignKey(n => n.DiscipleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            note.HasOne(n => n.Leader)
+                .WithMany()
+                .HasForeignKey(n => n.LeaderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            note.HasMany(n => n.Entries)
+                .WithOne(e => e.Note)
+                .HasForeignKey(e => e.NoteId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<DiscipleshipNoteEntry>(entry =>
+        {
+            entry.HasOne(e => e.Author)
+                .WithMany()
+                .HasForeignKey(e => e.AuthorId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
     }
 }

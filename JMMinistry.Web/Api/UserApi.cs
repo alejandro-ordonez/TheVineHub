@@ -113,5 +113,13 @@ namespace JMMinistry.Web.Api
 
             return await result.Content.ReadFromJsonAsync<Response<DocumentCheckResultDto>>();
         }
+
+        public async Task<Response<bool>?> IsLeaderOfAsync(string discipleId)
+        {
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            var result = await httpClient.GetAsync($"{_userApi}/{discipleId}/is-leader");
+
+            return await result.Content.ReadFromJsonAsync<Response<bool>?>();
+        }
     }
 }

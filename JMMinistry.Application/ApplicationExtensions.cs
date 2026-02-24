@@ -14,6 +14,7 @@ namespace JMMinistry.Application
     {
         public static void AddApplicationLayer(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddMemoryCache();
             services.AddExceptionHandler<GlobalExceptionHandler>();
             services.AddProblemDetails();
             services.AddSingleton<AppMapper>();

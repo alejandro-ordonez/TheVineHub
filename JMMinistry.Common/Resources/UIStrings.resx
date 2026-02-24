@@ -418,4 +418,19 @@
   <data name="UserHasCell" xml:space="preserve">
     <value>{0} {1} already belongs to a cell</value>
   </data>
+  <data name="DiscipleshipJournal" xml:space="preserve">
+    <value>Discipleship Journal</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="UnderRevision" xml:space="preserve">
+    <value>Under revision</value>
+  </data>
+  <data name="Resolved" xml:space="preserve">
+    <value>Resolved</value>
+  </data>
+  <data name="Abandoned" xml:space="preserve">
+    <value>Abandoned</value>
+  </data>
 </root>

@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using MudBlazor;
 
-namespace JMMinistry.Web.Pages.User
+using JMMinistry.Web.Pages.User.Dialogs;
+
+namespace JMMinistry.Web.Pages.User.Components
 {
     public partial class UsersTable
     {

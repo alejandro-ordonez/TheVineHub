@@ -1,0 +1,72 @@
+@using JMMinistry.Common.Dtos.Discipleship
+
+@if (OnCreateNote.HasDelegate)
+{
+    <div class="d-flex justify-end my-2">
+        <MudButton Variant="Variant.Filled"
+                   Color="Color.Primary"
+                   StartIcon="@Icons.Material.Filled.Add"
+                   OnClick="OnCreateNote">
+            New Note
+        </MudButton>
+    </div>
+}
+
+@if (IsLoading)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+}
+else if (Notes.Count == 0)
+{
+    <MudText Typo="Typo.body1" Align="Align.Center" Class="my-4">No notes found.</MudText>
+}
+else
+{
+    <div class="kanban-board">
+        @foreach (var status in Enum.GetValues<NoteStatus>())
+        {
+            <div class="kanban-column">
+                <MudText Typo="Typo.h6" Class="kanban-column-header">@status</MudText>
+                @foreach (var note in Notes.Where(n => n.NoteStatus == status))
+                {
+                    <MudCard Class="kanban-card" Style="cursor: pointer" @onclick="() => OnNoteClicked.InvokeAsync(note.NoteId)">
+                        <MudCardHeader>
+                            <MudText Typo="Typo.subtitle1">@note.Title</MudText>
+                        </MudCardHeader>
+                        <MudCardContent>
+                            @if (!string.IsNullOrWhiteSpace(note.Description))
+                            {
+                                <MudText Typo="Typo.body2">@note.Description</MudText>
+                            }
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">@note.CreatedAt.ToString("d")</MudText>
+
+                            @if (note.Categories.Count > 0)
+                            {
+                                <div class="kanban-categories">
+                                    @foreach (var category in note.Categories)
+                                    {
+                                        <MudChip T="string" Size="Size.Small" Color="Color.Primary" Variant="Variant.Outlined">@category</MudChip>
+                                    }
+                                </div>
+                            }
+                        </MudCardContent>
+                    </MudCard>
+                }
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public IList<DiscipleshipNoteDto> Notes { get; set; } = [];
+
+    [Parameter]
+    public bool IsLoading { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnNoteClicked { get; set; }
+
+    [Parameter]
+    public EventCallback OnCreateNote { get; set; }
+}

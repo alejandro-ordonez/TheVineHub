@@ -19,7 +19,7 @@ namespace JMMinistry.Common.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class UIStrings {
@@ -57,6 +57,15 @@ namespace JMMinistry.Common.Resources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abandoned.
+        /// </summary>
+        public static string Abandoned {
+            get {
+                return ResourceManager.GetString("Abandoned", resourceCulture);
             }
         }
         
@@ -232,6 +241,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check.
+        /// </summary>
+        public static string CheckDocument {
+            get {
+                return ResourceManager.GetString("CheckDocument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to City.
         /// </summary>
         public static string City {
@@ -309,6 +327,15 @@ namespace JMMinistry.Common.Resources {
         public static string Disciples {
             get {
                 return ResourceManager.GetString("Disciples", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discipleship Journal.
+        /// </summary>
+        public static string DiscipleshipJournal {
+            get {
+                return ResourceManager.GetString("DiscipleshipJournal", resourceCulture);
             }
         }
         
@@ -610,6 +637,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New.
+        /// </summary>
+        public static string New {
+            get {
+                return ResourceManager.GetString("New", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Cells registered, please create one..
         /// </summary>
         public static string NoCells {
@@ -633,6 +669,15 @@ namespace JMMinistry.Common.Resources {
         public static string NotSet {
             get {
                 return ResourceManager.GetString("NotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opening date.
+        /// </summary>
+        public static string OpeningDate {
+            get {
+                return ResourceManager.GetString("OpeningDate", resourceCulture);
             }
         }
         
@@ -705,6 +750,15 @@ namespace JMMinistry.Common.Resources {
         public static string RemoveDiscipleAction {
             get {
                 return ResourceManager.GetString("RemoveDiscipleAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resolved.
+        /// </summary>
+        public static string Resolved {
+            get {
+                return ResourceManager.GetString("Resolved", resourceCulture);
             }
         }
         
@@ -853,6 +907,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Under revision.
+        /// </summary>
+        public static string UnderRevision {
+            get {
+                return ResourceManager.GetString("UnderRevision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown.
         /// </summary>
         public static string Unknown {
@@ -876,6 +939,24 @@ namespace JMMinistry.Common.Resources {
         public static string User {
             get {
                 return ResourceManager.GetString("User", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} already exists without a cell. Add as disciple?.
+        /// </summary>
+        public static string UserAlreadyExists {
+            get {
+                return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} already belongs to a cell.
+        /// </summary>
+        public static string UserHasCell {
+            get {
+                return ResourceManager.GetString("UserHasCell", resourceCulture);
             }
         }
         

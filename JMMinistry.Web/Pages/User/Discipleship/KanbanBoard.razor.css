@@ -1,0 +1,42 @@
+.kanban-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.kanban-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.kanban-column-header {
+    padding: 0.5rem;
+    text-align: center;
+    border-bottom: 2px solid var(--mud-palette-primary);
+    margin-bottom: 0.5rem;
+}
+
+.kanban-card {
+    margin-bottom: 0.5rem;
+}
+
+.kanban-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 960px) {
+    .kanban-board {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .kanban-board {
+        grid-template-columns: 1fr;
+    }
+}

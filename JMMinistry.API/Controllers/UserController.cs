@@ -1,4 +1,6 @@
 ﻿using JMMinistry.API.Extensions;
+using JMMinistry.Application.Exceptions;
+using JMMinistry.Application.Features.Hierarchy.Queries.IsLeaderInHierarchy;
 using JMMinistry.Application.Features.User.Commands.Authenticate;
 using JMMinistry.Application.Features.User.Commands.CreateUser;
 using JMMinistry.Application.Features.User.Commands.ImportUsers;
@@ -84,6 +86,21 @@ namespace JMMinistry.API.Controllers
         public async Task<ActionResult<PagedResponse<PartialUserInfoDto>>> GetUsersByCriteria(GetUserInfoByCriteriaQuery criteria)
         {
             var result = await mediator.Send(criteria);
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpGet("{discipleId}/is-leader")]
+        public async Task<ActionResult<bool>> IsLeaderInHierarchy(string discipleId)
+        {
+            var requestorId = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
+
+            var result = await mediator.Send(new IsLeaderInHierarchyQuery
+            {
+                RequestorId = requestorId,
+                DiscipleId = discipleId
+            });
+
             return Ok(result);
         }
     }

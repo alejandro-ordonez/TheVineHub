@@ -1,4 +1,5 @@
 ﻿using JMMinistry.Domain;
+using JMMinistry.Domain.Discipleship;
 using JMMinistry.Domain.Location;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +24,10 @@ namespace JMMinistry.Application.Services
 
         DbSet<ConventionAttendee> ConventionAttendees { get; set; }
 
+        DbSet<DiscipleshipNote> DiscipleshipNotes { get; set; }
+
+        DbSet<DiscipleshipNoteEntry> DiscipleshipNoteEntries { get; set; }
+
         DbSet<Event> Events { get; set; }
 
         DbSet<Gained> Gained { get; set; }
@@ -40,5 +45,7 @@ namespace JMMinistry.Application.Services
         DbSet<City> Cities { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
+        Task<T?> ExecuteScalarFunctionAsync<T>(string functionCall, CancellationToken ct, params object[] parameters);
     }
 }

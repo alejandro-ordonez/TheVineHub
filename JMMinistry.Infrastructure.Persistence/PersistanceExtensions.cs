@@ -17,17 +17,10 @@ namespace JMMinistry.Infrastructure.Persistence
     {
         public static void AddPersistenceLayer(this IServiceCollection services, IConfiguration configuration)
         {
-#if DEBUG
-            services.AddDbContext<JmDbContext>(options =>
-                options.UseInMemoryDatabase($"{nameof(JMMinistry)}Db")
-            );
-
-#else
             services.AddDbContext<JmDbContext>(options =>
                 options.UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(JmDbContext).Assembly.FullName)));
-#endif
 
             services.AddIdentity<PersonalInfo, Role>()
                 .AddEntityFrameworkStores<JmDbContext>();

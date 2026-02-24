@@ -1,34 +1,59 @@
-﻿@attribute [Route($"{Routes.User}/{{Document?}}")]
+@attribute [Route($"{Routes.User}/{{Document?}}")]
 
 @layout MainLayout
 
 @using JMMinistry.Common
 @using JMMinistry.Common.Dtos.Common
+@using JMMinistry.Common.Dtos.Discipleship
+@using JMMinistry.Web.Pages.User.Components
+@using JMMinistry.Web.Pages.User.Discipleship
 @using JMMinistry.Common.Dtos.User
 @using JMMinistry.Web.Api
+@using JMMinistry.Web.Store.DiscipleshipNotesUseCase
+@using JMMinistry.Web.Store.DiscipleshipNotesUseCase.Actions
+@using Fluxor
+@using Fluxor.Blazor.Web.Components
+
+@inherits FluxorComponent
 
 @inject IUserApi userApi;
 @inject IMinistryApi ministryApi;
 @inject ISnackbar snackbar;
 @inject IStringLocalizer<UIStrings> translator;
 @inject NavigationManager navigationManager;
+@inject IState<DiscipleshipNotesState> DiscipleshipNotesState;
+@inject IDispatcher Dispatcher;
+@inject IDialogService dialogService;
 
 <UserSummary UserInfo="User"/>
 
 @if(User is not null)
 {
-    <MudText Typo="Typo.h6">@translator["CellMates"]</MudText>
-    <MudDivider Style="margin: 0.5rem 0"/>
+    <MudTabs>
 
-    <div class="cards-grid">
-        @foreach (var disciple in CellMates)
+        @if(DiscipleshipNotesState.Value.IsLeader)
         {
-            <UserCard User="disciple"
-            OnClick="@(User.AccessType.IsAdminOrLeader() ? EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails) : 
-                                    (EventCallback<UserEventArgs>?)null)" />
+            <MudTabPanel Text="@translator["DiscipleshipJournal"]" Icon="@Icons.Material.Filled.Book">
+                <KanbanBoard Notes="DiscipleshipNotesState.Value.Notes"
+                             IsLoading="DiscipleshipNotesState.Value.IsLoading"
+                             OnNoteClicked="HandleNoteClicked"
+                             OnCreateNote="HandleCreateNote" />
+            </MudTabPanel>
         }
-    </div>
 
+        <MudTabPanel Text="@translator["CellMates"]" Icon="@Icons.Material.Filled.Group">
+
+            <div class="cards-grid">
+                @foreach (var disciple in CellMates)
+                {
+                    <UserCard User="disciple"
+                              OnClick="@(User.AccessType.IsAdminOrLeader() ? EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails) :
+                                                                  (EventCallback<UserEventArgs>?)null)" />
+                        }
+            </div>
+        </MudTabPanel>
+
+    </MudTabs>
 }
 
 @code {
@@ -50,6 +75,12 @@
 
             if (User?.CellId is not null && User?.CellId > 0)
                 CellMates = await FetchCellMates(User.CellId.Value, User.Document);
+
+            if (!string.IsNullOrEmpty(Document))
+            {
+                Dispatcher.Dispatch(new CheckIsLeaderAction { DiscipleId = Document });
+                Dispatcher.Dispatch(new FetchDiscipleshipNotesAction { DiscipleId = Document });
+            }
         }
 
         else
@@ -77,5 +108,58 @@
     void ShowUserDetails(UserEventArgs user)
     {
         navigationManager.NavigateTo($"{Routes.User}/{user.Document}");
+    }
+
+    async Task HandleCreateNote()
+    {
+        if (string.IsNullOrEmpty(Document)) return;
+
+        var dialog = await dialogService.ShowAsync<CreateNoteDialog>(translator["DiscipleshipJournal"]);
+        var result = await dialog.Result;
+
+        if (result is null || result.Canceled) return;
+
+        var dto = result.Data as CreateDiscipleshipNoteDto;
+        if (dto is null) return;
+
+        Dispatcher.Dispatch(new CreateNoteAction
+        {
+            DiscipleId = Document,
+            Title = dto.Title,
+            Description = dto.Description,
+            Categories = dto.Categories
+        });
+    }
+
+    async Task HandleNoteClicked(int noteId)
+    {
+        var note = DiscipleshipNotesState.Value.Notes.FirstOrDefault(n => n.NoteId == noteId);
+        if (note is null || string.IsNullOrEmpty(Document)) return;
+
+        Dispatcher.Dispatch(new SelectNoteAction { NoteId = noteId });
+        Dispatcher.Dispatch(new FetchNoteEntriesAction { DiscipleId = Document, NoteId = noteId });
+
+        var parameters = new DialogParameters<NoteDetailDialog>
+        {
+            { x => x.Note, note },
+            { x => x.OnEntrySubmit, EventCallback.Factory.Create<(string Content, DateTime Date)>(this, entry => HandleEntrySubmit(noteId, entry)) }
+        };
+
+        await dialogService.ShowAsync<NoteDetailDialog>(note.Title, parameters);
+
+        Dispatcher.Dispatch(new SelectNoteAction { NoteId = null });
+    }
+
+    void HandleEntrySubmit(int noteId, (string Content, DateTime Date) entry)
+    {
+        if (string.IsNullOrEmpty(Document)) return;
+
+        Dispatcher.Dispatch(new CreateNoteEntryAction
+        {
+            DiscipleId = Document,
+            NoteId = noteId,
+            Content = entry.Content,
+            Date = entry.Date
+        });
     }
 }

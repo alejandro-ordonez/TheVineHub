@@ -1,11 +1,14 @@
+using System.Text.Json;
 using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.Class;
 using JMMinistry.Common.Dtos.Common;
+using JMMinistry.Common.Dtos.Discipleship;
 using JMMinistry.Common.Dtos.Gained;
 using JMMinistry.Common.Dtos.Meetings;
 using JMMinistry.Common.Dtos.School;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Domain;
+using JMMinistry.Domain.Discipleship;
 using JMMinistry.Domain.Location;
 using Riok.Mapperly.Abstractions;
 
@@ -282,6 +285,37 @@ namespace JMMinistry.Application.Mappers
         public partial City CityDtoToCity(CityDto source);
         public partial LocalityDto LocalityToLocalityDto(Locality source);
         public partial Locality LocalityDtoToLocality(LocalityDto source);
+
+        // ===== DiscipleshipNote mappings =====
+
+        [MapProperty(nameof(DiscipleshipNote.Id), nameof(DiscipleshipNoteDto.NoteId))]
+        [MapProperty(nameof(DiscipleshipNote.Status), nameof(DiscipleshipNoteDto.NoteStatus))]
+        [MapperIgnoreSource(nameof(DiscipleshipNote.Disciple))]
+        [MapperIgnoreSource(nameof(DiscipleshipNote.Leader))]
+        [MapperIgnoreSource(nameof(DiscipleshipNote.Categories))]
+        [MapperIgnoreSource(nameof(DiscipleshipNote.Entries))]
+        [MapperIgnoreTarget(nameof(DiscipleshipNoteDto.Categories))]
+        [MapperIgnoreTarget(nameof(DiscipleshipNoteDto.Entries))]
+        private partial DiscipleshipNoteDto DiscipleshipNoteToDto(DiscipleshipNote source);
+
+        public DiscipleshipNoteDto DiscipleshipNoteToDiscipleshipNoteDto(DiscipleshipNote source)
+        {
+            var dto = DiscipleshipNoteToDto(source);
+            dto.Categories = JsonSerializer.Deserialize<List<string>>(source.Categories) ?? [];
+            dto.Entries = DiscipleshipNoteEntryListToDtoList(source.Entries);
+            return dto;
+        }
+
+        public IList<DiscipleshipNoteDto> DiscipleshipNoteListToDiscipleshipNoteDtoList(IEnumerable<DiscipleshipNote> source)
+            => source.Select(DiscipleshipNoteToDiscipleshipNoteDto).ToList();
+
+        // ===== DiscipleshipNoteEntry mappings =====
+
+        [MapperIgnoreSource(nameof(DiscipleshipNoteEntry.Note))]
+        [MapperIgnoreSource(nameof(DiscipleshipNoteEntry.Author))]
+        public partial DiscipleshipNoteEntryDto DiscipleshipNoteEntryToDto(DiscipleshipNoteEntry source);
+
+        public partial IList<DiscipleshipNoteEntryDto> DiscipleshipNoteEntryListToDtoList(IEnumerable<DiscipleshipNoteEntry> source);
 
         // ===== Collection mappings =====
 

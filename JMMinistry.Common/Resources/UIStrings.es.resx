@@ -417,4 +417,19 @@
   <data name="UserHasCell" xml:space="preserve">
     <value>{0} {1} ya pertenece a una célula</value>
   </data>
+  <data name="DiscipleshipJournal" xml:space="preserve">
+    <value>Diario del discipular</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>Nuevo</value>
+  </data>
+  <data name="UnderRevision" xml:space="preserve">
+    <value>Bajo revisión</value>
+  </data>
+  <data name="Resolved" xml:space="preserve">
+    <value>Resuelto</value>
+  </data>
+  <data name="Abandoned" xml:space="preserve">
+    <value>Abandonado</value>
+  </data>
 </root>

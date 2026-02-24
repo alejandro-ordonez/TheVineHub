@@ -1,7 +1,8 @@
 ﻿using Fluxor;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Web.Api;
-using JMMinistry.Web.Pages.User;
+using JMMinistry.Web.Pages.User.Components;
+using JMMinistry.Web.Pages.User.Dialogs;
 using JMMinistry.Web.Shared.Components;
 using JMMinistry.Web.Store.CellAttendances.Actions;
 using JMMinistry.Web.Store.DisciplesUseCase;
