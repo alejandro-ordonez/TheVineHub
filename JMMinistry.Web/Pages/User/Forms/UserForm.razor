@@ -299,8 +299,8 @@
                 // then reset validation so they don't show errors.
                 StateHasChanged();
                 await Task.Yield();
-                _basicInfoForm?.ResetValidation();
-                _addressInfoForm?.ResetValidation();
+                if (_basicInfoForm is not null) await _basicInfoForm.ResetValidationAsync();
+                if (_addressInfoForm is not null) await _addressInfoForm.ResetValidationAsync();
             }
         }
         else
