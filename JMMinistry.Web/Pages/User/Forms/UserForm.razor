@@ -294,6 +294,13 @@
                 _isUpdateMode = true;
                 _formUnlocked = true;
                 _lastCheckedDocument = UserInfo.Document;
+
+                // Allow form fields to render with pre-populated values,
+                // then reset validation so they don't show errors.
+                StateHasChanged();
+                await Task.Yield();
+                _basicInfoForm?.ResetValidation();
+                _addressInfoForm?.ResetValidation();
             }
         }
         else

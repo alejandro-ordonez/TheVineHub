@@ -151,8 +151,10 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(Cell.Disciples))]
         public partial CellDto CellToCellDto(Cell source);
 
-        [MapperIgnoreTarget(nameof(Cell.CityId))]
-        [MapperIgnoreTarget(nameof(Cell.LocalityId))]
+        [MapProperty($"{nameof(CellDto.City)}.{nameof(CellDto.City.Id)}", nameof(Cell.CityId))]
+        [MapProperty($"{nameof(CellDto.Locality)}.{nameof(CellDto.Locality.Id)}", nameof(Cell.LocalityId))]
+        [MapperIgnoreTarget(nameof(Cell.City))]
+        [MapperIgnoreTarget(nameof(Cell.Locality))]
         [MapperIgnoreTarget(nameof(Cell.Leaders))]
         [MapperIgnoreTarget(nameof(Cell.Disciples))]
         public partial Cell CellDtoToCell(CellDto source);

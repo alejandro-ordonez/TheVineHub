@@ -15,7 +15,7 @@
                     <MudChip T="string" Size="Size.Small" Color="@GetStatusColor(Note.NoteStatus)" Variant="Variant.Filled">
                         @Note.NoteStatus
                     </MudChip>
-                    <MudText Typo="Typo.caption" Color="Color.Secondary">@Note.CreatedAt.ToString("d")</MudText>
+                    <MudText Typo="Typo.caption" Color="Color.Secondary">@Note.CreatedAt.ToLocalTime().ToString("d")</MudText>
                 </div>
 
                 @if (!string.IsNullOrWhiteSpace(Note.Description))
@@ -56,7 +56,7 @@
                         <MudPaper Class="pa-3 mb-2" Elevation="0" Outlined="true">
                             <div class="d-flex justify-space-between align-center mb-1">
                                 <MudText Typo="Typo.caption"><b>@entry.AuthorId</b></MudText>
-                                <MudText Typo="Typo.caption" Color="Color.Secondary">@entry.Date.ToString("d")</MudText>
+                                <MudText Typo="Typo.caption" Color="Color.Secondary">@entry.Date.ToLocalTime().ToString("d")</MudText>
                             </div>
                             <div class="entry-content">@((MarkupString)entry.Content)</div>
                         </MudPaper>

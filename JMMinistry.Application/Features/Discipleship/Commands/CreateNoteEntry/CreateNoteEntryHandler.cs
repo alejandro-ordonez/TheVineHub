@@ -33,7 +33,7 @@ namespace JMMinistry.Application.Features.Discipleship.Commands.CreateNoteEntry
             var entry = new DiscipleshipNoteEntry
             {
                 Content = request.Content,
-                Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc),
+                Date = request.Date.ToUniversalTime(),
                 NoteId = request.NoteId,
                 AuthorId = request.RequestorId
             };

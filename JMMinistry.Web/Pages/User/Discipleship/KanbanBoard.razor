@@ -38,7 +38,7 @@ else
                             {
                                 <MudText Typo="Typo.body2">@note.Description</MudText>
                             }
-                            <MudText Typo="Typo.caption" Color="Color.Secondary">@note.CreatedAt.ToString("d")</MudText>
+                            <MudText Typo="Typo.caption" Color="Color.Secondary">@note.CreatedAt.ToLocalTime().ToString("d")</MudText>
 
                             @if (note.Categories.Count > 0)
                             {
