@@ -33,7 +33,8 @@ namespace JMMinistry.Web.Pages.Ministry.Cells
         {
             var parameters = new DialogParameters<CellAttendanceDialog>()
             {
-                {x => x.Attendance, attendance }
+                {x => x.Attendance, attendance },
+                {x => x.CellId, CellId }
             };
 
             await DialogService.ShowAsync<CellAttendanceDialog>(translator["Attendance", attendance.Date.ToShortDateString()], parameters);

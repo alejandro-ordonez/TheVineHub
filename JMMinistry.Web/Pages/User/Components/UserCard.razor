@@ -7,6 +7,8 @@
 @inject IDialogService dialogService;
 
 <MudPaper Style="padding: 0.5rem" Class="@(OnClick is null || (EnableSelection ?? false) ? "" : "mud-ripple")"
+          Outlined="@(Outlined ?? false)"
+          Elevation="@(Outlined == true ? 0 : 1)"
           onclick="@(() => HandleClick())">
 
     <div class="user-card">
@@ -66,6 +68,9 @@
 
     [Parameter]
     public bool? EnableSelection { get; set; }
+
+    [Parameter]
+    public bool? Outlined { get; set; }
 
     [Parameter]
     public bool Selected { get; set; }

@@ -1,15 +1,16 @@
 @using JMMinistry.Common.Dtos.Discipleship
+@inject IStringLocalizer<UIStrings> translator;
+
 
 @if (OnCreateNote.HasDelegate)
 {
-    <div class="d-flex justify-end my-2">
-        <MudButton Variant="Variant.Filled"
-                   Color="Color.Primary"
-                   StartIcon="@Icons.Material.Filled.Add"
-                   OnClick="OnCreateNote">
-            New Note
-        </MudButton>
-    </div>
+    <MudPaper Style="margin: 1rem 0px">
+        <MudToolBar>
+            <MudText Typo="Typo.subtitle1">@translator["Total", Notes.Count]</MudText>
+            <MudSpacer />
+            <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Tertiary" OnClick="OnCreateNote" />
+        </MudToolBar>
+    </MudPaper>
 }
 
 @if (IsLoading)
@@ -26,13 +27,16 @@ else
         @foreach (var status in Enum.GetValues<NoteStatus>())
         {
             <div class="kanban-column">
-                <MudText Typo="Typo.h6" Class="kanban-column-header">@status</MudText>
+                <MudText Typo="Typo.h6" Class="kanban-column-header">@translator[status.ToString()] (@Notes.Count(note => note.NoteStatus == status))</MudText>
+                <MudDivider />
+
                 @foreach (var note in Notes.Where(n => n.NoteStatus == status))
                 {
                     <MudCard Class="kanban-card" Style="cursor: pointer" @onclick="() => OnNoteClicked.InvokeAsync(note.NoteId)">
                         <MudCardHeader>
                             <MudText Typo="Typo.subtitle1">@note.Title</MudText>
                         </MudCardHeader>
+
                         <MudCardContent>
                             @if (!string.IsNullOrWhiteSpace(note.Description))
                             {
