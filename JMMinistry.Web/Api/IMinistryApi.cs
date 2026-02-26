@@ -15,6 +15,7 @@ namespace JMMinistry.Web.Api
         Task<Response<object>?> UpdateCellAsync(CellDto cell);
 
         Task<Response<object>?> RecordCellAttendance(int cellId, AddCellAttendanceDto cellAttendance);
+        Task<Response<object>?> UpdateCellAttendance(int cellId, int attendanceId, UpdateCellAttendanceDto dto);
         Task<Response<IList<CellAttendanceDto>>?> GetCellAttendances(int cellId);
     }
 }

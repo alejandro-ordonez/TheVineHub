@@ -18,5 +18,9 @@ namespace JMMinistry.Web.Store.CellAttendances
         [ReducerMethod(typeof(AddCellAttendanceAction))]
         public static CellAttendancesState ReduceAddCellAttendanceAction(CellAttendancesState state)
                     => state with { IsLoading = true };
+
+        [ReducerMethod(typeof(UpdateCellAttendanceAction))]
+        public static CellAttendancesState ReduceUpdateCellAttendanceAction(CellAttendancesState state)
+                    => state with { IsLoading = true };
     }
 }

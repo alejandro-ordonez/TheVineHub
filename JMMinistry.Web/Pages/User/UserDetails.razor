@@ -25,11 +25,13 @@
 @inject IDispatcher Dispatcher;
 @inject IDialogService dialogService;
 
-<UserSummary UserInfo="User"/>
+<MudPaper>
+    <UserSummary UserInfo="User"/>
+</MudPaper>
 
 @if(User is not null)
 {
-    <MudTabs>
+    <MudTabs Class="my-lg-3">
 
         @if(DiscipleshipNotesState.Value.IsLeader)
         {
@@ -43,7 +45,7 @@
 
         <MudTabPanel Text="@translator["CellMates"]" Icon="@Icons.Material.Filled.Group">
 
-            <div class="cards-grid">
+            <div class="cards-grid my-lg-5"">
                 @foreach (var disciple in CellMates)
                 {
                     <UserCard User="disciple"

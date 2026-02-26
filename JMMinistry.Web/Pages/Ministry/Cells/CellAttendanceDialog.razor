@@ -1,49 +1,93 @@
-﻿@using JMMinistry.Common.Dtos.Cell
+@using JMMinistry.Common.Dtos.Cell
 @using JMMinistry.Web.Pages.User.Components
 
 @inject IStringLocalizer<UIStrings> translator;
 
-<Dialog ResultType="object"
-        PrimaryButton="false">
-
-    <Content>
-        @if (!string.IsNullOrEmpty(Attendance.Notes))
+<MudDialog>
+    <DialogContent>
+        @if (IsEditing)
         {
             <div class="ma-4">
-                <MudText Typo="Typo.body1">@Attendance.Notes</MudText>
+                <MudTextField @bind-Value="EditNotes"
+                              Label="@translator["Notes"]"
+                              Variant="Variant.Outlined"
+                              Lines="2" />
+
+                <MudDatePicker @bind-Date="EditDate"
+                               Label="@translator["Date"]"
+                               Variant="Variant.Outlined"
+                               Class="mt-4" />
+            </div>
+
+            <div class="ma-4">
+                <MudText Typo="Typo.subtitle2">
+                    <MudIcon Icon="@Icons.Material.Filled.People" Size="Size.Small" Class="mr-1" />
+                    @translator["Attendees", SelectedDocuments.Count]
+                </MudText>
+                <MudDivider />
+            </div>
+
+            <div class="dynamic-grid">
+                @foreach (var disciple in AllDisciples)
+                {
+                    <UserCard User="disciple"
+                              EnableSelection="true"
+                              Selected="SelectedDocuments.Contains(disciple.Document)"
+                              Outlined="true"
+                              @ref="ComponentRef" />
+                }
             </div>
         }
-
-        <div class="ma-4">
-            <MudText Typo="Typo.subtitle2">@translator["Attendees", Attendance.Attendees.Count]</MudText>
-            <MudDivider />
-        </div>
-
-        <div class="dynamic-grid">
-            @foreach (var disciple in Attendance.Attendees)
+        else
+        {
+            @if (!string.IsNullOrEmpty(Attendance.Notes))
             {
-                <UserCard User="disciple" />
+                <div class="ma-4">
+                    <MudText Typo="Typo.body1">@Attendance.Notes</MudText>
+                </div>
             }
-        </div>
 
+            <div class="ma-4">
+                <MudText Typo="Typo.subtitle2">
+                    <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Size="Size.Small" Color="Color.Success" Class="mr-1" />
+                    @translator["Attendees", Attendance.Attendees.Count]
+                </MudText>
+                <MudDivider />
+            </div>
 
-        <div class="ma-4">
-            <MudText Typo="Typo.subtitle2">@translator["Missing", Attendance.Attendees.Count]</MudText>
-            <MudDivider />
-        </div>
+            <div class="dynamic-grid">
+                @foreach (var disciple in Attendance.Attendees)
+                {
+                    <UserCard User="disciple" Outlined="true" />
+                }
+            </div>
 
-        <div class="dynamic-grid">
-            @foreach (var disciple in Attendance.MissingAttendees)
-            {
-                <UserCard User="disciple" />
-            }
-        </div>
-    </Content>
+            <div class="ma-4">
+                <MudText Typo="Typo.subtitle2">
+                    <MudIcon Icon="@Icons.Material.Filled.Cancel" Size="Size.Small" Color="Color.Error" Class="mr-1" />
+                    @translator["Missing", Attendance.MissingAttendees.Count]
+                </MudText>
+                <MudDivider />
+            </div>
 
-</Dialog>
-
-
-@code {
-    [Parameter]
-    public required CellAttendanceDto Attendance { get; set; }
-}
+            <div class="dynamic-grid">
+                @foreach (var disciple in Attendance.MissingAttendees)
+                {
+                    <UserCard User="disciple" Outlined="true" />
+                }
+            </div>
+        }
+    </DialogContent>
+    <DialogActions>
+        @if (IsEditing)
+        {
+            <MudButton OnClick="CancelEdit">@translator["Cancel"]</MudButton>
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="Save">@translator["Save"]</MudButton>
+        }
+        else
+        {
+            <MudButton OnClick="Cancel">@translator["Cancel"]</MudButton>
+            <MudButton Color="Color.Tertiary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Edit" OnClick="EnterEditMode">@translator["Edit"]</MudButton>
+        }
+    </DialogActions>
+</MudDialog>

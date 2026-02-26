@@ -33,5 +33,23 @@ namespace JMMinistry.Web.Store.CellAttendances
 
             dispatcher.Dispatch(new FetchCellAttendancesAction { CellId = action.CellId });
         }
+
+        [EffectMethod]
+        public async Task HandleUpdateCellAttendanceAction(UpdateCellAttendanceAction action, IDispatcher dispatcher)
+        {
+            var dto = new UpdateCellAttendanceDto
+            {
+                Disciples = action.Documents,
+                Notes = action.Notes,
+                Date = action.Date
+            };
+
+            var response = await ministryApi.UpdateCellAttendance(action.CellId, action.AttendanceId, dto);
+
+            if (response is null || response.Data is null || !response.Success)
+                dispatcher.Dispatch(new FailedAction<UpdateCellAttendanceAction>());
+
+            dispatcher.Dispatch(new FetchCellAttendancesAction { CellId = action.CellId });
+        }
     }
 }

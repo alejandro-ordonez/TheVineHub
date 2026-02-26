@@ -1,5 +1,6 @@
 ﻿.user-info-card{
     display: flex;
+    padding: 1rem;
 }
 
 .user-info {

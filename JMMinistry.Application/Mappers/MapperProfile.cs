@@ -275,7 +275,6 @@ namespace JMMinistry.Application.Mappers
 
         // ===== CellAttendance mappings =====
 
-        [MapperIgnoreSource(nameof(CellAttendance.Id))]
         [MapperIgnoreSource(nameof(CellAttendance.CellId))]
         [MapperIgnoreSource(nameof(CellAttendance.Cell))]
         [MapperIgnoreTarget(nameof(CellAttendanceDto.MissingAttendees))]

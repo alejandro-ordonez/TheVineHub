@@ -4,6 +4,7 @@ using JMMinistry.Application.Features.Cells.Commands.AddDisciples;
 using JMMinistry.Application.Features.Cells.Commands.CreateCell;
 using JMMinistry.Application.Features.Cells.Commands.RecordAttendance;
 using JMMinistry.Application.Features.Cells.Commands.RemoveDisciple;
+using JMMinistry.Application.Features.Cells.Commands.UpdateAttendance;
 using JMMinistry.Application.Features.Cells.Queries.GetCell;
 using JMMinistry.Application.Features.Cells.Queries.GetCellAttendances;
 using JMMinistry.Application.Features.Cells.Queries.GetCells;
@@ -71,6 +72,25 @@ namespace JMMinistry.API.Controllers
                 RequestorId = document,
                 Attendees = cellAttendance.Disciples,
                 Notes = cellAttendance.Notes
+            };
+
+            var result = await mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPut("attendances/{cellId}/{attendanceId}")]
+        public async Task<ActionResult> UpdateCellAttendance(int cellId, int attendanceId, UpdateCellAttendanceDto cellAttendance)
+        {
+            var document = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
+
+            var command = new UpdateAttendanceCommand
+            {
+                CellId = cellId,
+                AttendanceId = attendanceId,
+                RequestorId = document,
+                Attendees = cellAttendance.Disciples,
+                Notes = cellAttendance.Notes,
+                Date = cellAttendance.Date
             };
 
             var result = await mediator.Send(command);
