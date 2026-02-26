@@ -16,6 +16,11 @@
 
         <div class="grid-details">
             <div class="grid-item">
+                <MudIcon Icon="@Icons.Material.Filled.Key" />
+                <MudText Class="mx-4" Typo="Typo.body1">@UserInfo?.Document</MudText>
+            </div>
+
+            <div class="grid-item">
                 <MudIcon Icon="@Icons.Material.Filled.Phone" Size="Size.Small" />
                 <MudLink Typo="Typo.body1" Underline="Underline.None" Class="text-icon-centered mx-4" Href="@($"http://api.whatsapp.com/send?phone=57{UserInfo?.Phone}")">
                     @UserInfo?.Phone
@@ -24,12 +29,12 @@
 
             <div class="grid-item">
                 <MudIcon Icon="@Icons.Material.Filled.Email" />
-                <MudText Class="mx-4"Typo="Typo.body1">@UserInfo?.Email</MudText>
+                <MudText Class="mx-4" Typo="Typo.body1">@UserInfo?.Email</MudText>
             </div>
 
             <div class="grid-item">
                 <MudIcon Icon="@Icons.Material.Filled.CalendarMonth" />
-                <MudText Class="mx-4"Typo="Typo.body1">@UserInfo?.Birthday</MudText>
+                <MudText Class="mx-4" Typo="Typo.body1">@UserInfo?.Birthday</MudText>
             </div>
 
             <div class="grid-item">
