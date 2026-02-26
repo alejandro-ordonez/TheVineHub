@@ -339,6 +339,83 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.ToTable("ConventionAttendees");
                 });
 
+            modelBuilder.Entity("JMMinistry.Domain.Discipleship.DiscipleshipNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Categories")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("DiscipleId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LeaderId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DiscipleId");
+
+                    b.HasIndex("LeaderId");
+
+                    b.ToTable("DiscipleshipNotes");
+                });
+
+            modelBuilder.Entity("JMMinistry.Domain.Discipleship.DiscipleshipNoteEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("NoteId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("NoteId");
+
+                    b.ToTable("DiscipleshipNoteEntries");
+                });
+
             modelBuilder.Entity("JMMinistry.Domain.Event", b =>
                 {
                     b.Property<int>("Id")
@@ -968,6 +1045,44 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Navigation("InvitedBy");
                 });
 
+            modelBuilder.Entity("JMMinistry.Domain.Discipleship.DiscipleshipNote", b =>
+                {
+                    b.HasOne("JMMinistry.Domain.PersonalInfo", "Disciple")
+                        .WithMany()
+                        .HasForeignKey("DiscipleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JMMinistry.Domain.PersonalInfo", "Leader")
+                        .WithMany()
+                        .HasForeignKey("LeaderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Disciple");
+
+                    b.Navigation("Leader");
+                });
+
+            modelBuilder.Entity("JMMinistry.Domain.Discipleship.DiscipleshipNoteEntry", b =>
+                {
+                    b.HasOne("JMMinistry.Domain.PersonalInfo", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JMMinistry.Domain.Discipleship.DiscipleshipNote", "Note")
+                        .WithMany("Entries")
+                        .HasForeignKey("NoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Note");
+                });
+
             modelBuilder.Entity("JMMinistry.Domain.Gained", b =>
                 {
                     b.HasOne("JMMinistry.Domain.PersonalInfo", "InvitedBy")
@@ -1099,6 +1214,11 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("JMMinistry.Domain.Class", b =>
                 {
                     b.Navigation("ClassAttendances");
+                });
+
+            modelBuilder.Entity("JMMinistry.Domain.Discipleship.DiscipleshipNote", b =>
+                {
+                    b.Navigation("Entries");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.Gained", b =>

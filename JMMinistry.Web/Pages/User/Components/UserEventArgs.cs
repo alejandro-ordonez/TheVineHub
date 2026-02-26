@@ -2,7 +2,7 @@
 using JMMinistry.Common.Dtos.User;
 using MudBlazor;
 
-namespace JMMinistry.Web.Pages.User
+namespace JMMinistry.Web.Pages.User.Components
 {
     public class UserEventArgs : EventArgs
     {

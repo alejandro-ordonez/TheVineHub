@@ -165,11 +165,10 @@
                              SearchFunc="@((searchTerm, token) => locationApi.GetCities(searchTerm))"
                              ToStringFunc="@(e => e == null ? null : e.Name)"
                              Required="true"
-                             RequiredError="@_translator["FieldRequired"]"
                              Variant="Variant.Outlined"
                              CoerceText="true"
-                             CoerceValue="true"
-                             ShowProgressIndicator="true" />
+                             ShowProgressIndicator="true"
+                             UserAttributes="@(new Dictionary<string, object> { { "autocomplete", "off" } })" />
 
             @if (SelectedCity is not null && SelectedCity.Localities.Count > 0)
             {
@@ -179,9 +178,9 @@
                                  Variant="Variant.Outlined"
                                  DebounceInterval="400"
                                  CoerceText="true"
-                                 CoerceValue="true"
                                  MaxItems="22"
-                                 ShowProgressIndicator="true" />
+                                 ShowProgressIndicator="true"
+                                 UserAttributes="@(new Dictionary<string, object> { { "autocomplete", "off" } })" />
             }
 
             <MudTextField @bind-Value="UserInfo.Neighborhood"
@@ -295,6 +294,13 @@
                 _isUpdateMode = true;
                 _formUnlocked = true;
                 _lastCheckedDocument = UserInfo.Document;
+
+                // Allow form fields to render with pre-populated values,
+                // then reset validation so they don't show errors.
+                StateHasChanged();
+                await Task.Yield();
+                _basicInfoForm?.ResetValidation();
+                _addressInfoForm?.ResetValidation();
             }
         }
         else
