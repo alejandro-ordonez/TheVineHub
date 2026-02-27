@@ -65,18 +65,19 @@ steps:
 - task: CmdLine@2
   displayName: 'Build and run containers'
   inputs:
-    script: | 
-      DefaultUser__Document=$(DefaultUser__Document) \
-      DefaultUser__LastName=$(DefaultUser__LastName) \
-      DefaultUser__Name=$(DefaultUser__Name) \
-      DefaultUser__Password=$(DefaultUser__Password) \
-      JwtSettings__Audience=$(JwtSettings__Audience) \
-      JwtSettings__DurationInMinutes=$(JwtSettings__DurationInMinutes) \
-      JwtSettings__Issuer=$(JwtSettings__Issuer) \
-      JwtSettings__Key=$(JwtSettings__Key) \
-      POSTGRES_PASSWORD=$(POSTGRES_PASSWORD) \
-      API_URL=$(SERVER_HOST) \
-      docker compose up -d --build
+    script: |
+      export DefaultUser__Document=$(DefaultUser__Document)
+      export DefaultUser__LastName=$(DefaultUser__LastName)
+      export DefaultUser__Name=$(DefaultUser__Name)
+      export DefaultUser__Password=$(DefaultUser__Password)
+      export JwtSettings__Audience=$(JwtSettings__Audience)
+      export JwtSettings__DurationInMinutes=$(JwtSettings__DurationInMinutes)
+      export JwtSettings__Issuer=$(JwtSettings__Issuer)
+      export JwtSettings__Key=$(JwtSettings__Key)
+      export POSTGRES_PASSWORD=$(POSTGRES_PASSWORD)
+      export API_URL=$(SERVER_HOST)
+      docker compose build --no-cache
+      docker compose up -d
 
 
 
