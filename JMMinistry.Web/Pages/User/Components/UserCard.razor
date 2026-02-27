@@ -15,7 +15,7 @@
 
         @if (EnableSelection ?? false)
         {
-            <MudCheckBox Color="Color.Primary" @bind-Value="Selected" />
+            <MudCheckBox T="bool" Color="Color.Primary" Value="Selected" ValueChanged="HandleSelectionChanged" />
         }
 
         else
@@ -38,11 +38,6 @@
             <MudText Typo="Typo.subtitle1" Class="text-icon-centered">
                 <MudIcon Icon="@User.Gender.GetGenderIcon()" Color="@User.Gender.GetGenderColor()" />
                 @User.GetFirsNameAndLastName()
-            </MudText>
-
-            <MudText Typo="Typo.body2" Class="text-icon-centered">
-                <MudIcon Icon="@Icons.Material.Filled.Church" Color="Color.Tertiary" />
-                @translator[User.MinistryStatus?.ToString() ?? ""]
             </MudText>
 
             <MudLink Typo="Typo.body2" Underline="Underline.None" Class="text-icon-centered" Href="@($"http://api.whatsapp.com/send?phone=57{User.Phone}")">
@@ -76,7 +71,17 @@
     public bool Selected { get; set; }
 
     [Parameter]
+    public EventCallback<bool> SelectedChanged { get; set; }
+
+    [Parameter]
     public EventCallback<UserEventArgs>? OnClick { get; set; }
+
+    async Task HandleSelectionChanged(bool value)
+    {
+        Selected = value;
+        if (SelectedChanged.HasDelegate)
+            await SelectedChanged.InvokeAsync(value);
+    }
 
     void HandleClick()
     {

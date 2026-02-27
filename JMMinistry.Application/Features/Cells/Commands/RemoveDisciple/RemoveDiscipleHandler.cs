@@ -27,8 +27,6 @@ namespace JMMinistry.Application.Features.Cells.Commands.RemoveDisciple
                 .Include(c => c.Disciples)
                 .FirstOrDefaultAsync(cell => cell.Id == request.CellId, cancellationToken) ?? throw new NotFoundException<Cell>(request.CellId.ToString());
 
-            disciple.MinistryStatus = MinistryStatus.Unknown;
-
             cell.Disciples.Remove(disciple);
 
             dbContext.PersonalInfo.Update(disciple);

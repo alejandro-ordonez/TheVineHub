@@ -14,12 +14,17 @@
         // Ministry
         public const string Ministry = $"/{nameof(Ministry)}";
         public const string CellDetails = $"/{nameof(CellDetails)}";
+        public const string DiscipleStep = $"/{nameof(DiscipleStep)}";
+        public const string MeetingAttendances = $"/{nameof(MeetingAttendances)}";
 
         // Gained
         public const string Gained = $"/{nameof(Gained)}";
 
         // Meetings
         public const string Meetings = $"/{nameof(Meetings)}";
+
+        // Admin
+        public const string DiscipleStepsAdmin = $"/{nameof(DiscipleStepsAdmin)}";
 
 
 

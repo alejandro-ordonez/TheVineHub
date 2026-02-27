@@ -2,6 +2,7 @@ using System.Text.Json;
 using JMMinistry.Common.Dtos.Cell;
 using JMMinistry.Common.Dtos.Class;
 using JMMinistry.Common.Dtos.Common;
+using JMMinistry.Common.Dtos.DiscipleJourney;
 using JMMinistry.Common.Dtos.Discipleship;
 using JMMinistry.Common.Dtos.Gained;
 using JMMinistry.Common.Dtos.Meetings;
@@ -9,6 +10,7 @@ using JMMinistry.Common.Dtos.School;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Domain;
 using JMMinistry.Domain.Discipleship;
+using JMMinistry.Domain.DiscipleJourney;
 using JMMinistry.Domain.Location;
 using Riok.Mapperly.Abstractions;
 
@@ -34,12 +36,9 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(PersonalInfo.LockoutEnabled))]
         [MapperIgnoreSource(nameof(PersonalInfo.AccessFailedCount))]
         [MapperIgnoreSource(nameof(PersonalInfo.LastAccess))]
-        [MapperIgnoreSource(nameof(PersonalInfo.GainedId))]
-        [MapperIgnoreSource(nameof(PersonalInfo.GainedRecord))]
         [MapperIgnoreSource(nameof(PersonalInfo.Cell))]
         [MapperIgnoreSource(nameof(PersonalInfo.CellEnrollmentDate))]
         [MapperIgnoreSource(nameof(PersonalInfo.Cells))]
-        [MapperIgnoreSource(nameof(PersonalInfo.Gained))]
         [MapperIgnoreSource(nameof(PersonalInfo.MeetingAttendances))]
         [MapperIgnoreSource(nameof(PersonalInfo.CellAttendances))]
         [MapperIgnoreSource(nameof(PersonalInfo.ClassAttendances))]
@@ -77,12 +76,9 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(PersonalInfo.MaritalStatus))]
         [MapperIgnoreSource(nameof(PersonalInfo.Birthday))]
         [MapperIgnoreSource(nameof(PersonalInfo.LastAccess))]
-        [MapperIgnoreSource(nameof(PersonalInfo.GainedId))]
-        [MapperIgnoreSource(nameof(PersonalInfo.GainedRecord))]
         [MapperIgnoreSource(nameof(PersonalInfo.Cell))]
         [MapperIgnoreSource(nameof(PersonalInfo.CellEnrollmentDate))]
         [MapperIgnoreSource(nameof(PersonalInfo.Cells))]
-        [MapperIgnoreSource(nameof(PersonalInfo.Gained))]
         [MapperIgnoreSource(nameof(PersonalInfo.MeetingAttendances))]
         [MapperIgnoreSource(nameof(PersonalInfo.CellAttendances))]
         [MapperIgnoreSource(nameof(PersonalInfo.ClassAttendances))]
@@ -111,12 +107,9 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreTarget(nameof(PersonalInfo.LockoutEnabled))]
         [MapperIgnoreTarget(nameof(PersonalInfo.AccessFailedCount))]
         [MapperIgnoreTarget(nameof(PersonalInfo.LastAccess))]
-        [MapperIgnoreTarget(nameof(PersonalInfo.GainedId))]
-        [MapperIgnoreTarget(nameof(PersonalInfo.GainedRecord))]
         [MapperIgnoreTarget(nameof(PersonalInfo.Cell))]
         [MapperIgnoreTarget(nameof(PersonalInfo.CellEnrollmentDate))]
         [MapperIgnoreTarget(nameof(PersonalInfo.Cells))]
-        [MapperIgnoreTarget(nameof(PersonalInfo.Gained))]
         [MapperIgnoreTarget(nameof(PersonalInfo.MeetingAttendances))]
         [MapperIgnoreTarget(nameof(PersonalInfo.CellAttendances))]
         [MapperIgnoreTarget(nameof(PersonalInfo.ClassAttendances))]
@@ -186,12 +179,9 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreTarget(nameof(PersonalInfo.MaritalStatus))]
         [MapperIgnoreTarget(nameof(PersonalInfo.Birthday))]
         [MapperIgnoreTarget(nameof(PersonalInfo.LastAccess))]
-        [MapperIgnoreTarget(nameof(PersonalInfo.GainedId))]
-        [MapperIgnoreTarget(nameof(PersonalInfo.GainedRecord))]
         [MapperIgnoreTarget(nameof(PersonalInfo.Cell))]
         [MapperIgnoreTarget(nameof(PersonalInfo.CellEnrollmentDate))]
         [MapperIgnoreTarget(nameof(PersonalInfo.Cells))]
-        [MapperIgnoreTarget(nameof(PersonalInfo.Gained))]
         [MapperIgnoreTarget(nameof(PersonalInfo.MeetingAttendances))]
         [MapperIgnoreTarget(nameof(PersonalInfo.CellAttendances))]
         [MapperIgnoreTarget(nameof(PersonalInfo.ClassAttendances))]
@@ -226,12 +216,9 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(PersonalInfo.MaritalStatus))]
         [MapperIgnoreSource(nameof(PersonalInfo.Birthday))]
         [MapperIgnoreSource(nameof(PersonalInfo.LastAccess))]
-        [MapperIgnoreSource(nameof(PersonalInfo.GainedId))]
-        [MapperIgnoreSource(nameof(PersonalInfo.GainedRecord))]
         [MapperIgnoreSource(nameof(PersonalInfo.Cell))]
         [MapperIgnoreSource(nameof(PersonalInfo.CellEnrollmentDate))]
         [MapperIgnoreSource(nameof(PersonalInfo.Cells))]
-        [MapperIgnoreSource(nameof(PersonalInfo.Gained))]
         [MapperIgnoreSource(nameof(PersonalInfo.MeetingAttendances))]
         [MapperIgnoreSource(nameof(PersonalInfo.CellAttendances))]
         [MapperIgnoreSource(nameof(PersonalInfo.ClassAttendances))]
@@ -243,23 +230,6 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreTarget(nameof(GainedUser.Petition))]
         [MapperIgnoreTarget(nameof(GainedUser.Photo))]
         public partial GainedUser PersonalInfoToGainedUser(PersonalInfo source);
-
-        // Gained -> GainedUser (flatten Person properties)
-        public GainedUser GainedToGainedUser(Gained source)
-        {
-            var user = PersonalInfoToGainedUser(source.Person);
-            user.Events = GainedEventListToGainedEventDtoList(source.Events);
-            return user;
-        }
-
-        // ===== GainedEvent mappings =====
-
-        [MapProperty(nameof(Domain.GainedEvent.EventId), nameof(Common.Dtos.Gained.GainedEvent.Id))]
-        [MapperIgnoreSource(nameof(Domain.GainedEvent.GainedId))]
-        [MapperIgnoreSource(nameof(Domain.GainedEvent.Gained))]
-        [MapperIgnoreSource(nameof(Domain.GainedEvent.Date))]
-        public partial Common.Dtos.Gained.GainedEvent GainedEventToGainedEventDto(Domain.GainedEvent source);
-        public partial List<Common.Dtos.Gained.GainedEvent> GainedEventListToGainedEventDtoList(List<Domain.GainedEvent> source);
 
         // ===== Meeting mappings =====
 
@@ -318,10 +288,25 @@ namespace JMMinistry.Application.Mappers
 
         public partial IList<DiscipleshipNoteEntryDto> DiscipleshipNoteEntryListToDtoList(IEnumerable<DiscipleshipNoteEntry> source);
 
+        // ===== DiscipleStep mappings =====
+
+        [MapperIgnoreSource(nameof(DiscipleStep.DiscipleStepRequirements))]
+        [MapperIgnoreTarget(nameof(DiscipleStepDto.RequirementIds))]
+        private partial DiscipleStepDto DiscipleStepToDto(DiscipleStep source);
+
+        public DiscipleStepDto DiscipleStepToDiscipleStepDto(DiscipleStep source)
+        {
+            var dto = DiscipleStepToDto(source);
+            dto.RequirementIds = source.DiscipleStepRequirements.Select(r => r.Id).ToList();
+            return dto;
+        }
+
+        public IList<DiscipleStepDto> DiscipleStepListToDiscipleStepDtoList(IEnumerable<DiscipleStep> source)
+            => source.Select(DiscipleStepToDiscipleStepDto).ToList();
+
         // ===== Collection mappings =====
 
         public partial IList<PartialUserInfoDto> PersonalInfoListToPartialUserInfoDtoList(IEnumerable<PersonalInfo> source);
-        public partial IList<GainedUser> GainedListToGainedUserList(IList<Gained> source);
         public partial IEnumerable<CellDto> CellListToCellDtoList(IEnumerable<Cell> source);
         public partial IEnumerable<SchoolDto> SchoolListToSchoolDtoList(IEnumerable<School> source);
         public partial IList<MeetingDto> MeetingListToMeetingDtoList(IEnumerable<Meeting> source);

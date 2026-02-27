@@ -1,4 +1,5 @@
 ﻿using JMMinistry.Common.Dtos.User.Enums;
+using JMMinistry.Domain.DiscipleJourney;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,15 +36,17 @@ public partial class PersonalInfo : IdentityUser<string>
 
     public Gender? Gender { get; set; }
 
-    public MinistryStatus MinistryStatus { get; set; }
-
     public DateTime? LastAccess { get; set; }
 
-    public int? GainedId { get; set; }
     /// <summary>
-    /// Record when the person was gained.
+    /// Steps completed as a disciple
     /// </summary>
-    public Gained? GainedRecord { get; set; }
+    public IList<StepCompletion> StepCompletions { get; set; } = [];
+
+    /// <summary>
+    /// Steps your disciples completed.
+    /// </summary>
+    public IList<StepCompletion> SupervisedStepCompletions { get; set; } = [];
 
 
     public int? CellId { get; set; }
@@ -69,12 +72,5 @@ public partial class PersonalInfo : IdentityUser<string>
 
 
     public virtual IList<PersonalInfoRole> UserRoles { get; set; } = [];
-
-    /// <summary>
-    /// Gained by the person
-    /// </summary>
-    public IList<Gained> Gained { get; set; } = [];
-
-
 
 }

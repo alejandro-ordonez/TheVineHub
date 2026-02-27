@@ -1,7 +1,16 @@
-﻿@using JMMinistry.Web.Pages
+@using Fluxor
+@using Fluxor.Blazor.Web.Components
+@using JMMinistry.Common.Dtos.DiscipleJourney.Enums
+@using JMMinistry.Web.Pages
 @using JMMinistry.Web.Services
+@using JMMinistry.Web.Store.DiscipleStepsUseCase
+@using JMMinistry.Web.Store.DiscipleStepsUseCase.Actions
+
+@inherits FluxorComponent
 
 @inject IStringLocalizer<UIStrings> _translator
+@inject IState<DiscipleStepsState> DiscipleStepsState
+@inject IDispatcher Dispatcher
 
 
 <MudNavMenu>
@@ -9,28 +18,48 @@
         @_translator["Home"]
     </MudNavLink>
 
-    <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.People" Href="@Routes.Ministry">
-        @_translator["MyMinistry"]
-    </MudNavLink>
+    <MudNavGroup Title="@_translator["MyMinistry"]" Icon="@Icons.Material.Filled.People" Expanded="true">
+        <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Group"
+                    Href="@Routes.Ministry">@_translator["Cells"]</MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Check"
+                    Href="@Routes.MeetingAttendances">@_translator["Attendances"]</MudNavLink>
 
-    <!--
-         <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Add" Href="@Routes.Gained">
-        @_translator["GainedUsers"]
-        </MudNavLink>
+        @foreach (var step in DiscipleStepsState.Value.Steps)
+        {
+            <MudNavLink Match="NavLinkMatch.All"
+                        Icon="@GetStepIcon(step.StepCategory)"
+                        Href="@($"{Routes.DiscipleStep}/{step.Id}")">
+                @step.Name
+            </MudNavLink>
+        }
+    </MudNavGroup>
 
-    -->
-   
     <AuthorizeView Roles="Admin">
         <MudDivider Style="margin: 1rem 0"/>
-        <MudText Class="mud-nav-link mud-ripple align-items-center" Typo="Typo.subtitle2">
-            <MudIcon Icon="@Icons.Material.Filled.AdminPanelSettings" style="margin: 0 20px"/> 
-            @_translator["Administration"]  </MudText>
 
-        <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.VerifiedUser" Href="@Routes.UserManagement">@_translator["Users"]</MudNavLink>
-        <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Schedule" Href="@Routes.Meetings">@_translator["Meetings"]</MudNavLink>
-    </AuthorizeView>
+        <MudNavGroup Title="@_translator["Administration"]" Icon="@Icons.Material.Filled.AdminPanelSettings">
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.VerifiedUser" Href="@Routes.UserManagement">@_translator["Users"]</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Schedule" Href="@Routes.Meetings">@_translator["Meetings"]</MudNavLink>
+            <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Route" Href="@Routes.DiscipleStepsAdmin">@_translator["DiscipleSteps"]</MudNavLink>
+        </MudNavGroup>
+
+     </AuthorizeView>
 
 </MudNavMenu>
 
 @code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Dispatcher.Dispatch(new FetchDiscipleStepsAction());
+    }
+
+    private static string GetStepIcon(StepCategory category) => category switch
+    {
+        StepCategory.Gain => Icons.Material.Filled.PersonAdd,
+        StepCategory.Consolidate => Icons.Material.Filled.Handshake,
+        StepCategory.Disciple => Icons.Material.Filled.School,
+        StepCategory.Send => Icons.Material.Filled.Send,
+        _ => Icons.Material.Filled.Circle
+    };
 }

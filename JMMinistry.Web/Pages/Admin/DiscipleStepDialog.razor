@@ -1,0 +1,68 @@
+@using Fluxor
+@using JMMinistry.Common.Dtos.DiscipleJourney
+@using JMMinistry.Common.Dtos.DiscipleJourney.Enums
+@using JMMinistry.Web.Store.DiscipleStepsUseCase
+
+@inject IStringLocalizer<UIStrings> translator
+@inject IState<DiscipleStepsState> StepsState
+
+<Dialog ResultType="CreateDiscipleStepDto"
+        Result="Model"
+        Color="Color.Primary"
+        PrimaryText="@translator["Create"]">
+    <Content>
+        <MudForm @ref="_form">
+            <MudTextField @bind-Value="Model.Name"
+                          Label="@translator["Name"]"
+                          Required="true"
+                          RequiredError="@translator["FieldRequired"]"
+                          Variant="Variant.Outlined" />
+
+            <MudTextField @bind-Value="Model.Description"
+                          Label="@translator["Description"]"
+                          Required="true"
+                          RequiredError="@translator["FieldRequired"]"
+                          Variant="Variant.Outlined"
+                          Lines="3" />
+
+            <MudSelect T="StepCategory"
+                       @bind-Value="Model.StepCategory"
+                       Label="@translator["Category"]"
+                       Required="true"
+                       RequiredError="@translator["FieldRequired"]"
+                       Variant="Variant.Outlined">
+                @foreach (var category in Enum.GetValues<StepCategory>())
+                {
+                    <MudSelectItem T="StepCategory" Value="category">@translator[category.ToString()]</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudSelect T="int"
+                       Label="@translator["Requirements"]"
+                       MultiSelection="true"
+                       SelectedValues="_selectedRequirements"
+                       SelectedValuesChanged="OnRequirementsChanged"
+                       Variant="Variant.Outlined"
+                       ToStringFunc="@(id => StepsState.Value.Steps.FirstOrDefault(s => s.Id == id)?.Name ?? id.ToString())">
+                @foreach (var step in StepsState.Value.Steps)
+                {
+                    <MudSelectItem T="int" Value="step.Id">@step.Name</MudSelectItem>
+                }
+            </MudSelect>
+        </MudForm>
+    </Content>
+</Dialog>
+
+@code {
+    CreateDiscipleStepDto Model { get; set; } = new();
+
+    MudForm? _form;
+
+    IReadOnlyCollection<int> _selectedRequirements = [];
+
+    void OnRequirementsChanged(IEnumerable<int> values)
+    {
+        _selectedRequirements = values.ToList();
+        Model.RequirementIds = values.ToList();
+    }
+}

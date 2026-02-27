@@ -38,10 +38,6 @@
         </MudTh>
 
         <MudTh>
-            <MudTableSortLabel SortLabel="MinistryStatus" T="PartialUserInfoDto">@_translator["MinistryStatus"]</MudTableSortLabel>
-        </MudTh>
-
-        <MudTh>
            @_translator["Phone"]
         </MudTh>
 
@@ -57,7 +53,6 @@
         <MudTd DataLabel="@_translator["Document"]">@context.Document</MudTd>
         <MudTd DataLabel="@_translator["Name"]">@context.Name</MudTd>
         <MudTd DataLabel="@_translator["LastName"]">@context.LastName</MudTd>
-        <MudTd DataLabel="@_translator["MinistryStatus"]">@_translator[context.MinistryStatus?.ToString() ?? ""]</MudTd>
         <MudTd DataLabel="@_translator["Phone"]">@context.Phone</MudTd>
 
             @if (AnyActions)

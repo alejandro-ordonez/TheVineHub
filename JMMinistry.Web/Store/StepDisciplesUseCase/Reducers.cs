@@ -1,0 +1,32 @@
+using Fluxor;
+using JMMinistry.Web.Store.StepDisciplesUseCase.Actions;
+
+namespace JMMinistry.Web.Store.StepDisciplesUseCase
+{
+    public static class Reducers
+    {
+        [ReducerMethod]
+        public static StepDisciplesState ReduceFetchStepDisciplesAction(StepDisciplesState state, FetchStepDisciplesAction action) =>
+            state with { IsLoading = true, StepId = action.StepId };
+
+        [ReducerMethod]
+        public static StepDisciplesState ReduceFetchStepDisciplesResultAction(StepDisciplesState state, FetchStepDisciplesResultAction action) =>
+            state with { IsLoading = false, StepId = action.StepId, Groups = action.Groups, Success = true };
+
+        [ReducerMethod]
+        public static StepDisciplesState ReduceFetchEligibleDisciplesAction(StepDisciplesState state, FetchEligibleDisciplesAction action) =>
+            state with { IsLoadingEligible = true };
+
+        [ReducerMethod]
+        public static StepDisciplesState ReduceFetchEligibleDisciplesResultAction(StepDisciplesState state, FetchEligibleDisciplesResultAction action) =>
+            state with { IsLoadingEligible = false, EligibleGroups = action.Groups };
+
+        [ReducerMethod]
+        public static StepDisciplesState ReduceCompleteStepAction(StepDisciplesState state, CompleteStepAction action) =>
+            state with { IsCompletingStep = true };
+
+        [ReducerMethod]
+        public static StepDisciplesState ReduceCompleteStepResultAction(StepDisciplesState state, CompleteStepResultAction action) =>
+            state with { IsCompletingStep = false };
+    }
+}

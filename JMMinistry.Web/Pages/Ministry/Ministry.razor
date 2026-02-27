@@ -13,16 +13,7 @@
 @inject IDispatcher dispatcher;
 @inject IStringLocalizer<UIStrings> translator;
 
-<MudTabs Outlined="true">
-    <MudTabPanel Text="@translator["Cells"]" Icon="@Icons.Material.Filled.Group" >
-        <Cells />
-    </MudTabPanel>
-
-
-    <MudTabPanel Text="@translator["Attendances"]" Icon="@Icons.Material.Filled.Check">
-    </MudTabPanel>
-   
-</MudTabs>
+<Cells />
 
 @code{
     protected override async Task OnInitializedAsync()

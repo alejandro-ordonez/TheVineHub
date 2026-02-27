@@ -1,5 +1,6 @@
 ﻿using JMMinistry.Domain;
 using JMMinistry.Domain.Discipleship;
+using JMMinistry.Domain.DiscipleJourney;
 using JMMinistry.Domain.Location;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,9 +29,12 @@ namespace JMMinistry.Application.Services
 
         DbSet<DiscipleshipNoteEntry> DiscipleshipNoteEntries { get; set; }
 
+        DbSet<DiscipleStep> DiscipleSteps { get; set; }
+
+        DbSet<StepCompletion> StepCompletions { get; set; }
+
         DbSet<Event> Events { get; set; }
 
-        DbSet<Gained> Gained { get; set; }
 
         DbSet<Meeting> Meetings { get; set; }
 
@@ -47,5 +51,7 @@ namespace JMMinistry.Application.Services
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
         Task<T?> ExecuteScalarFunctionAsync<T>(string functionCall, CancellationToken ct, params object[] parameters);
+
+        Task<List<T>> ExecuteTableFunctionAsync<T>(string functionCall, CancellationToken ct, params object[] parameters);
     }
 }

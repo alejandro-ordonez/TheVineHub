@@ -1,0 +1,133 @@
+@using Fluxor
+@using Fluxor.Blazor.Web.Components
+@using JMMinistry.Common.Dtos.DiscipleJourney
+@using JMMinistry.Common.Dtos.DiscipleJourney.Enums
+@using JMMinistry.Web.Store.DiscipleStepsUseCase
+@using JMMinistry.Web.Store.DiscipleStepsUseCase.Actions
+@using JMMinistry.Web.Store.PageUseCase
+
+@attribute [Route(Routes.DiscipleStepsAdmin)]
+@attribute [Authorize(Roles = "Admin")]
+@layout MainLayout
+
+@inherits FluxorComponent
+
+@inject IState<DiscipleStepsState> StepsState
+@inject IDispatcher Dispatcher
+@inject IDialogService DialogService
+@inject IStringLocalizer<UIStrings> translator
+
+<MudPaper Class="ma-2">
+    <Header Title="@translator["DiscipleSteps"]">
+        <ActionMenu>
+            <MudFab StartIcon="@Icons.Material.Filled.Add"
+                    Color="Color.Primary"
+                    Size="Size.Small"
+                    Disabled="@StepsState.Value.IsLoading"
+                    OnClick="OpenCreateDialog" />
+        </ActionMenu>
+    </Header>
+</MudPaper>
+
+@if (StepsState.Value.IsLoading)
+{
+    <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+}
+
+<div class="ma-2 cards-grid">
+    @foreach (var step in StepsState.Value.Steps)
+    {
+        <MudCard>
+            <MudCardHeader>
+                <CardHeaderContent>
+                    <MudText Typo="Typo.h6">@step.Name</MudText>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudChip T="string"
+                             Color="@GetCategoryColor(step.StepCategory)"
+                             Size="Size.Small">
+                        @translator[step.StepCategory.ToString()]
+                    </MudChip>
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudText Typo="Typo.body2" Class="mb-1">@step.Description</MudText>
+
+                @if (step.RequirementIds.Count > 0)
+                {
+                    <MudText Typo="Typo.caption">@translator["Requirements"]:</MudText>
+                    <MudChipSet T="string" ReadOnly="true">
+                        @foreach (var reqId in step.RequirementIds)
+                        {
+                            var reqStep = StepsState.Value.Steps.FirstOrDefault(s => s.Id == reqId);
+                            if (reqStep is not null)
+                            {
+                                <MudChip T="string"
+                                         Color="@GetCategoryColor(reqStep.StepCategory)"
+                                         Variant="Variant.Outlined"
+                                         Size="Size.Small">
+                                    @reqStep.Name
+                                </MudChip>
+                            }
+                        }
+                    </MudChipSet>
+                }
+                else
+                {
+                    <MudText Typo="Typo.caption" Color="Color.Default">@translator["NoRequirements"]</MudText>
+                }
+            </MudCardContent>
+            <MudCardActions>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                               Color="Color.Error"
+                               Size="Size.Small"
+                               OnClick="@(() => ConfirmDelete(step))" />
+            </MudCardActions>
+        </MudCard>
+    }
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Dispatcher.Dispatch(new SetTitleAction { Title = translator["DiscipleSteps"] });
+        Dispatcher.Dispatch(new FetchDiscipleStepsAction());
+    }
+
+    async Task OpenCreateDialog()
+    {
+        var dialog = await DialogService.ShowAsync<DiscipleStepDialog>(translator["CreateNew", translator["DiscipleStep"]]);
+        var result = await dialog.GetReturnValueAsync<DialogResult<CreateDiscipleStepDto>>();
+
+        if (result?.Data is null)
+            return;
+
+        Dispatcher.Dispatch(new CreateDiscipleStepAction { Step = result.Data });
+    }
+
+    async Task ConfirmDelete(DiscipleStepDto step)
+    {
+        var parameters = new DialogParameters<ConfirmationDialog>
+        {
+            { x => x.ButtonText, translator["Remove"] },
+            { x => x.ContentText, translator["AreYouSure", translator["Remove"], translator["DiscipleStep"], step.Name] },
+            { x => x.Color, Color.Error }
+        };
+
+        var dialog = await DialogService.ShowAsync<ConfirmationDialog>(translator["Remove"], parameters);
+        var result = await dialog.Result;
+
+        if (!result?.Canceled ?? false)
+            Dispatcher.Dispatch(new DeleteDiscipleStepAction { StepId = step.Id });
+    }
+
+    static Color GetCategoryColor(StepCategory category) => category switch
+    {
+        StepCategory.Gain => Color.Success,
+        StepCategory.Consolidate => Color.Info,
+        StepCategory.Disciple => Color.Warning,
+        StepCategory.Send => Color.Primary,
+        _ => Color.Default
+    };
+}

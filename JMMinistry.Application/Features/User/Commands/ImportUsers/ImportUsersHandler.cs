@@ -79,7 +79,6 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
                     Neighborhood = neighborhood,
                     EducationalLevel = Enum.Parse<EducationalLevel>(educationalLevel!),
                     MaritalStatus = Enum.Parse<MaritalStatus>(maritalStatus!),
-                    MinistryStatus = MinistryStatus.Unknown,
                     Gender = Enum.Parse<Gender>(gender!)
                 };
 
