@@ -35,6 +35,7 @@ namespace JMMinistry.Web.Api
             services.AddTransient<IMeetingApi, MeetingApi>();
             services.AddTransient<ILocationApi, LocationApi>();
             services.AddTransient<IDiscipleshipApi, DiscipleshipApi>();
+            services.AddTransient<IDiscipleJourneyApi, DiscipleJourneyApi>();
         }
 
         public static IConfigurationRoot GetConfiguration()

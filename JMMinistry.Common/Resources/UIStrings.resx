@@ -433,4 +433,76 @@
   <data name="Abandoned" xml:space="preserve">
     <value>Abandoned</value>
   </data>
+  <data name="DiscipleSteps" xml:space="preserve">
+    <value>Disciple Steps</value>
+  </data>
+  <data name="DiscipleStep" xml:space="preserve">
+    <value>disciple step</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
+  <data name="Requirements" xml:space="preserve">
+    <value>Requirements</value>
+  </data>
+  <data name="NoRequirements" xml:space="preserve">
+    <value>No requirements</value>
+  </data>
+  <data name="Gain" xml:space="preserve">
+    <value>Gain</value>
+  </data>
+  <data name="Consolidate" xml:space="preserve">
+    <value>Consolidate</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="ComingSoon" xml:space="preserve">
+    <value>Coming soon</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>Not found</value>
+  </data>
+  <data name="CreateDiscipleStepAction" xml:space="preserve">
+    <value>create disciple step</value>
+    <comment>Use with FailedTo</comment>
+  </data>
+  <data name="DeleteDiscipleStepAction" xml:space="preserve">
+    <value>delete disciple step</value>
+    <comment>Use with FailedTo</comment>
+  </data>
+  <data name="FetchDiscipleStepsAction" xml:space="preserve">
+    <value>fetch disciple steps</value>
+    <comment>Use with FailedTo</comment>
+  </data>
+  <data name="FetchStepDisciplesAction" xml:space="preserve">
+    <value>fetch disciples for this step</value>
+    <comment>Use with FailedTo</comment>
+  </data>
+  <data name="NoDisciples" xml:space="preserve">
+    <value>No disciples registered for this step yet.</value>
+  </data>
+  <data name="WithoutCell" xml:space="preserve">
+    <value>Without cell</value>
+  </data>
+  <data name="AddStepCompletion" xml:space="preserve">
+    <value>Add step completion</value>
+  </data>
+  <data name="CompletionDate" xml:space="preserve">
+    <value>Completion date</value>
+  </data>
+  <data name="NoEligibleDisciples" xml:space="preserve">
+    <value>No eligible disciples found for this step.</value>
+  </data>
+  <data name="AddNewUser" xml:space="preserve">
+    <value>Add new user</value>
+  </data>
+  <data name="CompleteStepForDisciplesAction" xml:space="preserve">
+    <value>complete step for disciples</value>
+    <comment>Use with FailedTo</comment>
+  </data>
+  <data name="FetchEligibleDisciplesAction" xml:space="preserve">
+    <value>fetch eligible disciples</value>
+    <comment>Use with FailedTo</comment>
+  </data>
 </root>

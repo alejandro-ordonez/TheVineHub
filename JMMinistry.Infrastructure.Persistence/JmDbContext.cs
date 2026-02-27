@@ -1,6 +1,7 @@
 using JMMinistry.Application.Services;
 using JMMinistry.Domain;
 using JMMinistry.Domain.Discipleship;
+using JMMinistry.Domain.DiscipleJourney;
 using JMMinistry.Domain.Location;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -36,8 +37,11 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
     public virtual DbSet<DiscipleshipNote> DiscipleshipNotes { get; set; }
     public virtual DbSet<DiscipleshipNoteEntry> DiscipleshipNoteEntries { get; set; }
 
+    public virtual DbSet<DiscipleStep> DiscipleSteps { get; set; }
+
+    public virtual DbSet<StepCompletion> StepCompletions { get; set; }
+
     public virtual DbSet<Event> Events { get; set; }
-    public virtual DbSet<Gained> Gained { get; set; }
 
 
     public virtual DbSet<Meeting> Meetings { get; set; }
@@ -54,6 +58,11 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
     public async Task<T?> ExecuteScalarFunctionAsync<T>(string functionCall, CancellationToken ct, params object[] parameters)
     {
         return await Database.SqlQueryRaw<T>(functionCall, parameters).FirstOrDefaultAsync(ct);
+    }
+
+    public async Task<List<T>> ExecuteTableFunctionAsync<T>(string functionCall, CancellationToken ct, params object[] parameters)
+    {
+        return await Database.SqlQueryRaw<T>(functionCall, parameters).ToListAsync(ct);
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -102,18 +111,21 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
             .WithMany(p => p.Conventions)
             .HasForeignKey(c => c.AttendeeId);
 
-        builder.Entity<Gained>()
-            .HasOne(g => g.Person)
-            .WithOne(p => p.GainedRecord)
-            .HasForeignKey<PersonalInfo>(p => p.GainedId);
-
-        builder.Entity<Gained>()
-            .HasOne(g => g.InvitedBy)
-            .WithMany(p => p.Gained)
-            .HasForeignKey(g => g.InvitedById);
-
         builder.Entity<Locality>()
             .ToTable("Localities");
+
+        builder.Entity<StepCompletion>(step =>
+        {
+            step.HasOne(s => s.Disciple)
+                .WithMany(p => p.StepCompletions)
+                .HasForeignKey(s => s.DiscipleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            step.HasOne(s => s.Leader)
+                .WithMany(p => p.SupervisedStepCompletions)
+                .HasForeignKey(s => s.LeaderId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
 
         builder.Entity<DiscipleshipNote>(note =>
         {
@@ -139,6 +151,13 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
                 .WithMany()
                 .HasForeignKey(e => e.AuthorId)
                 .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        builder.Entity<DiscipleStep>(step =>
+        {
+            step.HasMany(s => s.DiscipleStepRequirements)
+                .WithMany()
+                .UsingEntity(j => j.ToTable("DiscipleStepRequirement"));
         });
     }
 }

@@ -365,3 +365,4 @@ FodyWeavers.xsd
 /compose.ps1
 /TestFiles/*
 .env
+/.claude/settings.local.json

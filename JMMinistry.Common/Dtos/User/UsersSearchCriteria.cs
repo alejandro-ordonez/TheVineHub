@@ -9,6 +9,5 @@ namespace JMMinistry.Common.Dtos.User
         public string? LastName { get; set; }
         public string? Document { get; set; }
         public string? Requestor { get; set; }
-        public List<MinistryStatus> MinistryStatus { get; set; } = [];
     }
 }

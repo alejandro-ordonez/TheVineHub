@@ -96,7 +96,6 @@ namespace JMMinistry.Infrastructure.Persistence
                         Name = defaultUser.Name,
                         LastName = defaultUser.LastName,
                         UserName = $"{defaultUser.Name.Split(' ')[0]}.{defaultUser.LastName.Split(' ')[0]}",
-                        MinistryStatus = MinistryStatus.Admin
                     };
 
                     var createUserResult = await userManager.CreateAsync(userIdentity, defaultUser.Password);

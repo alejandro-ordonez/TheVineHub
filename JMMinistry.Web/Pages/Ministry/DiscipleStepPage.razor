@@ -1,0 +1,142 @@
+@using Fluxor
+@using Fluxor.Blazor.Web.Components
+@using JMMinistry.Web.Pages.User.Components
+@using JMMinistry.Web.Store.DiscipleStepsUseCase
+@using JMMinistry.Web.Store.DiscipleStepsUseCase.Actions
+@using JMMinistry.Web.Store.StepDisciplesUseCase
+@using JMMinistry.Web.Store.StepDisciplesUseCase.Actions
+@using JMMinistry.Web.Store.PageUseCase
+@using JMMinistry.Web.Pages.User.Dialogs
+@using JMMinistry.Web.Shared.Components
+
+@attribute [Route(Routes.DiscipleStep + "/{StepId:int}")]
+@attribute [Authorize]
+@layout MainLayout
+
+@inherits FluxorComponent
+
+@inject IState<DiscipleStepsState> DiscipleStepsState
+@inject IState<StepDisciplesState> StepDisciplesState
+@inject IDispatcher Dispatcher
+@inject IStringLocalizer<UIStrings> Translator
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+
+@if (_step is not null)
+{
+    <MudPaper Style="margin: 1rem 0px">
+        <MudToolBar>
+            <MudText Typo="Typo.subtitle1">@Translator["Total", TotalDisciples]</MudText>
+            <MudSpacer />
+            <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Tertiary" OnClick="OpenAddCompletionDialog" />
+        </MudToolBar>
+    </MudPaper>
+
+    @if (StepDisciplesState.Value.IsLoading)
+    {
+        <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+    }
+
+    @foreach (var group in StepDisciplesState.Value.Groups)
+    {
+        <MudText Typo="Typo.subtitle2" Class="mt-4 mb-2">
+            @(string.IsNullOrEmpty(group.CellName) ? Translator["WithoutCell"] : group.CellName)
+            @if (!string.IsNullOrEmpty(group.LeaderName))
+            {
+                <MudText Typo="Typo.caption" Inline="true" Color="Color.Secondary"> — @group.LeaderName</MudText>
+            }
+            <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@group.Disciples.Count</MudChip>
+        </MudText>
+
+        <div class="users-grid">
+            @foreach (var disciple in group.Disciples)
+            {
+                <UserCard User="disciple" OnClick="@(EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails))" />
+            }
+        </div>
+    }
+
+    @if (!StepDisciplesState.Value.IsLoading && TotalDisciples == 0)
+    {
+        <MudAlert Severity="Severity.Info" Class="mt-4">@Translator["NoDisciples"]</MudAlert>
+    }
+}
+else if (!DiscipleStepsState.Value.IsLoading)
+{
+    <MudAlert Severity="Severity.Warning">@Translator["NotFound"]</MudAlert>
+}
+else
+{
+    <MudProgressCircular Indeterminate="true" />
+}
+
+@code {
+    [Parameter] public int StepId { get; set; }
+
+    private Common.Dtos.DiscipleJourney.DiscipleStepDto? _step;
+
+    private int TotalDisciples => StepDisciplesState.Value.Groups.Sum(g => g.Disciples.Count);
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Dispatcher.Dispatch(new FetchDiscipleStepsAction());
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        UpdateStep();
+    }
+
+    private void UpdateStep()
+    {
+        _step = DiscipleStepsState.Value.Steps.FirstOrDefault(s => s.Id == StepId);
+
+        if (_step is not null)
+        {
+            Dispatcher.Dispatch(new SetTitleAction { Title = _step.Name });
+            Dispatcher.Dispatch(new FetchStepDisciplesAction { StepId = StepId });
+        }
+    }
+
+    private async Task ShowUserDetails(UserEventArgs user)
+    {
+        var parameters = new DialogParameters<UserDetailsDialog>
+        {
+            { x => x.Document, user.Document }
+        };
+
+        var dialog = await DialogService.ShowAsync<UserDetailsDialog>(Translator["Details"], parameters);
+        var result = await dialog.GetReturnValueAsync<DialogResult<UserEventArgs>>();
+
+        if (result?.Data is not null && result.Option == DialogResultOption.PrimaryButton)
+        {
+            NavigationManager.NavigateTo($"{Routes.User}/{user.Document}");
+        }
+    }
+
+    private async Task OpenAddCompletionDialog()
+    {
+        if (_step is null) return;
+
+        var parameters = new DialogParameters<AddStepCompletionDialog>
+        {
+            { x => x.StepId, StepId },
+            { x => x.HasRequirements, _step.RequirementIds.Count > 0 }
+        };
+
+        var dialog = await DialogService.ShowAsync<AddStepCompletionDialog>(Translator["AddStepCompletion"], parameters);
+        var result = await dialog.GetReturnValueAsync<AddStepCompletionDialog.StepCompletionDialogResult>();
+
+        if (result is not null && result.Documents.Count > 0)
+        {
+            Dispatcher.Dispatch(new CompleteStepAction
+            {
+                StepId = StepId,
+                Documents = result.Documents.ToList(),
+                CompletionDate = result.CompletionDate
+            });
+        }
+    }
+}

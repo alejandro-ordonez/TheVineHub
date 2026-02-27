@@ -70,6 +70,21 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.ToTable("ClassAttendancePersonalInfo");
                 });
 
+            modelBuilder.Entity("DiscipleStepDiscipleStep", b =>
+                {
+                    b.Property<int>("DiscipleStepId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("DiscipleStepRequirementsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("DiscipleStepId", "DiscipleStepRequirementsId");
+
+                    b.HasIndex("DiscipleStepRequirementsId");
+
+                    b.ToTable("DiscipleStepRequirement", (string)null);
+                });
+
             modelBuilder.Entity("JMMinistry.Domain.Announcement", b =>
                 {
                     b.Property<int>("Id")
@@ -339,6 +354,69 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.ToTable("ConventionAttendees");
                 });
 
+            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.DiscipleStep", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("StepCategory")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DiscipleSteps");
+                });
+
+            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.StepCompletion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("DateCreated")
+                        .HasColumnType("date");
+
+                    b.Property<string>("DiscipleId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("DiscipleStepId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly>("LastUpdated")
+                        .HasColumnType("date");
+
+                    b.Property<string>("LeaderId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("StepStatus")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DiscipleId");
+
+                    b.HasIndex("DiscipleStepId");
+
+                    b.HasIndex("LeaderId");
+
+                    b.ToTable("StepCompletions");
+                });
+
             modelBuilder.Entity("JMMinistry.Domain.Discipleship.DiscipleshipNote", b =>
                 {
                     b.Property<int>("Id")
@@ -437,58 +515,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Events");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.Gained", b =>
-                {
-                    b.Property<int>("GainedId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("GainedId"));
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<string>("InvitedById")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PersonId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("GainedId");
-
-                    b.HasIndex("InvitedById");
-
-                    b.ToTable("Gained");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.GainedEvent", b =>
-                {
-                    b.Property<int>("EventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EventId"));
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<int>("EventType")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("GainedId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Observations")
-                        .HasColumnType("text");
-
-                    b.HasKey("EventId");
-
-                    b.HasIndex("GainedId");
-
-                    b.ToTable("GainedEvent");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.Location.City", b =>
@@ -623,9 +649,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<int?>("GainedId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("Gender")
                         .HasColumnType("integer");
 
@@ -646,9 +669,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("MaritalStatus")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("MinistryStatus")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -697,9 +717,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CellId");
-
-                    b.HasIndex("GainedId")
-                        .IsUnique();
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -946,6 +963,21 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DiscipleStepDiscipleStep", b =>
+                {
+                    b.HasOne("JMMinistry.Domain.DiscipleJourney.DiscipleStep", null)
+                        .WithMany()
+                        .HasForeignKey("DiscipleStepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JMMinistry.Domain.DiscipleJourney.DiscipleStep", null)
+                        .WithMany()
+                        .HasForeignKey("DiscipleStepRequirementsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("JMMinistry.Domain.Assignment", b =>
                 {
                     b.HasOne("JMMinistry.Domain.School", "School")
@@ -1045,6 +1077,33 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Navigation("InvitedBy");
                 });
 
+            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.StepCompletion", b =>
+                {
+                    b.HasOne("JMMinistry.Domain.PersonalInfo", "Disciple")
+                        .WithMany("StepCompletions")
+                        .HasForeignKey("DiscipleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JMMinistry.Domain.DiscipleJourney.DiscipleStep", "DiscipleStep")
+                        .WithMany()
+                        .HasForeignKey("DiscipleStepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JMMinistry.Domain.PersonalInfo", "Leader")
+                        .WithMany("SupervisedStepCompletions")
+                        .HasForeignKey("LeaderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Disciple");
+
+                    b.Navigation("DiscipleStep");
+
+                    b.Navigation("Leader");
+                });
+
             modelBuilder.Entity("JMMinistry.Domain.Discipleship.DiscipleshipNote", b =>
                 {
                     b.HasOne("JMMinistry.Domain.PersonalInfo", "Disciple")
@@ -1083,26 +1142,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Navigation("Note");
                 });
 
-            modelBuilder.Entity("JMMinistry.Domain.Gained", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.PersonalInfo", "InvitedBy")
-                        .WithMany("Gained")
-                        .HasForeignKey("InvitedById");
-
-                    b.Navigation("InvitedBy");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.GainedEvent", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.Gained", "Gained")
-                        .WithMany("Events")
-                        .HasForeignKey("GainedId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Gained");
-                });
-
             modelBuilder.Entity("JMMinistry.Domain.Location.Locality", b =>
                 {
                     b.HasOne("JMMinistry.Domain.Location.City", null)
@@ -1127,13 +1166,7 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .WithMany("Disciples")
                         .HasForeignKey("CellId");
 
-                    b.HasOne("JMMinistry.Domain.Gained", "GainedRecord")
-                        .WithOne("Person")
-                        .HasForeignKey("JMMinistry.Domain.PersonalInfo", "GainedId");
-
                     b.Navigation("Cell");
-
-                    b.Navigation("GainedRecord");
                 });
 
             modelBuilder.Entity("MeetingAttendancePersonalInfo", b =>
@@ -1221,14 +1254,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Navigation("Entries");
                 });
 
-            modelBuilder.Entity("JMMinistry.Domain.Gained", b =>
-                {
-                    b.Navigation("Events");
-
-                    b.Navigation("Person")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("JMMinistry.Domain.Location.City", b =>
                 {
                     b.Navigation("Localities");
@@ -1247,7 +1272,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
 
                     b.Navigation("Conventions");
 
-                    b.Navigation("Gained");
+                    b.Navigation("StepCompletions");
+
+                    b.Navigation("SupervisedStepCompletions");
 
                     b.Navigation("UserRoles");
                 });

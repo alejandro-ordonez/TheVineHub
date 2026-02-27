@@ -1,0 +1,140 @@
+@using Fluxor
+@using Fluxor.Blazor.Web.Components
+@using JMMinistry.Web.Pages.User.Components
+@using JMMinistry.Web.Pages.User.Dialogs
+@using JMMinistry.Web.Shared.Components
+@using JMMinistry.Web.Store.StepDisciplesUseCase
+@using JMMinistry.Web.Store.StepDisciplesUseCase.Actions
+@using JMMinistry.Common.Dtos.User
+
+@inherits FluxorComponent
+
+@inject IState<StepDisciplesState> StepDisciplesState
+@inject IDispatcher Dispatcher
+@inject IStringLocalizer<UIStrings> Translator
+@inject IDialogService DialogService
+
+<MudDialog>
+    <DialogContent>
+        @if (StepDisciplesState.Value.IsLoadingEligible)
+        {
+            <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
+        }
+        else if (StepDisciplesState.Value.EligibleGroups.Count == 0)
+        {
+            <MudAlert Severity="Severity.Info" Class="mt-2">@Translator["NoEligibleDisciples"]</MudAlert>
+        }
+        else
+        {
+            @foreach (var group in StepDisciplesState.Value.EligibleGroups)
+            {
+                <MudText Typo="Typo.subtitle2" Class="mt-4 mb-2">
+                    @(string.IsNullOrEmpty(group.CellName) ? Translator["WithoutCell"] : group.CellName)
+                    @if (!string.IsNullOrEmpty(group.LeaderName))
+                    {
+                        <MudText Typo="Typo.caption" Inline="true" Color="Color.Secondary"> — @group.LeaderName</MudText>
+                    }
+                    <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined">@group.Disciples.Count</MudChip>
+                </MudText>
+
+                <div class="users-grid">
+                    @foreach (var disciple in group.Disciples)
+                    {
+                        <UserCard User="disciple"
+                                  EnableSelection="true"
+                                  Outlined="true"
+                                  Selected="@SelectedDocuments.Contains(disciple.Document)"
+                                  SelectedChanged="@(selected => ToggleSelection(disciple.Document, selected))" />
+                    }
+                </div>
+            }
+        }
+
+        <MudDatePicker Class="mt-4" @bind-Date="_completionDate" Label="@Translator["CompletionDate"]" Variant="Variant.Outlined" />
+
+        @if (!HasRequirements)
+        {
+            <MudButton Class="mt-4"
+                       Variant="Variant.Outlined"
+                       Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.PersonAdd"
+                       OnClick="OpenAddUserDialog">
+                @Translator["AddNewUser"]
+            </MudButton>
+        }
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@Translator["Cancel"]</MudButton>
+        <MudButton Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   Disabled="@(SelectedDocuments.Count == 0)"
+                   OnClick="Submit">
+            @Translator["Add"]
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance? MudDialog { get; set; }
+
+    [Parameter]
+    public int StepId { get; set; }
+
+    [Parameter]
+    public bool HasRequirements { get; set; }
+
+    private HashSet<string> SelectedDocuments { get; set; } = [];
+    private DateTime? _completionDate = DateTime.Today;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Dispatcher.Dispatch(new FetchEligibleDisciplesAction { StepId = StepId });
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (MudDialog is not null)
+        {
+            var options = MudDialog.Options with
+            {
+                FullWidth = true,
+                MaxWidth = MaxWidth.Medium
+            };
+
+            await MudDialog.SetOptionsAsync(options);
+        }
+    }
+
+    private void ToggleSelection(string document, bool selected)
+    {
+        if (selected)
+            SelectedDocuments.Add(document);
+        else
+            SelectedDocuments.Remove(document);
+    }
+
+    private async Task OpenAddUserDialog()
+    {
+        var dialog = await DialogService.ShowAsync<AddUserDialog>(Translator["AddNewUser"]);
+        var result = await dialog.GetReturnValueAsync<DialogResult<CreateUserInfoDto>>();
+
+        if (result?.Data is not null)
+            SelectedDocuments.Add(result.Data.Document);
+    }
+
+    private void Submit() => MudDialog?.Close(new StepCompletionDialogResult
+    {
+        Documents = SelectedDocuments,
+        CompletionDate = DateOnly.FromDateTime(_completionDate ?? DateTime.Today)
+    });
+
+    private void Cancel() => MudDialog?.Cancel();
+
+    public record StepCompletionDialogResult
+    {
+        public HashSet<string> Documents { get; set; } = [];
+        public DateOnly CompletionDate { get; set; }
+    }
+}

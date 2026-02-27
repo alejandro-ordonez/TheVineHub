@@ -39,18 +39,6 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
         {
             var newQuery = query;
 
-            if (request.MinistryStatus.Count > 0)
-            {
-                if (!string.IsNullOrEmpty(request.Requestor) && request.MinistryStatus.Contains(MinistryStatus.Gained))
-                {
-                    newQuery = newQuery
-                       .Include(user => user.GainedRecord)
-                       .Where(user => user.GainedRecord == null || user.GainedRecord!.InvitedById == request.Requestor);
-                }
-
-                newQuery = newQuery.Where(user => request.MinistryStatus.Contains(user.MinistryStatus));
-            }
-
             if (!string.IsNullOrEmpty(request.Name))
                 newQuery = newQuery.Where(user => user.Name.StartsWith(request.Name.Trim()));
 
@@ -68,7 +56,6 @@ namespace JMMinistry.Application.Features.User.Queries.GetUserInfoByCriteria
         {
             "Document" => info => info.Id,
             "Name" => info => info.Name,
-            "MinistryStatus" => info => info.MinistryStatus,
             _ => info => info.Name
         };
     }
