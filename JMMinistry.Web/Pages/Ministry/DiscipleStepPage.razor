@@ -1,5 +1,6 @@
 @using Fluxor
 @using Fluxor.Blazor.Web.Components
+@using JMMinistry.Common.Dtos.DiscipleJourney.Enums
 @using JMMinistry.Web.Pages.User.Components
 @using JMMinistry.Web.Store.DiscipleStepsUseCase
 @using JMMinistry.Web.Store.DiscipleStepsUseCase.Actions
@@ -26,7 +27,9 @@
 {
     <MudPaper Style="margin: 1rem 0px">
         <MudToolBar>
-            <MudText Typo="Typo.subtitle1">@Translator["Total", TotalDisciples]</MudText>
+            <MudText Typo="Typo.subtitle1">
+                @Translator["InProgress"]: @InProgressCount | @Translator["Completed"]: @CompletedCount | @Translator["Total", TotalDisciples]
+            </MudText>
             <MudSpacer />
             <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Tertiary" OnClick="OpenAddCompletionDialog" />
         </MudToolBar>
@@ -51,7 +54,24 @@
         <div class="users-grid">
             @foreach (var disciple in group.Disciples)
             {
-                <UserCard User="disciple" OnClick="@(EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails))" />
+                <div style="position: relative;">
+                    <UserCard User="disciple" OnClick="@(EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails))" />
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 4px;">
+                        <MudChip T="string" Size="Size.Small"
+                                 Color="@(disciple.StepStatus == StepStatus.InProgress ? Color.Info : Color.Success)"
+                                 Variant="Variant.Filled">
+                            @(disciple.StepStatus == StepStatus.InProgress ? Translator["InProgress"] : Translator["Completed"])
+                            — @disciple.LastUpdated.ToString("d")
+                        </MudChip>
+                        <MudMenu Icon="@Icons.Material.Filled.MoreVert" Size="Size.Small" Dense="true" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
+                            @if (disciple.StepStatus == StepStatus.InProgress)
+                            {
+                                <MudMenuItem OnClick="@(() => UpdateStatus(disciple.Document, StepStatus.Completed))">@Translator["MarkCompleted"]</MudMenuItem>
+                            }
+                            <MudMenuItem OnClick="@(() => UpdateStatus(disciple.Document, StepStatus.Abandoned))">@Translator["MarkAbandoned"]</MudMenuItem>
+                        </MudMenu>
+                    </div>
+                </div>
             }
         </div>
     }
@@ -75,7 +95,14 @@ else
 
     private Common.Dtos.DiscipleJourney.DiscipleStepDto? _step;
 
-    private int TotalDisciples => StepDisciplesState.Value.Groups.Sum(g => g.Disciples.Count);
+    private IEnumerable<Common.Dtos.DiscipleJourney.StepDiscipleDto> AllDisciples =>
+        StepDisciplesState.Value.Groups.SelectMany(g => g.Disciples);
+
+    private int TotalDisciples => AllDisciples.Count();
+
+    private int InProgressCount => AllDisciples.Count(d => d.StepStatus == StepStatus.InProgress);
+
+    private int CompletedCount => AllDisciples.Count(d => d.StepStatus == StepStatus.Completed);
 
     protected override void OnInitialized()
     {
@@ -91,7 +118,8 @@ else
 
     private void UpdateStep()
     {
-        _step = DiscipleStepsState.Value.Steps.FirstOrDefault(s => s.Id == StepId);
+        _step = DiscipleStepsState.Value.Steps.FirstOrDefault(s => s.Id == StepId)
+             ?? DiscipleStepsState.Value.Steps.SelectMany(s => s.SubSteps).FirstOrDefault(s => s.Id == StepId);
 
         if (_step is not null)
         {
@@ -104,7 +132,8 @@ else
     {
         var parameters = new DialogParameters<UserDetailsDialog>
         {
-            { x => x.Document, user.Document }
+            { x => x.Document, user.Document },
+            { x => x.ShowRemoveButton, false }
         };
 
         var dialog = await DialogService.ShowAsync<UserDetailsDialog>(Translator["Details"], parameters);
@@ -138,5 +167,15 @@ else
                 CompletionDate = result.CompletionDate
             });
         }
+    }
+
+    private void UpdateStatus(string discipleId, StepStatus status)
+    {
+        Dispatcher.Dispatch(new UpdateStepCompletionAction
+        {
+            StepId = StepId,
+            DiscipleId = discipleId,
+            Status = status
+        });
     }
 }

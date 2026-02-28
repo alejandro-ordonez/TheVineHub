@@ -10,5 +10,7 @@ namespace JMMinistry.Application.Features.DiscipleJourney.Queries.GetStepDiscipl
         public int? disciple_cell_id { get; set; }
         public string cell_name { get; set; } = string.Empty;
         public string cell_leader_name { get; set; } = string.Empty;
+        public int step_status { get; set; }
+        public DateOnly last_updated { get; set; }
     }
 }

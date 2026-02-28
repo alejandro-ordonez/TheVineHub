@@ -26,11 +26,27 @@
 
         @foreach (var step in DiscipleStepsState.Value.Steps)
         {
-            <MudNavLink Match="NavLinkMatch.All"
-                        Icon="@GetStepIcon(step.StepCategory)"
-                        Href="@($"{Routes.DiscipleStep}/{step.Id}")">
-                @step.Name
-            </MudNavLink>
+            @if (step.SubSteps.Count > 0)
+            {
+                <MudNavGroup Title="@step.Name" Icon="@GetStepIcon(step.StepCategory)">
+                    @foreach (var subStep in step.SubSteps)
+                    {
+                        <MudNavLink Match="NavLinkMatch.All"
+                                    Icon="@GetStepIcon(subStep.StepCategory)"
+                                    Href="@($"{Routes.DiscipleStep}/{subStep.Id}")">
+                            @subStep.Name
+                        </MudNavLink>
+                    }
+                </MudNavGroup>
+            }
+            else
+            {
+                <MudNavLink Match="NavLinkMatch.All"
+                            Icon="@GetStepIcon(step.StepCategory)"
+                            Href="@($"{Routes.DiscipleStep}/{step.Id}")">
+                    @step.Name
+                </MudNavLink>
+            }
         }
     </MudNavGroup>
 

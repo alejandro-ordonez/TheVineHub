@@ -19,7 +19,7 @@ namespace JMMinistry.Web.Store.DiscipleStepsUseCase
 
         [ReducerMethod]
         public static DiscipleStepsState ReduceCreateDiscipleStepResultAction(DiscipleStepsState state, CreateDiscipleStepResultAction action) =>
-            state with { IsLoading = false, Steps = [.. state.Steps, action.Step], Success = true };
+            state with { IsLoading = false, Steps = state.Steps, Success = true, LastFetched = null };
 
         [ReducerMethod(typeof(DeleteDiscipleStepAction))]
         public static DiscipleStepsState ReduceDeleteDiscipleStepAction(DiscipleStepsState state) =>
@@ -27,6 +27,14 @@ namespace JMMinistry.Web.Store.DiscipleStepsUseCase
 
         [ReducerMethod]
         public static DiscipleStepsState ReduceDeleteDiscipleStepResultAction(DiscipleStepsState state, DeleteDiscipleStepResultAction action) =>
-            state with { IsLoading = false, Steps = state.Steps.Where(s => s.Id != action.StepId).ToList(), Success = true };
+            state with { IsLoading = false, Steps = state.Steps, Success = true, LastFetched = null };
+
+        [ReducerMethod(typeof(UpdateDiscipleStepAction))]
+        public static DiscipleStepsState ReduceUpdateDiscipleStepAction(DiscipleStepsState state) =>
+            state with { IsLoading = true };
+
+        [ReducerMethod]
+        public static DiscipleStepsState ReduceUpdateDiscipleStepResultAction(DiscipleStepsState state, UpdateDiscipleStepResultAction action) =>
+            state with { IsLoading = false, Steps = state.Steps, Success = true, LastFetched = null };
     }
 }

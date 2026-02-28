@@ -9,7 +9,7 @@
 <Dialog ResultType="CreateDiscipleStepDto"
         Result="Model"
         Color="Color.Primary"
-        PrimaryText="@translator["Create"]">
+        PrimaryText="@(IsEditMode ? translator["Save"] : translator["Create"])">
     <Content>
         <MudForm @ref="_form">
             <MudTextField @bind-Value="Model.Name"
@@ -30,10 +30,24 @@
                        Label="@translator["Category"]"
                        Required="true"
                        RequiredError="@translator["FieldRequired"]"
-                       Variant="Variant.Outlined">
+                       Variant="Variant.Outlined"
+                       Disabled="_lockCategory">
                 @foreach (var category in Enum.GetValues<StepCategory>())
                 {
                     <MudSelectItem T="StepCategory" Value="category">@translator[category.ToString()]</MudSelectItem>
+                }
+            </MudSelect>
+
+            <MudSelect T="int?"
+                       Value="_selectedParentId"
+                       ValueChanged="OnParentChanged"
+                       Label="@translator["ParentStep"]"
+                       Variant="Variant.Outlined"
+                       Clearable="true"
+                       Disabled="_lockParent">
+                @foreach (var step in StepsState.Value.Steps.Where(s => s.Id != ExistingStep?.Id))
+                {
+                    <MudSelectItem T="int?" Value="@((int?)step.Id)">@step.Name</MudSelectItem>
                 }
             </MudSelect>
 
@@ -43,8 +57,8 @@
                        SelectedValues="_selectedRequirements"
                        SelectedValuesChanged="OnRequirementsChanged"
                        Variant="Variant.Outlined"
-                       ToStringFunc="@(id => StepsState.Value.Steps.FirstOrDefault(s => s.Id == id)?.Name ?? id.ToString())">
-                @foreach (var step in StepsState.Value.Steps)
+                       ToStringFunc="@(id => FindStepName(id))">
+                @foreach (var step in AllSteps.Where(s => s.Id != ExistingStep?.Id))
                 {
                     <MudSelectItem T="int" Value="step.Id">@step.Name</MudSelectItem>
                 }
@@ -54,15 +68,79 @@
 </Dialog>
 
 @code {
+    [Parameter]
+    public DiscipleStepDto? ExistingStep { get; set; }
+
+    [Parameter]
+    public int? ParentStepId { get; set; }
+
     CreateDiscipleStepDto Model { get; set; } = new();
 
     MudForm? _form;
 
     IReadOnlyCollection<int> _selectedRequirements = [];
+    int? _selectedParentId;
+    bool _lockParent;
+    bool _lockCategory;
+
+    bool IsEditMode => ExistingStep is not null;
+
+    IEnumerable<DiscipleStepDto> AllSteps =>
+        StepsState.Value.Steps.SelectMany(s => new[] { s }.Concat(s.SubSteps));
+
+    protected override void OnInitialized()
+    {
+        if (ExistingStep is not null)
+        {
+            Model.Name = ExistingStep.Name;
+            Model.Description = ExistingStep.Description;
+            Model.StepCategory = ExistingStep.StepCategory;
+            Model.RequirementIds = ExistingStep.RequirementIds.ToList();
+            Model.ParentStepId = ExistingStep.ParentStepId;
+            _selectedRequirements = ExistingStep.RequirementIds.ToList();
+            _selectedParentId = ExistingStep.ParentStepId;
+        }
+        else if (ParentStepId is not null)
+        {
+            _selectedParentId = ParentStepId;
+            Model.ParentStepId = ParentStepId;
+            _lockParent = true;
+
+            var parent = StepsState.Value.Steps.FirstOrDefault(s => s.Id == ParentStepId);
+            if (parent is not null)
+            {
+                Model.StepCategory = parent.StepCategory;
+                _lockCategory = true;
+            }
+        }
+    }
+
+    void OnParentChanged(int? value)
+    {
+        _selectedParentId = value;
+        Model.ParentStepId = value;
+
+        if (value is not null)
+        {
+            var parent = StepsState.Value.Steps.FirstOrDefault(s => s.Id == value);
+            if (parent is not null)
+            {
+                Model.StepCategory = parent.StepCategory;
+                _lockCategory = true;
+            }
+        }
+        else
+        {
+            _lockCategory = false;
+        }
+    }
 
     void OnRequirementsChanged(IEnumerable<int> values)
     {
         _selectedRequirements = values.ToList();
         Model.RequirementIds = values.ToList();
     }
+
+    string FindStepName(int id) =>
+        AllSteps.FirstOrDefault(s => s.Id == id)?.Name ?? id.ToString();
 }

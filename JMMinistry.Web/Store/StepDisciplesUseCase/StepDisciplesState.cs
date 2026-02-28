@@ -11,5 +11,6 @@ namespace JMMinistry.Web.Store.StepDisciplesUseCase
         public IList<StepDisciplesByCellDto> EligibleGroups { get; set; } = [];
         public bool IsLoadingEligible { get; set; }
         public bool IsCompletingStep { get; set; }
+        public bool IsUpdatingCompletion { get; set; }
     }
 }

@@ -3,6 +3,8 @@ using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.DiscipleJourney.Commands.CompleteStepForDisciples;
 using JMMinistry.Application.Features.DiscipleJourney.Commands.CreateDiscipleStep;
 using JMMinistry.Application.Features.DiscipleJourney.Commands.DeleteDiscipleStep;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateDiscipleStep;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateStepCompletion;
 using JMMinistry.Application.Features.DiscipleJourney.Queries.GetDiscipleSteps;
 using JMMinistry.Application.Features.DiscipleJourney.Queries.GetEligibleStepDisciples;
 using JMMinistry.Application.Features.DiscipleJourney.Queries.GetStepDisciples;
@@ -51,7 +53,25 @@ namespace JMMinistry.API.Controllers
                 Name = dto.Name,
                 Description = dto.Description,
                 StepCategory = dto.StepCategory,
-                RequirementIds = dto.RequirementIds
+                RequirementIds = dto.RequirementIds,
+                ParentStepId = dto.ParentStepId
+            });
+
+            return Ok(result);
+        }
+
+        [HttpPut("steps/{stepId:int}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<DiscipleStepDto>> UpdateStep(int stepId, [FromBody] UpdateDiscipleStepDto dto)
+        {
+            var result = await mediator.Send(new UpdateDiscipleStepCommand
+            {
+                Id = stepId,
+                Name = dto.Name,
+                Description = dto.Description,
+                StepCategory = dto.StepCategory,
+                RequirementIds = dto.RequirementIds,
+                ParentStepId = dto.ParentStepId
             });
 
             return Ok(result);
@@ -77,6 +97,19 @@ namespace JMMinistry.API.Controllers
             });
 
             return Ok(result);
+        }
+
+        [HttpPut("steps/{stepId:int}/completions/{discipleId}")]
+        public async Task<ActionResult> UpdateStepCompletion(int stepId, string discipleId, [FromBody] UpdateStepCompletionDto dto)
+        {
+            await mediator.Send(new UpdateStepCompletionCommand
+            {
+                StepId = stepId,
+                DiscipleId = discipleId,
+                StepStatus = (Domain.DiscipleJourney.StepStatus)(int)dto.Status
+            });
+
+            return NoContent();
         }
 
         [HttpPost("steps/{stepId:int}/completions")]

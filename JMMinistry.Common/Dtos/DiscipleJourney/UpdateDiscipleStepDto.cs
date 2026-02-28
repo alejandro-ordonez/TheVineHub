@@ -2,7 +2,7 @@ using JMMinistry.Common.Dtos.DiscipleJourney.Enums;
 
 namespace JMMinistry.Common.Dtos.DiscipleJourney
 {
-    public class DiscipleStepDto
+    public class UpdateDiscipleStepDto
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -10,6 +10,5 @@ namespace JMMinistry.Common.Dtos.DiscipleJourney
         public StepCategory StepCategory { get; set; }
         public IList<int> RequirementIds { get; set; } = [];
         public int? ParentStepId { get; set; }
-        public IList<DiscipleStepDto> SubSteps { get; set; } = [];
     }
 }

@@ -24,7 +24,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     disciple_gender INTEGER,
                     disciple_cell_id INTEGER,
                     cell_name TEXT,
-                    cell_leader_name TEXT
+                    cell_leader_name TEXT,
+                    step_status INTEGER,
+                    last_updated DATE
                 )
                 LANGUAGE plpgsql STABLE
                 AS $$
@@ -68,7 +70,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         COALESCE(pi."Gender", 0),
                         pi."CellId",
                         COALESCE(c."Name", ''),
-                        COALESCE(TRIM(COALESCE(ldr."Name", '') || ' ' || COALESCE(ldr."LastName", '')), '')
+                        COALESCE(TRIM(COALESCE(ldr."Name", '') || ' ' || COALESCE(ldr."LastName", '')), ''),
+                        sc."StepStatus",
+                        sc."LastUpdated"
                     FROM hierarchy_disciples hd
                     INNER JOIN "PersonalInfo" pi ON pi."Id" = hd.disciple_id
                     LEFT JOIN "Cells" c ON c."Id" = pi."CellId"
@@ -77,7 +81,8 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     INNER JOIN "StepCompletions" sc
                         ON sc."DiscipleId" = pi."Id"
                         AND sc."DiscipleStepId" = p_step_id
-                    ORDER BY c."Name" NULLS LAST, pi."Name";
+                        AND sc."StepStatus" <> 0
+                    ORDER BY sc."StepStatus" ASC, c."Name" NULLS LAST, pi."Name";
                 END;
                 $$;
                 """);

@@ -432,4 +432,103 @@
   <data name="Abandoned" xml:space="preserve">
     <value>Abandonado</value>
   </data>
+  <data name="DiscipleSteps" xml:space="preserve">
+    <value>Pasos del discipular</value>
+  </data>
+  <data name="DiscipleStep" xml:space="preserve">
+    <value>Paso del discipular</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Categoría</value>
+  </data>
+  <data name="Requirements" xml:space="preserve">
+    <value>Requerimientos</value>
+  </data>
+  <data name="NoRequirements" xml:space="preserve">
+    <value>Sin requisitos</value>
+  </data>
+  <data name="Gain" xml:space="preserve">
+    <value>Ganar</value>
+  </data>
+  <data name="Consolidate" xml:space="preserve">
+    <value>Consolidar</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Enviar</value>
+  </data>
+  <data name="ComingSoon" xml:space="preserve">
+    <value>Pronto</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>No encontrado</value>
+  </data>
+  <data name="CreateDiscipleStepAction" xml:space="preserve">
+    <value>crear paso del discipular</value>
+  </data>
+  <data name="DeleteDiscipleStepAction" xml:space="preserve">
+    <value>eliminar paso del discipular</value>
+  </data>
+  <data name="FetchDiscipleStepsAction" xml:space="preserve">
+    <value>obtener los pasos del discipular</value>
+  </data>
+  <data name="FetchStepDisciplesAction" xml:space="preserve">
+    <value>obtener los discípulos para este paso</value>
+  </data>
+  <data name="NoDisciples" xml:space="preserve">
+    <value>No hay discípulos en este paso</value>
+  </data>
+  <data name="WithoutCell" xml:space="preserve">
+    <value>Sin célula</value>
+  </data>
+  <data name="AddStepCompletion" xml:space="preserve">
+    <value>Agregar</value>
+  </data>
+  <data name="NoEligibleDisciples" xml:space="preserve">
+    <value>No hay discípulos elegibles</value>
+  </data>
+  <data name="AddNewUser" xml:space="preserve">
+    <value>Agregar nuevo usuario</value>
+  </data>
+  <data name="CompleteStepForDisciplesAction" xml:space="preserve">
+    <value>agregar al discípulo a este paso</value>
+  </data>
+  <data name="FetchEligibleDisciplesAction" xml:space="preserve">
+    <value>obtener los discípulos elegibles</value>
+  </data>
+  <data name="CompletionDate" xml:space="preserve">
+    <value>Fecha de culminación</value>
+  </data>
+  <data name="UpdateDiscipleStepAction" xml:space="preserve">
+    <value>actualizar paso del discipular</value>
+  </data>
+  <data name="ParentStep" xml:space="preserve">
+    <value>Grupo</value>
+  </data>
+  <data name="SubSteps" xml:space="preserve">
+    <value>Sub pasos</value>
+  </data>
+  <data name="AddSubStep" xml:space="preserve">
+    <value>Agregar sub paso</value>
+  </data>
+  <data name="EditStep" xml:space="preserve">
+    <value>Editar paso</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="InProgress" xml:space="preserve">
+    <value>En Progreso</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completado</value>
+  </data>
+  <data name="MarkCompleted" xml:space="preserve">
+    <value>Marcar Completado</value>
+  </data>
+  <data name="MarkAbandoned" xml:space="preserve">
+    <value>Marcar Abandonado</value>
+  </data>
+  <data name="UpdateStepCompletionAction" xml:space="preserve">
+    <value>actualizar estado del paso</value>
+  </data>
 </root>

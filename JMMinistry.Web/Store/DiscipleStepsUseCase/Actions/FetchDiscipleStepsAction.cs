@@ -28,4 +28,14 @@ namespace JMMinistry.Web.Store.DiscipleStepsUseCase.Actions
     {
         public required int StepId { get; set; }
     }
+
+    public record UpdateDiscipleStepAction
+    {
+        public required UpdateDiscipleStepDto Step { get; set; }
+    }
+
+    public record UpdateDiscipleStepResultAction
+    {
+        public required DiscipleStepDto Step { get; set; }
+    }
 }
