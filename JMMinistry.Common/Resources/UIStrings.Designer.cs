@@ -106,6 +106,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add new user.
+        /// </summary>
+        public static string AddNewUser {
+            get {
+                return ResourceManager.GetString("AddNewUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Address.
         /// </summary>
         public static string Address {
@@ -120,6 +129,24 @@ namespace JMMinistry.Common.Resources {
         public static string AddressInformation {
             get {
                 return ResourceManager.GetString("AddressInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add step completion.
+        /// </summary>
+        public static string AddStepCompletion {
+            get {
+                return ResourceManager.GetString("AddStepCompletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Sub-Step.
+        /// </summary>
+        public static string AddSubStep {
+            get {
+                return ResourceManager.GetString("AddSubStep", resourceCulture);
             }
         }
         
@@ -223,6 +250,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Category.
+        /// </summary>
+        public static string Category {
+            get {
+                return ResourceManager.GetString("Category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cell mates.
         /// </summary>
         public static string CellMates {
@@ -268,6 +304,42 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Coming soon.
+        /// </summary>
+        public static string ComingSoon {
+            get {
+                return ResourceManager.GetString("ComingSoon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to complete step for disciples.
+        /// </summary>
+        public static string CompleteStepForDisciplesAction {
+            get {
+                return ResourceManager.GetString("CompleteStepForDisciplesAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Completion date.
+        /// </summary>
+        public static string CompletionDate {
+            get {
+                return ResourceManager.GetString("CompletionDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consolidate.
+        /// </summary>
+        public static string Consolidate {
+            get {
+                return ResourceManager.GetString("Consolidate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create.
         /// </summary>
         public static string Create {
@@ -286,6 +358,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to create disciple step.
+        /// </summary>
+        public static string CreateDiscipleStepAction {
+            get {
+                return ResourceManager.GetString("CreateDiscipleStepAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create new {0}.
         /// </summary>
         public static string CreateNew {
@@ -300,6 +381,15 @@ namespace JMMinistry.Common.Resources {
         public static string Day {
             get {
                 return ResourceManager.GetString("Day", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to delete disciple step.
+        /// </summary>
+        public static string DeleteDiscipleStepAction {
+            get {
+                return ResourceManager.GetString("DeleteDiscipleStepAction", resourceCulture);
             }
         }
         
@@ -340,6 +430,24 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to disciple step.
+        /// </summary>
+        public static string DiscipleStep {
+            get {
+                return ResourceManager.GetString("DiscipleStep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disciple Steps.
+        /// </summary>
+        public static string DiscipleSteps {
+            get {
+                return ResourceManager.GetString("DiscipleSteps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Document.
         /// </summary>
         public static string Document {
@@ -363,6 +471,15 @@ namespace JMMinistry.Common.Resources {
         public static string EditEntity {
             get {
                 return ResourceManager.GetString("EditEntity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Step.
+        /// </summary>
+        public static string EditStep {
+            get {
+                return ResourceManager.GetString("EditStep", resourceCulture);
             }
         }
         
@@ -439,6 +556,33 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to fetch disciple steps.
+        /// </summary>
+        public static string FetchDiscipleStepsAction {
+            get {
+                return ResourceManager.GetString("FetchDiscipleStepsAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to fetch eligible disciples.
+        /// </summary>
+        public static string FetchEligibleDisciplesAction {
+            get {
+                return ResourceManager.GetString("FetchEligibleDisciplesAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to fetch disciples for this step.
+        /// </summary>
+        public static string FetchStepDisciplesAction {
+            get {
+                return ResourceManager.GetString("FetchStepDisciplesAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Field required.
         /// </summary>
         public static string FieldRequired {
@@ -453,6 +597,15 @@ namespace JMMinistry.Common.Resources {
         public static string Friday {
             get {
                 return ResourceManager.GetString("Friday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gain.
+        /// </summary>
+        public static string Gain {
+            get {
+                return ResourceManager.GetString("Gain", resourceCulture);
             }
         }
         
@@ -655,11 +808,47 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No disciples registered for this step yet..
+        /// </summary>
+        public static string NoDisciples {
+            get {
+                return ResourceManager.GetString("NoDisciples", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No eligible disciples found for this step..
+        /// </summary>
+        public static string NoEligibleDisciples {
+            get {
+                return ResourceManager.GetString("NoEligibleDisciples", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None.
         /// </summary>
         public static string None {
             get {
                 return ResourceManager.GetString("None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No requirements.
+        /// </summary>
+        public static string NoRequirements {
+            get {
+                return ResourceManager.GetString("NoRequirements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not found.
+        /// </summary>
+        public static string NotFound {
+            get {
+                return ResourceManager.GetString("NotFound", resourceCulture);
             }
         }
         
@@ -678,6 +867,15 @@ namespace JMMinistry.Common.Resources {
         public static string OpeningDate {
             get {
                 return ResourceManager.GetString("OpeningDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parent Step.
+        /// </summary>
+        public static string ParentStep {
+            get {
+                return ResourceManager.GetString("ParentStep", resourceCulture);
             }
         }
         
@@ -754,6 +952,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Requirements.
+        /// </summary>
+        public static string Requirements {
+            get {
+                return ResourceManager.GetString("Requirements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resolved.
         /// </summary>
         public static string Resolved {
@@ -768,6 +975,15 @@ namespace JMMinistry.Common.Resources {
         public static string Saturday {
             get {
                 return ResourceManager.GetString("Saturday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         
@@ -817,6 +1033,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send.
+        /// </summary>
+        public static string Send {
+            get {
+                return ResourceManager.GetString("Send", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sent.
         /// </summary>
         public static string Sent {
@@ -858,6 +1083,15 @@ namespace JMMinistry.Common.Resources {
         public static string SignUp {
             get {
                 return ResourceManager.GetString("SignUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub-Steps.
+        /// </summary>
+        public static string SubSteps {
+            get {
+                return ResourceManager.GetString("SubSteps", resourceCulture);
             }
         }
         
@@ -934,6 +1168,15 @@ namespace JMMinistry.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to update disciple step.
+        /// </summary>
+        public static string UpdateDiscipleStepAction {
+            get {
+                return ResourceManager.GetString("UpdateDiscipleStepAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User.
         /// </summary>
         public static string User {
@@ -993,6 +1236,15 @@ namespace JMMinistry.Common.Resources {
         public static string Welcome {
             get {
                 return ResourceManager.GetString("Welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Without cell.
+        /// </summary>
+        public static string WithoutCell {
+            get {
+                return ResourceManager.GetString("WithoutCell", resourceCulture);
             }
         }
         

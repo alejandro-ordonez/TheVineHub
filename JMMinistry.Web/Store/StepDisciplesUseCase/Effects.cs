@@ -8,6 +8,24 @@ namespace JMMinistry.Web.Store.StepDisciplesUseCase
     public class Effects(IDiscipleJourneyApi discipleJourneyApi)
     {
         [EffectMethod]
+        public async Task HandleUpdateStepCompletionAction(UpdateStepCompletionAction action, IDispatcher dispatcher)
+        {
+            var success = await discipleJourneyApi.UpdateStepCompletionAsync(action.StepId, action.DiscipleId, new UpdateStepCompletionDto
+            {
+                Status = action.Status
+            });
+
+            if (!success)
+            {
+                dispatcher.Dispatch(new FailedAction<UpdateStepCompletionAction>());
+                return;
+            }
+
+            dispatcher.Dispatch(new UpdateStepCompletionResultAction());
+            dispatcher.Dispatch(new FetchStepDisciplesAction { StepId = action.StepId });
+        }
+
+        [EffectMethod]
         public async Task HandleFetchStepDisciplesAction(FetchStepDisciplesAction action, IDispatcher dispatcher)
         {
             var result = await discipleJourneyApi.GetStepDisciplesAsync(action.StepId);

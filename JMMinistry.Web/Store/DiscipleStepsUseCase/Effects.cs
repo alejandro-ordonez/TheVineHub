@@ -41,6 +41,7 @@ namespace JMMinistry.Web.Store.DiscipleStepsUseCase
             }
 
             dispatcher.Dispatch(new CreateDiscipleStepResultAction { Step = result.Data });
+            dispatcher.Dispatch(new FetchDiscipleStepsAction());
         }
 
         [EffectMethod]
@@ -55,6 +56,22 @@ namespace JMMinistry.Web.Store.DiscipleStepsUseCase
             }
 
             dispatcher.Dispatch(new DeleteDiscipleStepResultAction { StepId = action.StepId });
+            dispatcher.Dispatch(new FetchDiscipleStepsAction());
+        }
+
+        [EffectMethod]
+        public async Task HandleUpdateDiscipleStepAction(UpdateDiscipleStepAction action, IDispatcher dispatcher)
+        {
+            var result = await discipleJourneyApi.UpdateStepAsync(action.Step.Id, action.Step);
+
+            if (result is null || !result.Success || result.Data is null)
+            {
+                dispatcher.Dispatch(new FailedAction<UpdateDiscipleStepAction>());
+                return;
+            }
+
+            dispatcher.Dispatch(new UpdateDiscipleStepResultAction { Step = result.Data });
+            dispatcher.Dispatch(new FetchDiscipleStepsAction());
         }
     }
 }

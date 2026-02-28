@@ -3,10 +3,11 @@ using JMMinistry.Common.Dtos.DiscipleJourney;
 using JMMinistry.Common.Dtos.DiscipleJourney.Enums;
 using Mediator;
 
-namespace JMMinistry.Application.Features.DiscipleJourney.Commands.CreateDiscipleStep
+namespace JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateDiscipleStep
 {
-    public class CreateDiscipleStepCommand : ICommand<DiscipleStepDto>
+    public class UpdateDiscipleStepCommand : ICommand<DiscipleStepDto>
     {
+        public required int Id { get; set; }
         public required string Name { get; set; }
         public required string Description { get; set; }
         public required StepCategory StepCategory { get; set; }
@@ -14,10 +15,11 @@ namespace JMMinistry.Application.Features.DiscipleJourney.Commands.CreateDiscipl
         public int? ParentStepId { get; set; }
     }
 
-    public class CreateDiscipleStepValidator : AbstractValidator<CreateDiscipleStepCommand>
+    public class UpdateDiscipleStepValidator : AbstractValidator<UpdateDiscipleStepCommand>
     {
-        public CreateDiscipleStepValidator()
+        public UpdateDiscipleStepValidator()
         {
+            RuleFor(x => x.Id).GreaterThan(0);
             RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.Description).NotEmpty();
             RuleFor(x => x.StepCategory).IsInEnum();

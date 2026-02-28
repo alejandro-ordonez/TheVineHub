@@ -1,7 +1,7 @@
 using JMMinistry.Application.Features.DiscipleJourney.Queries.GetStepDisciples;
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.DiscipleJourney;
-using JMMinistry.Common.Dtos.User;
+using JMMinistry.Common.Dtos.DiscipleJourney.Enums;
 using JMMinistry.Common.Dtos.User.Enums;
 using Mediator;
 using Npgsql;
@@ -28,14 +28,16 @@ public class GetEligibleStepDisciplesHandler(IJmDbContext dbContext)
                 CellId = g.Key.disciple_cell_id,
                 CellName = g.Key.disciple_cell_id.HasValue ? g.Key.cell_name : string.Empty,
                 LeaderName = g.Key.cell_leader_name,
-                Disciples = g.Select(r => new PartialUserInfoDto
+                Disciples = g.Select(r => new StepDiscipleDto
                 {
                     Document = r.disciple_id,
                     Name = r.disciple_name,
                     LastName = r.disciple_last_name,
                     Phone = r.disciple_phone,
                     Gender = (Gender)r.disciple_gender,
-                    CellId = r.disciple_cell_id
+                    CellId = r.disciple_cell_id,
+                    StepStatus = StepStatus.InProgress,
+                    LastUpdated = r.last_updated
                 }).ToList()
             })
             .OrderBy(g => g.CellId is null)

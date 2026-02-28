@@ -158,6 +158,11 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
             step.HasMany(s => s.DiscipleStepRequirements)
                 .WithMany()
                 .UsingEntity(j => j.ToTable("DiscipleStepRequirement"));
+
+            step.HasMany(s => s.SubSteps)
+                .WithOne(s => s.ParentStep)
+                .HasForeignKey(s => s.ParentStepId)
+                .OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

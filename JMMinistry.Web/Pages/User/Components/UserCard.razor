@@ -40,7 +40,7 @@
                 @User.GetFirsNameAndLastName()
             </MudText>
 
-            <MudLink Typo="Typo.body2" Underline="Underline.None" Class="text-icon-centered" Href="@($"http://api.whatsapp.com/send?phone=57{User.Phone}")">
+            <MudLink Typo="Typo.body2" Underline="Underline.None" Class="text-icon-centered" Style="width: fit-content" Href="@($"http://api.whatsapp.com/send?phone=57{User.Phone}")">
                 <MudIcon Icon="@Icons.Material.Filled.Phone" Size="Size.Small" />
                 @User.Phone
             </MudLink>

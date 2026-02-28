@@ -13,6 +13,9 @@ namespace JMMinistry.Application.Features.DiscipleJourney.Queries.GetDiscipleSte
         {
             var steps = await dbContext.DiscipleSteps
                 .Include(s => s.DiscipleStepRequirements)
+                .Include(s => s.SubSteps)
+                    .ThenInclude(sub => sub.DiscipleStepRequirements)
+                .Where(s => s.ParentStepId == null)
                 .OrderBy(s => s.StepCategory)
                 .ThenBy(s => s.Id)
                 .ToListAsync(cancellationToken);

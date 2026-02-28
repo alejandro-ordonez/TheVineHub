@@ -12,6 +12,10 @@ namespace JMMinistry.Domain.DiscipleJourney
 
         public required StepCategory StepCategory { get; set; }
 
+        public int? ParentStepId { get; set; }
+        public DiscipleStep? ParentStep { get; set; }
+        public IList<DiscipleStep> SubSteps { get; set; } = [];
+
         public IList<DiscipleStep> DiscipleStepRequirements { get; set; } = [];
     }
 }

@@ -291,13 +291,17 @@ namespace JMMinistry.Application.Mappers
         // ===== DiscipleStep mappings =====
 
         [MapperIgnoreSource(nameof(DiscipleStep.DiscipleStepRequirements))]
+        [MapperIgnoreSource(nameof(DiscipleStep.SubSteps))]
+        [MapperIgnoreSource(nameof(DiscipleStep.ParentStep))]
         [MapperIgnoreTarget(nameof(DiscipleStepDto.RequirementIds))]
+        [MapperIgnoreTarget(nameof(DiscipleStepDto.SubSteps))]
         private partial DiscipleStepDto DiscipleStepToDto(DiscipleStep source);
 
         public DiscipleStepDto DiscipleStepToDiscipleStepDto(DiscipleStep source)
         {
             var dto = DiscipleStepToDto(source);
             dto.RequirementIds = source.DiscipleStepRequirements.Select(r => r.Id).ToList();
+            dto.SubSteps = source.SubSteps.OrderBy(s => s.Id).Select(DiscipleStepToDiscipleStepDto).ToList();
             return dto;
         }
 

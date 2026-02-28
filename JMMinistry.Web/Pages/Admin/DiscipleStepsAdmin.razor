@@ -59,7 +59,7 @@
                     <MudChipSet T="string" ReadOnly="true">
                         @foreach (var reqId in step.RequirementIds)
                         {
-                            var reqStep = StepsState.Value.Steps.FirstOrDefault(s => s.Id == reqId);
+                            var reqStep = FindStep(reqId);
                             if (reqStep is not null)
                             {
                                 <MudChip T="string"
@@ -76,8 +76,49 @@
                 {
                     <MudText Typo="Typo.caption" Color="Color.Default">@translator["NoRequirements"]</MudText>
                 }
+
+                @if (step.SubSteps.Count > 0)
+                {
+                    <MudDivider Class="my-2" />
+                    <MudText Typo="Typo.caption" Class="mb-1">@translator["SubSteps"]:</MudText>
+                    <MudStack Spacing="1">
+                        @foreach (var subStep in step.SubSteps)
+                        {
+                            <MudPaper Outlined="true" Class="pa-2">
+                                <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+                                    <MudStack Spacing="0">
+                                        <MudText Typo="Typo.subtitle2">@subStep.Name</MudText>
+                                        <MudText Typo="Typo.caption">@subStep.Description</MudText>
+                                    </MudStack>
+                                    <MudStack Row="true" Spacing="0">
+                                        <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                                       Color="Color.Primary"
+                                                       Size="Size.Small"
+                                                       OnClick="@(() => OpenEditDialog(subStep))" />
+                                        <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                                       Color="Color.Error"
+                                                       Size="Size.Small"
+                                                       OnClick="@(() => ConfirmDelete(subStep))" />
+                                    </MudStack>
+                                </MudStack>
+                            </MudPaper>
+                        }
+                    </MudStack>
+                }
             </MudCardContent>
             <MudCardActions>
+                <MudButton StartIcon="@Icons.Material.Filled.Add"
+                           Size="Size.Small"
+                           Color="Color.Primary"
+                           Variant="Variant.Text"
+                           OnClick="@(() => OpenCreateSubStepDialog(step))">
+                    @translator["AddSubStep"]
+                </MudButton>
+                <MudSpacer />
+                <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                               Color="Color.Primary"
+                               Size="Size.Small"
+                               OnClick="@(() => OpenEditDialog(step))" />
                 <MudIconButton Icon="@Icons.Material.Filled.Delete"
                                Color="Color.Error"
                                Size="Size.Small"
@@ -95,6 +136,17 @@
         Dispatcher.Dispatch(new FetchDiscipleStepsAction());
     }
 
+    DiscipleStepDto? FindStep(int id)
+    {
+        foreach (var step in StepsState.Value.Steps)
+        {
+            if (step.Id == id) return step;
+            var sub = step.SubSteps.FirstOrDefault(s => s.Id == id);
+            if (sub is not null) return sub;
+        }
+        return null;
+    }
+
     async Task OpenCreateDialog()
     {
         var dialog = await DialogService.ShowAsync<DiscipleStepDialog>(translator["CreateNew", translator["DiscipleStep"]]);
@@ -104,6 +156,51 @@
             return;
 
         Dispatcher.Dispatch(new CreateDiscipleStepAction { Step = result.Data });
+    }
+
+    async Task OpenCreateSubStepDialog(DiscipleStepDto parentStep)
+    {
+        var parameters = new DialogParameters<DiscipleStepDialog>
+        {
+            { x => x.ParentStepId, parentStep.Id }
+        };
+
+        var dialog = await DialogService.ShowAsync<DiscipleStepDialog>(
+            translator["AddSubStep"], parameters);
+        var result = await dialog.GetReturnValueAsync<DialogResult<CreateDiscipleStepDto>>();
+
+        if (result?.Data is null)
+            return;
+
+        Dispatcher.Dispatch(new CreateDiscipleStepAction { Step = result.Data });
+    }
+
+    async Task OpenEditDialog(DiscipleStepDto step)
+    {
+        var parameters = new DialogParameters<DiscipleStepDialog>
+        {
+            { x => x.ExistingStep, step }
+        };
+
+        var dialog = await DialogService.ShowAsync<DiscipleStepDialog>(
+            translator["EditStep"], parameters);
+        var result = await dialog.GetReturnValueAsync<DialogResult<CreateDiscipleStepDto>>();
+
+        if (result?.Data is null)
+            return;
+
+        Dispatcher.Dispatch(new UpdateDiscipleStepAction
+        {
+            Step = new UpdateDiscipleStepDto
+            {
+                Id = step.Id,
+                Name = result.Data.Name,
+                Description = result.Data.Description,
+                StepCategory = result.Data.StepCategory,
+                RequirementIds = result.Data.RequirementIds,
+                ParentStepId = result.Data.ParentStepId
+            }
+        });
     }
 
     async Task ConfirmDelete(DiscipleStepDto step)

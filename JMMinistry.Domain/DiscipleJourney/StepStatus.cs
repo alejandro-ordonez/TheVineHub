@@ -6,7 +6,7 @@ namespace JMMinistry.Domain.DiscipleJourney
 {
     public enum StepStatus
     {
-        Failed,
+        Abandoned,
         InProgress,
         Completed
     }

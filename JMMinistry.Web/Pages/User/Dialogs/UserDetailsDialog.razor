@@ -12,7 +12,7 @@
         PrimaryButton="AccessFullDetails"
         PrimaryText="MoreInfo"
         MaxWidth="MaxWidth.Medium"
-        SecondaryButton="true"
+        SecondaryButton="ShowRemoveButton && AccessFullDetails"
         SecondaryText="Remove">
 
     <Content>
@@ -26,6 +26,9 @@
 
     [Parameter]
     public required string Document { get; set; }
+
+    [Parameter]
+    public bool ShowRemoveButton { get; set; } = true;
 
     UserInfoDto? User { get; set; }
 
@@ -44,7 +47,8 @@
             if (response is not null && response.Success)
             {
                 User = response.Data;
-                AccessFullDetails = AllowedAccessTypes.Contains(User?.AccessType ?? AccessType.Mate);
+                AccessFullDetails = AllowedAccessTypes.Contains(User?.AccessType ?? AccessType.Mate)
+                    && (User?.CellId ?? 0) != 0;
             }
 
             else

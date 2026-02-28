@@ -23,7 +23,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     disciple_gender INTEGER,
                     disciple_cell_id INTEGER,
                     cell_name TEXT,
-                    cell_leader_name TEXT
+                    cell_leader_name TEXT,
+                    step_status INTEGER,
+                    last_updated DATE
                 )
                 LANGUAGE plpgsql STABLE
                 AS $$
@@ -53,7 +55,7 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         SELECT sc."DiscipleId"
                         FROM "StepCompletions" sc
                         WHERE sc."DiscipleStepId" = p_step_id
-                          AND sc."StepStatus" <> 0
+                          AND sc."StepStatus" IN (1, 2)
                     ),
                     step_requirements AS (
                         SELECT dsr."DiscipleStepRequirementsId" AS required_step_id
@@ -84,7 +86,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         COALESCE(pi."Gender", 0),
                         pi."CellId",
                         COALESCE(c."Name", ''),
-                        COALESCE(TRIM(COALESCE(ldr."Name", '') || ' ' || COALESCE(ldr."LastName", '')), '')
+                        COALESCE(TRIM(COALESCE(ldr."Name", '') || ' ' || COALESCE(ldr."LastName", '')), ''),
+                        0,
+                        CURRENT_DATE
                     FROM disciples_with_all_requirements dar
                     INNER JOIN "PersonalInfo" pi ON pi."Id" = dar.disciple_id
                     LEFT JOIN "Cells" c ON c."Id" = pi."CellId"

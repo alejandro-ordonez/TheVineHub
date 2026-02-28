@@ -479,6 +479,25 @@
     <value>fetch disciples for this step</value>
     <comment>Use with FailedTo</comment>
   </data>
+  <data name="UpdateDiscipleStepAction" xml:space="preserve">
+    <value>update disciple step</value>
+    <comment>Use with FailedTo</comment>
+  </data>
+  <data name="ParentStep" xml:space="preserve">
+    <value>Parent Step</value>
+  </data>
+  <data name="SubSteps" xml:space="preserve">
+    <value>Sub-Steps</value>
+  </data>
+  <data name="AddSubStep" xml:space="preserve">
+    <value>Add Sub-Step</value>
+  </data>
+  <data name="EditStep" xml:space="preserve">
+    <value>Edit Step</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
   <data name="NoDisciples" xml:space="preserve">
     <value>No disciples registered for this step yet.</value>
   </data>
@@ -503,6 +522,22 @@
   </data>
   <data name="FetchEligibleDisciplesAction" xml:space="preserve">
     <value>fetch eligible disciples</value>
+    <comment>Use with FailedTo</comment>
+  </data>
+  <data name="InProgress" xml:space="preserve">
+    <value>In Progress</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
+  <data name="MarkCompleted" xml:space="preserve">
+    <value>Mark Completed</value>
+  </data>
+  <data name="MarkAbandoned" xml:space="preserve">
+    <value>Mark Abandoned</value>
+  </data>
+  <data name="UpdateStepCompletionAction" xml:space="preserve">
+    <value>update step status</value>
     <comment>Use with FailedTo</comment>
   </data>
 </root>

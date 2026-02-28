@@ -23,6 +23,13 @@ namespace JMMinistry.Web.Api
             return await response.Content.ReadFromJsonAsync<Response<DiscipleStepDto>?>();
         }
 
+        public async Task<Response<DiscipleStepDto>?> UpdateStepAsync(int stepId, UpdateDiscipleStepDto dto)
+        {
+            using var client = clientFactory.CreateClient(Constants.ApiClient);
+            var response = await client.PutAsJsonAsync($"{_discipleJourneyApi}/steps/{stepId}", dto);
+            return await response.Content.ReadFromJsonAsync<Response<DiscipleStepDto>?>();
+        }
+
         public async Task<bool> DeleteStepAsync(int stepId)
         {
             using var client = clientFactory.CreateClient(Constants.ApiClient);
@@ -51,6 +58,13 @@ namespace JMMinistry.Web.Api
         {
             using var client = clientFactory.CreateClient(Constants.ApiClient);
             var response = await client.PostAsJsonAsync($"{_discipleJourneyApi}/steps/{stepId}/completions", dto);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> UpdateStepCompletionAsync(int stepId, string discipleId, UpdateStepCompletionDto dto)
+        {
+            using var client = clientFactory.CreateClient(Constants.ApiClient);
+            var response = await client.PutAsJsonAsync($"{_discipleJourneyApi}/steps/{stepId}/completions/{discipleId}", dto);
             return response.IsSuccessStatusCode;
         }
     }

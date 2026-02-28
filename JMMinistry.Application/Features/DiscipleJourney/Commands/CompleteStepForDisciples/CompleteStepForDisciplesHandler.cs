@@ -14,7 +14,7 @@ public class CompleteStepForDisciplesHandler(IJmDbContext dbContext)
             DiscipleStepId = request.StepId,
             DiscipleId = doc,
             LeaderId = request.LeaderId,
-            StepStatus = StepStatus.Completed,
+            StepStatus = StepStatus.InProgress,
             DateCreated = request.CompletionDate,
             LastUpdated = request.CompletionDate
         });
