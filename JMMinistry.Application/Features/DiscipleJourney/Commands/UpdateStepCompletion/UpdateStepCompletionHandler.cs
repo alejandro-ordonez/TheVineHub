@@ -17,7 +17,7 @@ public class UpdateStepCompletionHandler(IJmDbContext dbContext)
             ?? throw new KeyNotFoundException($"StepCompletion not found for step {request.StepId} and disciple {request.DiscipleId}");
 
         completion.StepStatus = request.StepStatus;
-        completion.LastUpdated = DateOnly.FromDateTime(DateTime.UtcNow);
+        completion.LastUpdated = request.CompletionDate ?? DateOnly.FromDateTime(DateTime.UtcNow);
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

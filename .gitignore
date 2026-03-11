@@ -366,3 +366,6 @@ FodyWeavers.xsd
 /TestFiles/*
 .env
 /.claude/settings.local.json
+/.chunkhound
+/.chunkhound.json
+/.mcp.json

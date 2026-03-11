@@ -66,7 +66,7 @@
                         <MudMenu Icon="@Icons.Material.Filled.MoreVert" Size="Size.Small" Dense="true" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
                             @if (disciple.StepStatus == StepStatus.InProgress)
                             {
-                                <MudMenuItem OnClick="@(() => UpdateStatus(disciple.Document, StepStatus.Completed))">@Translator["MarkCompleted"]</MudMenuItem>
+                                <MudMenuItem OnClick="@(() => MarkCompleted(disciple.Document))">@Translator["MarkCompleted"]</MudMenuItem>
                             }
                             <MudMenuItem OnClick="@(() => UpdateStatus(disciple.Document, StepStatus.Abandoned))">@Translator["MarkAbandoned"]</MudMenuItem>
                         </MudMenu>
@@ -165,6 +165,23 @@ else
                 StepId = StepId,
                 Documents = result.Documents.ToList(),
                 CompletionDate = result.CompletionDate
+            });
+        }
+    }
+
+    private async Task MarkCompleted(string discipleId)
+    {
+        var dialog = await DialogService.ShowAsync<SelectDateDialog>(Translator["MarkCompleted"]);
+        var result = await dialog.GetReturnValueAsync<DateOnly?>();
+
+        if (result is not null)
+        {
+            Dispatcher.Dispatch(new UpdateStepCompletionAction
+            {
+                StepId = StepId,
+                DiscipleId = discipleId,
+                Status = StepStatus.Completed,
+                CompletionDate = result
             });
         }
     }

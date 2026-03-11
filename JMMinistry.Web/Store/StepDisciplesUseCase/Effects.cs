@@ -12,7 +12,8 @@ namespace JMMinistry.Web.Store.StepDisciplesUseCase
         {
             var success = await discipleJourneyApi.UpdateStepCompletionAsync(action.StepId, action.DiscipleId, new UpdateStepCompletionDto
             {
-                Status = action.Status
+                Status = action.Status,
+                CompletionDate = action.CompletionDate
             });
 
             if (!success)

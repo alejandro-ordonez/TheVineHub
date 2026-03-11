@@ -1,0 +1,26 @@
+@inject IStringLocalizer<UIStrings> Translator
+
+<MudDialog>
+    <DialogContent>
+        <MudDatePicker @bind-Date="_date" Label="@Translator["CompletionDate"]" Variant="Variant.Outlined" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@Translator["Cancel"]</MudButton>
+        <MudButton Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   OnClick="Submit">
+            @Translator["Save"]
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance? MudDialog { get; set; }
+
+    private DateTime? _date = DateTime.Today;
+
+    private void Submit() => MudDialog?.Close(DateOnly.FromDateTime(_date ?? DateTime.Today));
+
+    private void Cancel() => MudDialog?.Cancel();
+}

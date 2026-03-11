@@ -106,7 +106,8 @@ namespace JMMinistry.API.Controllers
             {
                 StepId = stepId,
                 DiscipleId = discipleId,
-                StepStatus = (Domain.DiscipleJourney.StepStatus)(int)dto.Status
+                StepStatus = (Domain.DiscipleJourney.StepStatus)(int)dto.Status,
+                CompletionDate = dto.CompletionDate
             });
 
             return NoContent();

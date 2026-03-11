@@ -3,6 +3,7 @@ using System;
 using JMMinistry.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JMMinistry.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(JmDbContext))]
-    partial class JmDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260311165001_UpdateGetStepDisciplesExcludeFurtherSteps")]
+    partial class UpdateGetStepDisciplesExcludeFurtherSteps
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -354,119 +357,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.ToTable("ConventionAttendees");
                 });
 
-            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.CycleAttendance", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CycleSessionId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("DiscipleId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DiscipleId");
-
-                    b.HasIndex("CycleSessionId", "DiscipleId")
-                        .IsUnique();
-
-                    b.ToTable("CycleAttendances");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.CycleEnrollment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CycleStaffId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("DiscipleId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateOnly>("EnrolledAt")
-                        .HasColumnType("date");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("StepCycleId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CycleStaffId");
-
-                    b.HasIndex("DiscipleId");
-
-                    b.HasIndex("StepCycleId", "DiscipleId")
-                        .IsUnique();
-
-                    b.ToTable("CycleEnrollments");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.CycleSession", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateOnly>("Date")
-                        .HasColumnType("date");
-
-                    b.Property<int>("StepCycleId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Topic")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StepCycleId");
-
-                    b.ToTable("CycleSessions");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.CycleStaff", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("PersonId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("StepCycleId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonId");
-
-                    b.HasIndex("StepCycleId", "PersonId")
-                        .IsUnique();
-
-                    b.ToTable("CycleStaff");
-                });
-
             modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.DiscipleStep", b =>
                 {
                     b.Property<int>("Id")
@@ -485,9 +375,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
 
                     b.Property<int?>("ParentStepId")
                         .HasColumnType("integer");
-
-                    b.Property<bool>("RequiresCycle")
-                        .HasColumnType("boolean");
 
                     b.Property<int>("StepCategory")
                         .HasColumnType("integer");
@@ -524,9 +411,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("StepCycleId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("StepStatus")
                         .HasColumnType("integer");
 
@@ -538,48 +422,7 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("LeaderId");
 
-                    b.HasIndex("StepCycleId");
-
                     b.ToTable("StepCompletions");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.StepCycle", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DiscipleStepId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateOnly>("EndDate")
-                        .HasColumnType("date");
-
-                    b.Property<DateOnly?>("EnrollmentDeadline")
-                        .HasColumnType("date");
-
-                    b.Property<bool>("IsOpen")
-                        .HasColumnType("boolean");
-
-                    b.Property<int>("MinAttendanceRequired")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DiscipleStepId");
-
-                    b.HasIndex("DiscipleStepId", "IsOpen");
-
-                    b.ToTable("StepCycles");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.Discipleship.DiscipleshipNote", b =>
@@ -1242,81 +1085,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Navigation("InvitedBy");
                 });
 
-            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.CycleAttendance", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.DiscipleJourney.CycleSession", "CycleSession")
-                        .WithMany("Attendances")
-                        .HasForeignKey("CycleSessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JMMinistry.Domain.PersonalInfo", "Disciple")
-                        .WithMany()
-                        .HasForeignKey("DiscipleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("CycleSession");
-
-                    b.Navigation("Disciple");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.CycleEnrollment", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.DiscipleJourney.CycleStaff", "CycleStaff")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("CycleStaffId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("JMMinistry.Domain.PersonalInfo", "Disciple")
-                        .WithMany()
-                        .HasForeignKey("DiscipleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("JMMinistry.Domain.DiscipleJourney.StepCycle", "StepCycle")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("StepCycleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CycleStaff");
-
-                    b.Navigation("Disciple");
-
-                    b.Navigation("StepCycle");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.CycleSession", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.DiscipleJourney.StepCycle", "StepCycle")
-                        .WithMany("Sessions")
-                        .HasForeignKey("StepCycleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("StepCycle");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.CycleStaff", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.PersonalInfo", "Person")
-                        .WithMany()
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("JMMinistry.Domain.DiscipleJourney.StepCycle", "StepCycle")
-                        .WithMany("Staff")
-                        .HasForeignKey("StepCycleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Person");
-
-                    b.Navigation("StepCycle");
-                });
-
             modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.DiscipleStep", b =>
                 {
                     b.HasOne("JMMinistry.Domain.DiscipleJourney.DiscipleStep", "ParentStep")
@@ -1347,28 +1115,11 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("JMMinistry.Domain.DiscipleJourney.StepCycle", "StepCycle")
-                        .WithMany()
-                        .HasForeignKey("StepCycleId");
-
                     b.Navigation("Disciple");
 
                     b.Navigation("DiscipleStep");
 
                     b.Navigation("Leader");
-
-                    b.Navigation("StepCycle");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.StepCycle", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.DiscipleJourney.DiscipleStep", "DiscipleStep")
-                        .WithMany("Cycles")
-                        .HasForeignKey("DiscipleStepId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DiscipleStep");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.Discipleship.DiscipleshipNote", b =>
@@ -1516,30 +1267,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Navigation("ClassAttendances");
                 });
 
-            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.CycleSession", b =>
-                {
-                    b.Navigation("Attendances");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.CycleStaff", b =>
-                {
-                    b.Navigation("Enrollments");
-                });
-
             modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.DiscipleStep", b =>
                 {
-                    b.Navigation("Cycles");
-
                     b.Navigation("SubSteps");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.StepCycle", b =>
-                {
-                    b.Navigation("Enrollments");
-
-                    b.Navigation("Sessions");
-
-                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.Discipleship.DiscipleshipNote", b =>

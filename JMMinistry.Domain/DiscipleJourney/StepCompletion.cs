@@ -25,5 +25,8 @@ namespace JMMinistry.Domain.DiscipleJourney
         /// </summary>
         public string LeaderId { get; set; } = null!;
         public PersonalInfo? Leader { get; set; }
+
+        public int? StepCycleId { get; set; }
+        public StepCycle? StepCycle { get; set; }
     }
 }
