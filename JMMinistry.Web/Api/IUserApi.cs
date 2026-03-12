@@ -16,5 +16,10 @@ namespace JMMinistry.Web.Api
         Task<Response<DocumentCheckResultDto>?> CheckDocumentExists(string document);
         Task<Response<bool>?> IsLeaderOfAsync(string discipleId);
         Task<Response<object>?> MarryAsync(MarryLeadersDto dto);
+        Task<Response<string>?> UploadPhotoAsync(string document, IBrowserFile file);
+        Task<Response<string>?> UploadTempPhotoAsync(IBrowserFile file);
+        Task<Response<string>?> AssignTempPhotoAsync(string document, string tempId);
+        Task<Response<object>?> DeletePhotoAsync(string document);
+        string GetPhotoUrl(string relativePath);
     }
 }

@@ -136,5 +136,53 @@ namespace JMMinistry.Web.Api
 
             return response;
         }
+
+        public async Task<Response<string>?> UploadPhotoAsync(string document, IBrowserFile file)
+        {
+            using var content = new MultipartFormDataContent();
+            var fileContent = new StreamContent(file.OpenReadStream(maxAllowedSize: 20 * 1024 * 1024));
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+            content.Add(fileContent, "\"file\"", file.Name);
+
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            var result = await httpClient.PostAsync($"{_userApi}/{document}/photo", content);
+
+            return await result.Content.ReadFromJsonAsync<Response<string>?>();
+        }
+
+        public async Task<Response<string>?> UploadTempPhotoAsync(IBrowserFile file)
+        {
+            using var content = new MultipartFormDataContent();
+            var fileContent = new StreamContent(file.OpenReadStream(maxAllowedSize: 20 * 1024 * 1024));
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+            content.Add(fileContent, "\"file\"", file.Name);
+
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            var result = await httpClient.PostAsync($"{_userApi}/photo/temp", content);
+
+            return await result.Content.ReadFromJsonAsync<Response<string>?>();
+        }
+
+        public async Task<Response<string>?> AssignTempPhotoAsync(string document, string tempId)
+        {
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            var result = await httpClient.PostAsync($"{_userApi}/{document}/photo/assign/{tempId}", null);
+
+            return await result.Content.ReadFromJsonAsync<Response<string>?>();
+        }
+
+        public async Task<Response<object>?> DeletePhotoAsync(string document)
+        {
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            var result = await httpClient.DeleteAsync($"{_userApi}/{document}/photo");
+
+            return await result.Content.ReadFromJsonAsync<Response<object>?>();
+        }
+
+        public string GetPhotoUrl(string relativePath)
+        {
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            return $"{httpClient.BaseAddress}uploads/{relativePath}";
+        }
     }
 }

@@ -4,6 +4,7 @@ using JMMinistry.Application.Configuration;
 using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Mappers;
 using JMMinistry.Application.Pipelines;
+using JMMinistry.Application.Services;
 using Mediator;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,8 @@ namespace JMMinistry.Application
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             services.AddValidatorsFromAssembly(typeof(ApplicationExtensions).Assembly);
+
+            services.AddScoped<IPhotoService, PhotoService>();
         }
     }
 }

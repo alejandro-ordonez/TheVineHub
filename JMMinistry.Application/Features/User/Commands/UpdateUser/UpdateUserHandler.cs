@@ -18,7 +18,7 @@ namespace JMMinistry.Application.Features.User.Commands.UpdateUser
 
             user.Name = request.Name;
             user.LastName = request.LastName;
-            user.Phone = request.Phone;
+            user.PhoneNumber = request.Phone;
             user.Email = request.Email;
             user.Birthday = request.Birthday;
             user.Gender = request.Gender;

@@ -73,7 +73,7 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
                     LastName = lastName.ToCapitalCase(),
                     UserName = userName,
                     Birthday = string.IsNullOrEmpty(birthdayString) ? null : DateOnly.ParseExact(birthdayString, DateFormats, CultureInfo.InvariantCulture),
-                    Phone = phone,
+                    PhoneNumber = phone,
                     Email = email,
                     Locality = locality,
                     Neighborhood = neighborhood,

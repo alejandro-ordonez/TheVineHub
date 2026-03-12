@@ -7,8 +7,9 @@
 @inject IStringLocalizer<UIStrings> _translator;
 @inject ILocationApi locationApi;
 @inject IUserApi userApi;
+@inject IJSRuntime JS;
 
-<MudStepper Vertical="false" ShowResetButton OnPreviewInteraction="OnPreviewInteraction">
+<MudStepper @ref="_stepper" Vertical="false" ShowResetButton OnPreviewInteraction="OnPreviewInteraction">
 
     <MudStep Title="@_translator["BasicInformation"]" @bind-HasError="_basicInfoHasError">
         <MudForm @ref="_basicInfoForm">
@@ -50,6 +51,29 @@
 
             @if (_formUnlocked)
             {
+                <div class="d-flex justify-center mb-4">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div class="photo-container @(_processingPhoto ? "" : "photo-editable")">
+                            <img src="@(_photoPreviewUrl ?? "/images/user.png")" class="profile-photo" />
+                            <label class="photo-overlay">
+                                <InputFile accept=".png,.jpg,.jpeg,.webp" OnChange="OnPhotoFileSelected" style="display:none" />
+                                <MudIcon Icon="@Icons.Material.Filled.CameraAlt" Size="Size.Small" />
+                                <span>@_translator["SelectPhoto"]</span>
+                            </label>
+                            @if (_processingPhoto)
+                            {
+                                <div class="photo-progress">
+                                    <MudProgressCircular Size="Size.Medium" Indeterminate Color="Color.Primary" />
+                                </div>
+                            }
+                        </div>
+                        @if (TempPhotoId is not null && !_processingPhoto)
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.CheckCircle" Color="Color.Success" Size="Size.Small" />
+                        }
+                    </div>
+                </div>
+
                 <MudTextField @bind-Value="UserInfo.Name"
                               For="@(() => UserInfo.Name)"
 
@@ -213,6 +237,9 @@
     [Parameter]
     public EventCallback<CreateUserInfoDto> OnCompleted { get; set; }
 
+    public string? TempPhotoId { get; private set; }
+
+    MudStepper? _stepper;
     MudForm? _basicInfoForm;
     MudForm? _addressInfoForm;
 
@@ -225,6 +252,8 @@
     string? _lastCheckedDocument;
     string? _infoMessage;
     Severity _infoSeverity;
+    string? _photoPreviewUrl;
+    bool _processingPhoto;
 
     private void OnDocumentChanged(string newValue)
     {
@@ -332,6 +361,12 @@
 
     private async Task OnPreviewInteraction(StepperInteractionEventArgs args)
     {
+        if (_processingPhoto)
+        {
+            args.Cancel = true;
+            return;
+        }
+
         if (args.Action == StepAction.Complete)
         {
             await ValidateStep(args);
@@ -345,6 +380,21 @@
         else if (args.Action == StepAction.Activate)
         {
             await ValidateStep(args);
+        }
+
+        if (!args.Cancel)
+        {
+            await ScrollStepperIntoView();
+        }
+    }
+
+    private async Task ScrollStepperIntoView()
+    {
+        await Task.Yield();
+        if (_stepper is not null)
+        {
+            // Scroll the stepper's parent dialog content into view
+            await JS.InvokeVoidAsync("eval", "document.querySelector('.mud-dialog-content')?.scrollTo({top: 0, behavior: 'smooth'})");
         }
     }
 
@@ -391,6 +441,29 @@
         {
             _selectedLocality = value;
             UserInfo.Locality = value?.Name;
+        }
+    }
+
+    private async Task OnPhotoFileSelected(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        _processingPhoto = true;
+        StateHasChanged();
+
+        try
+        {
+            var response = await userApi.UploadTempPhotoAsync(file);
+
+            if (response?.Success == true && response.Data is not null)
+            {
+                TempPhotoId = response.Data;
+                _photoPreviewUrl = userApi.GetPhotoUrl($"photos/temp_{TempPhotoId}_web.webp");
+            }
+        }
+        finally
+        {
+            _processingPhoto = false;
+            StateHasChanged();
         }
     }
 }

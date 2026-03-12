@@ -5,6 +5,7 @@ using JMMinistry.Application.Features.User.Commands.Authenticate;
 using JMMinistry.Application.Features.User.Commands.CreateUser;
 using JMMinistry.Application.Features.User.Commands.ImportUsers;
 using JMMinistry.Application.Features.User.Commands.MarryLeaders;
+using JMMinistry.Application.Features.User.Commands.Photo;
 using JMMinistry.Application.Features.User.Commands.UpdateUser;
 using JMMinistry.Application.Features.User.Queries.CheckDocumentExists;
 using JMMinistry.Application.Features.User.Queries.GetUserInfo;
@@ -119,6 +120,63 @@ namespace JMMinistry.API.Controllers
             });
 
             return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("photo/temp")]
+        public async Task<ActionResult<string>> UploadTempPhoto(IFormFile file)
+        {
+            if (file is null || file.Length == 0)
+                return BadRequest("No file provided");
+
+            using var stream = file.OpenReadStream();
+            var result = await mediator.Send(new UploadTempPhotoCommand { ImageStream = stream });
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("{document}/photo/assign/{tempId}")]
+        public async Task<ActionResult<string>> AssignTempPhoto(string document, string tempId)
+        {
+            var requestorId = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
+            var result = await mediator.Send(new AssignTempPhotoCommand
+            {
+                RequestorId = requestorId,
+                Document = document,
+                TempId = tempId
+            });
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("{document}/photo")]
+        public async Task<ActionResult<string>> UploadPhoto(string document, IFormFile file)
+        {
+            if (file is null || file.Length == 0)
+                return BadRequest("No file provided");
+
+            var requestorId = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
+            using var stream = file.OpenReadStream();
+            var result = await mediator.Send(new UploadPhotoCommand
+            {
+                RequestorId = requestorId,
+                Document = document,
+                ImageStream = stream
+            });
+            return Ok(result);
+        }
+
+        [Authorize]
+        [HttpDelete("{document}/photo")]
+        public async Task<ActionResult> DeletePhoto(string document)
+        {
+            var requestorId = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
+            await mediator.Send(new DeletePhotoCommand
+            {
+                RequestorId = requestorId,
+                Document = document
+            });
+            return Ok(new { });
         }
     }
 }
