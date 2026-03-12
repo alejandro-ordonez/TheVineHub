@@ -1,11 +1,36 @@
-﻿@using JMMinistry.Common
+@using JMMinistry.Common
 @using JMMinistry.Common.Dtos.User
+@using JMMinistry.Web.Api
 
 @inject IStringLocalizer<UIStrings> translator;
+@inject IUserApi userApi;
 
 <div class="user-info-card">
-    <div>
-        <MudImage Src="/images/user.png" Fluid="true" Style="max-height: 200px; min-width: 150px; margin: 0.5rem;" />
+    <div class="photo-container @(CanUploadPhoto && !_uploading ? "photo-editable" : "")">
+        @if (!string.IsNullOrEmpty(UserInfo?.Photo))
+        {
+            <img src="@GetPhotoUrl()" class="profile-photo" />
+        }
+        else
+        {
+            <img src="/images/user.png" class="profile-photo" />
+        }
+
+        @if (CanUploadPhoto)
+        {
+            <label class="photo-overlay">
+                <InputFile accept=".png,.jpg,.jpeg,.webp" OnChange="OnPhotoSelected" style="display:none" />
+                <MudIcon Icon="@Icons.Material.Filled.CameraAlt" Size="Size.Small" />
+                <span>@translator["ChangePhoto"]</span>
+            </label>
+
+            @if (_uploading)
+            {
+                <div class="photo-progress">
+                    <MudProgressCircular Size="Size.Small" Indeterminate Color="Color.Surface" />
+                </div>
+            }
+        }
     </div>
 
     <div class="user-info">
@@ -64,5 +89,35 @@
     [Parameter]
     public UserInfoDto? UserInfo { get; set; }
 
-    
+    [Parameter]
+    public bool CanUploadPhoto { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnPhotoUploaded { get; set; }
+
+    bool _uploading;
+
+    string GetPhotoUrl() => userApi.GetPhotoUrl(UserInfo!.Photo!);
+
+    async Task OnPhotoSelected(InputFileChangeEventArgs e)
+    {
+        if (UserInfo is null) return;
+
+        var file = e.File;
+
+        _uploading = true;
+        StateHasChanged();
+
+        var response = await userApi.UploadPhotoAsync(UserInfo.Document, file);
+
+        if (response?.Success == true && response.Data is not null)
+        {
+            UserInfo.Photo = response.Data;
+            if (OnPhotoUploaded.HasDelegate)
+                await OnPhotoUploaded.InvokeAsync(response.Data);
+        }
+
+        _uploading = false;
+        StateHasChanged();
+    }
 }

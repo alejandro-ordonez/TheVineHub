@@ -1,10 +1,12 @@
 ﻿@using JMMinistry.Common
 @using JMMinistry.Common.Dtos.User
+@using JMMinistry.Web.Api
 @using JMMinistry.Web.Extensions
 
 @inject IStringLocalizer<UIStrings> translator;
 @inject NavigationManager navigationManager;
 @inject IDialogService dialogService;
+@inject IUserApi userApi;
 
 <MudPaper Style="padding: 0.5rem" Class="@(OnClick is null || (EnableSelection ?? false) ? "" : "mud-ripple")"
           Outlined="@(Outlined ?? false)"
@@ -26,10 +28,9 @@
                 {
                     @User.Name[0]
                 }
-
                 else
                 {
-                    <MudImage Src="@User.Photo"></MudImage>
+                    <MudImage Src="@GetPhotoUrl()" />
                 }
             </MudAvatar>
         }
@@ -91,4 +92,5 @@
         OnClick?.InvokeAsync(new UserEventArgs { CellId = User.CellId ?? 0, Document = User.Document });
     }
 
+    string GetPhotoUrl() => userApi.GetPhotoUrl(User.Photo!);
 }

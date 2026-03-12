@@ -20,6 +20,8 @@ namespace JMMinistry.Application.Mappers
         // ===== PersonalInfo <-> UserInfoDto =====
 
         [MapProperty(nameof(PersonalInfo.Id), nameof(UserInfoDto.Document))]
+        [MapProperty(nameof(PersonalInfo.PhoneNumber), nameof(UserInfoDto.Phone))]
+        [MapProperty(nameof(PersonalInfo.PhotoPath), nameof(UserInfoDto.Photo))]
         [MapperIgnoreSource(nameof(PersonalInfo.UserName))]
         [MapperIgnoreSource(nameof(PersonalInfo.NormalizedUserName))]
         [MapperIgnoreSource(nameof(PersonalInfo.NormalizedEmail))]
@@ -27,7 +29,6 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(PersonalInfo.PasswordHash))]
         [MapperIgnoreSource(nameof(PersonalInfo.SecurityStamp))]
         [MapperIgnoreSource(nameof(PersonalInfo.ConcurrencyStamp))]
-        [MapperIgnoreSource(nameof(PersonalInfo.PhoneNumber))]
         [MapperIgnoreSource(nameof(PersonalInfo.PhoneNumberConfirmed))]
         [MapperIgnoreSource(nameof(PersonalInfo.TwoFactorEnabled))]
         [MapperIgnoreSource(nameof(PersonalInfo.LockoutEnd))]
@@ -45,10 +46,11 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(PersonalInfo.UserRoles))]
         [MapperIgnoreTarget(nameof(UserInfoDto.AccessType))]
         [MapperIgnoreTarget(nameof(UserInfoDto.Leaders))]
-        [MapperIgnoreTarget(nameof(UserInfoDto.Photo))]
         public partial UserInfoDto PersonalInfoToUserInfoDto(PersonalInfo source);
 
         [MapProperty(nameof(PersonalInfo.Id), nameof(PartialUserInfoDto.Document))]
+        [MapProperty(nameof(PersonalInfo.PhoneNumber), nameof(PartialUserInfoDto.Phone))]
+        [MapProperty(nameof(PersonalInfo.PhotoPath), nameof(PartialUserInfoDto.Photo))]
         [MapperIgnoreSource(nameof(PersonalInfo.UserName))]
         [MapperIgnoreSource(nameof(PersonalInfo.NormalizedUserName))]
         [MapperIgnoreSource(nameof(PersonalInfo.NormalizedEmail))]
@@ -56,7 +58,6 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(PersonalInfo.PasswordHash))]
         [MapperIgnoreSource(nameof(PersonalInfo.SecurityStamp))]
         [MapperIgnoreSource(nameof(PersonalInfo.ConcurrencyStamp))]
-        [MapperIgnoreSource(nameof(PersonalInfo.PhoneNumber))]
         [MapperIgnoreSource(nameof(PersonalInfo.PhoneNumberConfirmed))]
         [MapperIgnoreSource(nameof(PersonalInfo.TwoFactorEnabled))]
         [MapperIgnoreSource(nameof(PersonalInfo.LockoutEnd))]
@@ -81,21 +82,20 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(PersonalInfo.Conventions))]
         [MapperIgnoreSource(nameof(PersonalInfo.ConventionInvites))]
         [MapperIgnoreSource(nameof(PersonalInfo.UserRoles))]
-        [MapperIgnoreTarget(nameof(PartialUserInfoDto.Photo))]
         public partial PartialUserInfoDto PersonalInfoToPartialUserInfoDto(PersonalInfo source);
 
         [MapProperty(nameof(UserInfoDto.Document), nameof(PersonalInfo.Id))]
         [MapProperty(nameof(UserInfoDto.Document), nameof(PersonalInfo.UserName))]
+        [MapProperty(nameof(UserInfoDto.Phone), nameof(PersonalInfo.PhoneNumber))]
+        [MapProperty(nameof(UserInfoDto.Photo), nameof(PersonalInfo.PhotoPath))]
         [MapperIgnoreSource(nameof(UserInfoDto.AccessType))]
         [MapperIgnoreSource(nameof(UserInfoDto.Leaders))]
-        [MapperIgnoreSource(nameof(UserInfoDto.Photo))]
         [MapperIgnoreTarget(nameof(PersonalInfo.NormalizedUserName))]
         [MapperIgnoreTarget(nameof(PersonalInfo.NormalizedEmail))]
         [MapperIgnoreTarget(nameof(PersonalInfo.EmailConfirmed))]
         [MapperIgnoreTarget(nameof(PersonalInfo.PasswordHash))]
         [MapperIgnoreTarget(nameof(PersonalInfo.SecurityStamp))]
         [MapperIgnoreTarget(nameof(PersonalInfo.ConcurrencyStamp))]
-        [MapperIgnoreTarget(nameof(PersonalInfo.PhoneNumber))]
         [MapperIgnoreTarget(nameof(PersonalInfo.PhoneNumberConfirmed))]
         [MapperIgnoreTarget(nameof(PersonalInfo.TwoFactorEnabled))]
         [MapperIgnoreTarget(nameof(PersonalInfo.LockoutEnd))]
@@ -133,8 +133,9 @@ namespace JMMinistry.Application.Mappers
 
         [MapProperty(nameof(CreateGainedUser.Document), nameof(PersonalInfo.Id))]
         [MapProperty(nameof(CreateGainedUser.Document), nameof(PersonalInfo.UserName))]
+        [MapProperty(nameof(CreateGainedUser.Phone), nameof(PersonalInfo.PhoneNumber))]
+        [MapProperty(nameof(CreateGainedUser.Photo), nameof(PersonalInfo.PhotoPath))]
         [MapperIgnoreSource(nameof(CreateGainedUser.Petition))]
-        [MapperIgnoreSource(nameof(CreateGainedUser.Photo))]
         [MapperIgnoreTarget(nameof(PersonalInfo.NormalizedUserName))]
         [MapperIgnoreTarget(nameof(PersonalInfo.NormalizedEmail))]
         [MapperIgnoreTarget(nameof(PersonalInfo.Email))]
@@ -142,7 +143,6 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreTarget(nameof(PersonalInfo.PasswordHash))]
         [MapperIgnoreTarget(nameof(PersonalInfo.SecurityStamp))]
         [MapperIgnoreTarget(nameof(PersonalInfo.ConcurrencyStamp))]
-        [MapperIgnoreTarget(nameof(PersonalInfo.PhoneNumber))]
         [MapperIgnoreTarget(nameof(PersonalInfo.PhoneNumberConfirmed))]
         [MapperIgnoreTarget(nameof(PersonalInfo.TwoFactorEnabled))]
         [MapperIgnoreTarget(nameof(PersonalInfo.LockoutEnd))]
@@ -170,6 +170,8 @@ namespace JMMinistry.Application.Mappers
         // ===== PersonalInfo -> GainedUser =====
 
         [MapProperty(nameof(PersonalInfo.Id), nameof(GainedUser.Document))]
+        [MapProperty(nameof(PersonalInfo.PhoneNumber), nameof(GainedUser.Phone))]
+        [MapProperty(nameof(PersonalInfo.PhotoPath), nameof(GainedUser.Photo))]
         [MapperIgnoreSource(nameof(PersonalInfo.UserName))]
         [MapperIgnoreSource(nameof(PersonalInfo.NormalizedUserName))]
         [MapperIgnoreSource(nameof(PersonalInfo.NormalizedEmail))]
@@ -178,7 +180,6 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(PersonalInfo.PasswordHash))]
         [MapperIgnoreSource(nameof(PersonalInfo.SecurityStamp))]
         [MapperIgnoreSource(nameof(PersonalInfo.ConcurrencyStamp))]
-        [MapperIgnoreSource(nameof(PersonalInfo.PhoneNumber))]
         [MapperIgnoreSource(nameof(PersonalInfo.PhoneNumberConfirmed))]
         [MapperIgnoreSource(nameof(PersonalInfo.TwoFactorEnabled))]
         [MapperIgnoreSource(nameof(PersonalInfo.LockoutEnd))]
@@ -203,7 +204,6 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(PersonalInfo.UserRoles))]
         [MapperIgnoreTarget(nameof(GainedUser.Events))]
         [MapperIgnoreTarget(nameof(GainedUser.Petition))]
-        [MapperIgnoreTarget(nameof(GainedUser.Photo))]
         public partial GainedUser PersonalInfoToGainedUser(PersonalInfo source);
 
         // ===== Meeting mappings =====

@@ -26,7 +26,7 @@
 @inject IDialogService dialogService;
 
 <MudPaper>
-    <UserSummary UserInfo="User"/>
+    <UserSummary UserInfo="User" CanUploadPhoto="string.IsNullOrEmpty(Document) || DiscipleshipNotesState.Value.IsLeader"/>
 </MudPaper>
 
 @if(User is not null)

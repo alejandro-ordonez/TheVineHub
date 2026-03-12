@@ -69,26 +69,22 @@ namespace JMMinistry.Web.Pages.Ministry.Cells
         async Task OpenAddDisciple()
         {
             var dialog = await DialogService.ShowAsync<AddUserDialog>(translator["AddDisciples"]);
-            var result = await dialog.GetReturnValueAsync<DialogResult<CreateUserInfoDto>>();
+            var result = await dialog.GetReturnValueAsync<DialogResult<AddUserDialog.AddUserResult>>();
 
             if (result?.Data is null)
                 return;
 
-            if (result.Data.IsUpdate)
+            var userDto = result.Data.User;
+            var response = userDto.IsUpdate
+                ? await UserApi.UpdateUser(userDto)
+                : await UserApi.CreateUser(userDto);
+
+            if (response?.Success ?? false)
             {
-                var response = await UserApi.UpdateUser(result.Data);
-                if (response?.Success ?? false)
-                {
-                    Dispatcher.Dispatch(new AddDisciplesAction { CellId = CellId, Documents = [result.Data.Document] });
-                }
-            }
-            else
-            {
-                var response = await UserApi.CreateUser(result.Data);
-                if (response?.Success ?? false)
-                {
-                    Dispatcher.Dispatch(new AddDisciplesAction { CellId = CellId, Documents = [result.Data.Document] });
-                }
+                if (result.Data.TempPhotoId is not null)
+                    await UserApi.AssignTempPhotoAsync(userDto.Document, result.Data.TempPhotoId);
+
+                Dispatcher.Dispatch(new AddDisciplesAction { CellId = CellId, Documents = [userDto.Document] });
             }
         }
 

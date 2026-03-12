@@ -660,4 +660,16 @@
   <data name="NoResults" xml:space="preserve">
     <value>Sin resultados</value>
   </data>
+  <data name="Photo" xml:space="preserve">
+    <value>Foto</value>
+  </data>
+  <data name="SelectPhoto" xml:space="preserve">
+    <value>Seleccionar foto</value>
+  </data>
+  <data name="ChangePhoto" xml:space="preserve">
+    <value>Cambiar foto</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>opcional</value>
+  </data>
 </root>

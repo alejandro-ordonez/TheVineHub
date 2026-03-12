@@ -156,18 +156,22 @@
     private async Task OpenAddUserDialog()
     {
         var dialog = await DialogService.ShowAsync<AddUserDialog>(Translator["AddNewUser"]);
-        var result = await dialog.GetReturnValueAsync<DialogResult<CreateUserInfoDto>>();
+        var result = await dialog.GetReturnValueAsync<DialogResult<AddUserDialog.AddUserResult>>();
 
         if (result?.Data is null)
             return;
 
-        var response = result.Data.IsUpdate
-            ? await UserApi.UpdateUser(result.Data)
-            : await UserApi.CreateUser(result.Data);
+        var userDto = result.Data.User;
+        var response = userDto.IsUpdate
+            ? await UserApi.UpdateUser(userDto)
+            : await UserApi.CreateUser(userDto);
 
         if (response?.Success ?? false)
         {
-            SelectedDocuments.Add(result.Data.Document);
+            if (result.Data.TempPhotoId is not null)
+                await UserApi.AssignTempPhotoAsync(userDto.Document, result.Data.TempPhotoId);
+
+            SelectedDocuments.Add(userDto.Document);
             Dispatcher.Dispatch(new FetchEligibleDisciplesAction { StepId = StepId });
         }
     }

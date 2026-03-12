@@ -2,6 +2,7 @@ using JMMinistry.API.Extensions;
 using JMMinistry.API.Middleware;
 using JMMinistry.Application;
 using JMMinistry.Infrastructure.Persistence;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(CORSPolicy);
+
+var uploadsPath = builder.Configuration.GetValue<string>("UploadsPath")
+    ?? Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+Directory.CreateDirectory(uploadsPath);
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsPath),
+    RequestPath = "/uploads"
+});
 
 app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), appBuilder =>
 {

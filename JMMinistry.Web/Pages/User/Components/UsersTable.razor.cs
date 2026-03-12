@@ -87,17 +87,21 @@ namespace JMMinistry.Web.Pages.User.Components
         async Task OpenAddUser()
         {
             var dialog = await DialogService.ShowAsync<AddUserDialog>(_translator["AddUser"]);
-            var result = await dialog.GetReturnValueAsync<DialogResult<CreateUserInfoDto>>();
+            var result = await dialog.GetReturnValueAsync<DialogResult<AddUserDialog.AddUserResult>>();
 
             if (result?.Data is null)
                 return;
 
-            var response = result.Data.IsUpdate
-                ? await UserApi.UpdateUser(result.Data)
-                : await UserApi.CreateUser(result.Data);
+            var userDto = result.Data.User;
+            var response = userDto.IsUpdate
+                ? await UserApi.UpdateUser(userDto)
+                : await UserApi.CreateUser(userDto);
 
             if (response?.Success ?? false)
             {
+                if (result.Data.TempPhotoId is not null)
+                    await UserApi.AssignTempPhotoAsync(userDto.Document, result.Data.TempPhotoId);
+
                 await RefreshData();
             }
         }
