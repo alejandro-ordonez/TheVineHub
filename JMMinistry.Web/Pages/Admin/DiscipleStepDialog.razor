@@ -51,6 +51,11 @@
                 }
             </MudSelect>
 
+            <MudSwitch T="bool" @bind-Value="Model.RequiresCycle"
+                       Label="@translator["RequiresCycle"]"
+                       Color="Color.Primary"
+                       Class="mt-2" />
+
             <MudSelect T="int"
                        Label="@translator["Requirements"]"
                        MultiSelection="true"
@@ -95,6 +100,7 @@
             Model.Name = ExistingStep.Name;
             Model.Description = ExistingStep.Description;
             Model.StepCategory = ExistingStep.StepCategory;
+            Model.RequiresCycle = ExistingStep.RequiresCycle;
             Model.RequirementIds = ExistingStep.RequirementIds.ToList();
             Model.ParentStepId = ExistingStep.ParentStepId;
             _selectedRequirements = ExistingStep.RequirementIds.ToList();

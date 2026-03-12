@@ -9,6 +9,8 @@ using JMMinistry.Web.Store.DisciplesUseCase;
 using JMMinistry.Web.Store.DisciplesUseCase.Actions;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using static JMMinistry.Web.Pages.Ministry.Cells.MarryDialog;
+using JMMinistry.Common;
 
 namespace JMMinistry.Web.Pages.Ministry.Cells
 {
@@ -87,6 +89,40 @@ namespace JMMinistry.Web.Pages.Ministry.Cells
                 {
                     Dispatcher.Dispatch(new AddDisciplesAction { CellId = CellId, Documents = [result.Data.Document] });
                 }
+            }
+        }
+
+        async Task OpenMarryDialog()
+        {
+            var parameters = new DialogParameters<MarryDialog>
+            {
+                { x => x.Disciples, State.Value.Disciples }
+            };
+
+            var dialog = await DialogService.ShowAsync<MarryDialog>(translator["Marry"], parameters);
+            var result = await dialog.GetReturnValueAsync<MarryDialogResult>();
+
+            if (result is null) return;
+
+            var person = State.Value.Disciples.FirstOrDefault(d => d.Document == result.PersonId);
+            var spouse = State.Value.Disciples.FirstOrDefault(d => d.Document == result.SpouseId);
+
+            var response = await UserApi.MarryAsync(new MarryLeadersDto
+            {
+                PersonId = result.PersonId,
+                SpouseId = result.SpouseId
+            });
+
+            if (response?.Success ?? false)
+            {
+                var personName = person is not null ? $"{person.Name} {person.LastName}" : result.PersonId;
+                var spouseName = spouse is not null ? $"{spouse.Name} {spouse.LastName}" : result.SpouseId;
+                Snackbar.Add(translator["MarriedSuccessfully", personName, spouseName], Severity.Success);
+                Dispatcher.Dispatch(new FetchDisciplesAction { CellId = CellId });
+            }
+            else
+            {
+                Snackbar.Add(response?.Details ?? translator["FailedTo", translator["Marry"]], Severity.Error);
             }
         }
 

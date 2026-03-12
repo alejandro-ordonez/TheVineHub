@@ -25,6 +25,8 @@
 
         // Admin
         public const string DiscipleStepsAdmin = $"/{nameof(DiscipleStepsAdmin)}";
+        public const string StepCycleAdmin = $"/{nameof(StepCycleAdmin)}";
+        public const string CycleDetailsAdmin = $"/{nameof(CycleDetailsAdmin)}";
 
 
 

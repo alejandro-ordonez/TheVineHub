@@ -16,6 +16,7 @@
 @inject IDispatcher Dispatcher
 @inject IDialogService DialogService
 @inject IStringLocalizer<UIStrings> translator
+@inject NavigationManager NavigationManager
 
 <MudPaper Class="ma-2">
     <Header Title="@translator["DiscipleSteps"]">
@@ -114,6 +115,16 @@
                            OnClick="@(() => OpenCreateSubStepDialog(step))">
                     @translator["AddSubStep"]
                 </MudButton>
+                @if (step.RequiresCycle)
+                {
+                    <MudButton StartIcon="@Icons.Material.Filled.Loop"
+                               Size="Size.Small"
+                               Color="Color.Secondary"
+                               Variant="Variant.Text"
+                               OnClick="@(() => NavigationManager.NavigateTo($"{Routes.StepCycleAdmin}/{step.Id}"))">
+                        @translator["ManageCycles"]
+                    </MudButton>
+                }
                 <MudSpacer />
                 <MudIconButton Icon="@Icons.Material.Filled.Edit"
                                Color="Color.Primary"
@@ -197,6 +208,7 @@
                 Name = result.Data.Name,
                 Description = result.Data.Description,
                 StepCategory = result.Data.StepCategory,
+                RequiresCycle = result.Data.RequiresCycle,
                 RequirementIds = result.Data.RequirementIds,
                 ParentStepId = result.Data.ParentStepId
             }

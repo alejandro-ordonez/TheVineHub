@@ -10,16 +10,8 @@ namespace JMMinistry.Application.Services
     {
         DbSet<Announcement> Announcements { get; set; }
 
-        DbSet<Assignment> Assignments { get; set; }
-
         DbSet<Cell> Cells { get; set; }
         DbSet<CellAttendance> CellAttendances { get; set; }
-
-        DbSet<Class> Classes { get; set; }
-
-        DbSet<ClassAttendance> ClassAttendances { get; set; }
-
-        DbSet<ClassStudent> ClassStudents { get; set; }
 
         DbSet<Convention> Conventions { get; set; }
 
@@ -33,6 +25,12 @@ namespace JMMinistry.Application.Services
 
         DbSet<StepCompletion> StepCompletions { get; set; }
 
+        DbSet<StepCycle> StepCycles { get; set; }
+        DbSet<CycleSession> CycleSessions { get; set; }
+        DbSet<CycleStaff> CycleStaff { get; set; }
+        DbSet<CycleEnrollment> CycleEnrollments { get; set; }
+        DbSet<CycleAttendance> CycleAttendances { get; set; }
+
         DbSet<Event> Events { get; set; }
 
 
@@ -43,8 +41,6 @@ namespace JMMinistry.Application.Services
         DbSet<Role> Ministries { get; set; }
 
         DbSet<PersonalInfo> PersonalInfo { get; set; }
-
-        DbSet<School> Schools { get; set; }
 
         DbSet<City> Cities { get; set; }
 

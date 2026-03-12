@@ -21,6 +21,7 @@ public class UpdateDiscipleStepHandler(IJmDbContext dbContext, AppMapper mapper)
         step.Name = request.Name;
         step.Description = request.Description;
         step.StepCategory = request.StepCategory;
+        step.RequiresCycle = request.RequiresCycle;
         step.ParentStepId = request.ParentStepId;
 
         var requirements = request.RequirementIds.Count > 0

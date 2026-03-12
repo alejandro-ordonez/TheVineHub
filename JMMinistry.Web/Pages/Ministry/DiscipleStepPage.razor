@@ -56,17 +56,34 @@
             {
                 <div style="position: relative;">
                     <UserCard User="disciple" OnClick="@(EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails))" />
-                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 4px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 4px; flex-wrap: wrap; gap: 2px;">
                         <MudChip T="string" Size="Size.Small"
                                  Color="@(disciple.StepStatus == StepStatus.InProgress ? Color.Info : Color.Success)"
                                  Variant="Variant.Filled">
                             @(disciple.StepStatus == StepStatus.InProgress ? Translator["InProgress"] : Translator["Completed"])
                             — @disciple.LastUpdated.ToString("d")
                         </MudChip>
+                        @if (disciple.CycleEnrollmentSummary is not null)
+                        {
+                            <MudChip T="string" Size="Size.Small"
+                                     Color="@(disciple.CycleEnrollmentSummary.Status == Common.Dtos.DiscipleJourney.Enums.EnrollmentStatus.Active ? Color.Tertiary : Color.Error)"
+                                     Variant="Variant.Outlined">
+                                @disciple.CycleEnrollmentSummary.CycleName
+                                (@disciple.CycleEnrollmentSummary.AttendanceCount)
+                            </MudChip>
+                        }
                         <MudMenu Icon="@Icons.Material.Filled.MoreVert" Size="Size.Small" Dense="true" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
                             @if (disciple.StepStatus == StepStatus.InProgress)
                             {
-                                <MudMenuItem OnClick="@(() => UpdateStatus(disciple.Document, StepStatus.Completed))">@Translator["MarkCompleted"]</MudMenuItem>
+                                @if (disciple.CycleEnrollmentSummary is null || disciple.CycleEnrollmentSummary.CycleEnded)
+                                {
+                                    var label = Translator["MarkCompleted"].ToString();
+                                    if (disciple.CycleEnrollmentSummary is { } ces)
+                                    {
+                                        label += $" ({ces.AttendanceCount}/{ces.MinAttendanceRequired})";
+                                    }
+                                    <MudMenuItem OnClick="@(() => MarkCompleted(disciple.Document))">@label</MudMenuItem>
+                                }
                             }
                             <MudMenuItem OnClick="@(() => UpdateStatus(disciple.Document, StepStatus.Abandoned))">@Translator["MarkAbandoned"]</MudMenuItem>
                         </MudMenu>
@@ -152,19 +169,50 @@ else
         var parameters = new DialogParameters<AddStepCompletionDialog>
         {
             { x => x.StepId, StepId },
-            { x => x.HasRequirements, _step.RequirementIds.Count > 0 }
+            { x => x.HasRequirements, _step.RequirementIds.Count > 0 },
+            { x => x.RequiresCycle, _step.RequiresCycle }
         };
 
-        var dialog = await DialogService.ShowAsync<AddStepCompletionDialog>(Translator["AddStepCompletion"], parameters);
+        var dialogTitle = _step.RequiresCycle ? Translator["EnrollDisciples"] : Translator["AddStepCompletion"];
+        var dialog = await DialogService.ShowAsync<AddStepCompletionDialog>(dialogTitle, parameters);
         var result = await dialog.GetReturnValueAsync<AddStepCompletionDialog.StepCompletionDialogResult>();
 
         if (result is not null && result.Documents.Count > 0)
         {
-            Dispatcher.Dispatch(new CompleteStepAction
+            if (result.CycleId.HasValue)
+            {
+                Dispatcher.Dispatch(new EnrollDisciplesAction
+                {
+                    StepId = StepId,
+                    CycleId = result.CycleId.Value,
+                    Documents = result.Documents.ToList()
+                });
+            }
+            else
+            {
+                Dispatcher.Dispatch(new CompleteStepAction
+                {
+                    StepId = StepId,
+                    Documents = result.Documents.ToList(),
+                    CompletionDate = result.CompletionDate
+                });
+            }
+        }
+    }
+
+    private async Task MarkCompleted(string discipleId)
+    {
+        var dialog = await DialogService.ShowAsync<SelectDateDialog>(Translator["MarkCompleted"]);
+        var result = await dialog.GetReturnValueAsync<DateOnly?>();
+
+        if (result is not null)
+        {
+            Dispatcher.Dispatch(new UpdateStepCompletionAction
             {
                 StepId = StepId,
-                Documents = result.Documents.ToList(),
-                CompletionDate = result.CompletionDate
+                DiscipleId = discipleId,
+                Status = StepStatus.Completed,
+                CompletionDate = result
             });
         }
     }

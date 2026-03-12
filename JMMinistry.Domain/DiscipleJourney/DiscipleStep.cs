@@ -11,11 +11,13 @@ namespace JMMinistry.Domain.DiscipleJourney
         public required string Description { get; set; }
 
         public required StepCategory StepCategory { get; set; }
+        public bool RequiresCycle { get; set; }
 
         public int? ParentStepId { get; set; }
         public DiscipleStep? ParentStep { get; set; }
         public IList<DiscipleStep> SubSteps { get; set; } = [];
 
         public IList<DiscipleStep> DiscipleStepRequirements { get; set; } = [];
+        public IList<StepCycle> Cycles { get; set; } = [];
     }
 }

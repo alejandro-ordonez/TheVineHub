@@ -7,5 +7,6 @@ namespace JMMinistry.Common.Dtos.DiscipleJourney
     {
         public StepStatus StepStatus { get; set; }
         public DateOnly LastUpdated { get; set; }
+        public CycleEnrollmentSummaryDto? CycleEnrollmentSummary { get; set; }
     }
 }

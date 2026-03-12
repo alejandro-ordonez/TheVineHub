@@ -121,5 +121,20 @@ namespace JMMinistry.Web.Api
 
             return await result.Content.ReadFromJsonAsync<Response<bool>?>();
         }
+
+        public async Task<Response<object>?> MarryAsync(MarryLeadersDto dto)
+        {
+            using var httpClient = clientFactory.CreateClient(Constants.ApiClient);
+            var result = await httpClient.PostAsJsonAsync($"{_userApi}/marry", dto);
+
+            var response = await result.Content.ReadFromJsonAsync<Response<object>?>();
+
+            if (!response?.Success ?? false)
+            {
+                logger.LogError("Failed to marry leaders, reason: \n {Errors}", string.Join("\n", response?.Errors ?? []));
+            }
+
+            return response;
+        }
     }
 }

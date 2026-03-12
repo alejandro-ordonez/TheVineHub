@@ -1,4 +1,5 @@
 using JMMinistry.Application.Services;
+using JMMinistry.Domain.DiscipleJourney;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,21 @@ public class UpdateStepCompletionHandler(IJmDbContext dbContext)
             ?? throw new KeyNotFoundException($"StepCompletion not found for step {request.StepId} and disciple {request.DiscipleId}");
 
         completion.StepStatus = request.StepStatus;
-        completion.LastUpdated = DateOnly.FromDateTime(DateTime.UtcNow);
+        completion.LastUpdated = request.CompletionDate ?? DateOnly.FromDateTime(DateTime.UtcNow);
+
+        // When abandoning, also abandon any active cycle enrollment for this step
+        if (request.StepStatus == StepStatus.Abandoned)
+        {
+            var activeEnrollment = await dbContext.CycleEnrollments
+                .FirstOrDefaultAsync(ce =>
+                    ce.DiscipleId == request.DiscipleId &&
+                    ce.Status == EnrollmentStatus.Active &&
+                    ce.StepCycle!.DiscipleStepId == request.StepId,
+                    cancellationToken);
+
+            if (activeEnrollment is not null)
+                activeEnrollment.Status = EnrollmentStatus.Abandoned;
+        }
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

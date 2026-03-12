@@ -21,15 +21,8 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
 
     public virtual DbSet<Announcement> Announcements { get; set; }
 
-    public virtual DbSet<Assignment> Assignments { get; set; }
-
     public virtual DbSet<Cell> Cells { get; set; }
     public virtual DbSet<CellAttendance> CellAttendances { get; set; }
-
-    public virtual DbSet<Class> Classes { get; set; }
-    public virtual DbSet<ClassAttendance> ClassAttendances { get; set; }
-
-    public virtual DbSet<ClassStudent> ClassStudents { get; set; }
 
     public virtual DbSet<Convention> Conventions { get; set; }
     public virtual DbSet<ConventionAttendee> ConventionAttendees { get; set; }
@@ -41,6 +34,12 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
 
     public virtual DbSet<StepCompletion> StepCompletions { get; set; }
 
+    public virtual DbSet<StepCycle> StepCycles { get; set; }
+    public virtual DbSet<CycleSession> CycleSessions { get; set; }
+    public virtual DbSet<CycleStaff> CycleStaff { get; set; }
+    public virtual DbSet<CycleEnrollment> CycleEnrollments { get; set; }
+    public virtual DbSet<CycleAttendance> CycleAttendances { get; set; }
+
     public virtual DbSet<Event> Events { get; set; }
 
 
@@ -50,8 +49,6 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
     public virtual DbSet<Role> Ministries { get; set; }
 
     public virtual DbSet<PersonalInfo> PersonalInfo { get; set; }
-
-    public virtual DbSet<School> Schools { get; set; }
 
     public virtual DbSet<City> Cities { get; set; }
 
@@ -80,6 +77,13 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
                 .WithOne(e => e.PersonalInfo)
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
+
+            user.HasOne(u => u.Spouse)
+                .WithOne()
+                .HasForeignKey<PersonalInfo>(u => u.SpouseId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            user.HasIndex(u => u.SpouseId).IsUnique().HasFilter("\"SpouseId\" IS NOT NULL");
 
             user.ToTable(nameof(PersonalInfo));
         });
@@ -163,6 +167,78 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
                 .WithOne(s => s.ParentStep)
                 .HasForeignKey(s => s.ParentStepId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            step.HasMany(s => s.Cycles)
+                .WithOne(c => c.DiscipleStep)
+                .HasForeignKey(c => c.DiscipleStepId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<StepCycle>(cycle =>
+        {
+            cycle.HasIndex(c => c.DiscipleStepId);
+            cycle.HasIndex(c => new { c.DiscipleStepId, c.IsOpen });
+
+            cycle.HasMany(c => c.Sessions)
+                .WithOne(s => s.StepCycle)
+                .HasForeignKey(s => s.StepCycleId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            cycle.HasMany(c => c.Enrollments)
+                .WithOne(e => e.StepCycle)
+                .HasForeignKey(e => e.StepCycleId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            cycle.HasMany(c => c.Staff)
+                .WithOne(s => s.StepCycle)
+                .HasForeignKey(s => s.StepCycleId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<CycleSession>(session =>
+        {
+            session.HasIndex(s => s.StepCycleId);
+
+            session.HasMany(s => s.Attendances)
+                .WithOne(a => a.CycleSession)
+                .HasForeignKey(a => a.CycleSessionId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<CycleStaff>(staff =>
+        {
+            staff.HasIndex(s => new { s.StepCycleId, s.PersonId }).IsUnique();
+
+            staff.HasOne(s => s.Person)
+                .WithMany()
+                .HasForeignKey(s => s.PersonId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            staff.HasMany(s => s.Enrollments)
+                .WithOne(e => e.CycleStaff)
+                .HasForeignKey(e => e.CycleStaffId)
+                .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        builder.Entity<CycleEnrollment>(enrollment =>
+        {
+            enrollment.HasIndex(e => new { e.StepCycleId, e.DiscipleId }).IsUnique();
+            enrollment.HasIndex(e => e.CycleStaffId);
+
+            enrollment.HasOne(e => e.Disciple)
+                .WithMany()
+                .HasForeignKey(e => e.DiscipleId)
+                .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        builder.Entity<CycleAttendance>(attendance =>
+        {
+            attendance.HasIndex(a => new { a.CycleSessionId, a.DiscipleId }).IsUnique();
+
+            attendance.HasOne(a => a.Disciple)
+                .WithMany()
+                .HasForeignKey(a => a.DiscipleId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }

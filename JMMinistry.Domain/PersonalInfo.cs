@@ -63,10 +63,10 @@ public partial class PersonalInfo : IdentityUser<string>
 
     public IList<MeetingAttendance> MeetingAttendances { get; set; } = [];
     public IList<CellAttendance> CellAttendances { get; set; } = [];
-    public IList<ClassAttendance> ClassAttendances { get; set; } = [];
 
+    public string? SpouseId { get; set; }
+    public PersonalInfo? Spouse { get; set; }
 
-    public IList<ClassStudent> Classes { get; set; } = [];
     public IList<ConventionAttendee> Conventions { get; set; } = [];
     public IList<ConventionAttendee> ConventionInvites { get; set; } = [];
 

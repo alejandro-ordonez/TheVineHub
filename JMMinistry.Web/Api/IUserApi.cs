@@ -15,5 +15,6 @@ namespace JMMinistry.Web.Api
         Task<Response<object>?> UpdateUser(CreateUserInfoDto dto);
         Task<Response<DocumentCheckResultDto>?> CheckDocumentExists(string document);
         Task<Response<bool>?> IsLeaderOfAsync(string discipleId);
+        Task<Response<object>?> MarryAsync(MarryLeadersDto dto);
     }
 }

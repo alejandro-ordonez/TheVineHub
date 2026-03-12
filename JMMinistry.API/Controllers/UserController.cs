@@ -4,6 +4,7 @@ using JMMinistry.Application.Features.Hierarchy.Queries.IsLeaderInHierarchy;
 using JMMinistry.Application.Features.User.Commands.Authenticate;
 using JMMinistry.Application.Features.User.Commands.CreateUser;
 using JMMinistry.Application.Features.User.Commands.ImportUsers;
+using JMMinistry.Application.Features.User.Commands.MarryLeaders;
 using JMMinistry.Application.Features.User.Commands.UpdateUser;
 using JMMinistry.Application.Features.User.Queries.CheckDocumentExists;
 using JMMinistry.Application.Features.User.Queries.GetUserInfo;
@@ -87,6 +88,22 @@ namespace JMMinistry.API.Controllers
         {
             var result = await mediator.Send(criteria);
             return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost("marry")]
+        public async Task<ActionResult> MarryLeaders([FromBody] MarryLeadersDto dto)
+        {
+            var requestorId = HttpContext.GetDocumentClaim() ?? throw new MissingInTokenException();
+
+            await mediator.Send(new MarryLeadersCommand
+            {
+                RequestorId = requestorId,
+                PersonId = dto.PersonId,
+                SpouseId = dto.SpouseId
+            });
+
+            return Ok(new { });
         }
 
         [Authorize]

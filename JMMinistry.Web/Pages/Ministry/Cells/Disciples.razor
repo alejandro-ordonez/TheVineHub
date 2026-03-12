@@ -3,6 +3,7 @@
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 @inject IStringLocalizer<UIStrings> translator;
+@inject ISnackbar Snackbar;
 
 <MudPaper Style="margin: 1rem 0px">
     <MudToolBar>
@@ -10,6 +11,11 @@
         <MudSpacer />
         <MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Tertiary" OnClick="OpenAddDisciple" />
         
+        @if (State.Value.Disciples.Count >= 2)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Error" OnClick="OpenMarryDialog" />
+        }
+
         @if (State.Value.Disciples.Count > 0)
         {
             <MudIconButton Icon="@Icons.Material.Filled.Checklist" Color="Color.Tertiary" OnClick="@(() => { AddAttendanceEnabled = !AddAttendanceEnabled; })" />

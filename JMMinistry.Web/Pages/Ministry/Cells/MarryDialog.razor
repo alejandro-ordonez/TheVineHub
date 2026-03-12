@@ -1,0 +1,106 @@
+@using JMMinistry.Common.Dtos.User
+@using JMMinistry.Common.Dtos.User.Enums
+@using JMMinistry.Web.Pages.User.Components
+
+@inject IStringLocalizer<UIStrings> Translator
+
+<MudDialog>
+    <DialogContent>
+        @if (_selectedMan is not null && _selectedWoman is not null)
+        {
+            <MudAlert Severity="Severity.Info" Class="mb-4">
+                @Translator["MarryConfirmation", _selectedMan.Name + " " + _selectedMan.LastName, _selectedWoman.Name + " " + _selectedWoman.LastName]
+            </MudAlert>
+        }
+
+        <div class="users-grid">
+            <div>
+                <MudText Typo="Typo.subtitle1" Class="mb-2">@Translator["Men"]</MudText>
+
+                <div class="users-grid">
+                    @foreach (var man in Men)
+                    {
+                        <UserCard User="man"
+                                  EnableSelection="true"
+                                  Outlined="true"
+                                  Selected="@(_selectedMan == man)"
+                                  SelectedChanged="@(selected => OnManSelected(man, selected))" />
+                    }
+                </div>
+
+                
+                @if (Men.Count == 0)
+                {
+                    <MudText Typo="Typo.body2" Color="Color.Secondary" Class="pa-2">@Translator["NoResults"]</MudText>
+                }
+            </div>
+            <div xs="6">
+                <MudText Typo="Typo.subtitle1" Class="mb-2">@Translator["Women"]</MudText>
+                @foreach (var woman in Women)
+                {
+                    <UserCard User="woman"
+                              EnableSelection="true"
+                              Outlined="true"
+                              Selected="@(_selectedWoman == woman)"
+                              SelectedChanged="@(selected => OnWomanSelected(woman, selected))" />
+                }
+                @if (Women.Count == 0)
+                {
+                    <MudText Typo="Typo.body2" Color="Color.Secondary" Class="pa-2">@Translator["NoResults"]</MudText>
+                }
+            </div>
+        </div>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@Translator["Cancel"]</MudButton>
+        <MudButton Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   Disabled="@(_selectedMan is null || _selectedWoman is null)"
+                   OnClick="Submit">
+            @Translator["Confirm"]
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance? MudDialog { get; set; }
+
+    [Parameter]
+    public IList<PartialUserInfoDto> Disciples { get; set; } = [];
+
+    private PartialUserInfoDto? _selectedMan;
+    private PartialUserInfoDto? _selectedWoman;
+
+    private IList<PartialUserInfoDto> Men => Disciples
+        .Where(d => d.Gender == Gender.Male && d.MaritalStatus == MaritalStatus.Single)
+        .ToList();
+
+    private IList<PartialUserInfoDto> Women => Disciples
+        .Where(d => d.Gender == Gender.Female && d.MaritalStatus == MaritalStatus.Single)
+        .ToList();
+
+    private void OnManSelected(PartialUserInfoDto man, bool selected)
+    {
+        _selectedMan = selected ? man : null;
+    }
+
+    private void OnWomanSelected(PartialUserInfoDto woman, bool selected)
+    {
+        _selectedWoman = selected ? woman : null;
+    }
+
+    private void Submit() => MudDialog?.Close(new MarryDialogResult
+    {
+        PersonId = _selectedMan!.Document,
+        SpouseId = _selectedWoman!.Document
+    });
+
+    private void Cancel() => MudDialog?.Cancel();
+
+    public record MarryDialogResult
+    {
+        public required string PersonId { get; set; }
+        public required string SpouseId { get; set; }
+    }
+}

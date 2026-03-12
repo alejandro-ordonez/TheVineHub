@@ -12,7 +12,8 @@ namespace JMMinistry.Web.Store.StepDisciplesUseCase
         {
             var success = await discipleJourneyApi.UpdateStepCompletionAsync(action.StepId, action.DiscipleId, new UpdateStepCompletionDto
             {
-                Status = action.Status
+                Status = action.Status,
+                CompletionDate = action.CompletionDate
             });
 
             if (!success)
@@ -44,6 +45,20 @@ namespace JMMinistry.Web.Store.StepDisciplesUseCase
         }
 
         [EffectMethod]
+        public async Task HandleFetchActiveCyclesAction(FetchActiveCyclesAction action, IDispatcher dispatcher)
+        {
+            var result = await discipleJourneyApi.GetActiveCyclesForStepAsync(action.StepId);
+
+            if (result is null || !result.Success || result.Data is null)
+            {
+                dispatcher.Dispatch(new FailedAction<FetchActiveCyclesAction>());
+                return;
+            }
+
+            dispatcher.Dispatch(new FetchActiveCyclesResultAction { Cycles = result.Data });
+        }
+
+        [EffectMethod]
         public async Task HandleFetchEligibleDisciplesAction(FetchEligibleDisciplesAction action, IDispatcher dispatcher)
         {
             var result = await discipleJourneyApi.GetEligibleDisciplesAsync(action.StepId);
@@ -58,6 +73,24 @@ namespace JMMinistry.Web.Store.StepDisciplesUseCase
             {
                 Groups = result.Data
             });
+        }
+
+        [EffectMethod]
+        public async Task HandleEnrollDisciplesAction(EnrollDisciplesAction action, IDispatcher dispatcher)
+        {
+            var success = await discipleJourneyApi.EnrollDisciplesAsync(action.CycleId, new EnrollDisciplesDto
+            {
+                DiscipleIds = action.Documents
+            });
+
+            if (!success)
+            {
+                dispatcher.Dispatch(new FailedAction<EnrollDisciplesAction>());
+                return;
+            }
+
+            dispatcher.Dispatch(new EnrollDisciplesResultAction());
+            dispatcher.Dispatch(new FetchStepDisciplesAction { StepId = action.StepId });
         }
 
         [EffectMethod]

@@ -9,6 +9,7 @@ namespace JMMinistry.Common.Dtos.User
         public string LastName { get; set; } = null!;
         public string Phone { get; set; } = string.Empty;
         public Gender Gender { get; set; }
+        public MaritalStatus MaritalStatus { get; set; }
         public string? Photo { get; set; }
         public int? CellId { get; set; }
     }

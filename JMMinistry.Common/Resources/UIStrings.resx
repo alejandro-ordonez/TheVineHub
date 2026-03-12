@@ -540,4 +540,133 @@
     <value>update step status</value>
     <comment>Use with FailedTo</comment>
   </data>
+  <data name="Cycles" xml:space="preserve">
+    <value>Cycles</value>
+  </data>
+  <data name="Cycle" xml:space="preserve">
+    <value>Cycle</value>
+  </data>
+  <data name="CreateCycle" xml:space="preserve">
+    <value>Create Cycle</value>
+  </data>
+  <data name="EditCycle" xml:space="preserve">
+    <value>Edit Cycle</value>
+  </data>
+  <data name="Sessions" xml:space="preserve">
+    <value>Sessions</value>
+  </data>
+  <data name="Staff" xml:space="preserve">
+    <value>Staff</value>
+  </data>
+  <data name="Enrollments" xml:space="preserve">
+    <value>Enrollments</value>
+  </data>
+  <data name="CycleAttendance" xml:space="preserve">
+    <value>Attendance</value>
+  </data>
+  <data name="EnrollmentDeadline" xml:space="preserve">
+    <value>Enrollment Deadline</value>
+  </data>
+  <data name="MinAttendance" xml:space="preserve">
+    <value>Min. Attendance</value>
+  </data>
+  <data name="Guide" xml:space="preserve">
+    <value>Guide</value>
+  </data>
+  <data name="Coordinator" xml:space="preserve">
+    <value>Coordinator</value>
+  </data>
+  <data name="Enrolled" xml:space="preserve">
+    <value>Enrolled</value>
+  </data>
+  <data name="NoCycles" xml:space="preserve">
+    <value>No cycles available</value>
+  </data>
+  <data name="NoSessions" xml:space="preserve">
+    <value>No sessions</value>
+  </data>
+  <data name="NoStaff" xml:space="preserve">
+    <value>No staff assigned</value>
+  </data>
+  <data name="ActiveCycles" xml:space="preserve">
+    <value>Active Cycles</value>
+  </data>
+  <data name="CycleClosed" xml:space="preserve">
+    <value>Cycle Closed</value>
+  </data>
+  <data name="DeadlinePassed" xml:space="preserve">
+    <value>Deadline Passed</value>
+  </data>
+  <data name="RequiresCycle" xml:space="preserve">
+    <value>Requires Cycle</value>
+  </data>
+  <data name="AssignGuide" xml:space="preserve">
+    <value>Assign Guide</value>
+  </data>
+  <data name="MarkAbandoned2" xml:space="preserve">
+    <value>Mark as Abandoned</value>
+  </data>
+  <data name="RecordAttendance" xml:space="preserve">
+    <value>Record Attendance</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>Closed</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="Topic" xml:space="preserve">
+    <value>Topic</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="AddSession" xml:space="preserve">
+    <value>Add Session</value>
+  </data>
+  <data name="AddStaff" xml:space="preserve">
+    <value>Add Staff</value>
+  </data>
+  <data name="EnrollDisciples" xml:space="preserve">
+    <value>Enroll Disciples</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="ManageCycles" xml:space="preserve">
+    <value>Manage Cycles</value>
+  </data>
+  <data name="NoEnrollments" xml:space="preserve">
+    <value>No enrollments</value>
+  </data>
+  <data name="SelectCycle" xml:space="preserve">
+    <value>Select Cycle</value>
+  </data>
+  <data name="Marry" xml:space="preserve">
+    <value>Marry</value>
+  </data>
+  <data name="MarryConfirmation" xml:space="preserve">
+    <value>{0} and {1} will be registered as married.</value>
+  </data>
+  <data name="MarriedSuccessfully" xml:space="preserve">
+    <value>{0} and {1} have been married successfully.</value>
+  </data>
+  <data name="Men" xml:space="preserve">
+    <value>Men</value>
+  </data>
+  <data name="Women" xml:space="preserve">
+    <value>Women</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>No results</value>
+  </data>
 </root>

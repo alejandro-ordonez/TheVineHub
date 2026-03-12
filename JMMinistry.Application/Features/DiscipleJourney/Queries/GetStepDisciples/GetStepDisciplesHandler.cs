@@ -1,5 +1,6 @@
 using JMMinistry.Application.Services;
 using JMMinistry.Common.Dtos.DiscipleJourney;
+using JMMinistry.Common.Dtos.DiscipleJourney.Enums;
 using JMMinistry.Common.Dtos.User.Enums;
 using Mediator;
 using Npgsql;
@@ -39,7 +40,15 @@ public class GetStepDisciplesHandler(IJmDbContext dbContext)
                     Gender = (Gender)r.disciple_gender,
                     CellId = r.disciple_cell_id,
                     StepStatus = (Common.Dtos.DiscipleJourney.Enums.StepStatus)r.step_status,
-                    LastUpdated = r.last_updated
+                    LastUpdated = r.last_updated,
+                    CycleEnrollmentSummary = r.cycle_name is not null ? new CycleEnrollmentSummaryDto
+                    {
+                        CycleName = r.cycle_name,
+                        Status = (EnrollmentStatus)(r.enrollment_status ?? 0),
+                        AttendanceCount = r.cycle_attendance_count ?? 0,
+                        CycleEndDate = r.cycle_end_date ?? default,
+                        MinAttendanceRequired = r.cycle_min_attendance ?? 0
+                    } : null
                 }).ToList()
             })
             .OrderBy(g => g.CellId is null)
