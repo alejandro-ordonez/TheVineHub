@@ -531,4 +531,133 @@
   <data name="UpdateStepCompletionAction" xml:space="preserve">
     <value>actualizar estado del paso</value>
   </data>
+  <data name="Cycles" xml:space="preserve">
+    <value>Ciclos</value>
+  </data>
+  <data name="Cycle" xml:space="preserve">
+    <value>Ciclo</value>
+  </data>
+  <data name="CreateCycle" xml:space="preserve">
+    <value>Crear Ciclo</value>
+  </data>
+  <data name="EditCycle" xml:space="preserve">
+    <value>Editar Ciclo</value>
+  </data>
+  <data name="Sessions" xml:space="preserve">
+    <value>Sesiones</value>
+  </data>
+  <data name="Staff" xml:space="preserve">
+    <value>Personal</value>
+  </data>
+  <data name="Enrollments" xml:space="preserve">
+    <value>Inscripciones</value>
+  </data>
+  <data name="CycleAttendance" xml:space="preserve">
+    <value>Asistencia</value>
+  </data>
+  <data name="EnrollmentDeadline" xml:space="preserve">
+    <value>Fecha Limite de Inscripcion</value>
+  </data>
+  <data name="MinAttendance" xml:space="preserve">
+    <value>Asistencia Min.</value>
+  </data>
+  <data name="Guide" xml:space="preserve">
+    <value>Guia</value>
+  </data>
+  <data name="Coordinator" xml:space="preserve">
+    <value>Coordinador</value>
+  </data>
+  <data name="Enrolled" xml:space="preserve">
+    <value>Inscrito</value>
+  </data>
+  <data name="NoCycles" xml:space="preserve">
+    <value>No hay ciclos disponibles</value>
+  </data>
+  <data name="NoSessions" xml:space="preserve">
+    <value>Sin sesiones</value>
+  </data>
+  <data name="NoStaff" xml:space="preserve">
+    <value>Sin personal asignado</value>
+  </data>
+  <data name="ActiveCycles" xml:space="preserve">
+    <value>Ciclos Activos</value>
+  </data>
+  <data name="CycleClosed" xml:space="preserve">
+    <value>Ciclo Cerrado</value>
+  </data>
+  <data name="DeadlinePassed" xml:space="preserve">
+    <value>Fecha Limite Pasada</value>
+  </data>
+  <data name="RequiresCycle" xml:space="preserve">
+    <value>Requiere Ciclo</value>
+  </data>
+  <data name="AssignGuide" xml:space="preserve">
+    <value>Asignar Guia</value>
+  </data>
+  <data name="MarkAbandoned2" xml:space="preserve">
+    <value>Marcar como Abandonado</value>
+  </data>
+  <data name="RecordAttendance" xml:space="preserve">
+    <value>Registrar Asistencia</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Abierto</value>
+  </data>
+  <data name="Closed" xml:space="preserve">
+    <value>Cerrado</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Fecha Inicio</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>Fecha Fin</value>
+  </data>
+  <data name="Topic" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Rol</value>
+  </data>
+  <data name="AddSession" xml:space="preserve">
+    <value>Agregar Sesion</value>
+  </data>
+  <data name="AddStaff" xml:space="preserve">
+    <value>Agregar Personal</value>
+  </data>
+  <data name="EnrollDisciples" xml:space="preserve">
+    <value>Inscribir Discipulos</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Activo</value>
+  </data>
+  <data name="ManageCycles" xml:space="preserve">
+    <value>Administrar Ciclos</value>
+  </data>
+  <data name="NoEnrollments" xml:space="preserve">
+    <value>Sin inscripciones</value>
+  </data>
+  <data name="SelectCycle" xml:space="preserve">
+    <value>Seleccionar Ciclo</value>
+  </data>
+  <data name="Marry" xml:space="preserve">
+    <value>Casar</value>
+  </data>
+  <data name="MarryConfirmation" xml:space="preserve">
+    <value>{0} y {1} serán registrados como casados.</value>
+  </data>
+  <data name="MarriedSuccessfully" xml:space="preserve">
+    <value>{0} y {1} han sido casados exitosamente.</value>
+  </data>
+  <data name="Men" xml:space="preserve">
+    <value>Hombres</value>
+  </data>
+  <data name="Women" xml:space="preserve">
+    <value>Mujeres</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirmar</value>
+  </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>Sin resultados</value>
+  </data>
 </root>

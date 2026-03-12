@@ -55,21 +55,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.ToTable("CellPersonalInfo");
                 });
 
-            modelBuilder.Entity("ClassAttendancePersonalInfo", b =>
-                {
-                    b.Property<string>("AttendeesId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("ClassAttendancesId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("AttendeesId", "ClassAttendancesId");
-
-                    b.HasIndex("ClassAttendancesId");
-
-                    b.ToTable("ClassAttendancePersonalInfo");
-                });
-
             modelBuilder.Entity("DiscipleStepDiscipleStep", b =>
                 {
                     b.Property<int>("DiscipleStepId")
@@ -103,37 +88,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Announcements");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.Assignment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateOnly>("DateRecorded")
-                        .HasColumnType("date");
-
-                    b.Property<decimal>("Grade")
-                        .HasColumnType("numeric");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("SchoolId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Student")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SchoolId");
-
-                    b.ToTable("Assignments");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.Cell", b =>
@@ -201,96 +155,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.HasIndex("CellId");
 
                     b.ToTable("CellAttendances");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.Class", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("SchoolId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateOnly>("StartDate")
-                        .HasColumnType("date");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SchoolId");
-
-                    b.ToTable("Classes");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.ClassAttendance", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ClassId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ClassNumber")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ClassRefName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateOnly>("DateOfClass")
-                        .HasColumnType("date");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassId");
-
-                    b.ToTable("ClassAttendances");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.ClassStudent", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ClassId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("Debt")
-                        .HasColumnType("numeric");
-
-                    b.Property<bool>("Paid")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("StudentId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("ClassStudents");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.Convention", b =>
@@ -872,6 +736,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
+                    b.Property<string>("SpouseId")
+                        .HasColumnType("text");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
 
@@ -889,6 +756,10 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("SpouseId")
+                        .IsUnique()
+                        .HasFilter("\"SpouseId\" IS NOT NULL");
 
                     b.HasIndex("Name", "LastName");
 
@@ -923,27 +794,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("Role", (string)null);
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.School", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Schools");
                 });
 
             modelBuilder.Entity("MeetingAttendancePersonalInfo", b =>
@@ -1113,21 +963,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ClassAttendancePersonalInfo", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.PersonalInfo", null)
-                        .WithMany()
-                        .HasForeignKey("AttendeesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("JMMinistry.Domain.ClassAttendance", null)
-                        .WithMany()
-                        .HasForeignKey("ClassAttendancesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("DiscipleStepDiscipleStep", b =>
                 {
                     b.HasOne("JMMinistry.Domain.DiscipleJourney.DiscipleStep", null)
@@ -1141,15 +976,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .HasForeignKey("DiscipleStepRequirementsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.Assignment", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.School", "School")
-                        .WithMany()
-                        .HasForeignKey("SchoolId");
-
-                    b.Navigation("School");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.Cell", b =>
@@ -1176,45 +1002,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Cell");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.Class", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.School", "School")
-                        .WithMany("Classes")
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("School");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.ClassAttendance", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.Class", "Class")
-                        .WithMany("ClassAttendances")
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Class");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.ClassStudent", b =>
-                {
-                    b.HasOne("JMMinistry.Domain.Class", "Class")
-                        .WithMany()
-                        .HasForeignKey("ClassId");
-
-                    b.HasOne("JMMinistry.Domain.PersonalInfo", "Student")
-                        .WithMany("Classes")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Class");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("JMMinistry.Domain.ConventionAttendee", b =>
@@ -1433,7 +1220,14 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .WithMany("Disciples")
                         .HasForeignKey("CellId");
 
+                    b.HasOne("JMMinistry.Domain.PersonalInfo", "Spouse")
+                        .WithOne()
+                        .HasForeignKey("JMMinistry.Domain.PersonalInfo", "SpouseId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Cell");
+
+                    b.Navigation("Spouse");
                 });
 
             modelBuilder.Entity("MeetingAttendancePersonalInfo", b =>
@@ -1511,11 +1305,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Navigation("Disciples");
                 });
 
-            modelBuilder.Entity("JMMinistry.Domain.Class", b =>
-                {
-                    b.Navigation("ClassAttendances");
-                });
-
             modelBuilder.Entity("JMMinistry.Domain.DiscipleJourney.CycleSession", b =>
                 {
                     b.Navigation("Attendances");
@@ -1559,8 +1348,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("JMMinistry.Domain.PersonalInfo", b =>
                 {
-                    b.Navigation("Classes");
-
                     b.Navigation("ConventionInvites");
 
                     b.Navigation("Conventions");
@@ -1575,11 +1362,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("JMMinistry.Domain.Role", b =>
                 {
                     b.Navigation("UserRoles");
-                });
-
-            modelBuilder.Entity("JMMinistry.Domain.School", b =>
-                {
-                    b.Navigation("Classes");
                 });
 #pragma warning restore 612, 618
         }

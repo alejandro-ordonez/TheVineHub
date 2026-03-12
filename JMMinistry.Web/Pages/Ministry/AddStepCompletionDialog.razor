@@ -1,11 +1,13 @@
 @using Fluxor
 @using Fluxor.Blazor.Web.Components
+@using JMMinistry.Common.Dtos.DiscipleJourney
 @using JMMinistry.Web.Pages.User.Components
 @using JMMinistry.Web.Pages.User.Dialogs
 @using JMMinistry.Web.Shared.Components
 @using JMMinistry.Web.Store.StepDisciplesUseCase
 @using JMMinistry.Web.Store.StepDisciplesUseCase.Actions
 @using JMMinistry.Common.Dtos.User
+@using JMMinistry.Web.Api
 
 @inherits FluxorComponent
 
@@ -13,6 +15,7 @@
 @inject IDispatcher Dispatcher
 @inject IStringLocalizer<UIStrings> Translator
 @inject IDialogService DialogService
+@inject IUserApi UserApi
 
 <MudDialog>
     <DialogContent>
@@ -50,9 +53,36 @@
             }
         }
 
-        <MudDatePicker Class="mt-4" @bind-Date="_completionDate" Label="@Translator["CompletionDate"]" Variant="Variant.Outlined" />
+        @if (RequiresCycle)
+        {
+            @if (StepDisciplesState.Value.IsLoadingActiveCycles)
+            {
+                <MudProgressLinear Indeterminate="true" Color="Color.Primary" Class="mt-4" />
+            }
+            else if (StepDisciplesState.Value.ActiveCycles.Count == 0)
+            {
+                <MudAlert Severity="Severity.Warning" Class="mt-4">@Translator["NoCycles"]</MudAlert>
+            }
+            else
+            {
+                <MudSelect T="int?" @bind-Value="_selectedCycleId"
+                           Label="@Translator["SelectCycle"]"
+                           Variant="Variant.Outlined"
+                           Class="mt-4"
+                           Required="true">
+                    @foreach (var cycle in StepDisciplesState.Value.ActiveCycles)
+                    {
+                        <MudSelectItem T="int?" Value="@cycle.Id">@cycle.Name</MudSelectItem>
+                    }
+                </MudSelect>
+            }
+        }
+        else
+        {
+            <MudDatePicker Class="mt-4" @bind-Date="_completionDate" Label="@Translator["CompletionDate"]" Variant="Variant.Outlined" />
+        }
 
-        @if (!HasRequirements)
+        @if (!HasRequirements && !RequiresCycle)
         {
             <MudButton Class="mt-4"
                        Variant="Variant.Outlined"
@@ -67,9 +97,9 @@
         <MudButton OnClick="Cancel">@Translator["Cancel"]</MudButton>
         <MudButton Color="Color.Primary"
                    Variant="Variant.Filled"
-                   Disabled="@(SelectedDocuments.Count == 0)"
+                   Disabled="@(SelectedDocuments.Count == 0 || (RequiresCycle && _selectedCycleId is null))"
                    OnClick="Submit">
-            @Translator["Add"]
+            @(RequiresCycle ? Translator["EnrollDisciples"] : Translator["Add"])
         </MudButton>
     </DialogActions>
 </MudDialog>
@@ -84,13 +114,21 @@
     [Parameter]
     public bool HasRequirements { get; set; }
 
+    [Parameter]
+    public bool RequiresCycle { get; set; }
+
     private HashSet<string> SelectedDocuments { get; set; } = [];
     private DateTime? _completionDate = DateTime.Today;
+    private int? _selectedCycleId;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         Dispatcher.Dispatch(new FetchEligibleDisciplesAction { StepId = StepId });
+        if (RequiresCycle)
+        {
+            Dispatcher.Dispatch(new FetchActiveCyclesAction { StepId = StepId });
+        }
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -120,14 +158,25 @@
         var dialog = await DialogService.ShowAsync<AddUserDialog>(Translator["AddNewUser"]);
         var result = await dialog.GetReturnValueAsync<DialogResult<CreateUserInfoDto>>();
 
-        if (result?.Data is not null)
+        if (result?.Data is null)
+            return;
+
+        var response = result.Data.IsUpdate
+            ? await UserApi.UpdateUser(result.Data)
+            : await UserApi.CreateUser(result.Data);
+
+        if (response?.Success ?? false)
+        {
             SelectedDocuments.Add(result.Data.Document);
+            Dispatcher.Dispatch(new FetchEligibleDisciplesAction { StepId = StepId });
+        }
     }
 
     private void Submit() => MudDialog?.Close(new StepCompletionDialogResult
     {
         Documents = SelectedDocuments,
-        CompletionDate = DateOnly.FromDateTime(_completionDate ?? DateTime.Today)
+        CompletionDate = DateOnly.FromDateTime(_completionDate ?? DateTime.Today),
+        CycleId = _selectedCycleId
     });
 
     private void Cancel() => MudDialog?.Cancel();
@@ -136,5 +185,6 @@
     {
         public HashSet<string> Documents { get; set; } = [];
         public DateOnly CompletionDate { get; set; }
+        public int? CycleId { get; set; }
     }
 }

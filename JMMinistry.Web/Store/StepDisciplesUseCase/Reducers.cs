@@ -29,6 +29,22 @@ namespace JMMinistry.Web.Store.StepDisciplesUseCase
         public static StepDisciplesState ReduceCompleteStepResultAction(StepDisciplesState state, CompleteStepResultAction action) =>
             state with { IsCompletingStep = false };
 
+        [ReducerMethod(typeof(FetchActiveCyclesAction))]
+        public static StepDisciplesState ReduceFetchActiveCyclesAction(StepDisciplesState state) =>
+            state with { IsLoadingActiveCycles = true };
+
+        [ReducerMethod]
+        public static StepDisciplesState ReduceFetchActiveCyclesResultAction(StepDisciplesState state, FetchActiveCyclesResultAction action) =>
+            state with { IsLoadingActiveCycles = false, ActiveCycles = action.Cycles };
+
+        [ReducerMethod(typeof(EnrollDisciplesAction))]
+        public static StepDisciplesState ReduceEnrollDisciplesAction(StepDisciplesState state) =>
+            state with { IsCompletingStep = true };
+
+        [ReducerMethod(typeof(EnrollDisciplesResultAction))]
+        public static StepDisciplesState ReduceEnrollDisciplesResultAction(StepDisciplesState state) =>
+            state with { IsCompletingStep = false };
+
         [ReducerMethod]
         public static StepDisciplesState ReduceUpdateStepCompletionAction(StepDisciplesState state, UpdateStepCompletionAction action) =>
             state with { IsUpdatingCompletion = true };

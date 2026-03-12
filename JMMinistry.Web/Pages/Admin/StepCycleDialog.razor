@@ -1,0 +1,97 @@
+@using JMMinistry.Common.Dtos.DiscipleJourney
+
+@inject IStringLocalizer<UIStrings> translator
+
+<Dialog ResultType="StepCycleDialogResult"
+        Result="Model"
+        Color="Color.Primary"
+        PrimaryText="@(IsEditMode ? translator["Save"] : translator["Create"])">
+    <Content>
+        <MudForm @ref="_form">
+            <MudTextField @bind-Value="Model.Name"
+                          Label="@translator["Name"]"
+                          Required="true"
+                          RequiredError="@translator["FieldRequired"]"
+                          Variant="Variant.Outlined" />
+
+            <MudDatePicker @bind-Date="_startDate"
+                           Label="@translator["StartDate"]"
+                           Variant="Variant.Outlined"
+                           Required="true" />
+
+            <MudDatePicker @bind-Date="_endDate"
+                           Label="@translator["EndDate"]"
+                           Variant="Variant.Outlined"
+                           Required="true" />
+
+            <MudNumericField T="int" @bind-Value="Model.MinAttendanceRequired"
+                             Label="@translator["MinAttendance"]"
+                             Variant="Variant.Outlined"
+                             Min="1" />
+
+            <MudDatePicker @bind-Date="_enrollmentDeadline"
+                           Label="@translator["EnrollmentDeadline"]"
+                           Variant="Variant.Outlined"
+                           Clearable="true" />
+
+            @if (IsEditMode)
+            {
+                <MudSwitch T="bool" @bind-Value="Model.IsOpen"
+                           Label="@(Model.IsOpen ? translator["Open"] : translator["Closed"])"
+                           Color="Color.Primary"
+                           Class="mt-2" />
+            }
+        </MudForm>
+    </Content>
+</Dialog>
+
+@code {
+    [Parameter]
+    public StepCycleDto? ExistingCycle { get; set; }
+
+    StepCycleDialogResult Model { get; set; } = new();
+
+    MudForm? _form;
+    DateTime? _startDate = DateTime.Today;
+    DateTime? _endDate = DateTime.Today.AddMonths(1);
+    DateTime? _enrollmentDeadline;
+
+    bool IsEditMode => ExistingCycle is not null;
+
+    protected override void OnInitialized()
+    {
+        if (ExistingCycle is not null)
+        {
+            Model.Name = ExistingCycle.Name;
+            Model.MinAttendanceRequired = ExistingCycle.MinAttendanceRequired;
+            Model.IsOpen = ExistingCycle.IsOpen;
+            _startDate = ExistingCycle.StartDate.ToDateTime(TimeOnly.MinValue);
+            _endDate = ExistingCycle.EndDate.ToDateTime(TimeOnly.MinValue);
+            _enrollmentDeadline = ExistingCycle.EnrollmentDeadline?.ToDateTime(TimeOnly.MinValue);
+        }
+        else
+        {
+            Model.IsOpen = true;
+            Model.MinAttendanceRequired = 1;
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        Model.StartDate = DateOnly.FromDateTime(_startDate ?? DateTime.Today);
+        Model.EndDate = DateOnly.FromDateTime(_endDate ?? DateTime.Today.AddMonths(1));
+        Model.EnrollmentDeadline = _enrollmentDeadline is not null
+            ? DateOnly.FromDateTime(_enrollmentDeadline.Value)
+            : null;
+    }
+
+    public class StepCycleDialogResult
+    {
+        public string Name { get; set; } = string.Empty;
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
+        public int MinAttendanceRequired { get; set; }
+        public bool IsOpen { get; set; }
+        public DateOnly? EnrollmentDeadline { get; set; }
+    }
+}

@@ -11,6 +11,7 @@ namespace JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateDiscipl
         public required string Name { get; set; }
         public required string Description { get; set; }
         public required StepCategory StepCategory { get; set; }
+        public bool RequiresCycle { get; set; }
         public IList<int> RequirementIds { get; set; } = [];
         public int? ParentStepId { get; set; }
     }

@@ -21,15 +21,8 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
 
     public virtual DbSet<Announcement> Announcements { get; set; }
 
-    public virtual DbSet<Assignment> Assignments { get; set; }
-
     public virtual DbSet<Cell> Cells { get; set; }
     public virtual DbSet<CellAttendance> CellAttendances { get; set; }
-
-    public virtual DbSet<Class> Classes { get; set; }
-    public virtual DbSet<ClassAttendance> ClassAttendances { get; set; }
-
-    public virtual DbSet<ClassStudent> ClassStudents { get; set; }
 
     public virtual DbSet<Convention> Conventions { get; set; }
     public virtual DbSet<ConventionAttendee> ConventionAttendees { get; set; }
@@ -56,8 +49,6 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
     public virtual DbSet<Role> Ministries { get; set; }
 
     public virtual DbSet<PersonalInfo> PersonalInfo { get; set; }
-
-    public virtual DbSet<School> Schools { get; set; }
 
     public virtual DbSet<City> Cities { get; set; }
 
@@ -86,6 +77,13 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
                 .WithOne(e => e.PersonalInfo)
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
+
+            user.HasOne(u => u.Spouse)
+                .WithOne()
+                .HasForeignKey<PersonalInfo>(u => u.SpouseId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            user.HasIndex(u => u.SpouseId).IsUnique().HasFilter("\"SpouseId\" IS NOT NULL");
 
             user.ToTable(nameof(PersonalInfo));
         });

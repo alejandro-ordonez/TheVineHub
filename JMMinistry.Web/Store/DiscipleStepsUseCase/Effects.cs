@@ -11,14 +11,15 @@ namespace JMMinistry.Web.Store.DiscipleStepsUseCase
         [EffectMethod]
         public async Task HandleFetchDiscipleStepsAction(FetchDiscipleStepsAction action, IDispatcher dispatcher)
         {
-            if (state.Value.LastFetched is not null
+            if (!action.ForceFresh
+                && state.Value.LastFetched is not null
                 && DateTime.UtcNow - state.Value.LastFetched.Value < CacheDuration)
             {
                 dispatcher.Dispatch(new FetchDiscipleStepsResultAction { Steps = state.Value.Steps });
                 return;
             }
 
-            var result = await discipleJourneyApi.GetStepsAsync();
+            var result = await discipleJourneyApi.GetStepsAsync(forceFresh: action.ForceFresh);
 
             if (result is null || !result.Success || result.Data is null)
             {
@@ -41,7 +42,7 @@ namespace JMMinistry.Web.Store.DiscipleStepsUseCase
             }
 
             dispatcher.Dispatch(new CreateDiscipleStepResultAction { Step = result.Data });
-            dispatcher.Dispatch(new FetchDiscipleStepsAction());
+            dispatcher.Dispatch(new FetchDiscipleStepsAction { ForceFresh = true });
         }
 
         [EffectMethod]
@@ -56,7 +57,7 @@ namespace JMMinistry.Web.Store.DiscipleStepsUseCase
             }
 
             dispatcher.Dispatch(new DeleteDiscipleStepResultAction { StepId = action.StepId });
-            dispatcher.Dispatch(new FetchDiscipleStepsAction());
+            dispatcher.Dispatch(new FetchDiscipleStepsAction { ForceFresh = true });
         }
 
         [EffectMethod]
@@ -71,7 +72,7 @@ namespace JMMinistry.Web.Store.DiscipleStepsUseCase
             }
 
             dispatcher.Dispatch(new UpdateDiscipleStepResultAction { Step = result.Data });
-            dispatcher.Dispatch(new FetchDiscipleStepsAction());
+            dispatcher.Dispatch(new FetchDiscipleStepsAction { ForceFresh = true });
         }
     }
 }

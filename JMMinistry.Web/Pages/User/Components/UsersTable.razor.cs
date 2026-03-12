@@ -22,6 +22,9 @@ namespace JMMinistry.Web.Pages.User.Components
         public HashSet<PartialUserInfoDto> Selected { get; set; } = [];
 
         [Parameter]
+        public EventCallback<HashSet<PartialUserInfoDto>> SelectedChanged { get; set; }
+
+        [Parameter]
         public EventCallback<UserEventArgs> EditUser { get; set; }
 
         [Parameter]
@@ -59,6 +62,12 @@ namespace JMMinistry.Web.Pages.User.Components
                 Items = users?.Results ?? [],
                 TotalItems = users?.Total ?? 0
             };
+        }
+
+        private async Task OnSelectedItemsChanged(HashSet<PartialUserInfoDto> items)
+        {
+            Selected = items;
+            await SelectedChanged.InvokeAsync(items);
         }
 
         private void OnSearch(string text)

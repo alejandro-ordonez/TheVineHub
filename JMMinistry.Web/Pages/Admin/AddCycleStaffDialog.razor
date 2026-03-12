@@ -1,0 +1,92 @@
+@using JMMinistry.Common.Dtos.Common
+@using JMMinistry.Common.Dtos.DiscipleJourney.Enums
+@using JMMinistry.Common.Dtos.User
+@using JMMinistry.Common.Dtos.User.Enums
+@using JMMinistry.Web.Api
+@using JMMinistry.Web.Pages.User.Components
+@using JMMinistry.Web.Services
+@using System.Security.Claims
+
+@inject IAuthStateProvider authState;
+@inject IUserApi userApi;
+@inject IStringLocalizer<UIStrings> translator;
+
+<MudDialog>
+    <DialogContent>
+        <MudSelect T="CycleStaffRole" @bind-Value="_role" Label="@translator["Role"]"
+                   Variant="Variant.Outlined" Class="mb-4">
+            <MudSelectItem Value="CycleStaffRole.Guide">@translator["Guide"]</MudSelectItem>
+            <MudSelectItem Value="CycleStaffRole.Coordinator">@translator["Coordinator"]</MudSelectItem>
+        </MudSelect>
+
+        <UsersTable FetchUsers="FetchUsers"
+                    Selectable="true"
+                    @bind-Selected="SelectedUsers">
+        </UsersTable>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">@translator["Cancel"]</MudButton>
+        <MudButton Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   Disabled="@(SelectedUsers.Count == 0)"
+                   OnClick="Submit">
+            @translator["AddStaff"]
+        </MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance? MudDialog { get; set; }
+
+    string? UserId { get; set; }
+    CycleStaffRole _role = CycleStaffRole.Guide;
+
+    public HashSet<PartialUserInfoDto> SelectedUsers { get; set; } = [];
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (MudDialog is not null && firstRender)
+        {
+            var options = MudDialog.Options with { FullWidth = true, MaxWidth = MaxWidth.Large };
+            await MudDialog.SetOptionsAsync(options);
+        }
+
+        var state = await authState.GetAuthenticationStateAsync();
+        UserId = state.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
+    }
+
+    async Task<PagedResponse<PartialUserInfoDto>> FetchUsers(TableState state, string searchString)
+    {
+        var criteria = new UsersSearchCriteria
+        {
+            Requestor = UserId,
+            LastName = searchString,
+            OrderByMember = state.SortLabel,
+            OrderDirection = state.SortDirection.ToString(),
+            Page = state.Page,
+            PageSize = state.PageSize
+        };
+
+        var results = await userApi.GetUserByCriteria(criteria);
+
+        if (!results?.Success ?? true)
+            return new PagedResponse<PartialUserInfoDto>();
+
+        return results?.Data ?? new PagedResponse<PartialUserInfoDto>();
+    }
+
+    private void Submit() => MudDialog?.Close(new AddCycleStaffResult
+    {
+        SelectedUsers = SelectedUsers,
+        Role = _role
+    });
+
+    private void Cancel() => MudDialog?.Cancel();
+
+    public record AddCycleStaffResult
+    {
+        public HashSet<PartialUserInfoDto> SelectedUsers { get; set; } = [];
+        public CycleStaffRole Role { get; set; }
+    }
+}

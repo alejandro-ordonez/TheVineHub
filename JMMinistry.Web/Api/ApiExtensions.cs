@@ -29,7 +29,6 @@ namespace JMMinistry.Web.Api
 
 
             services.AddTransient<IUserApi, UserApi>();
-            services.AddTransient<ISchoolApi, SchoolApi>();
             services.AddTransient<IMinistryApi, MinistryApi>();
             services.AddTransient<IGainedUsersApi, GainedUserApi>();
             services.AddTransient<IMeetingApi, MeetingApi>();

@@ -1,12 +1,10 @@
 using System.Text.Json;
 using JMMinistry.Common.Dtos.Cell;
-using JMMinistry.Common.Dtos.Class;
 using JMMinistry.Common.Dtos.Common;
 using JMMinistry.Common.Dtos.DiscipleJourney;
 using JMMinistry.Common.Dtos.Discipleship;
 using JMMinistry.Common.Dtos.Gained;
 using JMMinistry.Common.Dtos.Meetings;
-using JMMinistry.Common.Dtos.School;
 using JMMinistry.Common.Dtos.User;
 using JMMinistry.Domain;
 using JMMinistry.Domain.Discipleship;
@@ -41,8 +39,7 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(PersonalInfo.Cells))]
         [MapperIgnoreSource(nameof(PersonalInfo.MeetingAttendances))]
         [MapperIgnoreSource(nameof(PersonalInfo.CellAttendances))]
-        [MapperIgnoreSource(nameof(PersonalInfo.ClassAttendances))]
-        [MapperIgnoreSource(nameof(PersonalInfo.Classes))]
+
         [MapperIgnoreSource(nameof(PersonalInfo.Conventions))]
         [MapperIgnoreSource(nameof(PersonalInfo.ConventionInvites))]
         [MapperIgnoreSource(nameof(PersonalInfo.UserRoles))]
@@ -73,7 +70,6 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(PersonalInfo.EducationalLevel))]
         [MapperIgnoreSource(nameof(PersonalInfo.Profession))]
         [MapperIgnoreSource(nameof(PersonalInfo.Occupation))]
-        [MapperIgnoreSource(nameof(PersonalInfo.MaritalStatus))]
         [MapperIgnoreSource(nameof(PersonalInfo.Birthday))]
         [MapperIgnoreSource(nameof(PersonalInfo.LastAccess))]
         [MapperIgnoreSource(nameof(PersonalInfo.Cell))]
@@ -81,8 +77,7 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(PersonalInfo.Cells))]
         [MapperIgnoreSource(nameof(PersonalInfo.MeetingAttendances))]
         [MapperIgnoreSource(nameof(PersonalInfo.CellAttendances))]
-        [MapperIgnoreSource(nameof(PersonalInfo.ClassAttendances))]
-        [MapperIgnoreSource(nameof(PersonalInfo.Classes))]
+
         [MapperIgnoreSource(nameof(PersonalInfo.Conventions))]
         [MapperIgnoreSource(nameof(PersonalInfo.ConventionInvites))]
         [MapperIgnoreSource(nameof(PersonalInfo.UserRoles))]
@@ -112,29 +107,11 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreTarget(nameof(PersonalInfo.Cells))]
         [MapperIgnoreTarget(nameof(PersonalInfo.MeetingAttendances))]
         [MapperIgnoreTarget(nameof(PersonalInfo.CellAttendances))]
-        [MapperIgnoreTarget(nameof(PersonalInfo.ClassAttendances))]
-        [MapperIgnoreTarget(nameof(PersonalInfo.Classes))]
+
         [MapperIgnoreTarget(nameof(PersonalInfo.Conventions))]
         [MapperIgnoreTarget(nameof(PersonalInfo.ConventionInvites))]
         [MapperIgnoreTarget(nameof(PersonalInfo.UserRoles))]
         public partial PersonalInfo UserInfoDtoToPersonalInfo(UserInfoDto source);
-
-        // ===== School mappings =====
-
-        [MapperIgnoreSource(nameof(School.Classes))]
-        public partial SchoolDto SchoolToSchoolDto(School source);
-
-        [MapperIgnoreTarget(nameof(School.Classes))]
-        public partial School SchoolDtoToSchool(SchoolDto source);
-
-        public partial SchoolWithClassesDto SchoolToSchoolWithClassesDto(School source);
-
-        // ===== Class mappings =====
-
-        [MapperIgnoreSource(nameof(Class.SchoolId))]
-        [MapperIgnoreSource(nameof(Class.School))]
-        [MapperIgnoreSource(nameof(Class.ClassAttendances))]
-        public partial ClassDto ClassToClassDto(Class source);
 
         // ===== Cell mappings =====
 
@@ -184,8 +161,7 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreTarget(nameof(PersonalInfo.Cells))]
         [MapperIgnoreTarget(nameof(PersonalInfo.MeetingAttendances))]
         [MapperIgnoreTarget(nameof(PersonalInfo.CellAttendances))]
-        [MapperIgnoreTarget(nameof(PersonalInfo.ClassAttendances))]
-        [MapperIgnoreTarget(nameof(PersonalInfo.Classes))]
+
         [MapperIgnoreTarget(nameof(PersonalInfo.Conventions))]
         [MapperIgnoreTarget(nameof(PersonalInfo.ConventionInvites))]
         [MapperIgnoreTarget(nameof(PersonalInfo.UserRoles))]
@@ -221,8 +197,7 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(PersonalInfo.Cells))]
         [MapperIgnoreSource(nameof(PersonalInfo.MeetingAttendances))]
         [MapperIgnoreSource(nameof(PersonalInfo.CellAttendances))]
-        [MapperIgnoreSource(nameof(PersonalInfo.ClassAttendances))]
-        [MapperIgnoreSource(nameof(PersonalInfo.Classes))]
+
         [MapperIgnoreSource(nameof(PersonalInfo.Conventions))]
         [MapperIgnoreSource(nameof(PersonalInfo.ConventionInvites))]
         [MapperIgnoreSource(nameof(PersonalInfo.UserRoles))]
@@ -293,6 +268,7 @@ namespace JMMinistry.Application.Mappers
         [MapperIgnoreSource(nameof(DiscipleStep.DiscipleStepRequirements))]
         [MapperIgnoreSource(nameof(DiscipleStep.SubSteps))]
         [MapperIgnoreSource(nameof(DiscipleStep.ParentStep))]
+        [MapperIgnoreSource(nameof(DiscipleStep.Cycles))]
         [MapperIgnoreTarget(nameof(DiscipleStepDto.RequirementIds))]
         [MapperIgnoreTarget(nameof(DiscipleStepDto.SubSteps))]
         private partial DiscipleStepDto DiscipleStepToDto(DiscipleStep source);
@@ -312,7 +288,6 @@ namespace JMMinistry.Application.Mappers
 
         public partial IList<PartialUserInfoDto> PersonalInfoListToPartialUserInfoDtoList(IEnumerable<PersonalInfo> source);
         public partial IEnumerable<CellDto> CellListToCellDtoList(IEnumerable<Cell> source);
-        public partial IEnumerable<SchoolDto> SchoolListToSchoolDtoList(IEnumerable<School> source);
         public partial IList<MeetingDto> MeetingListToMeetingDtoList(IEnumerable<Meeting> source);
         public partial IList<CityDto> CityListToCityDtoList(IEnumerable<City> source);
         public partial List<PartialUserInfoDto> PersonalInfoCollectionToPartialUserInfoDtoListConcrete(ICollection<PersonalInfo> source);

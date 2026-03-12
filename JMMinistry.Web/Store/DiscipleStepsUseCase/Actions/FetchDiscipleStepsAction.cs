@@ -2,7 +2,10 @@ using JMMinistry.Common.Dtos.DiscipleJourney;
 
 namespace JMMinistry.Web.Store.DiscipleStepsUseCase.Actions
 {
-    public record FetchDiscipleStepsAction;
+    public record FetchDiscipleStepsAction
+    {
+        public bool ForceFresh { get; set; }
+    }
 
     public record FetchDiscipleStepsResultAction
     {
