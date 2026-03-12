@@ -25,5 +25,7 @@ RUN dotnet publish "./JMMinistry.API.csproj" -c $BUILD_CONFIGURATION -o /app/pub
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-RUN mkdir -p /app/uploads/photos
+USER root
+RUN mkdir -p /app/uploads/photos && chown -R app:app /app/uploads
+USER app
 ENTRYPOINT ["dotnet", "JMMinistry.API.dll"]

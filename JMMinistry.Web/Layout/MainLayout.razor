@@ -41,7 +41,7 @@
 
                 else
                 {
-                    <MudImage Src="@User.Photo"></MudImage>
+                    <MudImage Src="@userApi.GetPhotoUrl(User.Photo!)" />
                 }
             </MudAvatar>
 
