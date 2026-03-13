@@ -609,6 +609,12 @@
   <data name="Closed" xml:space="preserve">
     <value>Cerrado</value>
   </data>
+  <data name="Year" xml:space="preserve">
+    <value>Año</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Todos</value>
+  </data>
   <data name="StartDate" xml:space="preserve">
     <value>Fecha Inicio</value>
   </data>
