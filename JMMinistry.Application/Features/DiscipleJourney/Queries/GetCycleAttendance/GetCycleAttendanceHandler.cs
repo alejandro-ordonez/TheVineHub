@@ -29,7 +29,8 @@ public class GetCycleAttendanceHandler(IJmDbContext dbContext)
                 {
                     DiscipleId = r.disciple_id,
                     DiscipleName = r.disciple_name,
-                    Attended = r.attended
+                    Attended = r.attended,
+                    IsAbandoned = r.is_abandoned
                 }).ToList()
             })
             .ToList();

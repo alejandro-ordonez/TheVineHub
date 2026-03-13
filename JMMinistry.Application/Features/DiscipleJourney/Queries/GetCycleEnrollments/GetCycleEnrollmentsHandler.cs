@@ -26,7 +26,7 @@ public class GetCycleEnrollmentsHandler(IJmDbContext dbContext)
             DiscipleName = r.disciple_name,
             CycleStaffId = r.cycle_staff_id,
             GuideName = r.guide_name,
-            Status = (EnrollmentStatus)r.status,
+            Status = (StepStatus)r.status,
             EnrolledAt = r.enrolled_at,
             AttendanceCount = r.attendance_count
         }).ToList();

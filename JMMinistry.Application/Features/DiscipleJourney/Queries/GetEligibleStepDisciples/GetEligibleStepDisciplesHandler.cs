@@ -36,7 +36,7 @@ public class GetEligibleStepDisciplesHandler(IJmDbContext dbContext)
                     Phone = r.disciple_phone,
                     Gender = (Gender)r.disciple_gender,
                     CellId = r.disciple_cell_id,
-                    StepStatus = StepStatus.InProgress,
+                    StepStatus = null,
                     LastUpdated = r.last_updated
                 }).ToList()
             })

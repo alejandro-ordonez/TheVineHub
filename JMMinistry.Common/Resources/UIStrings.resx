@@ -310,7 +310,7 @@
     <value>More info</value>
   </data>
   <data name="CellMates" xml:space="preserve">
-    <value>Cell mates</value>
+    <value>Fellow servants</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
@@ -533,6 +533,9 @@
   <data name="MarkCompleted" xml:space="preserve">
     <value>Mark Completed</value>
   </data>
+  <data name="CloseCycle" xml:space="preserve">
+    <value>Close Cycle</value>
+  </data>
   <data name="MarkAbandoned" xml:space="preserve">
     <value>Mark Abandoned</value>
   </data>
@@ -683,5 +686,14 @@
   </data>
   <data name="RequiresCycleWarning" xml:space="preserve">
     <value>Enabling cycles prevents adding sub-steps to this step.</value>
+  </data>
+  <data name="InPrayers" xml:space="preserve">
+    <value>In Prayers</value>
+  </data>
+  <data name="InitialStatus" xml:space="preserve">
+    <value>Initial Status</value>
+  </data>
+  <data name="RequiresAdminApproval" xml:space="preserve">
+    <value>Requires admin approval</value>
   </data>
 </root>

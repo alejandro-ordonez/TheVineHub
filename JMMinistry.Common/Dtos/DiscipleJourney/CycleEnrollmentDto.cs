@@ -9,7 +9,7 @@ namespace JMMinistry.Common.Dtos.DiscipleJourney
         public string DiscipleName { get; set; } = string.Empty;
         public int? CycleStaffId { get; set; }
         public string? GuideName { get; set; }
-        public EnrollmentStatus Status { get; set; }
+        public StepStatus Status { get; set; }
         public DateOnly EnrolledAt { get; set; }
         public int AttendanceCount { get; set; }
     }

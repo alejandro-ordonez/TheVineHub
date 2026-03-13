@@ -73,6 +73,7 @@ namespace JMMinistry.API.Controllers
                 Description = dto.Description,
                 StepCategory = dto.StepCategory,
                 RequiresCycle = dto.RequiresCycle,
+                RequiresAdminApproval = dto.RequiresAdminApproval,
                 RequirementIds = dto.RequirementIds,
                 ParentStepId = dto.ParentStepId
             });
@@ -92,6 +93,7 @@ namespace JMMinistry.API.Controllers
                 Description = dto.Description,
                 StepCategory = dto.StepCategory,
                 RequiresCycle = dto.RequiresCycle,
+                RequiresAdminApproval = dto.RequiresAdminApproval,
                 RequirementIds = dto.RequirementIds,
                 ParentStepId = dto.ParentStepId
             });
@@ -299,7 +301,8 @@ namespace JMMinistry.API.Controllers
             {
                 CycleId = cycleId,
                 LeaderId = requestorId,
-                DiscipleIds = dto.DiscipleIds
+                DiscipleIds = dto.DiscipleIds,
+                InitialStatus = (Domain.DiscipleJourney.StepStatus?)(int?)dto.InitialStatus
             });
 
             await cache.EvictByTagAsync(CacheTags.CycleData, default);
@@ -313,7 +316,7 @@ namespace JMMinistry.API.Controllers
             {
                 CycleId = cycleId,
                 EnrollmentId = enrollmentId,
-                Status = dto.Status
+                Status = (Domain.DiscipleJourney.StepStatus)(int)dto.Status
             });
 
             await cache.EvictByTagAsync(CacheTags.CycleData, default);

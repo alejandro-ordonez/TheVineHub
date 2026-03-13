@@ -8,5 +8,6 @@ namespace JMMinistry.Application.Features.DiscipleJourney.Queries.GetCycleAttend
         public string disciple_id { get; set; } = null!;
         public string disciple_name { get; set; } = null!;
         public bool attended { get; set; }
+        public bool is_abandoned { get; set; }
     }
 }

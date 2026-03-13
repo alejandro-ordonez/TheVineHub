@@ -24,6 +24,7 @@ public class CreateDiscipleStepHandler(IJmDbContext dbContext, AppMapper mapper)
             Description = request.Description,
             StepCategory = request.StepCategory,
             RequiresCycle = request.RequiresCycle,
+            RequiresAdminApproval = request.RequiresAdminApproval,
             ParentStepId = request.ParentStepId,
             DiscipleStepRequirements = requirements
         };

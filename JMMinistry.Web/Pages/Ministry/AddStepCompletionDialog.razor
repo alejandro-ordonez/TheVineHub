@@ -1,6 +1,7 @@
 @using Fluxor
 @using Fluxor.Blazor.Web.Components
 @using JMMinistry.Common.Dtos.DiscipleJourney
+@using JMMinistry.Common.Dtos.DiscipleJourney.Enums
 @using JMMinistry.Web.Pages.User.Components
 @using JMMinistry.Web.Pages.User.Dialogs
 @using JMMinistry.Web.Shared.Components
@@ -75,6 +76,17 @@
                         <MudSelectItem T="int?" Value="@cycle.Id">@cycle.Name</MudSelectItem>
                     }
                 </MudSelect>
+
+                @if (_selectedCycleId.HasValue)
+                {
+                    <MudSelect T="StepStatus?" @bind-Value="_selectedInitialStatus"
+                               Label="@Translator["InitialStatus"]"
+                               Variant="Variant.Outlined"
+                               Class="mt-4">
+                        <MudSelectItem T="StepStatus?" Value="@((StepStatus?)StepStatus.Enrolled)">@Translator["Enrolled"]</MudSelectItem>
+                        <MudSelectItem T="StepStatus?" Value="@((StepStatus?)StepStatus.InPrayers)">@Translator["InPrayers"]</MudSelectItem>
+                    </MudSelect>
+                }
             }
         }
         else
@@ -120,6 +132,7 @@
     private HashSet<string> SelectedDocuments { get; set; } = [];
     private DateTime? _completionDate = DateTime.Today;
     private int? _selectedCycleId;
+    private StepStatus? _selectedInitialStatus = StepStatus.Enrolled;
 
     protected override void OnInitialized()
     {
@@ -180,7 +193,8 @@
     {
         Documents = SelectedDocuments,
         CompletionDate = DateOnly.FromDateTime(_completionDate ?? DateTime.Today),
-        CycleId = _selectedCycleId
+        CycleId = _selectedCycleId,
+        InitialStatus = _selectedCycleId.HasValue ? _selectedInitialStatus : null
     });
 
     private void Cancel() => MudDialog?.Cancel();
@@ -190,5 +204,6 @@
         public HashSet<string> Documents { get; set; } = [];
         public DateOnly CompletionDate { get; set; }
         public int? CycleId { get; set; }
+        public StepStatus? InitialStatus { get; set; }
     }
 }

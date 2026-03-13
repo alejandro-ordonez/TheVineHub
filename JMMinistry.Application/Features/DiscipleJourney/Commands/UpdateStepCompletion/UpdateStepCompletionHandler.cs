@@ -20,20 +20,6 @@ public class UpdateStepCompletionHandler(IJmDbContext dbContext)
         completion.StepStatus = request.StepStatus;
         completion.LastUpdated = request.CompletionDate ?? DateOnly.FromDateTime(DateTime.UtcNow);
 
-        // When abandoning, also abandon any active cycle enrollment for this step
-        if (request.StepStatus == StepStatus.Abandoned)
-        {
-            var activeEnrollment = await dbContext.CycleEnrollments
-                .FirstOrDefaultAsync(ce =>
-                    ce.DiscipleId == request.DiscipleId &&
-                    ce.Status == EnrollmentStatus.Active &&
-                    ce.StepCycle!.DiscipleStepId == request.StepId,
-                    cancellationToken);
-
-            if (activeEnrollment is not null)
-                activeEnrollment.Status = EnrollmentStatus.Abandoned;
-        }
-
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

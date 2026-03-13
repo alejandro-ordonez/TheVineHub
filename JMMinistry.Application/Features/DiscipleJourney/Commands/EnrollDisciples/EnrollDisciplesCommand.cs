@@ -1,4 +1,5 @@
 using FluentValidation;
+using JMMinistry.Domain.DiscipleJourney;
 using Mediator;
 
 namespace JMMinistry.Application.Features.DiscipleJourney.Commands.EnrollDisciples
@@ -8,6 +9,7 @@ namespace JMMinistry.Application.Features.DiscipleJourney.Commands.EnrollDiscipl
         public required int CycleId { get; set; }
         public required string LeaderId { get; set; }
         public IList<string> DiscipleIds { get; set; } = [];
+        public StepStatus? InitialStatus { get; set; }
     }
 
     public class EnrollDisciplesValidator : AbstractValidator<EnrollDisciplesCommand>

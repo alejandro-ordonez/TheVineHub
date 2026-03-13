@@ -13,5 +13,6 @@ namespace JMMinistry.Common.Dtos.DiscipleJourney
         public string DiscipleId { get; set; } = string.Empty;
         public string DiscipleName { get; set; } = string.Empty;
         public bool Attended { get; set; }
+        public bool IsAbandoned { get; set; }
     }
 }

@@ -58,22 +58,23 @@
                     <UserCard User="disciple" OnClick="@(EventCallback.Factory.Create<UserEventArgs>(this, ShowUserDetails))" />
                     <div style="display: flex; align-items: center; justify-content: space-between; padding: 0 4px; flex-wrap: wrap; gap: 2px;">
                         <MudChip T="string" Size="Size.Small"
-                                 Color="@(disciple.StepStatus == StepStatus.InProgress ? Color.Info : Color.Success)"
+                                 Color="@GetDiscipleStatusColor(disciple.StepStatus)"
                                  Variant="Variant.Filled">
-                            @(disciple.StepStatus == StepStatus.InProgress ? Translator["InProgress"] : Translator["Completed"])
+                            @GetDiscipleStatusLabel(disciple.StepStatus)
                             — @disciple.LastUpdated.ToString("d")
                         </MudChip>
                         @if (disciple.CycleEnrollmentSummary is not null)
                         {
                             <MudChip T="string" Size="Size.Small"
-                                     Color="@(disciple.CycleEnrollmentSummary.Status == Common.Dtos.DiscipleJourney.Enums.EnrollmentStatus.Active ? Color.Tertiary : Color.Error)"
+                                     Color="@(disciple.CycleEnrollmentSummary.Status == StepStatus.Enrolled || disciple.CycleEnrollmentSummary.Status == StepStatus.InPrayers ? Color.Tertiary : Color.Error)"
                                      Variant="Variant.Outlined">
                                 @disciple.CycleEnrollmentSummary.CycleName
                                 (@disciple.CycleEnrollmentSummary.AttendanceCount)
                             </MudChip>
                         }
                         <MudMenu Icon="@Icons.Material.Filled.MoreVert" Size="Size.Small" Dense="true" AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight">
-                            @if (disciple.StepStatus == StepStatus.InProgress)
+                            @if (!(_step?.RequiresAdminApproval ?? false)
+                                && disciple.StepStatus is StepStatus.InProgress or StepStatus.Enrolled or StepStatus.InPrayers)
                             {
                                 @if (disciple.CycleEnrollmentSummary is null || disciple.CycleEnrollmentSummary.CycleEnded)
                                 {
@@ -117,9 +118,29 @@ else
 
     private int TotalDisciples => AllDisciples.Count();
 
-    private int InProgressCount => AllDisciples.Count(d => d.StepStatus == StepStatus.InProgress);
+    private int InProgressCount => AllDisciples.Count(d => d.StepStatus is StepStatus.InProgress or StepStatus.Enrolled or StepStatus.InPrayers);
 
     private int CompletedCount => AllDisciples.Count(d => d.StepStatus == StepStatus.Completed);
+
+    Color GetDiscipleStatusColor(StepStatus? status) => status switch
+    {
+        StepStatus.InProgress => Color.Info,
+        StepStatus.Enrolled => Color.Success,
+        StepStatus.InPrayers => Color.Warning,
+        StepStatus.Completed => Color.Default,
+        StepStatus.Abandoned => Color.Error,
+        _ => Color.Default
+    };
+
+    string GetDiscipleStatusLabel(StepStatus? status) => status switch
+    {
+        StepStatus.InProgress => Translator["InProgress"],
+        StepStatus.Enrolled => Translator["Enrolled"],
+        StepStatus.InPrayers => Translator["InPrayers"],
+        StepStatus.Completed => Translator["Completed"],
+        StepStatus.Abandoned => Translator["Abandoned"],
+        _ => ""
+    };
 
     protected override void OnInitialized()
     {
@@ -185,7 +206,8 @@ else
                 {
                     StepId = StepId,
                     CycleId = result.CycleId.Value,
-                    Documents = result.Documents.ToList()
+                    Documents = result.Documents.ToList(),
+                    InitialStatus = result.InitialStatus
                 });
             }
             else

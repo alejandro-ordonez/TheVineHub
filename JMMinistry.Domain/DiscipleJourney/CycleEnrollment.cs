@@ -3,7 +3,6 @@ namespace JMMinistry.Domain.DiscipleJourney
     public class CycleEnrollment
     {
         public int Id { get; set; }
-        public EnrollmentStatus Status { get; set; }
         public DateOnly EnrolledAt { get; set; }
 
         // Navigation properties
@@ -16,5 +15,8 @@ namespace JMMinistry.Domain.DiscipleJourney
 
         public int? CycleStaffId { get; set; }
         public CycleStaff? CycleStaff { get; set; }
+
+        public int StepCompletionId { get; set; }
+        public StepCompletion? StepCompletion { get; set; }
     }
 }

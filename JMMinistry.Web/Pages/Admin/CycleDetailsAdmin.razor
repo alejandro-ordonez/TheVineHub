@@ -24,10 +24,28 @@
 
 @{
     var cycle = CyclesState.Value.Cycles.FirstOrDefault(c => c.Id == CycleId);
+    var allEnrollments = DetailsState.Value.Enrollments;
+    var canClose = cycle is { IsOpen: true }
+        && allEnrollments.Count > 0
+        && allEnrollments.All(e => e.Status is StepStatus.Completed or StepStatus.Abandoned);
 }
 
 <MudPaper Class="ma-2">
-    <Header Title="@(cycle?.Name ?? translator["Details"])" />
+    <Header Title="@(cycle?.Name ?? translator["Details"])">
+        <ActionMenu>
+            @if (cycle is { IsOpen: true })
+            {
+                <MudButton Variant="Variant.Filled"
+                           Color="Color.Warning"
+                           Size="Size.Small"
+                           StartIcon="@Icons.Material.Filled.Lock"
+                           Disabled="@(!canClose)"
+                           OnClick="CloseCycle">
+                    @translator["CloseCycle"]
+                </MudButton>
+            }
+        </ActionMenu>
+    </Header>
 </MudPaper>
 
 @if (DetailsState.Value.IsLoading)
@@ -35,63 +53,36 @@
     <MudProgressLinear Indeterminate="true" Color="Color.Primary" />
 }
 
-<MudTabs Class="ma-2" Elevation="2" Rounded="true" ApplyEffectsToContainer="true">
+<MudTabs Class="ma-2" Rounded="true" ApplyEffectsToContainer="true">
     @* ===== Enrollments Tab ===== *@
-    <MudTabPanel Text="@translator["Enrollments"]" Icon="@Icons.Material.Filled.People">
-        @if (DetailsState.Value.Enrollments.Count == 0)
+    <MudTabPanel Text="@translator["Enrollments"]" class="pa-4" Icon="@Icons.Material.Filled.People">
+        @if (allEnrollments.Count == 0)
         {
             <MudAlert Severity="Severity.Info">@translator["NoEnrollments"]</MudAlert>
         }
         else
         {
-            <MudSimpleTable Dense="true" Hover="true" Striped="true">
-                <thead>
-                    <tr>
-                        <th>@translator["Name"]</th>
-                        <th>@translator["Guide"]</th>
-                        <th>@translator["Status"]</th>
-                        <th>@translator["CycleAttendance"]</th>
-                        <th>@translator["Enrolled"]</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var enrollment in DetailsState.Value.Enrollments)
-                    {
-                        <tr>
-                            <td>@enrollment.DiscipleName</td>
-                            <td>
-                                <MudSelect T="int?" Value="@enrollment.CycleStaffId"
-                                           ValueChanged="@(v => AssignGuide(enrollment, v))"
-                                           Margin="Margin.Dense" Dense="true" Variant="Variant.Text">
-                                    <MudSelectItem T="int?" Value="@((int?)null)">—</MudSelectItem>
-                                    @foreach (var staff in DetailsState.Value.Staff)
-                                    {
-                                        <MudSelectItem T="int?" Value="@((int?)staff.Id)">@staff.PersonName</MudSelectItem>
-                                    }
-                                </MudSelect>
-                            </td>
-                            <td>
-                                <MudChip T="string" Size="Size.Small"
-                                         Color="@(enrollment.Status == EnrollmentStatus.Active ? Color.Success : Color.Error)">
-                                    @(enrollment.Status == EnrollmentStatus.Active ? translator["Active"] : translator["Abandoned"])
-                                </MudChip>
-                            </td>
-                            <td>@enrollment.AttendanceCount</td>
-                            <td>@enrollment.EnrolledAt.ToString("d")</td>
-                            <td>
-                                @if (enrollment.Status == EnrollmentStatus.Active)
-                                {
-                                    <MudIconButton Icon="@Icons.Material.Filled.PersonOff"
-                                                   Color="Color.Error"
-                                                   Size="Size.Small"
-                                                   OnClick="@(() => MarkAbandoned(enrollment))" />
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </MudSimpleTable>
+            var inPrayers = allEnrollments.Where(e => e.Status == StepStatus.InPrayers).ToList();
+            var active = allEnrollments.Where(e => e.Status is StepStatus.Enrolled or StepStatus.Completed).ToList();
+            var abandoned = allEnrollments.Where(e => e.Status == StepStatus.Abandoned).ToList();
+
+            @if (inPrayers.Count > 0)
+            {
+                <MudText Typo="Typo.subtitle2" Class="mt-2 mb-1">@translator["InPrayers"] <MudChip T="string" Size="Size.Small" Color="Color.Info">@inPrayers.Count</MudChip></MudText>
+                @EnrollmentTable(inPrayers)
+            }
+
+            @if (active.Count > 0)
+            {
+                <MudText Typo="Typo.subtitle2" Class="mt-4 mb-1">@translator["Enrolled"] <MudChip T="string" Size="Size.Small" Color="Color.Success">@active.Count</MudChip></MudText>
+                @EnrollmentTable(active)
+            }
+
+            @if (abandoned.Count > 0)
+            {
+                <MudText Typo="Typo.subtitle2" Class="mt-4 mb-1" Color="Color.Error">@translator["Abandoned"] <MudChip T="string" Size="Size.Small" Color="Color.Error">@abandoned.Count</MudChip></MudText>
+                @EnrollmentTable(abandoned)
+            }
         }
     </MudTabPanel>
 
@@ -109,13 +100,16 @@
         {
             @foreach (var session in DetailsState.Value.Attendance)
             {
-                <MudPaper Outlined="true" Class="pa-3 mb-3">
+                <MudPaper Outlined="true" Class="pa-3 ma-3">
                     <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="mb-2">
                         <MudText Typo="Typo.subtitle2">
                             @session.SessionDate.ToString("d")
                             @if (!string.IsNullOrEmpty(session.SessionTopic))
                             {
                                 <span> — @session.SessionTopic</span>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Success">@session.Attendees.Count(attendee => attendee.Attended)</MudChip>
+                                <span>/</span>
+                                <MudChip T="string" Size="Size.Small" Color="Color.Warning">@session.Attendees.Count</MudChip>
                             }
                         </MudText>
                         <MudButton Size="Size.Small"
@@ -132,6 +126,8 @@
                                          Value="@attendee.Attended"
                                          ValueChanged="@(v => attendee.Attended = v)"
                                          Label="@attendee.DiscipleName"
+                                         ReadOnly="@attendee.IsAbandoned"
+                                         Disabled="@attendee.IsAbandoned"
                                          Dense="true" />
                         }
                     </MudStack>
@@ -240,8 +236,98 @@
 @code {
     [Parameter] public int CycleId { get; set; }
 
+    int MinAttendance => CyclesState.Value.Cycles.FirstOrDefault(c => c.Id == CycleId)?.MinAttendanceRequired ?? 0;
+
     DateTime? _newSessionDate;
     string? _newSessionTopic;
+
+    RenderFragment EnrollmentTable(IList<CycleEnrollmentDto> enrollments) => __builder =>
+    {
+        <MudSimpleTable Dense="true" Hover="false" Striped="false">
+            <thead>
+                <tr>
+                    <th>@translator["Name"]</th>
+                    <th>@translator["Guide"]</th>
+                    <th>@translator["Status"]</th>
+                    <th>@translator["CycleAttendance"]</th>
+                    <th>@translator["Enrolled"]</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var enrollment in enrollments)
+                {
+                    <tr>
+                        <td>@enrollment.DiscipleName</td>
+                        <td>
+                            <MudSelect T="int?" Value="@enrollment.CycleStaffId"
+                                       ValueChanged="@(v => AssignGuide(enrollment, v))"
+                                       Margin="Margin.Dense" Dense="true" Variant="Variant.Text">
+                                <MudSelectItem T="int?" Value="@((int?)null)">—</MudSelectItem>
+                                @foreach (var staff in DetailsState.Value.Staff)
+                                {
+                                    <MudSelectItem T="int?" Value="@((int?)staff.Id)">@staff.PersonName</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </td>
+                        <td>
+                            <MudChip T="string" Size="Size.Small"
+                                     Color="@GetStatusColor(enrollment.Status)">
+                                @GetStatusLabel(enrollment.Status)
+                            </MudChip>
+                        </td>
+                        <td>@enrollment.AttendanceCount</td>
+                        <td>@enrollment.EnrolledAt.ToString("d")</td>
+                        <td>
+                            @if (enrollment.Status == StepStatus.Enrolled)
+                            {
+                                <MudIconButton Icon="@Icons.Material.Filled.CheckCircle"
+                                               Color="Color.Success"
+                                               Size="Size.Small"
+                                               Disabled="@(MinAttendance > 0 && enrollment.AttendanceCount < MinAttendance)"
+                                               title="@translator["MarkCompleted"]"
+                                               OnClick="@(() => MarkCompleted(enrollment))" />
+                            }
+                            @if (enrollment.Status == StepStatus.InPrayers)
+                            {
+                                <MudIconButton Icon="@Icons.Material.Filled.HowToReg"
+                                               Color="Color.Success"
+                                               Size="Size.Small"
+                                               title="@translator["Enrolled"]"
+                                               OnClick="@(() => MarkEnrolled(enrollment))" />
+                            }
+                            @if (enrollment.Status is StepStatus.Enrolled or StepStatus.InPrayers)
+                            {
+                                <MudIconButton Icon="@Icons.Material.Filled.PersonOff"
+                                               Color="Color.Error"
+                                               Size="Size.Small"
+                                               title="@translator["MarkAbandoned"]"
+                                               OnClick="@(() => MarkAbandoned(enrollment))" />
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </MudSimpleTable>
+    };
+
+    Color GetStatusColor(StepStatus status) => status switch
+    {
+        StepStatus.Enrolled => Color.Success,
+        StepStatus.InPrayers => Color.Info,
+        StepStatus.Completed => Color.Default,
+        StepStatus.Abandoned => Color.Error,
+        _ => Color.Default
+    };
+
+    string GetStatusLabel(StepStatus status) => status switch
+    {
+        StepStatus.Enrolled => translator["Enrolled"],
+        StepStatus.InPrayers => translator["InPrayers"],
+        StepStatus.Completed => translator["Completed"],
+        StepStatus.Abandoned => translator["Abandoned"],
+        _ => status.ToString()
+    };
 
     protected override void OnInitialized()
     {
@@ -253,13 +339,23 @@
         Dispatcher.Dispatch(new FetchCycleStaffAction { CycleId = CycleId });
     }
 
+    void MarkEnrolled(CycleEnrollmentDto enrollment)
+    {
+        Dispatcher.Dispatch(new UpdateEnrollmentStatusAction
+        {
+            CycleId = CycleId,
+            EnrollmentId = enrollment.Id,
+            Dto = new UpdateEnrollmentStatusDto { Status = StepStatus.Enrolled }
+        });
+    }
+
     void MarkAbandoned(CycleEnrollmentDto enrollment)
     {
         Dispatcher.Dispatch(new UpdateEnrollmentStatusAction
         {
             CycleId = CycleId,
             EnrollmentId = enrollment.Id,
-            Dto = new UpdateEnrollmentStatusDto { Status = EnrollmentStatus.Abandoned }
+            Dto = new UpdateEnrollmentStatusDto { Status = StepStatus.Abandoned }
         });
     }
 
@@ -337,6 +433,37 @@
             {
                 CycleStaffId = staffId.Value,
                 EnrollmentIds = [enrollment.Id]
+            }
+        });
+    }
+
+    void MarkCompleted(CycleEnrollmentDto enrollment)
+    {
+        Dispatcher.Dispatch(new UpdateEnrollmentStatusAction
+        {
+            CycleId = CycleId,
+            EnrollmentId = enrollment.Id,
+            Dto = new UpdateEnrollmentStatusDto { Status = StepStatus.Completed }
+        });
+    }
+
+    void CloseCycle()
+    {
+        var cycle = CyclesState.Value.Cycles.FirstOrDefault(c => c.Id == CycleId);
+        if (cycle is null) return;
+
+        Dispatcher.Dispatch(new UpdateStepCycleAction
+        {
+            StepId = cycle.DiscipleStepId,
+            CycleId = CycleId,
+            Dto = new UpdateStepCycleDto
+            {
+                Name = cycle.Name,
+                StartDate = cycle.StartDate,
+                EndDate = cycle.EndDate,
+                MinAttendanceRequired = cycle.MinAttendanceRequired,
+                IsOpen = false,
+                EnrollmentDeadline = cycle.EnrollmentDeadline
             }
         });
     }

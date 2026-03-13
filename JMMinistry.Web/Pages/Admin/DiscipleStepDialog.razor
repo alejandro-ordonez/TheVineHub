@@ -63,6 +63,11 @@
                 }
             }
 
+            <MudSwitch T="bool" @bind-Value="Model.RequiresAdminApproval"
+                       Label="@translator["RequiresAdminApproval"]"
+                       Color="Color.Primary"
+                       Class="mt-2" />
+
             <MudSelect T="int"
                        Label="@translator["Requirements"]"
                        MultiSelection="true"
@@ -109,6 +114,7 @@
             Model.Description = ExistingStep.Description;
             Model.StepCategory = ExistingStep.StepCategory;
             Model.RequiresCycle = ExistingStep.RequiresCycle;
+            Model.RequiresAdminApproval = ExistingStep.RequiresAdminApproval;
             Model.RequirementIds = ExistingStep.RequirementIds.ToList();
             Model.ParentStepId = ExistingStep.ParentStepId;
             _selectedRequirements = ExistingStep.RequirementIds.ToList();
