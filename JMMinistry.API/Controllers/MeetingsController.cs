@@ -1,21 +1,22 @@
-﻿using JMMinistry.Application.Features.Meetings.Commands.CreateMeeting;
+using JMMinistry.API.Extensions;
+using JMMinistry.Application.Features.Meetings.Commands.CreateMeeting;
 using JMMinistry.Application.Features.Meetings.Queries.GetMeetings;
 using JMMinistry.Common.Dtos.Meetings;
 using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace JMMinistry.API.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]
-    public class MeetingsController(IMediator mediator) : ControllerBase
+    public class MeetingsController(IMediator mediator, IOutputCacheStore cache) : ControllerBase
     {
         // GET: api/<MeetingsController>
         [HttpGet]
+        [OutputCache(PolicyName = CacheTags.Meetings)]
         public async Task<ActionResult<IEnumerable<MeetingDto>>> Get()
         {
             var command = new GetMeetingsQuery();
@@ -36,6 +37,7 @@ namespace JMMinistry.API.Controllers
         public async Task<ActionResult<MeetingDto>> Create(CreateMeetingCommand meetingDto)
         {
             var result = await mediator.Send(meetingDto);
+            await cache.EvictByTagAsync(CacheTags.Meetings, default);
             return Ok(result);
         }
 

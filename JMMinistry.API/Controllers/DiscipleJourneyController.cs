@@ -31,16 +31,17 @@ using JMMinistry.Common.Dtos.User;
 using Mediator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace JMMinistry.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class DiscipleJourneyController(IMediator mediator) : ControllerBase
+    public class DiscipleJourneyController(IMediator mediator, IOutputCacheStore cache) : ControllerBase
     {
         [HttpGet("steps")]
-        [ResponseCache(Duration = 86400)]
+        [OutputCache(PolicyName = CacheTags.DiscipleSteps)]
         public async Task<ActionResult<IList<DiscipleStepDto>>> GetSteps()
         {
             var result = await mediator.Send(new GetDiscipleStepsQuery());
@@ -76,6 +77,7 @@ namespace JMMinistry.API.Controllers
                 ParentStepId = dto.ParentStepId
             });
 
+            await cache.EvictByTagAsync(CacheTags.DiscipleSteps, default);
             return Ok(result);
         }
 
@@ -94,6 +96,7 @@ namespace JMMinistry.API.Controllers
                 ParentStepId = dto.ParentStepId
             });
 
+            await cache.EvictByTagAsync(CacheTags.DiscipleSteps, default);
             return Ok(result);
         }
 
@@ -102,6 +105,7 @@ namespace JMMinistry.API.Controllers
         public async Task<ActionResult> DeleteStep(int stepId)
         {
             await mediator.Send(new DeleteDiscipleStepCommand { StepId = stepId });
+            await cache.EvictByTagAsync(CacheTags.DiscipleSteps, default);
             return NoContent();
         }
 
@@ -153,6 +157,7 @@ namespace JMMinistry.API.Controllers
 
         [HttpGet("steps/{stepId:int}/cycles")]
         [Authorize(Roles = "Admin")]
+        [OutputCache(PolicyName = CacheTags.StepCycles)]
         public async Task<ActionResult<IList<StepCycleDto>>> GetStepCycles(int stepId)
         {
             var result = await mediator.Send(new GetStepCyclesQuery { StepId = stepId });
@@ -160,6 +165,7 @@ namespace JMMinistry.API.Controllers
         }
 
         [HttpGet("steps/{stepId:int}/cycles/active")]
+        [OutputCache(PolicyName = CacheTags.StepCycles)]
         public async Task<ActionResult<IList<StepCycleDto>>> GetActiveCyclesForStep(int stepId)
         {
             var result = await mediator.Send(new GetActiveCyclesForStepQuery { StepId = stepId });
@@ -180,6 +186,7 @@ namespace JMMinistry.API.Controllers
                 EnrollmentDeadline = dto.EnrollmentDeadline
             });
 
+            await cache.EvictByTagAsync(CacheTags.StepCycles, default);
             return Ok(result);
         }
 
@@ -199,6 +206,7 @@ namespace JMMinistry.API.Controllers
                 EnrollmentDeadline = dto.EnrollmentDeadline
             });
 
+            await cache.EvictByTagAsync(CacheTags.StepCycles, default);
             return Ok(result);
         }
 
@@ -207,12 +215,14 @@ namespace JMMinistry.API.Controllers
         public async Task<ActionResult> DeleteStepCycle(int stepId, int cycleId)
         {
             await mediator.Send(new DeleteStepCycleCommand { StepId = stepId, CycleId = cycleId });
+            await cache.EvictByTagAsync(CacheTags.StepCycles, default);
             return NoContent();
         }
 
         // ===== Cycle Sessions =====
 
         [HttpGet("cycles/{cycleId:int}/sessions")]
+        [OutputCache(PolicyName = CacheTags.CycleData)]
         public async Task<ActionResult<IList<CycleSessionDto>>> GetCycleSessions(int cycleId)
         {
             var result = await mediator.Send(new GetCycleSessionsQuery { CycleId = cycleId });
@@ -230,6 +240,7 @@ namespace JMMinistry.API.Controllers
                 Topic = dto.Topic
             });
 
+            await cache.EvictByTagAsync(CacheTags.CycleData, default);
             return Ok(result);
         }
 
@@ -238,6 +249,7 @@ namespace JMMinistry.API.Controllers
         public async Task<ActionResult> DeleteCycleSession(int cycleId, int sessionId)
         {
             await mediator.Send(new DeleteCycleSessionCommand { CycleId = cycleId, SessionId = sessionId });
+            await cache.EvictByTagAsync(CacheTags.CycleData, default);
             return NoContent();
         }
 
@@ -245,6 +257,7 @@ namespace JMMinistry.API.Controllers
 
         [HttpGet("cycles/{cycleId:int}/staff")]
         [Authorize(Roles = "Admin")]
+        [OutputCache(PolicyName = CacheTags.CycleData)]
         public async Task<ActionResult<IList<CycleStaffDto>>> GetCycleStaff(int cycleId)
         {
             var result = await mediator.Send(new GetCycleStaffQuery { CycleId = cycleId });
@@ -262,6 +275,7 @@ namespace JMMinistry.API.Controllers
                 Role = dto.Role
             });
 
+            await cache.EvictByTagAsync(CacheTags.CycleData, default);
             return Ok(result);
         }
 
@@ -270,6 +284,7 @@ namespace JMMinistry.API.Controllers
         public async Task<ActionResult> RemoveCycleStaff(int cycleId, int staffId)
         {
             await mediator.Send(new RemoveCycleStaffCommand { CycleId = cycleId, StaffId = staffId });
+            await cache.EvictByTagAsync(CacheTags.CycleData, default);
             return NoContent();
         }
 
@@ -287,6 +302,7 @@ namespace JMMinistry.API.Controllers
                 DiscipleIds = dto.DiscipleIds
             });
 
+            await cache.EvictByTagAsync(CacheTags.CycleData, default);
             return NoContent();
         }
 
@@ -300,6 +316,7 @@ namespace JMMinistry.API.Controllers
                 Status = dto.Status
             });
 
+            await cache.EvictByTagAsync(CacheTags.CycleData, default);
             return NoContent();
         }
 
@@ -313,12 +330,14 @@ namespace JMMinistry.API.Controllers
                 EnrollmentIds = dto.EnrollmentIds
             });
 
+            await cache.EvictByTagAsync(CacheTags.CycleData, default);
             return NoContent();
         }
 
         // ===== Cycle Attendance =====
 
         [HttpGet("cycles/{cycleId:int}/attendance")]
+        [OutputCache(PolicyName = CacheTags.CycleData)]
         public async Task<ActionResult<IList<CycleAttendanceDto>>> GetCycleAttendance(int cycleId)
         {
             var result = await mediator.Send(new GetCycleAttendanceQuery { CycleId = cycleId });
@@ -335,6 +354,7 @@ namespace JMMinistry.API.Controllers
                 DiscipleIds = dto.DiscipleIds
             });
 
+            await cache.EvictByTagAsync(CacheTags.CycleData, default);
             return NoContent();
         }
 
@@ -342,6 +362,7 @@ namespace JMMinistry.API.Controllers
 
         [HttpGet("cycles/{cycleId:int}/details")]
         [Authorize(Roles = "Admin")]
+        [OutputCache(PolicyName = CacheTags.CycleData)]
         public async Task<ActionResult<IList<CycleEnrollmentDto>>> GetCycleDetails(int cycleId)
         {
             var result = await mediator.Send(new GetCycleDetailsQuery { CycleId = cycleId });

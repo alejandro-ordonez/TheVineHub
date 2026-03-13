@@ -51,10 +51,17 @@
                 }
             </MudSelect>
 
-            <MudSwitch T="bool" @bind-Value="Model.RequiresCycle"
-                       Label="@translator["RequiresCycle"]"
-                       Color="Color.Primary"
-                       Class="mt-2" />
+            @if (!_hasSubSteps)
+            {
+                <MudSwitch T="bool" @bind-Value="Model.RequiresCycle"
+                           Label="@translator["RequiresCycle"]"
+                           Color="Color.Primary"
+                           Class="mt-2" />
+                @if (Model.RequiresCycle)
+                {
+                    <MudText Typo="Typo.caption" Color="Color.Warning">@translator["RequiresCycleWarning"]</MudText>
+                }
+            }
 
             <MudSelect T="int"
                        Label="@translator["Requirements"]"
@@ -87,6 +94,7 @@
     int? _selectedParentId;
     bool _lockParent;
     bool _lockCategory;
+    bool _hasSubSteps;
 
     bool IsEditMode => ExistingStep is not null;
 
@@ -105,6 +113,7 @@
             Model.ParentStepId = ExistingStep.ParentStepId;
             _selectedRequirements = ExistingStep.RequirementIds.ToList();
             _selectedParentId = ExistingStep.ParentStepId;
+            _hasSubSteps = ExistingStep.SubSteps.Count > 0;
         }
         else if (ParentStepId is not null)
         {

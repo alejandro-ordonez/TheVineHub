@@ -92,6 +92,13 @@
                                         <MudText Typo="Typo.caption">@subStep.Description</MudText>
                                     </MudStack>
                                     <MudStack Row="true" Spacing="0">
+                                        @if (subStep.RequiresCycle)
+                                        {
+                                            <MudIconButton Icon="@Icons.Material.Filled.Loop"
+                                                           Color="Color.Secondary"
+                                                           Size="Size.Small"
+                                                           OnClick="@(() => NavigationManager.NavigateTo($"{Routes.StepCycleAdmin}/{subStep.Id}"))" />
+                                        }
                                         <MudIconButton Icon="@Icons.Material.Filled.Edit"
                                                        Color="Color.Primary"
                                                        Size="Size.Small"
@@ -112,10 +119,11 @@
                            Size="Size.Small"
                            Color="Color.Primary"
                            Variant="Variant.Text"
+                           Disabled="@step.RequiresCycle"
                            OnClick="@(() => OpenCreateSubStepDialog(step))">
                     @translator["AddSubStep"]
                 </MudButton>
-                @if (step.RequiresCycle)
+                @if (step.RequiresCycle && step.SubSteps.Count == 0)
                 {
                     <MudButton StartIcon="@Icons.Material.Filled.Loop"
                                Size="Size.Small"

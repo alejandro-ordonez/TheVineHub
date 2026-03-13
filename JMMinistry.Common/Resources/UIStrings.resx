@@ -681,4 +681,7 @@
   <data name="Optional" xml:space="preserve">
     <value>optional</value>
   </data>
+  <data name="RequiresCycleWarning" xml:space="preserve">
+    <value>Enabling cycles prevents adding sub-steps to this step.</value>
+  </data>
 </root>
