@@ -14,12 +14,14 @@
                           RequiredError="@translator["FieldRequired"]"
                           Variant="Variant.Outlined" />
 
-            <MudDatePicker @bind-Date="_startDate"
+            <MudDatePicker Date="_startDate"
+                           DateChanged="OnStartDateChanged"
                            Label="@translator["StartDate"]"
                            Variant="Variant.Outlined"
                            Required="true" />
 
-            <MudDatePicker @bind-Date="_endDate"
+            <MudDatePicker Date="_endDate"
+                           DateChanged="OnEndDateChanged"
                            Label="@translator["EndDate"]"
                            Variant="Variant.Outlined"
                            Required="true" />
@@ -29,7 +31,8 @@
                              Variant="Variant.Outlined"
                              Min="1" />
 
-            <MudDatePicker @bind-Date="_enrollmentDeadline"
+            <MudDatePicker Date="_enrollmentDeadline"
+                           DateChanged="OnEnrollmentDeadlineChanged"
                            Label="@translator["EnrollmentDeadline"]"
                            Variant="Variant.Outlined"
                            Clearable="true" />
@@ -74,9 +77,29 @@
             Model.IsOpen = true;
             Model.MinAttendanceRequired = 1;
         }
+
+        SyncDatesToModel();
     }
 
-    protected override void OnParametersSet()
+    void OnStartDateChanged(DateTime? value)
+    {
+        _startDate = value;
+        Model.StartDate = DateOnly.FromDateTime(value ?? DateTime.Today);
+    }
+
+    void OnEndDateChanged(DateTime? value)
+    {
+        _endDate = value;
+        Model.EndDate = DateOnly.FromDateTime(value ?? DateTime.Today.AddMonths(1));
+    }
+
+    void OnEnrollmentDeadlineChanged(DateTime? value)
+    {
+        _enrollmentDeadline = value;
+        Model.EnrollmentDeadline = value is not null ? DateOnly.FromDateTime(value.Value) : null;
+    }
+
+    void SyncDatesToModel()
     {
         Model.StartDate = DateOnly.FromDateTime(_startDate ?? DateTime.Today);
         Model.EndDate = DateOnly.FromDateTime(_endDate ?? DateTime.Today.AddMonths(1));
