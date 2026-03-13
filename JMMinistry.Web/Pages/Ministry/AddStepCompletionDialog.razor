@@ -1,6 +1,7 @@
 @using Fluxor
 @using Fluxor.Blazor.Web.Components
 @using JMMinistry.Common.Dtos.DiscipleJourney
+@using JMMinistry.Common.Dtos.DiscipleJourney.Enums
 @using JMMinistry.Web.Pages.User.Components
 @using JMMinistry.Web.Pages.User.Dialogs
 @using JMMinistry.Web.Shared.Components
@@ -65,16 +66,56 @@
             }
             else
             {
-                <MudSelect T="int?" @bind-Value="_selectedCycleId"
-                           Label="@Translator["SelectCycle"]"
-                           Variant="Variant.Outlined"
-                           Class="mt-4"
-                           Required="true">
-                    @foreach (var cycle in StepDisciplesState.Value.ActiveCycles)
-                    {
-                        <MudSelectItem T="int?" Value="@cycle.Id">@cycle.Name</MudSelectItem>
-                    }
-                </MudSelect>
+                var allCycles = StepDisciplesState.Value.ActiveCycles;
+                var years = allCycles.Select(c => c.EndDate.Year).Distinct().OrderByDescending(y => y).ToList();
+                var filteredCycles = _selectedYear.HasValue
+                    ? allCycles.Where(c => c.EndDate.Year == _selectedYear.Value).ToList()
+                    : allCycles;
+
+                <MudStack Row="true" Class="mt-4" Spacing="2">
+                    <MudSelect T="int?" @bind-Value="_selectedYear"
+                               Label="@Translator["Year"]"
+                               Variant="Variant.Outlined"
+                               Style="max-width: 120px;">
+                        <MudSelectItem T="int?" Value="@((int?)null)">@Translator["All"]</MudSelectItem>
+                        @foreach (var year in years)
+                        {
+                            <MudSelectItem T="int?" Value="@year">@year</MudSelectItem>
+                        }
+                    </MudSelect>
+
+                    <MudSelect T="int?" @bind-Value="_selectedCycleId"
+                               Label="@Translator["SelectCycle"]"
+                               Variant="Variant.Outlined"
+                               Required="true"
+                               Style="flex: 1;">
+                        @foreach (var cycle in filteredCycles)
+                        {
+                            <MudSelectItem T="int?" Value="@cycle.Id">
+                                @cycle.Name
+                                @if (cycle.IsOpen)
+                                {
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Success" Variant="Variant.Outlined" Class="ml-2">@Translator["Open"]</MudChip>
+                                }
+                                else
+                                {
+                                    <MudChip T="string" Size="Size.Small" Color="Color.Default" Variant="Variant.Outlined" Class="ml-2">@Translator["Closed"]</MudChip>
+                                }
+                            </MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudStack>
+
+                @if (_selectedCycleId.HasValue && SelectedCycle is { IsOpen: true })
+                {
+                    <MudSelect T="StepStatus?" @bind-Value="_selectedInitialStatus"
+                               Label="@Translator["InitialStatus"]"
+                               Variant="Variant.Outlined"
+                               Class="mt-4">
+                        <MudSelectItem T="StepStatus?" Value="@((StepStatus?)StepStatus.Enrolled)">@Translator["Enrolled"]</MudSelectItem>
+                        <MudSelectItem T="StepStatus?" Value="@((StepStatus?)StepStatus.InPrayers)">@Translator["InPrayers"]</MudSelectItem>
+                    </MudSelect>
+                }
             }
         }
         else
@@ -119,7 +160,13 @@
 
     private HashSet<string> SelectedDocuments { get; set; } = [];
     private DateTime? _completionDate = DateTime.Today;
+    private int? _selectedYear;
     private int? _selectedCycleId;
+    private StepStatus? _selectedInitialStatus = StepStatus.Enrolled;
+
+    private StepCycleDto? SelectedCycle => _selectedCycleId.HasValue
+        ? StepDisciplesState.Value.ActiveCycles.FirstOrDefault(c => c.Id == _selectedCycleId.Value)
+        : null;
 
     protected override void OnInitialized()
     {
@@ -180,7 +227,8 @@
     {
         Documents = SelectedDocuments,
         CompletionDate = DateOnly.FromDateTime(_completionDate ?? DateTime.Today),
-        CycleId = _selectedCycleId
+        CycleId = _selectedCycleId,
+        InitialStatus = _selectedCycleId.HasValue ? _selectedInitialStatus : null
     });
 
     private void Cancel() => MudDialog?.Cancel();
@@ -190,5 +238,6 @@
         public HashSet<string> Documents { get; set; } = [];
         public DateOnly CompletionDate { get; set; }
         public int? CycleId { get; set; }
+        public StepStatus? InitialStatus { get; set; }
     }
 }

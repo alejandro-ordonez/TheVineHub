@@ -80,7 +80,8 @@ namespace JMMinistry.Web.Store.StepDisciplesUseCase
         {
             var success = await discipleJourneyApi.EnrollDisciplesAsync(action.CycleId, new EnrollDisciplesDto
             {
-                DiscipleIds = action.Documents
+                DiscipleIds = action.Documents,
+                InitialStatus = action.InitialStatus
             });
 
             if (!success)

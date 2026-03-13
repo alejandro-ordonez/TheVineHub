@@ -261,7 +261,7 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Property<DateOnly>("EnrolledAt")
                         .HasColumnType("date");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("StepCompletionId")
                         .HasColumnType("integer");
 
                     b.Property<int>("StepCycleId")
@@ -272,6 +272,8 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.HasIndex("CycleStaffId");
 
                     b.HasIndex("DiscipleId");
+
+                    b.HasIndex("StepCompletionId");
 
                     b.HasIndex("StepCycleId", "DiscipleId")
                         .IsUnique();
@@ -349,6 +351,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
 
                     b.Property<int?>("ParentStepId")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("RequiresAdminApproval")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("RequiresCycle")
                         .HasColumnType("boolean");
@@ -1061,6 +1066,12 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("JMMinistry.Domain.DiscipleJourney.StepCompletion", "StepCompletion")
+                        .WithMany()
+                        .HasForeignKey("StepCompletionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("JMMinistry.Domain.DiscipleJourney.StepCycle", "StepCycle")
                         .WithMany("Enrollments")
                         .HasForeignKey("StepCycleId")
@@ -1070,6 +1081,8 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Navigation("CycleStaff");
 
                     b.Navigation("Disciple");
+
+                    b.Navigation("StepCompletion");
 
                     b.Navigation("StepCycle");
                 });

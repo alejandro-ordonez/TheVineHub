@@ -5,24 +5,25 @@
 namespace JMMinistry.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddNotesColumnForCellAttendance : Migration
+    public partial class AddRequiresAdminApproval : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Notes",
-                table: "CellAttendances",
-                type: "text",
-                nullable: true);
+            migrationBuilder.AddColumn<bool>(
+                name: "RequiresAdminApproval",
+                table: "DiscipleSteps",
+                type: "boolean",
+                nullable: false,
+                defaultValue: false);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Notes",
-                table: "CellAttendances");
+                name: "RequiresAdminApproval",
+                table: "DiscipleSteps");
         }
     }
 }

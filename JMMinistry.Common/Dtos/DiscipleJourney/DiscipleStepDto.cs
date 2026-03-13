@@ -9,6 +9,7 @@ namespace JMMinistry.Common.Dtos.DiscipleJourney
         public string Description { get; set; } = string.Empty;
         public StepCategory StepCategory { get; set; }
         public bool RequiresCycle { get; set; }
+        public bool RequiresAdminApproval { get; set; }
         public IList<int> RequirementIds { get; set; } = [];
         public int? ParentStepId { get; set; }
         public IList<DiscipleStepDto> SubSteps { get; set; } = [];

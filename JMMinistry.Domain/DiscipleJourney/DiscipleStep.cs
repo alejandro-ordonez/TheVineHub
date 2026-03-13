@@ -12,6 +12,7 @@ namespace JMMinistry.Domain.DiscipleJourney
 
         public required StepCategory StepCategory { get; set; }
         public bool RequiresCycle { get; set; }
+        public bool RequiresAdminApproval { get; set; }
 
         public int? ParentStepId { get; set; }
         public DiscipleStep? ParentStep { get; set; }

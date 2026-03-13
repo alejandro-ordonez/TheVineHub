@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JMMinistry.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(JmDbContext))]
-    [Migration("20260311182710_RemoveSchoolTables")]
-    partial class RemoveSchoolTables
+    [Migration("20260313201240_AddRequiresAdminApproval")]
+    partial class AddRequiresAdminApproval
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -264,7 +264,7 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Property<DateOnly>("EnrolledAt")
                         .HasColumnType("date");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("StepCompletionId")
                         .HasColumnType("integer");
 
                     b.Property<int>("StepCycleId")
@@ -275,6 +275,8 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.HasIndex("CycleStaffId");
 
                     b.HasIndex("DiscipleId");
+
+                    b.HasIndex("StepCompletionId");
 
                     b.HasIndex("StepCycleId", "DiscipleId")
                         .IsUnique();
@@ -352,6 +354,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
 
                     b.Property<int?>("ParentStepId")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("RequiresAdminApproval")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("RequiresCycle")
                         .HasColumnType("boolean");
@@ -724,19 +729,22 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
 
-                    b.Property<string>("Phone")
-                        .HasColumnType("text");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("PhotoPath")
+                        .HasColumnType("text");
+
                     b.Property<string>("Profession")
                         .HasColumnType("text");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SpouseId")
                         .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -756,6 +764,10 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("SpouseId")
+                        .IsUnique()
+                        .HasFilter("\"SpouseId\" IS NOT NULL");
 
                     b.HasIndex("Name", "LastName");
 
@@ -1057,6 +1069,12 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("JMMinistry.Domain.DiscipleJourney.StepCompletion", "StepCompletion")
+                        .WithMany()
+                        .HasForeignKey("StepCompletionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("JMMinistry.Domain.DiscipleJourney.StepCycle", "StepCycle")
                         .WithMany("Enrollments")
                         .HasForeignKey("StepCycleId")
@@ -1066,6 +1084,8 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Navigation("CycleStaff");
 
                     b.Navigation("Disciple");
+
+                    b.Navigation("StepCompletion");
 
                     b.Navigation("StepCycle");
                 });
@@ -1216,7 +1236,14 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .WithMany("Disciples")
                         .HasForeignKey("CellId");
 
+                    b.HasOne("JMMinistry.Domain.PersonalInfo", "Spouse")
+                        .WithOne()
+                        .HasForeignKey("JMMinistry.Domain.PersonalInfo", "SpouseId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Cell");
+
+                    b.Navigation("Spouse");
                 });
 
             modelBuilder.Entity("MeetingAttendancePersonalInfo", b =>

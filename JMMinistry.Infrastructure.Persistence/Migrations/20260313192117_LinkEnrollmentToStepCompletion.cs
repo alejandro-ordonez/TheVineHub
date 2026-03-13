@@ -1,19 +1,77 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace JMMinistry.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateFunctionsPhoneToPhoneNumber : Migration
+    public partial class LinkEnrollmentToStepCompletion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Update functions to use "PhoneNumber" instead of "Phone"
-            // (Phone column was removed in ConsolidatePhoneAndAddPhotoPath migration)
-            migrationBuilder.Sql("""DROP FUNCTION IF EXISTS get_step_disciples(TEXT, INTEGER, INTEGER);""");
+            // 1. Add StepCompletionId as nullable
+            migrationBuilder.AddColumn<int>(
+                name: "StepCompletionId",
+                table: "CycleEnrollments",
+                type: "integer",
+                nullable: true);
 
+            // 2. Populate StepCompletionId by joining through StepCycles → StepCompletions
+            migrationBuilder.Sql("""
+                UPDATE "CycleEnrollments" ce
+                SET "StepCompletionId" = sp."Id"
+                FROM "StepCycles" sc
+                INNER JOIN "StepCompletions" sp
+                    ON sp."DiscipleStepId" = sc."DiscipleStepId"
+                    AND sp."StepStatus" <> 0
+                WHERE ce."StepCycleId" = sc."Id"
+                  AND sp."DiscipleId" = ce."DiscipleId"
+                  AND ce."StepCompletionId" IS NULL;
+                """);
+
+            // For any remaining nulls (abandoned enrollments), link to abandoned completions
+            migrationBuilder.Sql("""
+                UPDATE "CycleEnrollments" ce
+                SET "StepCompletionId" = sp."Id"
+                FROM "StepCycles" sc
+                INNER JOIN "StepCompletions" sp
+                    ON sp."DiscipleStepId" = sc."DiscipleStepId"
+                WHERE ce."StepCycleId" = sc."Id"
+                  AND sp."DiscipleId" = ce."DiscipleId"
+                  AND ce."StepCompletionId" IS NULL;
+                """);
+
+            // 3. Make StepCompletionId non-nullable
+            migrationBuilder.AlterColumn<int>(
+                name: "StepCompletionId",
+                table: "CycleEnrollments",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
+
+            // 4. Drop the old Status column
+            migrationBuilder.DropColumn(
+                name: "Status",
+                table: "CycleEnrollments");
+
+            // 5. Add index and FK
+            migrationBuilder.CreateIndex(
+                name: "IX_CycleEnrollments_StepCompletionId",
+                table: "CycleEnrollments",
+                column: "StepCompletionId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_CycleEnrollments_StepCompletions_StepCompletionId",
+                table: "CycleEnrollments",
+                column: "StepCompletionId",
+                principalTable: "StepCompletions",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            // 6. Rewrite PG functions to join through StepCompletionId instead of reading Status
+
+            migrationBuilder.Sql("""DROP FUNCTION IF EXISTS get_step_disciples(TEXT, INTEGER, INTEGER);""");
             migrationBuilder.Sql("""
                 CREATE FUNCTION get_step_disciples(
                     p_leader_id TEXT,
@@ -88,7 +146,7 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         sc."StepStatus",
                         sc."LastUpdated",
                         cyc."Name",
-                        ce."Status",
+                        sc2."StepStatus",
                         COALESCE(att_count.cnt, 0)::INTEGER,
                         cyc."EndDate",
                         cyc."MinAttendanceRequired"
@@ -106,7 +164,9 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         AND ce."StepCycleId" IN (
                             SELECT cyc2."Id" FROM "StepCycles" cyc2 WHERE cyc2."DiscipleStepId" = p_step_id
                         )
-                        AND ce."Status" = 0 -- Active
+                    LEFT JOIN "StepCompletions" sc2
+                        ON sc2."Id" = ce."StepCompletionId"
+                        AND sc2."StepStatus" IN (3, 4)
                     LEFT JOIN "StepCycles" cyc ON cyc."Id" = ce."StepCycleId"
                     LEFT JOIN LATERAL (
                         SELECT COUNT(*)::INTEGER AS cnt
@@ -129,7 +189,6 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 """);
 
             migrationBuilder.Sql("""DROP FUNCTION IF EXISTS get_eligible_step_disciples(TEXT, INTEGER);""");
-
             migrationBuilder.Sql("""
                 CREATE FUNCTION get_eligible_step_disciples(
                     p_leader_id TEXT,
@@ -190,7 +249,7 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         SELECT sc."DiscipleId"
                         FROM "StepCompletions" sc
                         WHERE sc."DiscipleStepId" = p_step_id
-                          AND sc."StepStatus" IN (1, 2)
+                          AND sc."StepStatus" IN (1, 2, 3, 4)
                     ),
                     step_requirements AS (
                         SELECT dsr."DiscipleStepRequirementsId" AS required_step_id
@@ -238,13 +297,171 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                 END;
                 $$;
                 """);
+
+            migrationBuilder.Sql(@"
+CREATE OR REPLACE FUNCTION get_cycle_details(p_cycle_id INTEGER)
+RETURNS TABLE (
+    enrollment_id INTEGER,
+    disciple_id TEXT,
+    disciple_name TEXT,
+    cycle_staff_id INTEGER,
+    guide_name TEXT,
+    status INTEGER,
+    enrolled_at DATE,
+    attendance_count BIGINT
+)
+LANGUAGE sql STABLE
+AS $$
+    SELECT
+        ce.""Id"" AS enrollment_id,
+        ce.""DiscipleId"" AS disciple_id,
+        CONCAT(pi.""Name"", ' ', pi.""LastName"") AS disciple_name,
+        ce.""CycleStaffId"" AS cycle_staff_id,
+        CONCAT(gp.""Name"", ' ', gp.""LastName"") AS guide_name,
+        sc.""StepStatus"" AS status,
+        ce.""EnrolledAt"" AS enrolled_at,
+        COALESCE(att.cnt, 0) AS attendance_count
+    FROM ""CycleEnrollments"" ce
+    INNER JOIN ""StepCompletions"" sc ON sc.""Id"" = ce.""StepCompletionId""
+    INNER JOIN ""PersonalInfo"" pi ON pi.""Id"" = ce.""DiscipleId""
+    LEFT JOIN ""CycleStaff"" cs ON cs.""Id"" = ce.""CycleStaffId""
+    LEFT JOIN ""PersonalInfo"" gp ON gp.""Id"" = cs.""PersonId""
+    LEFT JOIN LATERAL (
+        SELECT COUNT(*) AS cnt
+        FROM ""CycleAttendances"" ca
+        INNER JOIN ""CycleSessions"" sess ON sess.""Id"" = ca.""CycleSessionId""
+        WHERE ca.""DiscipleId"" = ce.""DiscipleId""
+          AND sess.""StepCycleId"" = p_cycle_id
+    ) att ON TRUE
+    WHERE ce.""StepCycleId"" = p_cycle_id
+    ORDER BY pi.""Name"", pi.""LastName"";
+$$;
+");
+
+            migrationBuilder.Sql(@"
+CREATE OR REPLACE FUNCTION get_cycle_attendance(p_cycle_id INTEGER)
+RETURNS TABLE (
+    session_id INTEGER,
+    session_date DATE,
+    session_topic TEXT,
+    disciple_id TEXT,
+    disciple_name TEXT,
+    attended BOOLEAN
+)
+LANGUAGE sql STABLE
+AS $$
+    SELECT
+        sess.""Id"" AS session_id,
+        sess.""Date"" AS session_date,
+        sess.""Topic"" AS session_topic,
+        ce.""DiscipleId"" AS disciple_id,
+        CONCAT(pi.""Name"", ' ', pi.""LastName"") AS disciple_name,
+        (ca.""Id"" IS NOT NULL) AS attended
+    FROM ""CycleSessions"" sess
+    CROSS JOIN ""CycleEnrollments"" ce
+    INNER JOIN ""StepCompletions"" sc ON sc.""Id"" = ce.""StepCompletionId""
+    INNER JOIN ""PersonalInfo"" pi ON pi.""Id"" = ce.""DiscipleId""
+    LEFT JOIN ""CycleAttendances"" ca
+        ON ca.""CycleSessionId"" = sess.""Id""
+        AND ca.""DiscipleId"" = ce.""DiscipleId""
+    WHERE sess.""StepCycleId"" = p_cycle_id
+      AND ce.""StepCycleId"" = p_cycle_id
+      AND sc.""StepStatus"" = 4  -- Enrolled only
+    ORDER BY sess.""Date"", pi.""Name"", pi.""LastName"";
+$$;
+");
+
+            migrationBuilder.Sql(@"
+CREATE OR REPLACE FUNCTION get_cycle_enrollments(p_leader_id TEXT, p_cycle_id INTEGER)
+RETURNS TABLE (
+    enrollment_id INTEGER,
+    disciple_id TEXT,
+    disciple_name TEXT,
+    cycle_staff_id INTEGER,
+    guide_name TEXT,
+    status INTEGER,
+    enrolled_at DATE,
+    attendance_count BIGINT
+)
+LANGUAGE sql STABLE
+AS $$
+    WITH RECURSIVE leader_hierarchy AS (
+        SELECT p_leader_id AS leader_id
+
+        UNION
+
+        SELECT DISTINCT pi.""Id"" AS leader_id
+        FROM leader_hierarchy lh
+        INNER JOIN ""CellPersonalInfo"" cpi ON cpi.""LeadersId"" = lh.leader_id
+        INNER JOIN ""PersonalInfo"" pi ON pi.""CellId"" = cpi.""CellsId""
+    ),
+    hierarchy_cells AS (
+        SELECT DISTINCT cpi.""CellsId"" AS cell_id
+        FROM leader_hierarchy lh
+        INNER JOIN ""CellPersonalInfo"" cpi ON cpi.""LeadersId"" = lh.leader_id
+    ),
+    visible_disciples AS (
+        -- Disciples in leader's hierarchy cells
+        SELECT pi.""Id""
+        FROM ""PersonalInfo"" pi
+        INNER JOIN hierarchy_cells hc ON pi.""CellId"" = hc.cell_id
+        UNION
+        -- Disciples assigned to leader as guide
+        SELECT ce2.""DiscipleId""
+        FROM ""CycleEnrollments"" ce2
+        INNER JOIN ""CycleStaff"" cs2 ON cs2.""Id"" = ce2.""CycleStaffId""
+        WHERE cs2.""PersonId"" = p_leader_id
+          AND ce2.""StepCycleId"" = p_cycle_id
+    )
+    SELECT
+        ce.""Id"" AS enrollment_id,
+        ce.""DiscipleId"" AS disciple_id,
+        CONCAT(pi.""Name"", ' ', pi.""LastName"") AS disciple_name,
+        ce.""CycleStaffId"" AS cycle_staff_id,
+        CONCAT(gp.""Name"", ' ', gp.""LastName"") AS guide_name,
+        sc.""StepStatus"" AS status,
+        ce.""EnrolledAt"" AS enrolled_at,
+        COALESCE(att.cnt, 0) AS attendance_count
+    FROM ""CycleEnrollments"" ce
+    INNER JOIN ""StepCompletions"" sc ON sc.""Id"" = ce.""StepCompletionId""
+    INNER JOIN ""PersonalInfo"" pi ON pi.""Id"" = ce.""DiscipleId""
+    LEFT JOIN ""CycleStaff"" cs ON cs.""Id"" = ce.""CycleStaffId""
+    LEFT JOIN ""PersonalInfo"" gp ON gp.""Id"" = cs.""PersonId""
+    LEFT JOIN LATERAL (
+        SELECT COUNT(*) AS cnt
+        FROM ""CycleAttendances"" ca
+        INNER JOIN ""CycleSessions"" sess ON sess.""Id"" = ca.""CycleSessionId""
+        WHERE ca.""DiscipleId"" = ce.""DiscipleId""
+          AND sess.""StepCycleId"" = p_cycle_id
+    ) att ON TRUE
+    WHERE ce.""StepCycleId"" = p_cycle_id
+      AND ce.""DiscipleId"" IN (SELECT ""Id"" FROM visible_disciples)
+    ORDER BY pi.""Name"", pi.""LastName"";
+$$;
+");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("""DROP FUNCTION IF EXISTS get_step_disciples(TEXT, INTEGER, INTEGER);""");
-            migrationBuilder.Sql("""DROP FUNCTION IF EXISTS get_eligible_step_disciples(TEXT, INTEGER);""");
+            migrationBuilder.DropForeignKey(
+                name: "FK_CycleEnrollments_StepCompletions_StepCompletionId",
+                table: "CycleEnrollments");
+
+            migrationBuilder.DropIndex(
+                name: "IX_CycleEnrollments_StepCompletionId",
+                table: "CycleEnrollments");
+
+            migrationBuilder.DropColumn(
+                name: "StepCompletionId",
+                table: "CycleEnrollments");
+
+            migrationBuilder.AddColumn<int>(
+                name: "Status",
+                table: "CycleEnrollments",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
         }
     }
 }

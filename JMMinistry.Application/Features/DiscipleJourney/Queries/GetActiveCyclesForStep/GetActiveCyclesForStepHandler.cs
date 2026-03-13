@@ -10,13 +10,9 @@ public class GetActiveCyclesForStepHandler(IJmDbContext dbContext)
 {
     public async ValueTask<IList<StepCycleDto>> Handle(GetActiveCyclesForStepQuery request, CancellationToken cancellationToken)
     {
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
-
         return await dbContext.StepCycles
-            .Where(c => c.DiscipleStepId == request.StepId
-                && c.IsOpen
-                && (!c.EnrollmentDeadline.HasValue || c.EnrollmentDeadline.Value >= today))
-            .OrderByDescending(c => c.StartDate)
+            .Where(c => c.DiscipleStepId == request.StepId)
+            .OrderByDescending(c => c.EndDate)
             .Select(c => new StepCycleDto
             {
                 Id = c.Id,

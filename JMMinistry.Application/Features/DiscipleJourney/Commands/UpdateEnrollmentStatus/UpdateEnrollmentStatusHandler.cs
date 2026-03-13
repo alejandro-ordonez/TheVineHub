@@ -12,10 +12,12 @@ public class UpdateEnrollmentStatusHandler(IJmDbContext dbContext)
     public async ValueTask<Unit> Handle(UpdateEnrollmentStatusCommand request, CancellationToken cancellationToken)
     {
         var enrollment = await dbContext.CycleEnrollments
+            .Include(e => e.StepCompletion)
             .FirstOrDefaultAsync(e => e.Id == request.EnrollmentId && e.StepCycleId == request.CycleId, cancellationToken)
             ?? throw new NotFoundException<CycleEnrollment>(request.EnrollmentId.ToString());
 
-        enrollment.Status = (EnrollmentStatus)(int)request.Status;
+        enrollment.StepCompletion!.StepStatus = request.Status;
+        enrollment.StepCompletion.LastUpdated = DateOnly.FromDateTime(DateTime.UtcNow);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;

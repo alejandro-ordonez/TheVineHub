@@ -4,6 +4,6 @@ namespace JMMinistry.Common.Dtos.DiscipleJourney
 {
     public class UpdateEnrollmentStatusDto
     {
-        public EnrollmentStatus Status { get; set; }
+        public StepStatus Status { get; set; }
     }
 }

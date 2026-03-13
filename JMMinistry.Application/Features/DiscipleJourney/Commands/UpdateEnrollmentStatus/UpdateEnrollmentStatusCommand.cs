@@ -1,5 +1,5 @@
 using FluentValidation;
-using JMMinistry.Common.Dtos.DiscipleJourney.Enums;
+using JMMinistry.Domain.DiscipleJourney;
 using Mediator;
 
 namespace JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateEnrollmentStatus
@@ -8,7 +8,7 @@ namespace JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateEnrollm
     {
         public required int CycleId { get; set; }
         public required int EnrollmentId { get; set; }
-        public EnrollmentStatus Status { get; set; }
+        public StepStatus Status { get; set; }
     }
 
     public class UpdateEnrollmentStatusValidator : AbstractValidator<UpdateEnrollmentStatusCommand>

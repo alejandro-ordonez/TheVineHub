@@ -525,6 +525,9 @@
   <data name="MarkCompleted" xml:space="preserve">
     <value>Marcar Completado</value>
   </data>
+  <data name="CloseCycle" xml:space="preserve">
+    <value>Cerrar Ciclo</value>
+  </data>
   <data name="MarkAbandoned" xml:space="preserve">
     <value>Marcar Abandonado</value>
   </data>
@@ -606,6 +609,12 @@
   <data name="Closed" xml:space="preserve">
     <value>Cerrado</value>
   </data>
+  <data name="Year" xml:space="preserve">
+    <value>Año</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Todos</value>
+  </data>
   <data name="StartDate" xml:space="preserve">
     <value>Fecha Inicio</value>
   </data>
@@ -674,5 +683,17 @@
   </data>
   <data name="RequiresCycleWarning" xml:space="preserve">
     <value>Habilitar ciclos impide agregar sub-pasos a este paso.</value>
+  </data>
+  <data name="Enrolled" xml:space="preserve">
+    <value>Inscrito</value>
+  </data>
+  <data name="InPrayers" xml:space="preserve">
+    <value>En Oraciones</value>
+  </data>
+  <data name="InitialStatus" xml:space="preserve">
+    <value>Estado Inicial</value>
+  </data>
+  <data name="RequiresAdminApproval" xml:space="preserve">
+    <value>Requiere aprobación del administrador</value>
   </data>
 </root>

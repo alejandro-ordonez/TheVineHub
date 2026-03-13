@@ -154,6 +154,7 @@ namespace JMMinistry.Web.Store.CycleDetailsUseCase
 
             dispatcher.Dispatch(new UpdateEnrollmentStatusResultAction());
             dispatcher.Dispatch(new FetchCycleDetailsAction { CycleId = action.CycleId });
+            dispatcher.Dispatch(new FetchCycleAttendanceAction { CycleId = action.CycleId });
         }
 
         [EffectMethod]
@@ -184,6 +185,7 @@ namespace JMMinistry.Web.Store.CycleDetailsUseCase
 
             dispatcher.Dispatch(new RecordCycleAttendanceResultAction());
             dispatcher.Dispatch(new FetchCycleAttendanceAction { CycleId = action.CycleId });
+            dispatcher.Dispatch(new FetchCycleDetailsAction { CycleId = action.CycleId });
         }
     }
 }

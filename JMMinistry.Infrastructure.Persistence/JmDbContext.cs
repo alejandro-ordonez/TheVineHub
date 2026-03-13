@@ -229,6 +229,11 @@ public partial class JmDbContext : IdentityDbContext<PersonalInfo, Role, string>
                 .WithMany()
                 .HasForeignKey(e => e.DiscipleId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            enrollment.HasOne(e => e.StepCompletion)
+                .WithMany()
+                .HasForeignKey(e => e.StepCompletionId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
 
         builder.Entity<CycleAttendance>(attendance =>

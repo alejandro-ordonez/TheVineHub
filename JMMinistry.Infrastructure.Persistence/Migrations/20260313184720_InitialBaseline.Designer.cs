@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace JMMinistry.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(JmDbContext))]
-    [Migration("20260311235216_AddCycleDetailsToStepDisciples")]
-    partial class AddCycleDetailsToStepDisciples
+    [Migration("20260313184720_InitialBaseline")]
+    partial class InitialBaseline
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -724,19 +724,22 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text");
 
-                    b.Property<string>("Phone")
-                        .HasColumnType("text");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("PhotoPath")
+                        .HasColumnType("text");
+
                     b.Property<string>("Profession")
                         .HasColumnType("text");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SpouseId")
                         .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -756,6 +759,10 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
+
+                    b.HasIndex("SpouseId")
+                        .IsUnique()
+                        .HasFilter("\"SpouseId\" IS NOT NULL");
 
                     b.HasIndex("Name", "LastName");
 
@@ -1216,7 +1223,14 @@ namespace JMMinistry.Infrastructure.Persistence.Migrations
                         .WithMany("Disciples")
                         .HasForeignKey("CellId");
 
+                    b.HasOne("JMMinistry.Domain.PersonalInfo", "Spouse")
+                        .WithOne()
+                        .HasForeignKey("JMMinistry.Domain.PersonalInfo", "SpouseId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.Navigation("Cell");
+
+                    b.Navigation("Spouse");
                 });
 
             modelBuilder.Entity("MeetingAttendancePersonalInfo", b =>

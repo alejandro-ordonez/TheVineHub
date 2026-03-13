@@ -21,47 +21,66 @@ public class EnrollDisciplesHandler(IJmDbContext dbContext)
         if (cycle.EnrollmentDeadline.HasValue && DateOnly.FromDateTime(DateTime.UtcNow) > cycle.EnrollmentDeadline.Value)
             throw new InvalidOperationException("Enrollment deadline has passed.");
 
-        var existingEnrollments = await dbContext.CycleEnrollments
-            .Where(e => e.StepCycleId == request.CycleId && request.DiscipleIds.Contains(e.DiscipleId))
+        // Resolve status: active cycle → InitialStatus ?? Enrolled; inactive → Completed
+        var resolvedStatus = cycle.IsOpen
+            ? request.InitialStatus ?? StepStatus.Enrolled
+            : StepStatus.Completed;
+
+        // One-enrollment-per-step guard: skip disciples who already have a non-abandoned enrollment for this step (any cycle)
+        var alreadyEnrolledIds = await dbContext.CycleEnrollments
+            .Include(e => e.StepCompletion)
+            .Where(e => e.StepCycle!.DiscipleStepId == cycle.DiscipleStepId
+                        && request.DiscipleIds.Contains(e.DiscipleId)
+                        && e.StepCompletion!.StepStatus != StepStatus.Abandoned)
             .Select(e => e.DiscipleId)
+            .Distinct()
             .ToListAsync(cancellationToken);
 
-        var newDiscipleIds = request.DiscipleIds.Except(existingEnrollments).ToList();
+        var newDiscipleIds = request.DiscipleIds.Except(alreadyEnrolledIds).ToList();
 
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
 
-        var enrollments = newDiscipleIds.Select(discipleId => new CycleEnrollment
-        {
-            StepCycleId = request.CycleId,
-            DiscipleId = discipleId,
-            Status = EnrollmentStatus.Active,
-            EnrolledAt = today
-        });
-
-        dbContext.CycleEnrollments.AddRange(enrollments);
-
-        // Also create StepCompletion (InProgress) so disciples appear on the leader's step page
+        // Find existing non-abandoned StepCompletions for reuse
         var existingCompletions = await dbContext.StepCompletions
             .Where(sc => sc.DiscipleStepId == cycle.DiscipleStepId
                          && newDiscipleIds.Contains(sc.DiscipleId)
                          && sc.StepStatus != StepStatus.Abandoned)
-            .Select(sc => sc.DiscipleId)
-            .ToListAsync(cancellationToken);
+            .ToDictionaryAsync(sc => sc.DiscipleId, cancellationToken);
 
-        var needCompletion = newDiscipleIds.Except(existingCompletions).ToList();
-
-        var completions = needCompletion.Select(discipleId => new StepCompletion
+        foreach (var discipleId in newDiscipleIds)
         {
-            DiscipleStepId = cycle.DiscipleStepId,
-            DiscipleId = discipleId,
-            LeaderId = request.LeaderId,
-            StepStatus = StepStatus.InProgress,
-            DateCreated = today,
-            LastUpdated = today,
-            StepCycleId = cycle.Id
-        });
+            StepCompletion completion;
 
-        dbContext.StepCompletions.AddRange(completions);
+            if (existingCompletions.TryGetValue(discipleId, out var existing))
+            {
+                existing.StepStatus = resolvedStatus;
+                existing.LastUpdated = today;
+                completion = existing;
+            }
+            else
+            {
+                completion = new StepCompletion
+                {
+                    DiscipleStepId = cycle.DiscipleStepId,
+                    DiscipleId = discipleId,
+                    LeaderId = request.LeaderId,
+                    StepStatus = resolvedStatus,
+                    DateCreated = today,
+                    LastUpdated = today,
+                    StepCycleId = cycle.Id
+                };
+                dbContext.StepCompletions.Add(completion);
+            }
+
+            dbContext.CycleEnrollments.Add(new CycleEnrollment
+            {
+                StepCycleId = request.CycleId,
+                DiscipleId = discipleId,
+                EnrolledAt = today,
+                StepCompletion = completion
+            });
+        }
+
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
