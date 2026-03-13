@@ -7,6 +7,5 @@ namespace JMMinistry.Web.Store.DiscipleStepsUseCase
     public record DiscipleStepsState : BaseState
     {
         public IList<DiscipleStepDto> Steps { get; set; } = [];
-        public DateTime? LastFetched { get; set; }
     }
 }

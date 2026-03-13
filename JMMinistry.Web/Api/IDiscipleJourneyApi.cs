@@ -5,7 +5,7 @@ namespace JMMinistry.Web.Api
 {
     public interface IDiscipleJourneyApi
     {
-        Task<Response<IList<DiscipleStepDto>>?> GetStepsAsync(bool forceFresh = false);
+        Task<Response<IList<DiscipleStepDto>>?> GetStepsAsync();
         Task<Response<DiscipleStepDto>?> CreateStepAsync(CreateDiscipleStepDto dto);
         Task<Response<DiscipleStepDto>?> UpdateStepAsync(int stepId, UpdateDiscipleStepDto dto);
         Task<bool> DeleteStepAsync(int stepId);

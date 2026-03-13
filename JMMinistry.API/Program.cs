@@ -2,6 +2,7 @@ using JMMinistry.API.Extensions;
 using JMMinistry.API.Middleware;
 using JMMinistry.Application;
 using JMMinistry.Infrastructure.Persistence;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,7 +31,36 @@ builder.Services.AddControllers();
 builder.Services.AddPersistenceLayer(builder.Configuration);
 builder.Services.AddApplicationLayer(builder.Configuration);
 
-builder.Services.AddOutputCache();
+builder.Services.AddOutputCache(options =>
+{
+    options.AddPolicy(CacheTags.DiscipleSteps, builder =>
+    {
+        builder.AddPolicy<AuthenticatedOutputCachePolicy>();
+        builder.Expire(TimeSpan.FromHours(24));
+        builder.Tag(CacheTags.DiscipleSteps);
+    });
+
+    options.AddPolicy(CacheTags.StepCycles, builder =>
+    {
+        builder.AddPolicy<AuthenticatedOutputCachePolicy>();
+        builder.Expire(TimeSpan.FromHours(1));
+        builder.Tag(CacheTags.StepCycles);
+    });
+
+    options.AddPolicy(CacheTags.CycleData, builder =>
+    {
+        builder.AddPolicy<AuthenticatedOutputCachePolicy>();
+        builder.Expire(TimeSpan.FromHours(1));
+        builder.Tag(CacheTags.CycleData);
+    });
+
+    options.AddPolicy(CacheTags.Meetings, builder =>
+    {
+        builder.AddPolicy<AuthenticatedOutputCachePolicy>();
+        builder.Expire(TimeSpan.FromHours(1));
+        builder.Tag(CacheTags.Meetings);
+    });
+});
 builder.Services.AddSwagger();
 
 var app = builder.Build();

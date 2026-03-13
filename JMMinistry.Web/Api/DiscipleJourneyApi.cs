@@ -9,13 +9,10 @@ namespace JMMinistry.Web.Api
     {
         private const string _discipleJourneyApi = "api/DiscipleJourney";
 
-        public async Task<Response<IList<DiscipleStepDto>>?> GetStepsAsync(bool forceFresh = false)
+        public async Task<Response<IList<DiscipleStepDto>>?> GetStepsAsync()
         {
             using var client = clientFactory.CreateClient(Constants.ApiClient);
-            var url = $"{_discipleJourneyApi}/steps";
-            if (forceFresh)
-                url += $"?_={DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}";
-            var response = await client.GetAsync(url);
+            var response = await client.GetAsync($"{_discipleJourneyApi}/steps");
             return await response.Content.ReadFromJsonAsync<Response<IList<DiscipleStepDto>>?>();
         }
 
