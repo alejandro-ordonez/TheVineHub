@@ -1,0 +1,31 @@
+{
+  "auth": {
+    "login": "INICIAR SESIÓN",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidó su contraseña?",
+    "invalidCredentials": "Credenciales inválidas",
+    "title": "JM MINISTERIO",
+    "subtitle": "Mayordomía y Crecimiento"
+  },
+  "common": {
+    "loading": "Cargando..."
+  },
+  "nav": {
+    "dashboard": "Panel",
+    "cells": "Células",
+    "training": "Capacitación"
+  },
+  "dashboard": {
+    "title": "Panel del Ministerio",
+    "content": "Contenido del Panel"
+  },
+  "cells": {
+    "title": "Mis Células",
+    "content": "Contenido de Células"
+  },
+  "training": {
+    "title": "Universidad de la Vida",
+    "content": "Contenido de Capacitación"
+  }
+}

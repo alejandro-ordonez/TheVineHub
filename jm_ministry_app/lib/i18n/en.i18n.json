@@ -1,0 +1,31 @@
+{
+  "auth": {
+    "login": "LOGIN",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "invalidCredentials": "Invalid credentials",
+    "title": "JM MINISTRY",
+    "subtitle": "Stewardship & Growth"
+  },
+  "common": {
+    "loading": "Loading..."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "cells": "Cells",
+    "training": "Training"
+  },
+  "dashboard": {
+    "title": "Ministry Dashboard",
+    "content": "Dashboard Content"
+  },
+  "cells": {
+    "title": "My Cells",
+    "content": "Cells Content"
+  },
+  "training": {
+    "title": "University of Life",
+    "content": "Training Content"
+  }
+}
