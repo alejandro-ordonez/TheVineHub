@@ -13,34 +13,82 @@ import '../../shared/main_shell.dart';
 
 part 'app_router.g.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final _shellNavigatorHomeKey = GlobalKey<NavigatorState>(debugLabel: 'home');
-final _shellNavigatorDashboardKey = GlobalKey<NavigatorState>(debugLabel: 'dashboard');
+final _shellNavigatorDashboardKey = GlobalKey<NavigatorState>(
+  debugLabel: 'dashboard',
+);
 final _shellNavigatorCellsKey = GlobalKey<NavigatorState>(debugLabel: 'cells');
-final _shellNavigatorTrainingKey = GlobalKey<NavigatorState>(debugLabel: 'training');
+final _shellNavigatorTrainingKey = GlobalKey<NavigatorState>(
+  debugLabel: 'training',
+);
 final _shellNavigatorAdminKey = GlobalKey<NavigatorState>(debugLabel: 'admin');
+
+class RouterListenable extends ChangeNotifier {
+  RouterListenable(Ref ref) {
+    _ref = ref;
+    final link = _ref.keepAlive();
+
+    _ref.listen(authProvider, (previous, next) {
+      if (previous?.isLoading != next.isLoading ||
+          previous?.value != next.value) {
+        debugPrint(
+          'RouterListenable: Auth state changed, notifying router. LoggedIn: ${next.value != null}',
+        );
+        notifyListeners();
+      }
+    });
+
+    _ref.onDispose(() {
+      link.close();
+    });
+  }
+
+  late final Ref _ref;
+}
+
+@riverpod
+RouterListenable routerListenable(Ref ref) {
+  return RouterListenable(ref);
+}
 
 @riverpod
 GoRouter router(Ref ref) {
-  final authState = ref.watch(authProvider);
+  final listenable = ref.watch(routerListenableProvider);
 
   return GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/login',
     navigatorKey: _rootNavigatorKey,
+    refreshListenable: listenable,
     redirect: (context, state) {
+      final authState = ref.read(authProvider);
+
+      // If auth is still initializing, don't redirect yet
+      if (authState.isLoading) {
+        return null;
+      }
+
       final isLoggedIn = authState.value != null;
       final isLoggingIn = state.matchedLocation == '/login';
 
-      if (!isLoggedIn && !isLoggingIn) return '/login';
-      if (isLoggedIn && isLoggingIn) return '/home';
+      debugPrint(
+        'Router Redirect: isLoggedIn=$isLoggedIn, isLoggingIn=$isLoggingIn, path=${state.matchedLocation}',
+      );
+
+      if (!isLoggedIn) {
+        if (isLoggingIn) return null;
+        return '/login';
+      }
+
+      // If logged in and trying to go to login, go home
+      if (isLoggingIn) {
+        return '/home';
+      }
 
       return null;
     },
     routes: [
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           return MainShell(navigationShell: navigationShell);
@@ -75,7 +123,7 @@ GoRouter router(Ref ref) {
                     path: ':id',
                     builder: (context, state) {
                       final id = state.pathParameters['id']!;
-                      return CellDetailsScreen(cellId: int.parse(id));
+                      return CellDetailsScreen(cellId: id);
                     },
                   ),
                 ],

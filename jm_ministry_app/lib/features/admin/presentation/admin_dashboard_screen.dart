@@ -1,13 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../shared/presentation/shell_utils.dart';
+import '../../../i18n/strings.g.dart';
 
-class AdminDashboardScreen extends StatelessWidget {
+class AdminDashboardScreen extends ConsumerWidget {
   const AdminDashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = Translations.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Admin Dashboard')),
-      body: const Center(child: Text('Admin management tools will appear here.')),
+      appBar: AppBar(
+        title: Text(t.admin.title),
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            ref.read(shellScaffoldKeyProvider).currentState?.openDrawer();
+          },
+        ),
+      ),
+      body: Center(child: Text(t.admin.emptyState)),
     );
   }
 }

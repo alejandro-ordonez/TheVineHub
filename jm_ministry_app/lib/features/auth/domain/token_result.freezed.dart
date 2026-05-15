@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TokenResult {
 
- bool get isAuthenticated; DateTime? get expiration; String? get token;
+ bool get isAuthenticated; DateTime get expiration; String get token; String get refreshToken;
 /// Create a copy of TokenResult
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $TokenResultCopyWith<TokenResult> get copyWith => _$TokenResultCopyWithImpl<Toke
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is TokenResult&&(identical(other.isAuthenticated, isAuthenticated) || other.isAuthenticated == isAuthenticated)&&(identical(other.expiration, expiration) || other.expiration == expiration)&&(identical(other.token, token) || other.token == token));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is TokenResult&&(identical(other.isAuthenticated, isAuthenticated) || other.isAuthenticated == isAuthenticated)&&(identical(other.expiration, expiration) || other.expiration == expiration)&&(identical(other.token, token) || other.token == token)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,isAuthenticated,expiration,token);
+int get hashCode => Object.hash(runtimeType,isAuthenticated,expiration,token,refreshToken);
 
 @override
 String toString() {
-  return 'TokenResult(isAuthenticated: $isAuthenticated, expiration: $expiration, token: $token)';
+  return 'TokenResult(isAuthenticated: $isAuthenticated, expiration: $expiration, token: $token, refreshToken: $refreshToken)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $TokenResultCopyWith<$Res>  {
   factory $TokenResultCopyWith(TokenResult value, $Res Function(TokenResult) _then) = _$TokenResultCopyWithImpl;
 @useResult
 $Res call({
- bool isAuthenticated, DateTime? expiration, String? token
+ bool isAuthenticated, DateTime expiration, String token, String refreshToken
 });
 
 
@@ -65,12 +65,13 @@ class _$TokenResultCopyWithImpl<$Res>
 
 /// Create a copy of TokenResult
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isAuthenticated = null,Object? expiration = freezed,Object? token = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isAuthenticated = null,Object? expiration = null,Object? token = null,Object? refreshToken = null,}) {
   return _then(_self.copyWith(
 isAuthenticated: null == isAuthenticated ? _self.isAuthenticated : isAuthenticated // ignore: cast_nullable_to_non_nullable
-as bool,expiration: freezed == expiration ? _self.expiration : expiration // ignore: cast_nullable_to_non_nullable
-as DateTime?,token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
-as String?,
+as bool,expiration: null == expiration ? _self.expiration : expiration // ignore: cast_nullable_to_non_nullable
+as DateTime,token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+as String,refreshToken: null == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -155,10 +156,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isAuthenticated,  DateTime? expiration,  String? token)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isAuthenticated,  DateTime expiration,  String token,  String refreshToken)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TokenResult() when $default != null:
-return $default(_that.isAuthenticated,_that.expiration,_that.token);case _:
+return $default(_that.isAuthenticated,_that.expiration,_that.token,_that.refreshToken);case _:
   return orElse();
 
 }
@@ -176,10 +177,10 @@ return $default(_that.isAuthenticated,_that.expiration,_that.token);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isAuthenticated,  DateTime? expiration,  String? token)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isAuthenticated,  DateTime expiration,  String token,  String refreshToken)  $default,) {final _that = this;
 switch (_that) {
 case _TokenResult():
-return $default(_that.isAuthenticated,_that.expiration,_that.token);case _:
+return $default(_that.isAuthenticated,_that.expiration,_that.token,_that.refreshToken);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -196,10 +197,10 @@ return $default(_that.isAuthenticated,_that.expiration,_that.token);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isAuthenticated,  DateTime? expiration,  String? token)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isAuthenticated,  DateTime expiration,  String token,  String refreshToken)?  $default,) {final _that = this;
 switch (_that) {
 case _TokenResult() when $default != null:
-return $default(_that.isAuthenticated,_that.expiration,_that.token);case _:
+return $default(_that.isAuthenticated,_that.expiration,_that.token,_that.refreshToken);case _:
   return null;
 
 }
@@ -211,12 +212,13 @@ return $default(_that.isAuthenticated,_that.expiration,_that.token);case _:
 @JsonSerializable()
 
 class _TokenResult implements TokenResult {
-  const _TokenResult({required this.isAuthenticated, required this.expiration, this.token});
+  const _TokenResult({required this.isAuthenticated, required this.expiration, required this.token, required this.refreshToken});
   factory _TokenResult.fromJson(Map<String, dynamic> json) => _$TokenResultFromJson(json);
 
 @override final  bool isAuthenticated;
-@override final  DateTime? expiration;
-@override final  String? token;
+@override final  DateTime expiration;
+@override final  String token;
+@override final  String refreshToken;
 
 /// Create a copy of TokenResult
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TokenResult&&(identical(other.isAuthenticated, isAuthenticated) || other.isAuthenticated == isAuthenticated)&&(identical(other.expiration, expiration) || other.expiration == expiration)&&(identical(other.token, token) || other.token == token));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TokenResult&&(identical(other.isAuthenticated, isAuthenticated) || other.isAuthenticated == isAuthenticated)&&(identical(other.expiration, expiration) || other.expiration == expiration)&&(identical(other.token, token) || other.token == token)&&(identical(other.refreshToken, refreshToken) || other.refreshToken == refreshToken));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,isAuthenticated,expiration,token);
+int get hashCode => Object.hash(runtimeType,isAuthenticated,expiration,token,refreshToken);
 
 @override
 String toString() {
-  return 'TokenResult(isAuthenticated: $isAuthenticated, expiration: $expiration, token: $token)';
+  return 'TokenResult(isAuthenticated: $isAuthenticated, expiration: $expiration, token: $token, refreshToken: $refreshToken)';
 }
 
 
@@ -251,7 +253,7 @@ abstract mixin class _$TokenResultCopyWith<$Res> implements $TokenResultCopyWith
   factory _$TokenResultCopyWith(_TokenResult value, $Res Function(_TokenResult) _then) = __$TokenResultCopyWithImpl;
 @override @useResult
 $Res call({
- bool isAuthenticated, DateTime? expiration, String? token
+ bool isAuthenticated, DateTime expiration, String token, String refreshToken
 });
 
 
@@ -268,12 +270,13 @@ class __$TokenResultCopyWithImpl<$Res>
 
 /// Create a copy of TokenResult
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isAuthenticated = null,Object? expiration = freezed,Object? token = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isAuthenticated = null,Object? expiration = null,Object? token = null,Object? refreshToken = null,}) {
   return _then(_TokenResult(
 isAuthenticated: null == isAuthenticated ? _self.isAuthenticated : isAuthenticated // ignore: cast_nullable_to_non_nullable
-as bool,expiration: freezed == expiration ? _self.expiration : expiration // ignore: cast_nullable_to_non_nullable
-as DateTime?,token: freezed == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
-as String?,
+as bool,expiration: null == expiration ? _self.expiration : expiration // ignore: cast_nullable_to_non_nullable
+as DateTime,token: null == token ? _self.token : token // ignore: cast_nullable_to_non_nullable
+as String,refreshToken: null == refreshToken ? _self.refreshToken : refreshToken // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

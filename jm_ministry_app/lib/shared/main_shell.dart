@@ -2,140 +2,172 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../features/training/data/training_repository_impl.dart';
+import '../features/auth/presentation/auth_notifier.dart';
 import '../i18n/strings.g.dart';
+import '../shared/presentation/shell_utils.dart';
 
 class MainShell extends ConsumerWidget {
   final StatefulNavigationShell navigationShell;
 
-  const MainShell({
-    super.key,
-    required this.navigationShell,
-  });
+  const MainShell({super.key, required this.navigationShell});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = Translations.of(context);
     final trainingSteps = ref.watch(trainingStepsProvider);
+    final scaffoldKey = ref.watch(shellScaffoldKeyProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_getAppBarTitle(navigationShell.currentIndex, t)),
-      ),
+      key: scaffoldKey,
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+        child: Column(
           children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
                 children: [
-                  const CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person, size: 40),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'JM Ministry',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 20,
+                  DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
                     ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const CircleAvatar(
+                          radius: 30,
+                          backgroundColor: Colors.white,
+                          child: Icon(Icons.person, size: 40),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          t.auth.appName,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // User Section
+                  _DrawerItem(
+                    icon: Icons.home_outlined,
+                    label: t.nav.home,
+                    isSelected: navigationShell.currentIndex == 0,
+                    onTap: () {
+                      _onItemTapped(0, context, scaffoldKey);
+                    },
+                  ),
+                  _DrawerItem(
+                    icon: Icons.dashboard_outlined,
+                    label: t.nav.dashboard,
+                    isSelected: navigationShell.currentIndex == 1,
+                    onTap: () {
+                      _onItemTapped(1, context, scaffoldKey);
+                    },
+                  ),
+                  _DrawerItem(
+                    icon: Icons.groups_outlined,
+                    label: t.nav.cells,
+                    isSelected: navigationShell.currentIndex == 2,
+                    onTap: () {
+                      _onItemTapped(2, context, scaffoldKey);
+                    },
+                  ),
+
+                  // Ladder of Success (Training)
+                  ExpansionTile(
+                    leading: const Icon(Icons.auto_graph),
+                    title: Text(t.common.ladderOfSuccess),
+                    initiallyExpanded: navigationShell.currentIndex == 3,
+                    children: [
+                      _DrawerItem(
+                        icon: Icons.school_outlined,
+                        label: t.common.overview,
+                        isSelected:
+                            navigationShell.currentIndex == 3 &&
+                            GoRouterState.of(context).matchedLocation ==
+                                '/training',
+                        onTap: () {
+                          _onItemTapped(3, context, scaffoldKey);
+                        },
+                      ),
+                      ...trainingSteps.when(
+                        data: (steps) => steps.map(
+                          (step) => _DrawerItem(
+                            icon: Icons.chevron_right,
+                            label: step.name ?? t.common.step(id: step.id),
+                            isSelected:
+                                GoRouterState.of(context).matchedLocation ==
+                                '/training/step/${step.id}',
+                            onTap: () {
+                              context.push('/training/step/${step.id}');
+                              if (scaffoldKey.currentState?.isDrawerOpen ??
+                                  false) {
+                                scaffoldKey.currentState?.closeDrawer();
+                              }
+                            },
+                          ),
+                        ),
+                        loading: () => [
+                          const Center(child: CircularProgressIndicator()),
+                        ],
+                        error: (e, _) => [
+                          ListTile(
+                            title: Text(t.common.errors.loadingSteps(error: e)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  const Divider(),
+                  // Admin Section
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      t.nav.admin,
+                      style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  ),
+                  _DrawerItem(
+                    icon: Icons.admin_panel_settings_outlined,
+                    label: t.nav.adminPanel,
+                    isSelected: navigationShell.currentIndex == 4,
+                    onTap: () {
+                      _onItemTapped(4, context, scaffoldKey);
+                    },
+                  ),
+                  _DrawerItem(
+                    icon: Icons.search,
+                    label: t.nav.searchUsers,
+                    onTap: () {
+                      // TODO: Implement user search
+                      if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
+                        scaffoldKey.currentState?.closeDrawer();
+                      }
+                    },
                   ),
                 ],
               ),
             ),
-            // User Section
-            _DrawerItem(
-              icon: Icons.home_outlined,
-              label: 'Home',
-              isSelected: navigationShell.currentIndex == 0,
-              onTap: () {
-                navigationShell.goBranch(0);
-                context.pop();
-              },
-            ),
-            _DrawerItem(
-              icon: Icons.dashboard_outlined,
-              label: t.nav.dashboard,
-              isSelected: navigationShell.currentIndex == 1,
-              onTap: () {
-                navigationShell.goBranch(1);
-                context.pop();
-              },
-            ),
-            _DrawerItem(
-              icon: Icons.groups_outlined,
-              label: t.nav.cells,
-              isSelected: navigationShell.currentIndex == 2,
-              onTap: () {
-                navigationShell.goBranch(2);
-                context.pop();
-              },
-            ),
-            
-            // Ladder of Success (Training)
-            ExpansionTile(
-              leading: const Icon(Icons.auto_graph),
-              title: const Text('Ladder of Success'),
-              initiallyExpanded: navigationShell.currentIndex == 3,
-              children: [
-                _DrawerItem(
-                  icon: Icons.school_outlined,
-                  label: 'Overview',
-                  isSelected: navigationShell.currentIndex == 3 && GoRouterState.of(context).matchedLocation == '/training',
-                  onTap: () {
-                    navigationShell.goBranch(3);
-                    context.pop();
-                  },
-                ),
-                ...trainingSteps.when(
-                  data: (steps) => steps.map((step) => _DrawerItem(
-                    icon: Icons.chevron_right,
-                    label: step.name ?? 'Step ${step.id}',
-                    isSelected: GoRouterState.of(context).matchedLocation == '/training/step/${step.id}',
-                    onTap: () {
-                      context.push('/training/step/${step.id}');
-                      context.pop();
-                    },
-                  )),
-                  loading: () => [const Center(child: CircularProgressIndicator())],
-                  error: (e, _) => [ListTile(title: Text('Error loading steps: $e'))],
-                ),
-              ],
-            ),
-
             const Divider(),
-            // Admin Section
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Admin',
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: Text(
+                t.auth.logout,
+                style: const TextStyle(color: Colors.red),
               ),
-            ),
-            _DrawerItem(
-              icon: Icons.admin_panel_settings_outlined,
-              label: 'Admin Panel',
-              isSelected: navigationShell.currentIndex == 4,
               onTap: () {
-                navigationShell.goBranch(4);
-                context.pop();
+                ref.read(authProvider.notifier).logout();
+                if (scaffoldKey.currentState?.isDrawerOpen ?? false) {
+                  scaffoldKey.currentState?.closeDrawer();
+                }
               },
             ),
-            _DrawerItem(
-              icon: Icons.search,
-              label: 'Search Users',
-              onTap: () {
-                // TODO: Implement user search
-                context.pop();
-              },
-            ),
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -143,14 +175,17 @@ class MainShell extends ConsumerWidget {
     );
   }
 
-  String _getAppBarTitle(int index, Translations t) {
-    switch (index) {
-      case 0: return 'Announcements';
-      case 1: return t.nav.dashboard;
-      case 2: return t.nav.cells;
-      case 3: return 'Ladder of Success';
-      case 4: return 'Admin Panel';
-      default: return 'JM Ministry';
+  void _onItemTapped(
+    int index,
+    BuildContext context,
+    GlobalKey<ScaffoldState> key,
+  ) {
+    navigationShell.goBranch(
+      index,
+      initialLocation: index == navigationShell.currentIndex,
+    );
+    if (key.currentState?.isDrawerOpen ?? false) {
+      key.currentState?.closeDrawer();
     }
   }
 }
@@ -171,7 +206,10 @@ class _DrawerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: isSelected ? Theme.of(context).colorScheme.primary : null),
+      leading: Icon(
+        icon,
+        color: isSelected ? Theme.of(context).colorScheme.primary : null,
+      ),
       title: Text(
         label,
         style: TextStyle(

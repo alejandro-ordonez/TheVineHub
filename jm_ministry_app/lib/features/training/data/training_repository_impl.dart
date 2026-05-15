@@ -5,6 +5,7 @@ import '../domain/disciple_step_dto.dart';
 import '../domain/step_cycle_dto.dart';
 import '../domain/cycle_session_dto.dart';
 import '../../../core/network/dio_provider.dart';
+import '../../../shared/domain/api_response.dart';
 
 part 'training_repository_impl.g.dart';
 
@@ -16,25 +17,53 @@ class TrainingRepositoryImpl implements TrainingRepository {
   @override
   Future<List<DiscipleStepDto>> getSteps() async {
     final response = await _dio.get('/api/DiscipleJourney/steps');
-    return (response.data as List)
-        .map((e) => DiscipleStepDto.fromJson(e as Map<String, dynamic>))
-        .toList();
+    final apiResponse = ApiResponse<List<dynamic>>.fromJson(
+      response.data,
+      (json) => json as List<dynamic>,
+    );
+
+    if (apiResponse.success && apiResponse.data != null) {
+      return apiResponse.data!
+          .map((e) => DiscipleStepDto.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+    throw Exception(apiResponse.errors.join(', '));
   }
 
   @override
   Future<List<StepCycleDto>> getActiveCycles(int stepId) async {
-    final response = await _dio.get('/api/DiscipleJourney/steps/$stepId/cycles/active');
-    return (response.data as List)
-        .map((e) => StepCycleDto.fromJson(e as Map<String, dynamic>))
-        .toList();
+    final response = await _dio.get(
+      '/api/DiscipleJourney/steps/$stepId/cycles/active',
+    );
+    final apiResponse = ApiResponse<List<dynamic>>.fromJson(
+      response.data,
+      (json) => json as List<dynamic>,
+    );
+
+    if (apiResponse.success && apiResponse.data != null) {
+      return apiResponse.data!
+          .map((e) => StepCycleDto.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+    throw Exception(apiResponse.errors.join(', '));
   }
 
   @override
   Future<List<CycleSessionDto>> getSessions(int cycleId) async {
-    final response = await _dio.get('/api/DiscipleJourney/cycles/$cycleId/sessions');
-    return (response.data as List)
-        .map((e) => CycleSessionDto.fromJson(e as Map<String, dynamic>))
-        .toList();
+    final response = await _dio.get(
+      '/api/DiscipleJourney/cycles/$cycleId/sessions',
+    );
+    final apiResponse = ApiResponse<List<dynamic>>.fromJson(
+      response.data,
+      (json) => json as List<dynamic>,
+    );
+
+    if (apiResponse.success && apiResponse.data != null) {
+      return apiResponse.data!
+          .map((e) => CycleSessionDto.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+    throw Exception(apiResponse.errors.join(', '));
   }
 }
 

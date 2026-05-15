@@ -8,15 +8,15 @@ part of 'token_result.dart';
 
 _TokenResult _$TokenResultFromJson(Map<String, dynamic> json) => _TokenResult(
   isAuthenticated: json['isAuthenticated'] as bool,
-  expiration: json['expiration'] == null
-      ? null
-      : DateTime.parse(json['expiration'] as String),
-  token: json['token'] as String?,
+  expiration: DateTime.parse(json['expiration'] as String),
+  token: json['token'] as String,
+  refreshToken: json['refreshToken'] as String,
 );
 
 Map<String, dynamic> _$TokenResultToJson(_TokenResult instance) =>
     <String, dynamic>{
       'isAuthenticated': instance.isAuthenticated,
-      'expiration': instance.expiration?.toIso8601String(),
+      'expiration': instance.expiration.toIso8601String(),
       'token': instance.token,
+      'refreshToken': instance.refreshToken,
     };

@@ -6,37 +6,53 @@ part 'cell_dto.g.dart';
 @freezed
 abstract class CellDto with _$CellDto {
   const factory CellDto({
-    int? id,
-    String? name,
-    String? description,
+    String? id,
+    required String name,
+    required String description,
     required bool mainCell,
     String? address,
-    CityDto? city,
-    LocalityDto? locality,
+    @Default(1) int level,
+    @Default(0) int memberCount,
     int? day,
     DateTime? openingDate,
+    @Default([]) List<LeaderInfoDto> leaders,
+    CityDto? city,
+    LocalityDto? locality,
   }) = _CellDto;
 
-  factory CellDto.fromJson(Map<String, dynamic> json) => _$CellDtoFromJson(json);
+  factory CellDto.fromJson(Map<String, dynamic> json) =>
+      _$CellDtoFromJson(json);
+}
+
+@freezed
+abstract class LeaderInfoDto with _$LeaderInfoDto {
+  const factory LeaderInfoDto({
+    String? id,
+    String? photoUrl,
+    required String fullName,
+  }) = _LeaderInfoDto;
+
+  factory LeaderInfoDto.fromJson(Map<String, dynamic> json) =>
+      _$LeaderInfoDtoFromJson(json);
 }
 
 @freezed
 abstract class CityDto with _$CityDto {
   const factory CityDto({
-    required int id,
-    required String? name,
+    required String id,
+    required String name,
     List<LocalityDto>? localities,
   }) = _CityDto;
 
-  factory CityDto.fromJson(Map<String, dynamic> json) => _$CityDtoFromJson(json);
+  factory CityDto.fromJson(Map<String, dynamic> json) =>
+      _$CityDtoFromJson(json);
 }
 
 @freezed
 abstract class LocalityDto with _$LocalityDto {
-  const factory LocalityDto({
-    required int id,
-    required String? name,
-  }) = _LocalityDto;
+  const factory LocalityDto({required String id, required String name}) =
+      _LocalityDto;
 
-  factory LocalityDto.fromJson(Map<String, dynamic> json) => _$LocalityDtoFromJson(json);
+  factory LocalityDto.fromJson(Map<String, dynamic> json) =>
+      _$LocalityDtoFromJson(json);
 }

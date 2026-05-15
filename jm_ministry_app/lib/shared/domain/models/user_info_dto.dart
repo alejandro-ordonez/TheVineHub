@@ -6,6 +6,8 @@ part 'user_info_dto.g.dart';
 
 @freezed
 abstract class UserInfoDto with _$UserInfoDto {
+  const UserInfoDto._();
+
   const factory UserInfoDto({
     String? document,
     String? name,

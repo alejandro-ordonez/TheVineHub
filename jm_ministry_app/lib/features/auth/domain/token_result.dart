@@ -7,9 +7,11 @@ part 'token_result.g.dart';
 abstract class TokenResult with _$TokenResult {
   const factory TokenResult({
     required bool isAuthenticated,
-    required DateTime? expiration,
-    String? token,
+    required DateTime expiration,
+    required String token,
+    required String refreshToken,
   }) = _TokenResult;
 
-  factory TokenResult.fromJson(Map<String, dynamic> json) => _$TokenResultFromJson(json);
+  factory TokenResult.fromJson(Map<String, dynamic> json) =>
+      _$TokenResultFromJson(json);
 }

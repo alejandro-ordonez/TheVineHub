@@ -48,4 +48,4 @@ final class TokenStorageProvider
   }
 }
 
-String _$tokenStorageHash() => r'59e72345d01864745386fab06542f8fff9f74e38';
+String _$tokenStorageHash() => r'0a52fbf7ed3645e59ce07741e73eaa82d0e6a60d';

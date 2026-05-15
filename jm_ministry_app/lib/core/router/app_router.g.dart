@@ -9,6 +9,52 @@ part of 'app_router.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
+@ProviderFor(routerListenable)
+final routerListenableProvider = RouterListenableProvider._();
+
+final class RouterListenableProvider
+    extends
+        $FunctionalProvider<
+          RouterListenable,
+          RouterListenable,
+          RouterListenable
+        >
+    with $Provider<RouterListenable> {
+  RouterListenableProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'routerListenableProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$routerListenableHash();
+
+  @$internal
+  @override
+  $ProviderElement<RouterListenable> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  RouterListenable create(Ref ref) {
+    return routerListenable(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(RouterListenable value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<RouterListenable>(value),
+    );
+  }
+}
+
+String _$routerListenableHash() => r'48d0ca0054da59e9d3b668d2c84be6264b94474b';
+
 @ProviderFor(router)
 final routerProvider = RouterProvider._();
 
@@ -48,4 +94,4 @@ final class RouterProvider
   }
 }
 
-String _$routerHash() => r'8826b540ff1228137c73bcc086373b37f68cf2d2';
+String _$routerHash() => r'd748664fa284d8ddfe52e03427fa57f5e5984902';

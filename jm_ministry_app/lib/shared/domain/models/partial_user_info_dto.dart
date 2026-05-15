@@ -5,6 +5,8 @@ part 'partial_user_info_dto.g.dart';
 
 @freezed
 abstract class PartialUserInfoDto with _$PartialUserInfoDto {
+  const PartialUserInfoDto._();
+
   const factory PartialUserInfoDto({
     String? document,
     String? name,

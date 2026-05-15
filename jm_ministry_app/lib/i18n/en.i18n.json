@@ -6,26 +6,130 @@
     "forgotPassword": "Forgot Password?",
     "invalidCredentials": "Invalid credentials",
     "title": "JM MINISTRY",
-    "subtitle": "Stewardship & Growth"
+    "subtitle": "Stewardship & Growth",
+    "logout": "Logout",
+    "appName": "JM Ministry",
+    "errors": {
+      "failed": "Authentication failed"
+    }
   },
   "common": {
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "ladderOfSuccess": "Ladder of Success",
+    "overview": "Overview",
+    "details": "Details",
+    "step": "Step {id}",
+    "unknown": "Unknown",
+    "profile": "Profile",
+    "roles": {
+      "helper": "Helper",
+      "leader": "Leader"
+    },
+    "errors": {
+      "generic": "Error: {error}",
+      "loadingSteps": "Error loading steps: {error}"
+    },
+    "validation": {
+      "required": "Required"
+    },
+    "days": {
+      "sunday": "Sunday",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday"
+    }
   },
   "nav": {
+    "home": "Home",
     "dashboard": "Dashboard",
     "cells": "Cells",
-    "training": "Training"
+    "training": "Training",
+    "admin": "Admin",
+    "adminPanel": "Admin Panel",
+    "searchUsers": "Search Users"
+  },
+  "home": {
+    "title": "Home / Announcements",
+    "emptyState": "Announcements will appear here."
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "emptyState": "Admin management tools will appear here."
   },
   "dashboard": {
     "title": "Ministry Dashboard",
     "content": "Dashboard Content"
   },
   "cells": {
-    "title": "My Cells",
-    "content": "Cells Content"
+    "title": "Cells",
+    "myCells": "My Cells",
+    "subtitle": "Manage your ministry groups and attendance.",
+    "content": "Cells Content",
+    "report": "Report",
+    "newCell": "New Cell",
+    "submitReport": "Submit Weekly Report",
+    "meetingNotes": "Meeting Notes",
+    "notesHint": "What happened in the cell today?",
+    "recordAttendance": "Record Attendance",
+    "pendingAttendance": "Pending Attendance",
+    "reportLastMeeting": "Report last week's meeting",
+    "emptyState": "No cells assigned yet",
+    "searchHint": "Search cells...",
+    "searchMembersHint": "Search members...",
+    "noAddress": "No address",
+    "everyDay": "Every {day}",
+    "notScheduled": "Not scheduled",
+    "activeGroup": "ACTIVE GROUP",
+    "totalMembers": "TOTAL MEMBERS",
+    "memberCount": "{count} Members",
+    "leader": "Leader",
+    "leaders": "Leaders",
+    "noLeader": "No leader assigned",
+    "noMembers": "No members in this cell yet",
+    "growth": "{count} this month",
+    "tags": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "mainCell": "Main Cell"
+    },
+    "levels": {
+      "direct": "Directly Led",
+      "disciples": "Disciples' Cells",
+      "generic": "Level {level}",
+      "g12": "The {count}"
+    },
+    "errors": {
+      "loadingCells": "Error loading cells: {error}",
+      "failedAttendance": "Failed to record attendance: {error}",
+      "loadingDisciples": "Error loading disciples: {error}",
+      "loadingLocations": "Error loading locations: {error}",
+      "createCell": "Error creating cell: {error}"
+    },
+    "success": {
+      "attendanceRecorded": "Attendance recorded successfully",
+      "cellCreated": "Cell created successfully"
+    },
+    "form": {
+      "name": "Cell Name",
+      "description": "Description",
+      "address": "Address",
+      "city": "City",
+      "locality": "Locality",
+      "meetingDay": "Meeting Day",
+      "isMainCell": "Is Main Cell?",
+      "mainCellSubtitle": "Main cells are central points of the ministry",
+      "openingDate": "Opening Date",
+      "selectDate": "Select a date"
+    }
   },
   "training": {
     "title": "University of Life",
-    "content": "Training Content"
+    "content": "Training Content",
+    "stepDetail": "Detailed view for step ID: {id}"
   }
 }

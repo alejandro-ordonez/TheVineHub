@@ -1,193 +1,152 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'cells_provider.dart';
-import '../../dashboard/data/ministry_repository_impl.dart';
-import '../domain/add_cell_attendance_dto.dart';
-import '../domain/cell_dto.dart';
-import '../../../shared/domain/models/partial_user_info_dto.dart';
+import 'widgets/details/header_bento_section.dart';
+import 'widgets/details/search_and_filters.dart';
+import 'widgets/details/member_card.dart';
+import 'widgets/details/empty_members_state.dart';
+import '../domain/disciple_dto.dart';
+import '../../../i18n/strings.g.dart';
 
 class CellDetailsScreen extends ConsumerStatefulWidget {
-  final int cellId;
+  final String cellId;
 
-  const CellDetailsScreen({
-    super.key,
-    required this.cellId,
-  });
+  const CellDetailsScreen({super.key, required this.cellId});
 
   @override
   ConsumerState<CellDetailsScreen> createState() => _CellDetailsScreenState();
 }
 
 class _CellDetailsScreenState extends ConsumerState<CellDetailsScreen> {
-  final Set<String> _selectedDisciples = {};
-  final _notesController = TextEditingController();
-  bool _isSubmitting = false;
+  final _searchController = TextEditingController();
 
   @override
   void dispose() {
-    _notesController.dispose();
+    _searchController.dispose();
     super.dispose();
-  }
-
-  Future<void> _submitAttendance() async {
-    setState(() => _isSubmitting = true);
-    try {
-      final repo = ref.read(ministryRepositoryProvider);
-      await repo.addAttendance(
-        widget.cellId,
-        AddCellAttendanceDto(
-          disciples: _selectedDisciples.toList(),
-          notes: _notesController.text,
-        ),
-      );
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Attendance recorded successfully')),
-        );
-        Navigator.of(context).pop();
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to record attendance: $e')),
-        );
-      }
-    } finally {
-      if (mounted) setState(() => _isSubmitting = false);
-    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = Translations.of(context);
     final cellAsync = ref.watch(cellDetailsProvider(widget.cellId));
     final disciplesAsync = ref.watch(cellDisciplesProvider(widget.cellId));
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: cellAsync.when(
-          data: (cell) => Text(cell.name ?? 'Cell Details'),
-          loading: () => const Text('Loading...'),
-          error: (_, __) => const Text('Error'),
+          data: (cell) => Text(cell.name),
+          loading: () => Text(t.common.loading),
+          error: (e, s) => Text(t.common.error),
         ),
+        elevation: 0,
+        backgroundColor: colorScheme.surface,
+        foregroundColor: colorScheme.primary,
       ),
-      body: cellAsync.when(
-        data: (cell) => SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildInfoSection(cell),
-              const SizedBox(height: 32),
-              Text(
-                'Record Attendance',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              disciplesAsync.when(
-                data: (disciples) => Column(
-                  children: [
-                    ...disciples.map((disciple) => CheckboxListTile(
-                      title: Text('${disciple.name} ${disciple.lastName}'),
-                      subtitle: Text(disciple.document ?? ''),
-                      value: _selectedDisciples.contains(disciple.document),
-                      onChanged: (selected) {
-                        setState(() {
-                          if (selected == true) {
-                            _selectedDisciples.add(disciple.document!);
-                          } else {
-                            _selectedDisciples.remove(disciple.document);
-                          }
-                        });
+      body: RefreshIndicator(
+        onRefresh: () async {
+          ref.invalidate(cellDetailsProvider(widget.cellId));
+          ref.invalidate(cellDisciplesProvider(widget.cellId));
+          return await ref.read(cellDetailsProvider(widget.cellId).future);
+        },
+        child: Skeletonizer(
+          enabled: cellAsync.isLoading || disciplesAsync.isLoading,
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 900),
+              child: CustomScrollView(
+                slivers: [
+                  // Header Bento Section
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 24,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: HeaderBentoSection(
+                        cell: cellAsync.value,
+                        memberCount: disciplesAsync.value?.length ?? 0,
+                      ),
+                    ),
+                  ),
+
+                  // Search & Filters
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    sliver: SliverToBoxAdapter(
+                      child: SearchAndFilters(controller: _searchController),
+                    ),
+                  ),
+
+                  // Members List
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(20, 32, 20, 100),
+                    sliver: disciplesAsync.when(
+                      data: (disciples) {
+                        if (disciples.isEmpty && !disciplesAsync.isLoading) {
+                          return const SliverFillRemaining(
+                            hasScrollBody: false,
+                            child: EmptyMembersState(),
+                          );
+                        }
+
+                        final displayDisciples = disciplesAsync.isLoading
+                            ? List.generate(
+                                5,
+                                (index) => DiscipleDto(
+                                  id: 'loading_$index',
+                                  fullName: 'Loading Name',
+                                  memberSince: DateTime.now(),
+                                ),
+                              )
+                            : disciples;
+
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) => MemberCard(
+                              index: index,
+                              disciple: displayDisciples[index],
+                            ),
+                            childCount: displayDisciples.length,
+                          ),
+                        );
                       },
-                    )),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: _notesController,
-                      decoration: const InputDecoration(
-                        labelText: 'Meeting Notes',
-                        border: OutlineInputBorder(),
-                        hintText: 'What happened in the cell today?',
-                      ),
-                      maxLines: 3,
+                      loading: () =>
+                          const SliverToBoxAdapter(child: SizedBox.shrink()),
+                      error: (err, stack) => _ErrorState(err: err),
                     ),
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: _isSubmitting || _selectedDisciples.isEmpty 
-                          ? null 
-                          : _submitAttendance,
-                        icon: _isSubmitting 
-                          ? const SizedBox(
-                              width: 20, 
-                              height: 20, 
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(Icons.check),
-                        label: const Text('Submit Weekly Report'),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) => Text('Error loading disciples: $e'),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // TODO: Add member
+        },
+        backgroundColor: colorScheme.secondaryContainer,
+        foregroundColor: colorScheme.onSecondaryContainer,
+        child: const Icon(Icons.person_add_outlined),
       ),
     );
-  }
-
-  Widget _buildInfoSection(CellDto cell) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceContainer,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          _buildInfoRow(Icons.location_on, cell.address ?? 'No address'),
-          const Divider(),
-          _buildInfoRow(Icons.calendar_month, 'Every ${_getDayName(cell.day)}'),
-          const Divider(),
-          _buildInfoRow(Icons.description, cell.description ?? 'No description'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(IconData icon, String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
-          const SizedBox(width: 12),
-          Expanded(child: Text(text)),
-        ],
-      ),
-    );
-  }
-
-  String _getDayName(int? day) {
-    if (day == null) return 'Not scheduled';
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    return (day >= 0 && day < days.length) ? days[day] : 'Unknown';
   }
 }
 
-// Additional provider for disciples
-final cellDisciplesProvider = FutureProvider.family<List<PartialUserInfoDto>, int>((ref, cellId) async {
-  final repo = ref.watch(ministryRepositoryProvider);
-  return repo.getDisciples(cellId);
-});
+class _ErrorState extends StatelessWidget {
+  final Object err;
+  const _ErrorState({required this.err});
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
+    return SliverToBoxAdapter(
+      child: Center(child: Text(t.cells.errors.loadingDisciples(error: err))),
+    );
+  }
+}

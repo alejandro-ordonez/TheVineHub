@@ -76,3 +76,36 @@ The application uses a high-fidelity editorial design system.
 - `lib/main.dart`: The entry point of the application.
 - `pubspec.yaml`: Project configuration and dependencies.
 - `analysis_options.yaml`: Linting and analyzer rules.
+
+## API Features Roadmap
+
+### 1. User & Authentication (`UserController`)
+- [x] **Login:** `POST /api/User/auth`
+- [ ] **Token Refresh:** `POST /api/User/refresh`
+- [ ] **Registration:** `POST /api/User/register`
+- [ ] **Profile Management:** `GET /api/User/{document?}`, `PUT /api/User`
+- [ ] **User Search:** `POST /api/User/Search`
+- [ ] **Hierarchy:** `GET /api/User/{discipleId}/is-leader`
+- [ ] **Photo Management:** `GET /api/User/photo/upload-url`, `DELETE /api/User/{document}/photo`
+
+### 2. Ministry & Cells (`MinistryController`)
+- [ ] **Cell Management:** `GET /api/Ministry`, `POST /api/Ministry`, `PUT /api/Ministry`
+- [ ] **Disciples:** `GET /api/Ministry/disciples/{cellId}`, `POST /api/Ministry/disciples/{cellId}`, `DELETE /api/Ministry/disciples/{cellId}/{discipleId}`
+- [ ] **Attendance:** `GET /api/Ministry/attendances/{cellId}`, `POST /api/Ministry/attendances/{cellId}`, `PUT /api/Ministry/attendances/{cellId}/{attendanceId}`
+
+### 3. Disciple Journey & Training (`DiscipleJourneyController`)
+- [ ] **Steps:** `GET /api/DiscipleJourney/steps`, `GET /api/DiscipleJourney/steps/{stepId}/disciples`
+- [ ] **Completions:** `PUT /api/DiscipleJourney/steps/{stepId}/completions/{discipleId}`, `POST /api/DiscipleJourney/steps/{stepId}/completions`
+- [ ] **Cycles:** `GET /api/DiscipleJourney/steps/{stepId}/cycles/active`, `GET /api/DiscipleJourney/cycles/{cycleId}/enrollments`
+- [ ] **Enrollment:** `POST /api/DiscipleJourney/cycles/{cycleId}/enrollments`, `PUT /api/DiscipleJourney/cycles/{cycleId}/enrollments/{enrollmentId}/status`
+- [ ] **Cycle Attendance:** `GET /api/DiscipleJourney/cycles/{cycleId}/attendance`, `POST /api/DiscipleJourney/cycles/{cycleId}/sessions/{sessionId}/attendance`
+
+### 4. Discipleship Notes (`DiscipleshipController`)
+- [ ] **Notes:** `GET /api/Discipleship/{discipleId}/notes`, `POST /api/Discipleship/{discipleId}/notes`
+- [ ] **Entries:** `GET /api/Discipleship/{discipleId}/notes/{noteId}/entries`, `POST /api/Discipleship/{discipleId}/notes/{noteId}/entries`
+
+### 5. Meetings & Events (`MeetingsController`)
+- [ ] **Meetings:** `GET /api/Meetings`, `POST /api/Meetings`
+
+### 6. Infrastructure (`LocationController`)
+- [ ] **Location Data:** `GET /api/Location`

@@ -4,6 +4,7 @@ import '../domain/discipleship_repository.dart';
 import '../domain/discipleship_note_dto.dart';
 import '../domain/discipleship_note_entry_dto.dart';
 import '../../../core/network/dio_provider.dart';
+import '../../../shared/domain/api_response.dart';
 
 part 'discipleship_repository_impl.g.dart';
 
@@ -15,29 +16,81 @@ class DiscipleshipRepositoryImpl implements DiscipleshipRepository {
   @override
   Future<List<DiscipleshipNoteDto>> getNotes(String discipleId) async {
     final response = await _dio.get('/api/Discipleship/$discipleId/notes');
-    return (response.data as List)
-        .map((e) => DiscipleshipNoteDto.fromJson(e as Map<String, dynamic>))
-        .toList();
+    final apiResponse = ApiResponse<List<dynamic>>.fromJson(
+      response.data,
+      (json) => json as List<dynamic>,
+    );
+
+    if (apiResponse.success && apiResponse.data != null) {
+      return apiResponse.data!
+          .map((e) => DiscipleshipNoteDto.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+    throw Exception(apiResponse.errors.join(', '));
   }
 
   @override
-  Future<DiscipleshipNoteDto> createNote(String discipleId, Map<String, dynamic> command) async {
-    final response = await _dio.post('/api/Discipleship/$discipleId/notes', data: command);
-    return DiscipleshipNoteDto.fromJson(response.data as Map<String, dynamic>);
+  Future<DiscipleshipNoteDto> createNote(
+    String discipleId,
+    Map<String, dynamic> command,
+  ) async {
+    final response = await _dio.post(
+      '/api/Discipleship/$discipleId/notes',
+      data: command,
+    );
+    final apiResponse = ApiResponse<Map<String, dynamic>>.fromJson(
+      response.data,
+      (json) => json as Map<String, dynamic>,
+    );
+
+    if (apiResponse.success && apiResponse.data != null) {
+      return DiscipleshipNoteDto.fromJson(apiResponse.data!);
+    }
+    throw Exception(apiResponse.errors.join(', '));
   }
 
   @override
-  Future<List<DiscipleshipNoteEntryDto>> getNoteEntries(String discipleId, int noteId) async {
-    final response = await _dio.get('/api/Discipleship/$discipleId/notes/$noteId/entries');
-    return (response.data as List)
-        .map((e) => DiscipleshipNoteEntryDto.fromJson(e as Map<String, dynamic>))
-        .toList();
+  Future<List<DiscipleshipNoteEntryDto>> getNoteEntries(
+    String discipleId,
+    int noteId,
+  ) async {
+    final response = await _dio.get(
+      '/api/Discipleship/$discipleId/notes/$noteId/entries',
+    );
+    final apiResponse = ApiResponse<List<dynamic>>.fromJson(
+      response.data,
+      (json) => json as List<dynamic>,
+    );
+
+    if (apiResponse.success && apiResponse.data != null) {
+      return apiResponse.data!
+          .map(
+            (e) => DiscipleshipNoteEntryDto.fromJson(e as Map<String, dynamic>),
+          )
+          .toList();
+    }
+    throw Exception(apiResponse.errors.join(', '));
   }
 
   @override
-  Future<DiscipleshipNoteEntryDto> createNoteEntry(String discipleId, int noteId, Map<String, dynamic> command) async {
-    final response = await _dio.post('/api/Discipleship/$discipleId/notes/$noteId/entries', data: command);
-    return DiscipleshipNoteEntryDto.fromJson(response.data as Map<String, dynamic>);
+  Future<DiscipleshipNoteEntryDto> createNoteEntry(
+    String discipleId,
+    int noteId,
+    Map<String, dynamic> command,
+  ) async {
+    final response = await _dio.post(
+      '/api/Discipleship/$discipleId/notes/$noteId/entries',
+      data: command,
+    );
+    final apiResponse = ApiResponse<Map<String, dynamic>>.fromJson(
+      response.data,
+      (json) => json as Map<String, dynamic>,
+    );
+
+    if (apiResponse.success && apiResponse.data != null) {
+      return DiscipleshipNoteEntryDto.fromJson(apiResponse.data!);
+    }
+    throw Exception(apiResponse.errors.join(', '));
   }
 }
 

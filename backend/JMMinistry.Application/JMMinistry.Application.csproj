@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Features\Classes\**" />
+    <EmbeddedResource Remove="Features\Classes\**" />
+    <None Remove="Features\Classes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="Mediator.Abstractions" Version="3.0.2" />
+    <PackageReference Include="Mediator.SourceGenerator" Version="3.0.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7" />
+    <PackageReference Include="Riok.Mapperly" Version="4.3.1" />
+    <PackageReference Include="Scriban" Version="7.1.0" />
+    <PackageReference Include="SkiaSharp" Version="3.119.2" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.2" />
+    <PackageReference Include="SurrealDb.Net" Version="0.10.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Meetings\Commands\RegisterAttendance\" />
+    <Folder Include="Features\User\Commands\EditUser\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JMMinistry.Common\JMMinistry.Common.csproj" />
+    <ProjectReference Include="..\JMMinistry.Domain\JMMinistry.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

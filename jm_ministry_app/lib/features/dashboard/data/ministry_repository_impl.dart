@@ -2,10 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../domain/ministry_repository.dart';
 import '../../cells/domain/cell_dto.dart';
+import '../../cells/domain/disciple_dto.dart';
 import '../../cells/domain/add_cell_attendance_dto.dart';
 import '../../cells/domain/update_cell_attendance_dto.dart';
-import '../../../shared/domain/models/partial_user_info_dto.dart';
 import '../../../core/network/dio_provider.dart';
+import '../../../shared/domain/api_response.dart';
 
 part 'ministry_repository_impl.g.dart';
 
@@ -17,33 +18,122 @@ class MinistryRepositoryImpl implements MinistryRepository {
   @override
   Future<List<CellDto>> getCells() async {
     final response = await _dio.get('/api/Ministry');
-    return (response.data as List)
-        .map((e) => CellDto.fromJson(e as Map<String, dynamic>))
-        .toList();
+    final apiResponse = ApiResponse<List<dynamic>>.fromJson(
+      response.data,
+      (json) => json as List<dynamic>,
+    );
+
+    if (apiResponse.success && apiResponse.data != null) {
+      return apiResponse.data!
+          .map((e) => CellDto.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+    throw Exception(apiResponse.errors.join(', '));
   }
 
   @override
-  Future<CellDto> getCell(int id) async {
+  Future<CellDto> getCell(String id) async {
     final response = await _dio.get('/api/Ministry/$id');
-    return CellDto.fromJson(response.data as Map<String, dynamic>);
+    final apiResponse = ApiResponse<Map<String, dynamic>>.fromJson(
+      response.data,
+      (json) => json as Map<String, dynamic>,
+    );
+
+    if (apiResponse.success && apiResponse.data != null) {
+      return CellDto.fromJson(apiResponse.data!);
+    }
+    throw Exception(apiResponse.errors.join(', '));
   }
 
   @override
-  Future<void> addAttendance(int cellId, AddCellAttendanceDto attendance) async {
-    await _dio.post('/api/Ministry/attendances/$cellId', data: attendance.toJson());
+  Future<CellDto> createCell(CellDto cell) async {
+    final response = await _dio.post('/api/Ministry', data: cell.toJson());
+    final apiResponse = ApiResponse<Map<String, dynamic>>.fromJson(
+      response.data,
+      (json) => json as Map<String, dynamic>,
+    );
+
+    if (apiResponse.success && apiResponse.data != null) {
+      return CellDto.fromJson(apiResponse.data!);
+    }
+    throw Exception(apiResponse.errors.join(', '));
   }
 
   @override
-  Future<void> updateAttendance(int cellId, int attendanceId, UpdateCellAttendanceDto attendance) async {
-    await _dio.put('/api/Ministry/attendances/$cellId/$attendanceId', data: attendance.toJson());
+  Future<CellDto> updateCell(CellDto cell) async {
+    final response = await _dio.put('/api/Ministry', data: cell.toJson());
+    final apiResponse = ApiResponse<Map<String, dynamic>>.fromJson(
+      response.data,
+      (json) => json as Map<String, dynamic>,
+    );
+
+    if (apiResponse.success && apiResponse.data != null) {
+      return CellDto.fromJson(apiResponse.data!);
+    }
+    throw Exception(apiResponse.errors.join(', '));
   }
 
   @override
-  Future<List<PartialUserInfoDto>> getDisciples(int cellId) async {
+  Future<void> addAttendance(
+    String cellId,
+    AddCellAttendanceDto attendance,
+  ) async {
+    final response = await _dio.post(
+      '/api/Ministry/attendances/$cellId',
+      data: attendance.toJson(),
+    );
+    final apiResponse = ApiResponse.fromJson(response.data, (json) => json);
+    if (!apiResponse.success) {
+      throw Exception(apiResponse.errors.join(', '));
+    }
+  }
+
+  @override
+  Future<void> updateAttendance(
+    String cellId,
+    String attendanceId,
+    UpdateCellAttendanceDto attendance,
+  ) async {
+    final response = await _dio.put(
+      '/api/Ministry/attendances/$cellId/$attendanceId',
+      data: attendance.toJson(),
+    );
+    final apiResponse = ApiResponse.fromJson(response.data, (json) => json);
+    if (!apiResponse.success) {
+      throw Exception(apiResponse.errors.join(', '));
+    }
+  }
+
+  @override
+  Future<List<DiscipleDto>> getDisciples(String cellId) async {
     final response = await _dio.get('/api/Ministry/disciples/$cellId');
-    return (response.data as List)
-        .map((e) => PartialUserInfoDto.fromJson(e as Map<String, dynamic>))
-        .toList();
+    final apiResponse = ApiResponse<List<dynamic>>.fromJson(
+      response.data,
+      (json) => json as List<dynamic>,
+    );
+
+    if (apiResponse.success && apiResponse.data != null) {
+      return apiResponse.data!
+          .map((e) => DiscipleDto.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+    throw Exception(apiResponse.errors.join(', '));
+  }
+
+  @override
+  Future<List<CityDto>> getLocationData() async {
+    final response = await _dio.get('/api/Location');
+    final apiResponse = ApiResponse<List<dynamic>>.fromJson(
+      response.data,
+      (json) => json as List<dynamic>,
+    );
+
+    if (apiResponse.success && apiResponse.data != null) {
+      return apiResponse.data!
+          .map((e) => CityDto.fromJson(e as Map<String, dynamic>))
+          .toList();
+    }
+    throw Exception(apiResponse.errors.join(', '));
   }
 }
 

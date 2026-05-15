@@ -215,8 +215,8 @@ return $default(_that.document,_that.name,_that.lastName,_that.phone,_that.gende
 /// @nodoc
 @JsonSerializable()
 
-class _PartialUserInfoDto implements PartialUserInfoDto {
-  const _PartialUserInfoDto({this.document, this.name, this.lastName, this.phone, this.gender, this.maritalStatus, this.photo, this.cellId});
+class _PartialUserInfoDto extends PartialUserInfoDto {
+  const _PartialUserInfoDto({this.document, this.name, this.lastName, this.phone, this.gender, this.maritalStatus, this.photo, this.cellId}): super._();
   factory _PartialUserInfoDto.fromJson(Map<String, dynamic> json) => _$PartialUserInfoDtoFromJson(json);
 
 @override final  String? document;

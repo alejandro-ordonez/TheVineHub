@@ -8,13 +8,7 @@ import 'i18n/strings.g.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   LocaleSettings.useDeviceLocale();
-  runApp(
-    ProviderScope(
-      child: TranslationProvider(
-        child: const MyApp(),
-      ),
-    ),
-  );
+  runApp(ProviderScope(child: TranslationProvider(child: const MyApp())));
 }
 
 class MyApp extends ConsumerWidget {
@@ -36,7 +30,7 @@ class MyApp extends ConsumerWidget {
       supportedLocales: AppLocaleUtils.supportedLocales,
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       builder: (context, child) {
-        return TranslationProvider(child: child!);
+        return child!;
       },
     );
   }

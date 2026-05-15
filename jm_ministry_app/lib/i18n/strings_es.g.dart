@@ -40,6 +40,8 @@ class TranslationsEs with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsAuthEs auth = _TranslationsAuthEs._(_root);
 	@override late final _TranslationsCommonEs common = _TranslationsCommonEs._(_root);
 	@override late final _TranslationsNavEs nav = _TranslationsNavEs._(_root);
+	@override late final _TranslationsHomeEs home = _TranslationsHomeEs._(_root);
+	@override late final _TranslationsAdminEs admin = _TranslationsAdminEs._(_root);
 	@override late final _TranslationsDashboardEs dashboard = _TranslationsDashboardEs._(_root);
 	@override late final _TranslationsCellsEs cells = _TranslationsCellsEs._(_root);
 	@override late final _TranslationsTrainingEs training = _TranslationsTrainingEs._(_root);
@@ -59,6 +61,9 @@ class _TranslationsAuthEs implements TranslationsAuthEn {
 	@override String get invalidCredentials => 'Credenciales inválidas';
 	@override String get title => 'JM MINISTERIO';
 	@override String get subtitle => 'Mayordomía y Crecimiento';
+	@override String get logout => 'Cerrar Sesión';
+	@override String get appName => 'JM Ministerio';
+	@override late final _TranslationsAuthErrorsEs errors = _TranslationsAuthErrorsEs._(_root);
 }
 
 // Path: common
@@ -69,6 +74,18 @@ class _TranslationsCommonEs implements TranslationsCommonEn {
 
 	// Translations
 	@override String get loading => 'Cargando...';
+	@override String get error => 'Error';
+	@override String get retry => 'Reintentar';
+	@override String get ladderOfSuccess => 'Escalera del Éxito';
+	@override String get overview => 'Resumen';
+	@override String get details => 'Detalles';
+	@override String step({required Object id}) => 'Paso ${id}';
+	@override String get unknown => 'Desconocido';
+	@override String get profile => 'Perfil';
+	@override late final _TranslationsCommonRolesEs roles = _TranslationsCommonRolesEs._(_root);
+	@override late final _TranslationsCommonErrorsEs errors = _TranslationsCommonErrorsEs._(_root);
+	@override late final _TranslationsCommonValidationEs validation = _TranslationsCommonValidationEs._(_root);
+	@override late final _TranslationsCommonDaysEs days = _TranslationsCommonDaysEs._(_root);
 }
 
 // Path: nav
@@ -78,9 +95,35 @@ class _TranslationsNavEs implements TranslationsNavEn {
 	final TranslationsEs _root; // ignore: unused_field
 
 	// Translations
+	@override String get home => 'Inicio';
 	@override String get dashboard => 'Panel';
 	@override String get cells => 'Células';
 	@override String get training => 'Capacitación';
+	@override String get admin => 'Admin';
+	@override String get adminPanel => 'Panel de Administración';
+	@override String get searchUsers => 'Buscar Usuarios';
+}
+
+// Path: home
+class _TranslationsHomeEs implements TranslationsHomeEn {
+	_TranslationsHomeEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Inicio / Anuncios';
+	@override String get emptyState => 'Los anuncios aparecerán aquí.';
+}
+
+// Path: admin
+class _TranslationsAdminEs implements TranslationsAdminEn {
+	_TranslationsAdminEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Panel de Administración';
+	@override String get emptyState => 'Las herramientas de gestión de administración aparecerán aquí.';
 }
 
 // Path: dashboard
@@ -101,8 +144,37 @@ class _TranslationsCellsEs implements TranslationsCellsEn {
 	final TranslationsEs _root; // ignore: unused_field
 
 	// Translations
-	@override String get title => 'Mis Células';
+	@override String get title => 'Células';
+	@override String get myCells => 'Mis Células';
+	@override String get subtitle => 'Gestiona tus grupos de ministerio y asistencia.';
 	@override String get content => 'Contenido de Células';
+	@override String get report => 'Reportar';
+	@override String get newCell => 'Nueva Célula';
+	@override String get submitReport => 'Enviar Reporte Semanal';
+	@override String get meetingNotes => 'Notas de la Reunión';
+	@override String get notesHint => '¿Qué pasó en la célula hoy?';
+	@override String get recordAttendance => 'Registrar Asistencia';
+	@override String get pendingAttendance => 'Asistencia Pendiente';
+	@override String get reportLastMeeting => 'Reportar la reunión de la semana pasada';
+	@override String get emptyState => 'No hay células asignadas todavía';
+	@override String get searchHint => 'Buscar células...';
+	@override String get searchMembersHint => 'Buscar miembros...';
+	@override String get noAddress => 'Sin dirección';
+	@override String everyDay({required Object day}) => 'Cada ${day}';
+	@override String get notScheduled => 'No programado';
+	@override String get activeGroup => 'GRUPO ACTIVO';
+	@override String get totalMembers => 'TOTAL MIEMBROS';
+	@override String memberCount({required Object count}) => '${count} Miembros';
+	@override String get leader => 'Líder';
+	@override String get leaders => 'Líderes';
+	@override String get noLeader => 'No hay líder asignado';
+	@override String get noMembers => 'No hay miembros en esta célula todavía';
+	@override String growth({required Object count}) => '${count} este mes';
+	@override late final _TranslationsCellsTagsEs tags = _TranslationsCellsTagsEs._(_root);
+	@override late final _TranslationsCellsLevelsEs levels = _TranslationsCellsLevelsEs._(_root);
+	@override late final _TranslationsCellsErrorsEs errors = _TranslationsCellsErrorsEs._(_root);
+	@override late final _TranslationsCellsSuccessEs success = _TranslationsCellsSuccessEs._(_root);
+	@override late final _TranslationsCellsFormEs form = _TranslationsCellsFormEs._(_root);
 }
 
 // Path: training
@@ -114,6 +186,134 @@ class _TranslationsTrainingEs implements TranslationsTrainingEn {
 	// Translations
 	@override String get title => 'Universidad de la Vida';
 	@override String get content => 'Contenido de Capacitación';
+	@override String stepDetail({required Object id}) => 'Vista detallada para el paso con ID: ${id}';
+}
+
+// Path: auth.errors
+class _TranslationsAuthErrorsEs implements TranslationsAuthErrorsEn {
+	_TranslationsAuthErrorsEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get failed => 'Error de autenticación';
+}
+
+// Path: common.roles
+class _TranslationsCommonRolesEs implements TranslationsCommonRolesEn {
+	_TranslationsCommonRolesEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get helper => 'Asistente';
+	@override String get leader => 'Líder';
+}
+
+// Path: common.errors
+class _TranslationsCommonErrorsEs implements TranslationsCommonErrorsEn {
+	_TranslationsCommonErrorsEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String generic({required Object error}) => 'Error: ${error}';
+	@override String loadingSteps({required Object error}) => 'Error al cargar los pasos: ${error}';
+}
+
+// Path: common.validation
+class _TranslationsCommonValidationEs implements TranslationsCommonValidationEn {
+	_TranslationsCommonValidationEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get required => 'Requerido';
+}
+
+// Path: common.days
+class _TranslationsCommonDaysEs implements TranslationsCommonDaysEn {
+	_TranslationsCommonDaysEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get sunday => 'Domingo';
+	@override String get monday => 'Lunes';
+	@override String get tuesday => 'Martes';
+	@override String get wednesday => 'Miércoles';
+	@override String get thursday => 'Jueves';
+	@override String get friday => 'Viernes';
+	@override String get saturday => 'Sábado';
+}
+
+// Path: cells.tags
+class _TranslationsCellsTagsEs implements TranslationsCellsTagsEn {
+	_TranslationsCellsTagsEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get active => 'ACTIVA';
+	@override String get inactive => 'INACTIVA';
+	@override String get mainCell => 'CÉLULA PRINCIPAL';
+}
+
+// Path: cells.levels
+class _TranslationsCellsLevelsEs implements TranslationsCellsLevelsEn {
+	_TranslationsCellsLevelsEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get direct => 'Liderazgo Directo';
+	@override String get disciples => 'Células de Discípulos';
+	@override String generic({required Object level}) => 'Nivel ${level}';
+	@override String g12({required Object count}) => 'Los ${count}';
+}
+
+// Path: cells.errors
+class _TranslationsCellsErrorsEs implements TranslationsCellsErrorsEn {
+	_TranslationsCellsErrorsEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String loadingCells({required Object error}) => 'Error al cargar las células: ${error}';
+	@override String failedAttendance({required Object error}) => 'Error al registrar la asistencia: ${error}';
+	@override String loadingDisciples({required Object error}) => 'Error al cargar los discípulos: ${error}';
+	@override String loadingLocations({required Object error}) => 'Error al cargar las ubicaciones: ${error}';
+	@override String createCell({required Object error}) => 'Error al crear la célula: ${error}';
+}
+
+// Path: cells.success
+class _TranslationsCellsSuccessEs implements TranslationsCellsSuccessEn {
+	_TranslationsCellsSuccessEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get attendanceRecorded => 'Asistencia registrada con éxito';
+	@override String get cellCreated => 'Célula creada con éxito';
+}
+
+// Path: cells.form
+class _TranslationsCellsFormEs implements TranslationsCellsFormEn {
+	_TranslationsCellsFormEs._(this._root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get name => 'Nombre de la Célula';
+	@override String get description => 'Descripción';
+	@override String get address => 'Dirección';
+	@override String get city => 'Ciudad';
+	@override String get locality => 'Localidad';
+	@override String get meetingDay => 'Día de Reunión';
+	@override String get isMainCell => '¿Es Célula Principal?';
+	@override String get mainCellSubtitle => 'Las células principales son puntos centrales del ministerio';
+	@override String get openingDate => 'Fecha de Apertura';
+	@override String get selectDate => 'Seleccionar una fecha';
 }
 
 /// The flat map containing all translations for locale <es>.
@@ -131,16 +331,96 @@ extension on TranslationsEs {
 			'auth.invalidCredentials' => 'Credenciales inválidas',
 			'auth.title' => 'JM MINISTERIO',
 			'auth.subtitle' => 'Mayordomía y Crecimiento',
+			'auth.logout' => 'Cerrar Sesión',
+			'auth.appName' => 'JM Ministerio',
+			'auth.errors.failed' => 'Error de autenticación',
 			'common.loading' => 'Cargando...',
+			'common.error' => 'Error',
+			'common.retry' => 'Reintentar',
+			'common.ladderOfSuccess' => 'Escalera del Éxito',
+			'common.overview' => 'Resumen',
+			'common.details' => 'Detalles',
+			'common.step' => ({required Object id}) => 'Paso ${id}',
+			'common.unknown' => 'Desconocido',
+			'common.profile' => 'Perfil',
+			'common.roles.helper' => 'Asistente',
+			'common.roles.leader' => 'Líder',
+			'common.errors.generic' => ({required Object error}) => 'Error: ${error}',
+			'common.errors.loadingSteps' => ({required Object error}) => 'Error al cargar los pasos: ${error}',
+			'common.validation.required' => 'Requerido',
+			'common.days.sunday' => 'Domingo',
+			'common.days.monday' => 'Lunes',
+			'common.days.tuesday' => 'Martes',
+			'common.days.wednesday' => 'Miércoles',
+			'common.days.thursday' => 'Jueves',
+			'common.days.friday' => 'Viernes',
+			'common.days.saturday' => 'Sábado',
+			'nav.home' => 'Inicio',
 			'nav.dashboard' => 'Panel',
 			'nav.cells' => 'Células',
 			'nav.training' => 'Capacitación',
+			'nav.admin' => 'Admin',
+			'nav.adminPanel' => 'Panel de Administración',
+			'nav.searchUsers' => 'Buscar Usuarios',
+			'home.title' => 'Inicio / Anuncios',
+			'home.emptyState' => 'Los anuncios aparecerán aquí.',
+			'admin.title' => 'Panel de Administración',
+			'admin.emptyState' => 'Las herramientas de gestión de administración aparecerán aquí.',
 			'dashboard.title' => 'Panel del Ministerio',
 			'dashboard.content' => 'Contenido del Panel',
-			'cells.title' => 'Mis Células',
+			'cells.title' => 'Células',
+			'cells.myCells' => 'Mis Células',
+			'cells.subtitle' => 'Gestiona tus grupos de ministerio y asistencia.',
 			'cells.content' => 'Contenido de Células',
+			'cells.report' => 'Reportar',
+			'cells.newCell' => 'Nueva Célula',
+			'cells.submitReport' => 'Enviar Reporte Semanal',
+			'cells.meetingNotes' => 'Notas de la Reunión',
+			'cells.notesHint' => '¿Qué pasó en la célula hoy?',
+			'cells.recordAttendance' => 'Registrar Asistencia',
+			'cells.pendingAttendance' => 'Asistencia Pendiente',
+			'cells.reportLastMeeting' => 'Reportar la reunión de la semana pasada',
+			'cells.emptyState' => 'No hay células asignadas todavía',
+			'cells.searchHint' => 'Buscar células...',
+			'cells.searchMembersHint' => 'Buscar miembros...',
+			'cells.noAddress' => 'Sin dirección',
+			'cells.everyDay' => ({required Object day}) => 'Cada ${day}',
+			'cells.notScheduled' => 'No programado',
+			'cells.activeGroup' => 'GRUPO ACTIVO',
+			'cells.totalMembers' => 'TOTAL MIEMBROS',
+			'cells.memberCount' => ({required Object count}) => '${count} Miembros',
+			'cells.leader' => 'Líder',
+			'cells.leaders' => 'Líderes',
+			'cells.noLeader' => 'No hay líder asignado',
+			'cells.noMembers' => 'No hay miembros en esta célula todavía',
+			'cells.growth' => ({required Object count}) => '${count} este mes',
+			'cells.tags.active' => 'ACTIVA',
+			'cells.tags.inactive' => 'INACTIVA',
+			'cells.tags.mainCell' => 'CÉLULA PRINCIPAL',
+			'cells.levels.direct' => 'Liderazgo Directo',
+			'cells.levels.disciples' => 'Células de Discípulos',
+			'cells.levels.generic' => ({required Object level}) => 'Nivel ${level}',
+			'cells.levels.g12' => ({required Object count}) => 'Los ${count}',
+			'cells.errors.loadingCells' => ({required Object error}) => 'Error al cargar las células: ${error}',
+			'cells.errors.failedAttendance' => ({required Object error}) => 'Error al registrar la asistencia: ${error}',
+			'cells.errors.loadingDisciples' => ({required Object error}) => 'Error al cargar los discípulos: ${error}',
+			'cells.errors.loadingLocations' => ({required Object error}) => 'Error al cargar las ubicaciones: ${error}',
+			'cells.errors.createCell' => ({required Object error}) => 'Error al crear la célula: ${error}',
+			'cells.success.attendanceRecorded' => 'Asistencia registrada con éxito',
+			'cells.success.cellCreated' => 'Célula creada con éxito',
+			'cells.form.name' => 'Nombre de la Célula',
+			'cells.form.description' => 'Descripción',
+			'cells.form.address' => 'Dirección',
+			'cells.form.city' => 'Ciudad',
+			'cells.form.locality' => 'Localidad',
+			'cells.form.meetingDay' => 'Día de Reunión',
+			'cells.form.isMainCell' => '¿Es Célula Principal?',
+			'cells.form.mainCellSubtitle' => 'Las células principales son puntos centrales del ministerio',
+			'cells.form.openingDate' => 'Fecha de Apertura',
+			'cells.form.selectDate' => 'Seleccionar una fecha',
 			'training.title' => 'Universidad de la Vida',
 			'training.content' => 'Contenido de Capacitación',
+			'training.stepDetail' => ({required Object id}) => 'Vista detallada para el paso con ID: ${id}',
 			_ => null,
 		};
 	}

@@ -56,7 +56,7 @@ final class CellDetailsProvider
     with $FutureModifier<CellDto>, $FutureProvider<CellDto> {
   CellDetailsProvider._({
     required CellDetailsFamily super.from,
-    required int super.argument,
+    required String super.argument,
   }) : super(
          retry: null,
          name: r'cellDetailsProvider',
@@ -82,7 +82,7 @@ final class CellDetailsProvider
 
   @override
   FutureOr<CellDto> create(Ref ref) {
-    final argument = this.argument as int;
+    final argument = this.argument as String;
     return cellDetails(ref, argument);
   }
 
@@ -97,10 +97,10 @@ final class CellDetailsProvider
   }
 }
 
-String _$cellDetailsHash() => r'33284582d2d7da882a88ad39b61a42e42701d276';
+String _$cellDetailsHash() => r'e9726237c49229ea35f6aae8ced1c3b56abd4cba';
 
 final class CellDetailsFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<CellDto>, int> {
+    with $FunctionalFamilyOverride<FutureOr<CellDto>, String> {
   CellDetailsFamily._()
     : super(
         retry: null,
@@ -110,9 +110,125 @@ final class CellDetailsFamily extends $Family
         isAutoDispose: true,
       );
 
-  CellDetailsProvider call(int id) =>
+  CellDetailsProvider call(String id) =>
       CellDetailsProvider._(argument: id, from: this);
 
   @override
   String toString() => r'cellDetailsProvider';
 }
+
+@ProviderFor(cellDisciples)
+final cellDisciplesProvider = CellDisciplesFamily._();
+
+final class CellDisciplesProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<DiscipleDto>>,
+          List<DiscipleDto>,
+          FutureOr<List<DiscipleDto>>
+        >
+    with
+        $FutureModifier<List<DiscipleDto>>,
+        $FutureProvider<List<DiscipleDto>> {
+  CellDisciplesProvider._({
+    required CellDisciplesFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'cellDisciplesProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$cellDisciplesHash();
+
+  @override
+  String toString() {
+    return r'cellDisciplesProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<List<DiscipleDto>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<DiscipleDto>> create(Ref ref) {
+    final argument = this.argument as String;
+    return cellDisciples(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CellDisciplesProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$cellDisciplesHash() => r'55aa70fa63f60648c6c844eb3713dc676e8bc8d3';
+
+final class CellDisciplesFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<List<DiscipleDto>>, String> {
+  CellDisciplesFamily._()
+    : super(
+        retry: null,
+        name: r'cellDisciplesProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  CellDisciplesProvider call(String cellId) =>
+      CellDisciplesProvider._(argument: cellId, from: this);
+
+  @override
+  String toString() => r'cellDisciplesProvider';
+}
+
+@ProviderFor(locationData)
+final locationDataProvider = LocationDataProvider._();
+
+final class LocationDataProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<List<CityDto>>,
+          List<CityDto>,
+          FutureOr<List<CityDto>>
+        >
+    with $FutureModifier<List<CityDto>>, $FutureProvider<List<CityDto>> {
+  LocationDataProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'locationDataProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$locationDataHash();
+
+  @$internal
+  @override
+  $FutureProviderElement<List<CityDto>> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<List<CityDto>> create(Ref ref) {
+    return locationData(ref);
+  }
+}
+
+String _$locationDataHash() => r'91fd1f35b951c1a346f0feda55649e57caf1150b';

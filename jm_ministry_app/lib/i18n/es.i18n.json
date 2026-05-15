@@ -6,26 +6,131 @@
     "forgotPassword": "¿Olvidó su contraseña?",
     "invalidCredentials": "Credenciales inválidas",
     "title": "JM MINISTERIO",
-    "subtitle": "Mayordomía y Crecimiento"
+    "subtitle": "Mayordomía y Crecimiento",
+    "logout": "Cerrar Sesión",
+    "appName": "JM Ministerio",
+    "errors": {
+      "failed": "Error de autenticación"
+    }
   },
   "common": {
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "error": "Error",
+    "retry": "Reintentar",
+    "ladderOfSuccess": "Escalera del Éxito",
+    "overview": "Resumen",
+    "details": "Detalles",
+    "step": "Paso {id}",
+    "unknown": "Desconocido",
+    "profile": "Perfil",
+    "roles": {
+      "helper": "Asistente",
+      "leader": "Líder"
+    },
+    "errors": {
+      "generic": "Error: {error}",
+      "loadingSteps": "Error al cargar los pasos: {error}"
+    },
+    "validation": {
+      "required": "Requerido"
+    },
+    "days": {
+      "sunday": "Domingo",
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado"
+    }
   },
   "nav": {
+    "home": "Inicio",
     "dashboard": "Panel",
     "cells": "Células",
-    "training": "Capacitación"
+    "training": "Capacitación",
+    "admin": "Admin",
+    "adminPanel": "Panel de Administración",
+    "searchUsers": "Buscar Usuarios"
+  },
+  "home": {
+    "title": "Inicio / Anuncios",
+    "emptyState": "Los anuncios aparecerán aquí."
+  },
+  "admin": {
+    "title": "Panel de Administración",
+    "emptyState": "Las herramientas de gestión de administración aparecerán aquí."
   },
   "dashboard": {
     "title": "Panel del Ministerio",
     "content": "Contenido del Panel"
   },
   "cells": {
-    "title": "Mis Células",
-    "content": "Contenido de Células"
+    "title": "Células",
+    "myCells": "Mis Células",
+    "subtitle": "Gestiona tus grupos de ministerio y asistencia.",
+    "content": "Contenido de Células",
+    "report": "Reportar",
+    "newCell": "Nueva Célula",
+    "submitReport": "Enviar Reporte Semanal",
+    "meetingNotes": "Notas de la Reunión",
+    "notesHint": "¿Qué pasó en la célula hoy?",
+    "recordAttendance": "Registrar Asistencia",
+    "pendingAttendance": "Asistencia Pendiente",
+    "reportLastMeeting": "Reportar la reunión de la semana pasada",
+    "emptyState": "No hay células asignadas todavía",
+    "searchHint": "Buscar células...",
+    "searchMembersHint": "Buscar miembros...",
+    "noAddress": "Sin dirección",
+    "everyDay": "Cada {day}",
+    "notScheduled": "No programado",
+    "activeGroup": "GRUPO ACTIVO",
+    "totalMembers": "TOTAL MIEMBROS",
+    "memberCount": "{count} Miembros",
+    "leader": "Líder",
+    "leaders": "Líderes",
+    "noLeader": "No hay líder asignado",
+    "noMembers": "No hay miembros en esta célula todavía",
+    "growth": "{count} este mes",
+    "tags": {
+      "active": "ACTIVA",
+      "inactive": "INACTIVA",
+      "mainCell": "CÉLULA PRINCIPAL"
+    },
+    "levels": {
+      "direct": "Liderazgo Directo",
+      "disciples": "Células de Discípulos",
+      "generic": "Nivel {level}",
+      "g12": "Los {count}"
+    },
+
+    "errors": {
+      "loadingCells": "Error al cargar las células: {error}",
+      "failedAttendance": "Error al registrar la asistencia: {error}",
+      "loadingDisciples": "Error al cargar los discípulos: {error}",
+      "loadingLocations": "Error al cargar las ubicaciones: {error}",
+      "createCell": "Error al crear la célula: {error}"
+    },
+    "success": {
+      "attendanceRecorded": "Asistencia registrada con éxito",
+      "cellCreated": "Célula creada con éxito"
+    },
+    "form": {
+      "name": "Nombre de la Célula",
+      "description": "Descripción",
+      "address": "Dirección",
+      "city": "Ciudad",
+      "locality": "Localidad",
+      "meetingDay": "Día de Reunión",
+      "isMainCell": "¿Es Célula Principal?",
+      "mainCellSubtitle": "Las células principales son puntos centrales del ministerio",
+      "openingDate": "Fecha de Apertura",
+      "selectDate": "Seleccionar una fecha"
+    }
   },
   "training": {
     "title": "Universidad de la Vida",
-    "content": "Contenido de Capacitación"
+    "content": "Contenido de Capacitación",
+    "stepDetail": "Vista detallada para el paso con ID: {id}"
   }
 }
