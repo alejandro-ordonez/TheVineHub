@@ -1,10 +1,15 @@
 using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Hierarchy.Queries.IsLeaderInHierarchy;
-using JMMinistry.Common.Dtos.Discipleship;
+using JMMinistry.Application.Features.Discipleship.Dtos;
+using JMMinistry.Application.Features.Discipleship.Commands.CreateNote;
+using JMMinistry.Application.Features.Discipleship.Commands.CreateNoteEntry;
+using JMMinistry.Application.Features.Discipleship.Enums;
 using Mediator;
 using Microsoft.Extensions.Caching.Memory;
 using SurrealDb.Net;
+using SurrealDb.Net.Models.Response;
 using System.Linq;
+using SurrealDb.Net.Models;
 
 namespace JMMinistry.Application.Features.Discipleship.Commands.CreateNote
 {
@@ -22,35 +27,44 @@ namespace JMMinistry.Application.Features.Discipleship.Commands.CreateNote
             if (!isLeader)
                 throw new NotAuthorizedException();
 
+            var requestorId = RecordId.From("user", request.RequestorId);
+            var discipleId = RecordId.From("user", request.DiscipleId);
+
             var result = await session.Query(@$"
-                BEGIN TRANSACTION;
-                
-                LET $note = (CREATE journal_entry SET 
-                    title = {request.Title}, 
-                    content = {request.Description}, 
-                    status = 'New', 
-                    categories = {request.Categories},
-                    created_at = time::now())[0];
-                
-                RELATE type::thing('user', {request.RequestorId})->authored->$note.id;
-                RELATE $note.id->concerning->type::thing('user', {request.DiscipleId});
-                
-                COMMIT TRANSACTION;
-                
-                RETURN {{
-                    note_id: $note.id,
-                    title: $note.title,
-                    description: $note.content,
-                    note_status: $note.status,
-                    created_at: $note.created_at,
-                    categories: $note.categories,
-                    disciple_id: type::thing('user', {request.DiscipleId}),
-                    leader_id: type::thing('user', {request.RequestorId}),
-                    entries: []
-                }};
+                {{
+                    LET $note = (CREATE journal_entry SET
+                        title = {request.Title},
+                        content = {request.Description},
+                        status = 'New',
+                        categories = {request.Categories},
+                        author = {requestorId},
+                        target_disciple = {discipleId},
+                        created_at = time::now())[0];
+
+                    RETURN {{
+                        note_id: type::string($note.id),
+                        title: $note.title,
+                        description: $note.content,
+                        note_status: $note.status,
+                        created_at: $note.created_at,
+                        categories: $note.categories,
+                        disciple_id: type::string({discipleId}),
+                        leader_id: type::string({requestorId}),
+                        entries: []
+                    }};
+                }}
             ", cancellationToken);
 
-            var noteDto = result.GetValue<DiscipleshipNoteDto>(0);
+            if (result.HasErrors)
+            {
+                var error = result.Errors.First();
+                if (error is SurrealDbErrorResult errorRes)
+                    throw new Exception($"SurrealDB Error: {errorRes.Details}");
+
+                throw new Exception($"SurrealDB Error: {error}");
+            }
+
+            var noteDto = result.GetValue<DiscipleshipNoteDto>(0) ?? throw new Exception("Unexpected null from DB");
 
             cache.Remove($"discipleship-notes:{request.DiscipleId}");
 

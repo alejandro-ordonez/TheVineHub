@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using FluentValidation;
 using Mediator;
 
@@ -5,7 +6,9 @@ namespace JMMinistry.Application.Features.Hierarchy.Queries.IsLeaderInHierarchy
 {
     public class IsLeaderInHierarchyQuery : IQuery<bool>
     {
+        [Column("requestor_id")]
         public required string RequestorId { get; set; }
+        [Column("disciple_id")]
         public required string DiscipleId { get; set; }
     }
 

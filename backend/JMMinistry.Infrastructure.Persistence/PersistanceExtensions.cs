@@ -1,6 +1,6 @@
 using JMMinistry.Application.Services;
-using JMMinistry.Common;
-using JMMinistry.Common.Dtos.User.Enums;
+using JMMinistry.Application.Common;
+using JMMinistry.Application.Features.User.Enums;
 using JMMinistry.Infrastructure.Persistence.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

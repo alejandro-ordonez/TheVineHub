@@ -1,9 +1,12 @@
-using JMMinistry.Common.Dtos.User;
+using JMMinistry.Application.Features.User.Dtos;
+using JMMinistry.Application.Features.User.Commands.Authenticate;
+using JMMinistry.Application.Features.User.Commands.CreateUser;
+using JMMinistry.Application.Features.User.Commands.MarryLeaders;
 using JMMinistry.Application.Exceptions;
 using Mediator;
 using SurrealDb.Net;
 using System.Linq;
-using JMMinistry.Domain.Users;
+
 using JMMinistry.Application.Features.User;
 
 namespace JMMinistry.Application.Features.Cells.Queries.GetDisciples
@@ -42,9 +45,9 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetDisciples
             ", cancellationToken);
 
 
-            var disciples = result.GetValue<IEnumerable<Disciple>>(3);
+            var disciples = result.GetValue<IEnumerable<DiscipleDto>>(3);
 
-            return disciples?.ToDtos() ?? [];
+            return disciples ?? [];
         }
     }
 }

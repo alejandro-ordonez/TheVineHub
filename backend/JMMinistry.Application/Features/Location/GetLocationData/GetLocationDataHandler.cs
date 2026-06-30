@@ -1,4 +1,5 @@
-using JMMinistry.Common.Dtos.Common;
+using JMMinistry.Application.Features.Location.Dtos;
+using JMMinistry.Application.Common;
 using Mediator;
 using SurrealDb.Net;
 
@@ -9,8 +10,10 @@ namespace JMMinistry.Application.Features.Location.GetLocationData
         public async ValueTask<IList<CityDto>> Handle(GetLocationDataQuery request, CancellationToken cancellationToken)
         {
             var result = await session.Query(@$"
-                SELECT *, 
-                       (SELECT * FROM locality WHERE id IN (SELECT VALUE in FROM <-part_of WHERE out = $parent.id)) AS localities
+                SELECT 
+                    type::string(id) AS id,
+                    name,
+                    (SELECT type::string(in) AS id, in.name AS name FROM part_of WHERE out = $parent.id) AS localities
                 FROM city;
             ", cancellationToken);
 

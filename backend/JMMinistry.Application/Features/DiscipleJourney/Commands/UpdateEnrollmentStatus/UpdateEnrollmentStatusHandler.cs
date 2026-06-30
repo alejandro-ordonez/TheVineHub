@@ -15,27 +15,27 @@ public class UpdateEnrollmentStatusHandler(ISurrealDbSession session)
 
         var result = await session.Query(@$"
             -- Find the user and the step associated with this enrollment
-            LET $enrollment = (SELECT in, out FROM type::thing('enrolled', {enrollmentId}) WHERE out = type::thing('cycle', {cycleId}))[0];
-            
+            LET $enrollment = (SELECT in, out FROM type::record('enrolled', {enrollmentId}) WHERE out = type::record('cycle', {cycleId}))[0];
+
             IF $enrollment == NONE THEN
                 THROW 'Enrollment not found';
             END;
 
             LET $user = $enrollment.in;
-            LET $stepId = (SELECT VALUE in FROM <-has WHERE out = type::thing('cycle', {cycleId}))[0];
+            LET $stepId = (SELECT VALUE in FROM <-has WHERE out = type::record('cycle', {cycleId}))[0];
 
             IF $stepId == NONE THEN
                 THROW 'Step associated with cycle not found';
             END;
 
             BEGIN TRANSACTION;
-            
+
             -- Update the completed relation status
-            UPDATE completed SET 
+            UPDATE completed SET
                 status = {request.Status.ToString()},
                 last_updated = time::now()
             WHERE in = $user AND out = $stepId;
-            
+
             COMMIT TRANSACTION;
         ", cancellationToken);
 

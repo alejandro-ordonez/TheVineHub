@@ -1,4 +1,4 @@
-using JMMinistry.Common;
+using JMMinistry.Application.Common;
 using Mediator;
 using SurrealDb.Net;
 using System.Linq;
@@ -13,14 +13,14 @@ namespace JMMinistry.Application.Features.Cells.Queries.CellCheckIsAuthorized
             allowedRoles.AddRange(new[] { Roles.Admin.ToString(), Roles.Attendance.ToString(), Roles.Cells.ToString() });
 
             var result = await session.Query(@$"
-                LET $user_roles = (SELECT VALUE out.name FROM type::thing('user', {request.RequestorId})->member_of);
+                LET $user_roles = (SELECT VALUE out.name FROM type::record('user', {request.RequestorId})->member_of);
                 LET $is_admin = (SELECT count() > 0 FROM $user_roles WHERE VALUE IN {allowedRoles})[0];
-                
+
                 IF $is_admin THEN
                     RETURN true;
                 END;
 
-                RETURN fn::is_leader(type::thing('user', {request.RequestorId}), type::thing('cell', {request.CellId}));
+                RETURN fn::is_leader(type::record('user', {request.RequestorId}), type::record('cell', {request.CellId}));
             ", cancellationToken);
 
             return result.GetValue<bool>(0);

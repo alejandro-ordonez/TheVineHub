@@ -1,4 +1,4 @@
-﻿using JMMinistry.Common;
+﻿using JMMinistry.Application.Common;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;

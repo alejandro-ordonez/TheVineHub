@@ -15,10 +15,10 @@ public class RemoveCycleStaffHandler(ISurrealDbSession session)
 
         var result = await session.Query(@$"
             BEGIN TRANSACTION;
-            
+
             -- Delete the guide relationship
-            DELETE type::thing('guides', {staffId});
-            
+            DELETE type::record('guides', {staffId});
+
             COMMIT TRANSACTION;
         ", cancellationToken);
 

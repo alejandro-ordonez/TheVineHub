@@ -1,9 +1,10 @@
-using JMMinistry.Common.Dtos.Cell;
+using JMMinistry.Application.Features.Cells.Dtos;
+using JMMinistry.Application.Features.Cells.Commands.AddDisciples;
 using JMMinistry.Application.Exceptions;
 using Mediator;
 using SurrealDb.Net;
 using System.Linq;
-using JMMinistry.Domain.Cells;
+
 
 namespace JMMinistry.Application.Features.Cells.Queries.GetCell
 {
@@ -21,9 +22,9 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetCell
                 FROM ONLY type::record('cell', {request.CellId});
             ", cancellationToken);
 
-            var cell = result.GetValue<Cell>(0);
+            var cell = result.GetValue<CellDto>(0) ?? throw new Exception("Unexpected null from DB");
 
-            return cell?.ToDto() ?? throw new NotFoundException("Cell not found");
+            return cell ?? throw new NotFoundException("Cell not found");
         }
     }
 }

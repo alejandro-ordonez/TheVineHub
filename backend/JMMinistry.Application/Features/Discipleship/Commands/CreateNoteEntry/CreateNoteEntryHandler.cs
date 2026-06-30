@@ -1,10 +1,14 @@
 using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Hierarchy.Queries.IsLeaderInHierarchy;
-using JMMinistry.Common.Dtos.Discipleship;
+using JMMinistry.Application.Features.Discipleship.Dtos;
+using JMMinistry.Application.Features.Discipleship.Commands.CreateNote;
+using JMMinistry.Application.Features.Discipleship.Commands.CreateNoteEntry;
+using JMMinistry.Application.Features.Discipleship.Enums;
 using Mediator;
 using Microsoft.Extensions.Caching.Memory;
 using SurrealDb.Net;
 using System.Linq;
+using SurrealDb.Net.Models.Response;
 
 namespace JMMinistry.Application.Features.Discipleship.Commands.CreateNoteEntry
 {
@@ -22,38 +26,48 @@ namespace JMMinistry.Application.Features.Discipleship.Commands.CreateNoteEntry
             if (!isLeader)
                 throw new NotAuthorizedException();
 
-            var noteId = request.NoteId.StartsWith("journal_entry:") ? request.NoteId : $"journal_entry:{request.NoteId}";
+            var rawNoteId = request.NoteId.StartsWith("journal_entry:") ? request.NoteId["journal_entry:".Length..] : request.NoteId;
 
             var result = await session.Query(@$"
-                -- Verify note exists and concerns the disciple
-                LET $note = (SELECT * FROM type::thing('journal_entry', {noteId}) WHERE ->concerning->(user WHERE id = type::thing('user', {request.DiscipleId})))[0];
-                
-                IF $note == NONE THEN
-                    THROW 'Note not found or does not concern the given disciple';
-                END;
-
-                BEGIN TRANSACTION;
-                
-                LET $entry = (CREATE journal_entry_entry SET 
-                    content = {request.Content}, 
-                    date = {request.Date.ToUniversalTime()})[0];
-                
-                RELATE type::thing('user', {request.RequestorId})->authored->$entry.id;
-                RELATE $entry.id->entry_of->type::thing('journal_entry', {noteId});
-                
-                COMMIT TRANSACTION;
-                
-                RETURN {{
-                    id: $entry.id,
-                    content: $entry.content,
-                    date: $entry.date,
-                    created_at: $entry.date, -- Or use a separate field if needed
-                    note_id: type::thing('journal_entry', {noteId}),
-                    author_id: type::thing('user', {request.RequestorId})
-                }};
+                {{
+                    -- Verify note exists and concerns the disciple
+                    LET $note = (SELECT * FROM type::record('journal_entry', {rawNoteId}) WHERE target_disciple = type::record('user', {request.DiscipleId}))[0];
+ 
+                    IF $note == NONE THEN
+                        THROW 'Note not found or does not concern the given disciple';
+                    END;
+ 
+                    LET $entry = (CREATE journal_entry SET
+                        title = '',
+                        content = {request.Content},
+                        status = $note.status,
+                        categories = [],
+                        author = type::record('user', {request.RequestorId}),
+                        target_disciple = type::record('user', {request.DiscipleId}),
+                        parent_entry = type::record('journal_entry', {rawNoteId}),
+                        created_at = {request.Date.ToUniversalTime()})[0];
+ 
+                    RETURN {{
+                        id: type::string($entry.id),
+                        content: $entry.content,
+                        date: $entry.created_at,
+                        created_at: $entry.created_at,
+                        note_id: type::string(type::record('journal_entry', {rawNoteId})),
+                        author_id: type::string(type::record('user', {request.RequestorId}))
+                    }};
+                }}
             ", cancellationToken);
 
-            var entryDto = result.GetValue<DiscipleshipNoteEntryDto>(0);
+            if (result.HasErrors)
+            {
+                var error = result.Errors.First();
+                if (error is SurrealDbErrorResult errorRes)
+                    throw new Exception($"SurrealDB Error: {errorRes.Details}");
+
+                throw new Exception($"SurrealDB Error: {error}");
+            }
+
+            var entryDto = result.GetValue<DiscipleshipNoteEntryDto>(0) ?? throw new Exception("Unexpected null from DB");
 
             cache.Remove($"discipleship-notes:{request.DiscipleId}");
 

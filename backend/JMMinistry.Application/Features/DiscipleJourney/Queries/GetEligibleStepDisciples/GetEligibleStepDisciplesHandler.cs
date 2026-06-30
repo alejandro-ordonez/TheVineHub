@@ -1,4 +1,16 @@
-using JMMinistry.Common.Dtos.DiscipleJourney;
+using JMMinistry.Application.Features.DiscipleJourney.Dtos;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.AssignGuide;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.CompleteStepForDisciples;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.CreateCycleSession;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.AddCycleStaff;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.CreateDiscipleStep;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.CreateStepCycle;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.EnrollDisciples;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.RecordCycleAttendance;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateDiscipleStep;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateEnrollmentStatus;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateStepCompletion;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateStepCycle;
 using Mediator;
 using SurrealDb.Net;
 using System.Linq;
@@ -15,12 +27,12 @@ public class GetEligibleStepDisciplesHandler(ISurrealDbSession session)
 
         var result = await session.Query(@$"
             -- Get step requirements
-            LET $requirements = (SELECT VALUE out FROM type::thing('disciple_step', {stepId})->requires);
-            
+            LET $requirements = (SELECT VALUE out FROM type::record('disciple_step', {stepId})->requires);
+
             -- Find users who have completed all requirements
             -- And haven't started/completed the target step
             LET $eligibleDisciples = (
-                SELECT 
+                SELECT
                     id AS Document,
                     name AS Name,
                     last_name AS LastName,
@@ -29,19 +41,19 @@ public class GetEligibleStepDisciplesHandler(ISurrealDbSession session)
                     (SELECT VALUE out FROM ->disciple_in)[0] AS CellId,
                     (SELECT VALUE in.name + ' ' + in.last_name FROM (SELECT VALUE out FROM ->disciple_in)-><-leads)[0] AS LeaderName,
                     (SELECT VALUE name FROM (SELECT VALUE out FROM ->disciple_in))[0] AS CellName
-                FROM user 
-                WHERE 
+                FROM user
+                WHERE
                     -- Is in the requestor's hierarchy (recursive)
-                    fn::is_leader(type::thing('user', {requestorId}), id)
+                    fn::is_leader(type::record('user', {requestorId}), id)
                     -- Has completed all requirements
                     AND (
-                        SELECT count() FROM completed 
+                        SELECT count() FROM completed
                         WHERE in = $parent.id AND out IN $requirements AND status = 'Completed'
                     )[0].count = array::len($requirements)
                     -- Hasn't started target step
                     AND (
-                        SELECT count() = 0 FROM completed 
-                        WHERE in = $parent.id AND out = type::thing('disciple_step', {stepId}) AND status != 'Abandoned'
+                        SELECT count() = 0 FROM completed
+                        WHERE in = $parent.id AND out = type::record('disciple_step', {stepId}) AND status != 'Abandoned'
                     )[0]
             );
 

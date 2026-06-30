@@ -1,6 +1,9 @@
-using JMMinistry.Common.Dtos.Meetings;
+using JMMinistry.Application.Features.Meetings.Dtos;
+using JMMinistry.Application.Features.Meetings.Commands.CreateMeeting;
 using Mediator;
 using SurrealDb.Net;
+using SurrealDb.Net.Models.Response;
+using System.Linq;
 
 namespace JMMinistry.Application.Features.Meetings.Commands.CreateMeeting
 {
@@ -9,18 +12,39 @@ namespace JMMinistry.Application.Features.Meetings.Commands.CreateMeeting
         public async ValueTask<MeetingDto> Handle(CreateMeetingCommand request, CancellationToken cancellationToken)
         {
             var result = await session.Query(@$"
-                CREATE meeting SET 
-                    name = {request.Name}, 
-                    start = {request.Start.ToString()}, 
-                    end = {request.End.ToString()}, 
-                    meeting_type = {request.MeetingTypes.ToString()}, 
-                    is_recurrent = {request.IsRecurrent}, 
-                    day_of_week = {request.DayOfWeek?.ToString()}, 
-                    date = {request.Date.ToDateTime(TimeOnly.MinValue)}
-                RETURN AFTER;
+                {{
+                    LET $meeting = (CREATE church_meeting SET 
+                        name = {request.Name}, 
+                        start = {request.Start}, 
+                        end = {request.End}, 
+                        meeting_type = {request.MeetingType.ToString()}, 
+                        is_recurrent = {request.IsRecurrent}, 
+                        day_of_week = {request.DayOfWeek?.ToString()} OR NONE, 
+                        date = {request.Date.ToDateTime(TimeOnly.MinValue)})[0];
+
+                    RETURN {{
+                        meeting_id: type::string($meeting.id),
+                        name: $meeting.name,
+                        start: $meeting.start,
+                        end: $meeting.end,
+                        meeting_type: $meeting.meeting_type,
+                        is_recurrent: $meeting.is_recurrent,
+                        day_of_week: $meeting.day_of_week,
+                        date: $meeting.date
+                    }};
+                }}
             ", cancellationToken);
 
-            return result.GetValue<MeetingDto>(0);
+            if (result.HasErrors)
+            {
+                var error = result.Errors.First();
+                if (error is SurrealDbErrorResult errorRes)
+                    throw new Exception($"SurrealDB Error: {errorRes.Details}");
+
+                throw new Exception($"SurrealDB Error: {error}");
+            }
+
+            return result.GetValue<MeetingDto>(0) ?? throw new Exception("Unexpected null from DB");
         }
     }
 }

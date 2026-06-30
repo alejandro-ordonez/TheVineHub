@@ -10,7 +10,7 @@ namespace JMMinistry.Application.Features.Hierarchy.Queries.IsLeaderInHierarchy
         public async ValueTask<bool> Handle(IsLeaderInHierarchyQuery request, CancellationToken cancellationToken)
         {
             var result = await session.Query(@$"
-                RETURN fn::is_leader(type::thing('user', {request.RequestorId}), type::thing('user', {request.DiscipleId}));
+                RETURN fn::is_leader(type::record('user', {request.RequestorId}), type::record('user', {request.DiscipleId}));
             ", cancellationToken);
 
             return result.GetValue<bool>(0);

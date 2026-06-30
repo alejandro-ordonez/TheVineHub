@@ -1,11 +1,14 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using FluentValidation;
-using JMMinistry.Common.Dtos.Cell;
+using JMMinistry.Application.Features.Cells.Dtos;
+using JMMinistry.Application.Features.Cells.Commands.AddDisciples;
 using Mediator;
 
 namespace JMMinistry.Application.Features.Cells.Commands.CreateCell
 {
     public class UpsertCellCommand : CellDto, ICommand<CellDto>
     {
+        [Column("document")]
         public string Document { get; set; } = string.Empty;
     }
 

@@ -1,6 +1,9 @@
 using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Hierarchy.Queries.IsLeaderInHierarchy;
-using JMMinistry.Common.Dtos.Discipleship;
+using JMMinistry.Application.Features.Discipleship.Dtos;
+using JMMinistry.Application.Features.Discipleship.Commands.CreateNote;
+using JMMinistry.Application.Features.Discipleship.Commands.CreateNoteEntry;
+using JMMinistry.Application.Features.Discipleship.Enums;
 using Mediator;
 using SurrealDb.Net;
 using System.Linq;
@@ -21,19 +24,19 @@ namespace JMMinistry.Application.Features.Discipleship.Queries.GetNoteEntries
             if (!isLeader)
                 throw new NotAuthorizedException();
 
-            var noteId = request.NoteId.StartsWith("journal_entry:") ? request.NoteId : $"journal_entry:{request.NoteId}";
+            var rawNoteId = request.NoteId.StartsWith("journal_entry:") ? request.NoteId["journal_entry:".Length..] : request.NoteId;
 
             var result = await session.Query(@$"
-                SELECT 
-                    id,
+                SELECT
+                    type::string(id) AS id,
                     content,
-                    date,
-                    date AS created_at,
-                    (SELECT VALUE out FROM ->entry_of)[0] AS note_id,
-                    (SELECT VALUE in FROM <-authored)[0] AS author_id
-                FROM journal_entry_entry 
-                WHERE id IN (SELECT VALUE in FROM entry_of WHERE out = type::thing('journal_entry', {noteId}))
-                ORDER BY date DESC;
+                    created_at AS date,
+                    created_at,
+                    type::string(parent_entry) AS note_id,
+                    type::string(author) AS author_id
+                FROM journal_entry
+                WHERE parent_entry = type::record('journal_entry', {rawNoteId})
+                ORDER BY created_at DESC;
             ", cancellationToken);
 
             var entries = result.GetValue<List<DiscipleshipNoteEntryDto>>(0);

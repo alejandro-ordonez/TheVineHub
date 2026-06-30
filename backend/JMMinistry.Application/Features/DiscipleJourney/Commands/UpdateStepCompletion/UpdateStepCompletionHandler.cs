@@ -15,13 +15,13 @@ public class UpdateStepCompletionHandler(ISurrealDbSession session)
 
         var result = await session.Query(@$"
             BEGIN TRANSACTION;
-            
-            UPDATE completed SET 
+
+            UPDATE completed SET
                 status = {request.StepStatus.ToString()},
-                last_updated = { (request.CompletionDate ?? DateOnly.FromDateTime(DateTime.UtcNow)).ToDateTime(TimeOnly.MinValue) }
-            WHERE in = type::thing('user', {request.DiscipleId}) AND out = type::thing('disciple_step', {request.StepId});
-            
-            IF array::len((SELECT * FROM completed WHERE in = type::thing('user', {request.DiscipleId}) AND out = type::thing('disciple_step', {request.StepId}))) == 0 THEN
+                last_updated = {(request.CompletionDate ?? DateOnly.FromDateTime(DateTime.UtcNow)).ToDateTime(TimeOnly.MinValue)}
+            WHERE in = type::record('user', {request.DiscipleId}) AND out = type::record('disciple_step', {request.StepId});
+
+            IF array::len((SELECT * FROM completed WHERE in = type::record('user', {request.DiscipleId}) AND out = type::record('disciple_step', {request.StepId}))) == 0 THEN
                 THROW 'StepCompletion not found';
             END;
 

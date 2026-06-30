@@ -1,4 +1,5 @@
-using JMMinistry.Common.Dtos.Common;
+using JMMinistry.Application.Features.Location.Dtos;
+using JMMinistry.Application.Common;
 using Mediator;
 
 namespace JMMinistry.Application.Features.Location.GetLocationData

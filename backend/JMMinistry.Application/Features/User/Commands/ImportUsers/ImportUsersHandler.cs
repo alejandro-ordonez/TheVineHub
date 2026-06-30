@@ -1,5 +1,5 @@
-using JMMinistry.Common;
-using JMMinistry.Common.Dtos.User.Enums;
+using JMMinistry.Application.Common;
+using JMMinistry.Application.Features.User.Enums;
 using JMMinistry.Application.Extensions;
 using Mediator;
 using SurrealDb.Net;
@@ -34,7 +34,7 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
             for (var lineNumber = 0; lineNumber < lines.Count; lineNumber++)
             {
                 var fields = lines[lineNumber].Split(',');
-                
+
                 // Simplified extraction for the refactor
                 var name = fields[CsvOrdinals.Name.GetHashCode()].Trim();
                 var lastName = fields[CsvOrdinals.LastName.GetHashCode()].Trim();
@@ -46,10 +46,10 @@ namespace JMMinistry.Application.Features.User.Commands.ImportUsers
                 if (string.IsNullOrEmpty(document)) continue;
 
                 var result = await session.Query(@$"
-                    CREATE type::thing('user', {document}) SET 
-                        name = {name.ToCapitalCase()}, 
-                        last_name = {lastName.ToCapitalCase()}, 
-                        email = {email}, 
+                    CREATE type::record('user', {document}) SET
+                        name = {name.ToCapitalCase()},
+                        last_name = {lastName.ToCapitalCase()},
+                        email = {email},
                         password = crypto::argon2::generate({$"User.{document}"}),
                         gender = {gender},
                         marital_status = {maritalStatus};

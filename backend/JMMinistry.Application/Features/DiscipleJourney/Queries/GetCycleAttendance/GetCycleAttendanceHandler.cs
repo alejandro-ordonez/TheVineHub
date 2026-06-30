@@ -1,4 +1,16 @@
-using JMMinistry.Common.Dtos.DiscipleJourney;
+using JMMinistry.Application.Features.DiscipleJourney.Dtos;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.AssignGuide;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.CompleteStepForDisciples;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.CreateCycleSession;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.AddCycleStaff;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.CreateDiscipleStep;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.CreateStepCycle;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.EnrollDisciples;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.RecordCycleAttendance;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateDiscipleStep;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateEnrollmentStatus;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateStepCompletion;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateStepCycle;
 using Mediator;
 using SurrealDb.Net;
 using System.Linq;
@@ -15,23 +27,23 @@ public class GetCycleAttendanceHandler(ISurrealDbSession session)
         var result = await session.Query(@$"
             -- Fetch all enrolled disciples for the cycle
             LET $disciples = (
-                SELECT 
+                SELECT
                     in AS disciple_id,
                     (SELECT VALUE name + ' ' + last_name FROM in)[0] AS disciple_name,
                     -- Check status from completed relation for the step of this cycle
-                    (SELECT count() > 0 FROM completed WHERE in = $parent.in AND out = (SELECT VALUE in FROM type::thing('cycle', {cycleId})<-has)[0] AND status == 'Abandoned')[0] AS is_abandoned
-                FROM enrolled 
-                WHERE out = type::thing('cycle', {cycleId})
+                    (SELECT count() > 0 FROM completed WHERE in = $parent.in AND out = (SELECT VALUE in FROM type::record('cycle', {cycleId})<-has)[0] AND status == 'Abandoned')[0] AS is_abandoned
+                FROM enrolled
+                WHERE out = type::record('cycle', {cycleId})
             );
 
             -- Fetch all sessions for the cycle
             LET $sessions = (
-                SELECT 
+                SELECT
                     id AS session_id,
                     date AS session_date,
                     topic AS session_topic
-                FROM cycle_session 
-                WHERE id IN (SELECT VALUE in FROM session_of WHERE out = type::thing('cycle', {cycleId}))
+                FROM cycle_session
+                WHERE id IN (SELECT VALUE in FROM session_of WHERE out = type::record('cycle', {cycleId}))
                 ORDER BY date ASC
             );
 

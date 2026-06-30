@@ -31,7 +31,7 @@ public class UploadPhotoHandler(
         var photoPath = string.Empty; // await photoService.SavePhotoAsync(request.Document, request.ImageStream);
 
         var result = await session.Query(@$"
-            UPDATE type::thing('user', {request.Document}) SET photo_path = {photoPath};
+            UPDATE type::record('user', {request.Document}) SET photo_path = {photoPath};
         ", cancellationToken);
 
         return photoPath;

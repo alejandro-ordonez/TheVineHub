@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
@@ -21,7 +22,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7" />
-    <PackageReference Include="Riok.Mapperly" Version="4.3.1" />
     <PackageReference Include="Scriban" Version="7.1.0" />
     <PackageReference Include="SkiaSharp" Version="3.119.2" />
     <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="3.119.2" />
@@ -31,11 +31,6 @@
   <ItemGroup>
     <Folder Include="Features\Meetings\Commands\RegisterAttendance\" />
     <Folder Include="Features\User\Commands\EditUser\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\JMMinistry.Common\JMMinistry.Common.csproj" />
-    <ProjectReference Include="..\JMMinistry.Domain\JMMinistry.Domain.csproj" />
   </ItemGroup>
 
 </Project>

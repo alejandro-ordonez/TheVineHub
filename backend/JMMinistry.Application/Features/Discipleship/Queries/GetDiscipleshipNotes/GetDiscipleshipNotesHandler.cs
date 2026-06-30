@@ -1,6 +1,9 @@
 using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Hierarchy.Queries.IsLeaderInHierarchy;
-using JMMinistry.Common.Dtos.Discipleship;
+using JMMinistry.Application.Features.Discipleship.Dtos;
+using JMMinistry.Application.Features.Discipleship.Commands.CreateNote;
+using JMMinistry.Application.Features.Discipleship.Commands.CreateNoteEntry;
+using JMMinistry.Application.Features.Discipleship.Enums;
 using Mediator;
 using Microsoft.Extensions.Caching.Memory;
 using SurrealDb.Net;
@@ -28,17 +31,17 @@ namespace JMMinistry.Application.Features.Discipleship.Queries.GetDiscipleshipNo
                 return cached;
 
             var result = await session.Query(@$"
-                SELECT 
-                    id AS note_id,
+                SELECT
+                    type::string(id) AS note_id,
                     title,
                     content AS description,
                     status AS note_status,
                     created_at,
                     categories,
-                    (SELECT VALUE out FROM ->concerning)[0] AS disciple_id,
-                    (SELECT VALUE in FROM <-authored)[0] AS leader_id
-                FROM journal_entry 
-                WHERE id IN (SELECT VALUE in FROM concerning WHERE out = type::thing('user', {request.DiscipleId}))
+                    type::string(target_disciple) AS disciple_id,
+                    type::string(author) AS leader_id
+                FROM journal_entry
+                WHERE target_disciple = type::record('user', {request.DiscipleId})
                 ORDER BY created_at DESC;
             ", cancellationToken);
 

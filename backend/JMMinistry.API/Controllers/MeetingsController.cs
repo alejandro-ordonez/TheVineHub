@@ -1,5 +1,5 @@
 using JMMinistry.API.Extensions;
-using JMMinistry.Common.Dtos.Meetings;
+using JMMinistry.Application.Features.Meetings.Dtos;
 using JMMinistry.Application.Features.Meetings.Commands.CreateMeeting;
 using JMMinistry.Application.Features.Meetings.Queries.GetMeetings;
 using Mediator;

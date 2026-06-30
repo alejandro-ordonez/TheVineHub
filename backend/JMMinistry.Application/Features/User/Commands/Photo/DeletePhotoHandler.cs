@@ -25,12 +25,12 @@ public class DeletePhotoHandler(
                 throw new NotAuthorizedException();
         }
 
-        // In the new Presigned URL pattern, we might not need to manually delete from MinIO 
+        // In the new Presigned URL pattern, we might not need to manually delete from MinIO
         // if we just overwrite or use object lifecycle policies.
         // However, we should at least clear the reference in SurrealDB.
-        
+
         var result = await session.Query(@$"
-            UPDATE type::thing('user', {request.Document}) SET photo_path = NONE;
+            UPDATE type::record('user', {request.Document}) SET photo_path = NONE;
         ", cancellationToken);
 
         return Unit.Value;

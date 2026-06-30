@@ -1,4 +1,4 @@
-using JMMinistry.Common.Dtos.User.Enums;
+using JMMinistry.Application.Features.User.Enums;
 using JMMinistry.Application.Exceptions;
 using Mediator;
 using SurrealDb.Net;
@@ -17,9 +17,9 @@ public class MarryLeadersHandler(ISurrealDbSession session)
 
         // Verify requestor is a leader of both persons (recursive)
         var result = await session.Query(@$"
-            LET $person = type::thing('user', {request.PersonId});
-            LET $spouse = type::thing('user', {request.SpouseId});
-            LET $requestor = type::thing('user', {request.RequestorId});
+            LET $person = type::record('user', {request.PersonId});
+            LET $spouse = type::record('user', {request.SpouseId});
+            LET $requestor = type::record('user', {request.RequestorId});
 
             IF !fn::is_leader($requestor, $person) OR !fn::is_leader($requestor, $spouse) THEN
                 THROW 'You must be a cell leader of both persons to perform this action.';

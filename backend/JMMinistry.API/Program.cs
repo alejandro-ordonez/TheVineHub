@@ -1,3 +1,4 @@
+using dotenv.net;
 using JMMinistry.API.Extensions;
 using JMMinistry.API.Middleware;
 using JMMinistry.Application;
@@ -6,6 +7,10 @@ using Microsoft.Extensions.FileProviders;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Load environment variables from .env file
+DotEnv.Load(options: new DotEnvOptions(probeForEnv: true, probeLevelsToSearch: 4));
+builder.Configuration.AddEnvironmentVariables();
 
 builder.AddOpenTelemetryConfiguration();
 

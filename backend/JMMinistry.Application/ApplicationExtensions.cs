@@ -2,7 +2,6 @@
 using JMMinistry.Application.Authentication;
 using JMMinistry.Application.Configuration;
 using JMMinistry.Application.Exceptions;
-using JMMinistry.Application.Mappers;
 using JMMinistry.Application.Pipelines;
 using JMMinistry.Application.Services;
 using Mediator;
@@ -21,6 +20,7 @@ namespace JMMinistry.Application
 
             services.Configure<JWTSettings>(configuration.GetSection(nameof(JWTSettings)));
             services.AddJwtAuthentication(configuration);
+            services.AddScoped<IJwtService, JwtService>();
 
             services.AddMediator(options =>
             {

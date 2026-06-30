@@ -1,6 +1,9 @@
 using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Hierarchy.Queries.IsLeaderInHierarchy;
-using JMMinistry.Common.Dtos.Discipleship;
+using JMMinistry.Application.Features.Discipleship.Dtos;
+using JMMinistry.Application.Features.Discipleship.Commands.CreateNote;
+using JMMinistry.Application.Features.Discipleship.Commands.CreateNoteEntry;
+using JMMinistry.Application.Features.Discipleship.Enums;
 using Mediator;
 using Microsoft.Extensions.Caching.Memory;
 using SurrealDb.Net;
@@ -27,21 +30,21 @@ namespace JMMinistry.Application.Features.Discipleship.Queries.GetDiscipleshipNo
             if (cache.TryGetValue(cacheKey, out DiscipleshipNoteDto? cached) && cached is not null)
                 return cached;
 
-            var noteId = request.NoteId.StartsWith("journal_entry:") ? request.NoteId : $"journal_entry:{request.NoteId}";
+            var rawNoteId = request.NoteId.StartsWith("journal_entry:") ? request.NoteId["journal_entry:".Length..] : request.NoteId;
 
             var result = await session.Query(@$"
-                SELECT 
-                    id AS note_id,
+                SELECT
+                    type::string(id) AS note_id,
                     title,
                     content AS description,
                     status AS note_status,
                     created_at,
                     categories,
-                    (SELECT VALUE out FROM ->concerning)[0] AS disciple_id,
-                    (SELECT VALUE in FROM <-authored)[0] AS leader_id,
-                    (SELECT *, id AS id, author AS author_id FROM journal_entry_entry WHERE id IN (SELECT VALUE in FROM <-entry_of WHERE out = $parent.id)) AS entries
-                FROM type::thing('journal_entry', {noteId})
-                WHERE ->concerning->(user WHERE id = type::thing('user', {request.DiscipleId}));
+                    type::string(target_disciple) AS disciple_id,
+                    type::string(author) AS leader_id,
+                    (SELECT type::string(id) AS id, content, created_at AS date, created_at, type::string(parent_entry) AS note_id, type::string(author) AS author_id FROM journal_entry WHERE parent_entry = $parent.id) AS entries
+                FROM type::record('journal_entry', {rawNoteId})
+                WHERE target_disciple = type::record('user', {request.DiscipleId});
             ", cancellationToken);
 
 

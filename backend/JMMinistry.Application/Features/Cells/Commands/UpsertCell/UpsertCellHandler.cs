@@ -1,7 +1,11 @@
 using JMMinistry.Application.Exceptions;
-using JMMinistry.Common.Dtos.Cell;
+using JMMinistry.Application.Features.Cells.Dtos;
+using JMMinistry.Application.Features.Cells.Commands.AddDisciples;
 using Mediator;
 using SurrealDb.Net;
+using SurrealDb.Net.Models.Response;
+using System.Linq;
+using SurrealDb.Net.Models;
 
 namespace JMMinistry.Application.Features.Cells.Commands.CreateCell;
 
@@ -10,44 +14,63 @@ public class UpsertCellHandler(ISurrealDbSession session) :
 {
     public async ValueTask<CellDto> Handle(UpsertCellCommand request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrEmpty(request.Id))
+        string? dayStr = request.Day?.ToString();
+        var leaderId = RecordId.From("user", request.Document);
+
+        if (request.Id == null)
         {
             // Create new cell and relate to leader
             var result = await session.Query(@$"
-                BEGIN TRANSACTION;
-                
-                LET $cell = (CREATE cell SET 
-                    name = {request.Name}, 
-                    description = {request.Description}, 
-                    main_cell = {request.MainCell}, 
-                    address = {request.Address}, 
-                    day = {request.Day?.ToString()}, 
-                    opening_date = {request.OpeningDate?.ToDateTime(TimeOnly.MinValue)})[0];
-                
-                RELATE type::thing('user', {request.Document})->leads->$cell.id SET since = time::now();
-                
-                COMMIT TRANSACTION;
-                
-                RETURN $cell;
+                {{
+                    LET $cell = (CREATE cell SET
+                        name = {request.Name},
+                        description = {request.Description} OR NONE,
+                        main_cell = {request.MainCell},
+                        address = {request.Address},
+                        day = {dayStr} OR NONE,
+                        opening_date = {request.OpeningDate?.ToDateTime(TimeOnly.MinValue)} OR NONE)[0];
+
+                    RELATE {leaderId}->leads->$cell SET since = time::now();
+
+                    RETURN $cell;
+                }}
             ", cancellationToken);
 
-            return result.GetValue<CellDto>(0);
+            if (result.HasErrors)
+            {
+                var error = result.Errors.First();
+                if (error is SurrealDbErrorResult errorRes)
+                    throw new Exception($"SurrealDB Error: {errorRes.Details}");
+
+                throw new Exception($"SurrealDB Error: {error}");
+            }
+
+            return result.GetValue<CellDto>(0) ?? throw new Exception("Unexpected null from DB");
         }
         else
         {
             // Update existing cell
             var result = await session.Query(@$"
-                UPDATE type::thing('cell', {request.Id}) SET 
-                    name = {request.Name}, 
-                    description = {request.Description}, 
-                    main_cell = {request.MainCell}, 
-                    address = {request.Address}, 
-                    day = {request.Day?.ToString()}, 
-                    opening_date = {request.OpeningDate?.ToDateTime(TimeOnly.MinValue)}
+                UPDATE {request.Id} SET
+                    name = {request.Name},
+                    description = {request.Description} OR NONE,
+                    main_cell = {request.MainCell},
+                    address = {request.Address},
+                    day = {dayStr} OR NONE,
+                    opening_date = {request.OpeningDate?.ToDateTime(TimeOnly.MinValue)} OR NONE
                 RETURN AFTER;
             ", cancellationToken);
 
-            return result.GetValue<CellDto>(0);
+            if (result.HasErrors)
+            {
+                var error = result.Errors.First();
+                if (error is SurrealDbErrorResult errorRes)
+                    throw new Exception($"SurrealDB Error: {errorRes.Details}");
+
+                throw new Exception($"SurrealDB Error: {error}");
+            }
+
+            return result.GetValue<CellDto>(0) ?? throw new Exception("Unexpected null from DB");
         }
     }
 }

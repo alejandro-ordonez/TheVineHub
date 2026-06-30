@@ -14,17 +14,17 @@ public class CompleteStepForDisciplesHandler(ISurrealDbSession session)
 
         var result = await session.Query(@$"
             BEGIN TRANSACTION;
-            
+
             FOR $doc IN {request.DiscipleDocuments} {{
-                LET $user = type::thing('user', $doc);
-                RELATE $user->completed->type::thing('disciple_step', {stepId}) 
-                SET 
+                LET $user = type::record('user', $doc);
+                RELATE $user->completed->type::record('disciple_step', {stepId})
+                SET
                     status = 'InProgress',
-                    leader = type::thing('user', {leaderId}),
+                    leader = type::record('user', {leaderId}),
                     date_created = {request.CompletionDate.ToDateTime(TimeOnly.MinValue)},
                     last_updated = {request.CompletionDate.ToDateTime(TimeOnly.MinValue)};
             }};
-            
+
             COMMIT TRANSACTION;
         ", cancellationToken);
 

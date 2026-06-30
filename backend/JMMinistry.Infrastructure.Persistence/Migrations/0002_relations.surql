@@ -15,6 +15,13 @@ DEFINE INDEX unique_disciple ON TABLE disciple_in FIELDS in UNIQUE;
 
 DEFINE TABLE requires TYPE RELATION IN disciple_step OUT disciple_step SCHEMAFULL;
 
+DEFINE TABLE completed TYPE RELATION IN user OUT disciple_step SCHEMAFULL;
+DEFINE FIELD status ON completed TYPE string ASSERT $value INSIDE ["Abandoned", "InProgress", "Completed", "InPrayers", "Enrolled"];
+DEFINE FIELD leader ON completed TYPE record<user>;
+DEFINE FIELD date_created ON completed TYPE datetime DEFAULT time::now();
+DEFINE FIELD last_updated ON completed TYPE datetime DEFAULT time::now();
+DEFINE INDEX idx_user_step ON completed FIELDS in, out UNIQUE;
+
 DEFINE TABLE enrolled_to TYPE RELATION IN user OUT cycle SCHEMAFULL;
 DEFINE FIELD status ON enrolled_to TYPE string ASSERT $value INSIDE ["in_prayers", "enrolled", "completed", "failed"];
 DEFINE FIELD guided_by ON enrolled_to TYPE option<record<user>> ASSERT $value == NONE OR (SELECT id FROM guides WHERE in = $value AND out = $parent.out).id[0] != NONE;

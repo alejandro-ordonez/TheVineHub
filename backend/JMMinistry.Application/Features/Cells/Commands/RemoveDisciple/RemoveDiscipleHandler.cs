@@ -1,4 +1,7 @@
-using JMMinistry.Common.Dtos.User;
+using JMMinistry.Application.Features.User.Dtos;
+using JMMinistry.Application.Features.User.Commands.Authenticate;
+using JMMinistry.Application.Features.User.Commands.CreateUser;
+using JMMinistry.Application.Features.User.Commands.MarryLeaders;
 using JMMinistry.Application.Exceptions;
 using Mediator;
 using SurrealDb.Net;
@@ -15,21 +18,21 @@ namespace JMMinistry.Application.Features.Cells.Commands.RemoveDisciple
 
             var result = await session.Query(@$"
                 BEGIN TRANSACTION;
-                
+
                 -- Verify relationship exists
-                LET $relation = (SELECT * FROM disciple_in WHERE in = type::thing('user', {userId}) AND out = type::thing('cell', {cellId}));
-                
+                LET $relation = (SELECT * FROM disciple_in WHERE in = type::record('user', {userId}) AND out = type::record('cell', {cellId}));
+
                 IF array::len($relation) == 0 THEN
                     THROW 'This person does not belong to the given cell';
                 END;
 
                 -- Delete relationship
-                DELETE disciple_in WHERE in = type::thing('user', {userId}) AND out = type::thing('cell', {cellId});
-                
+                DELETE disciple_in WHERE in = type::record('user', {userId}) AND out = type::record('cell', {cellId});
+
                 COMMIT TRANSACTION;
-                
+
                 -- Return updated disciples list
-                RETURN (SELECT in.* FROM disciple_in WHERE out = type::thing('cell', {cellId}));
+                RETURN (SELECT in.* FROM disciple_in WHERE out = type::record('cell', {cellId}));
             ", cancellationToken);
 
             var disciples = result.GetValue<List<DiscipleDto>>(0);

@@ -15,22 +15,22 @@ public class RecordCycleAttendanceHandler(ISurrealDbSession session)
 
         var result = await session.Query(@$"
             -- Verify session belongs to cycle
-            LET $belongs = (SELECT count() > 0 FROM session_of WHERE in = type::thing('cycle_session', {sessionId}) AND out = type::thing('cycle', {cycleId}))[0];
-            
-            IF !$belongs THEN
+            LET $session = (SELECT * FROM type::record('cycle_session', {sessionId}))[0];
+
+            IF $session == NONE OR $session.cycle != type::record('cycle', {cycleId}) THEN
                 THROW 'Session ' + {sessionId} + ' does not belong to cycle ' + {cycleId};
             END;
 
             BEGIN TRANSACTION;
-            
+
             -- Remove existing attendances for this session
-            DELETE attended WHERE out = type::thing('cycle_session', {sessionId});
+            DELETE attended_to WHERE out = type::record('cycle_session', {sessionId});
 
             -- Add new attendances
             FOR $discipleId IN {request.DiscipleIds} {{
-                RELATE type::thing('user', $discipleId)->attended->type::thing('cycle_session', {sessionId});
+                RELATE type::record('user', $discipleId)->attended_to->type::record('cycle_session', {sessionId});
             }};
-            
+
             COMMIT TRANSACTION;
         ", cancellationToken);
 

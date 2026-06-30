@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using FluentValidation;
 using Mediator;
 
@@ -5,7 +6,9 @@ namespace JMMinistry.Application.Features.DiscipleJourney.Commands.DeleteStepCyc
 {
     public class DeleteStepCycleCommand : ICommand
     {
+        [Column("step_id")]
         public required string StepId { get; set; }
+        [Column("cycle_id")]
         public required string CycleId { get; set; }
     }
 

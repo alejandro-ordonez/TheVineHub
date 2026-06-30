@@ -1,8 +1,11 @@
 ﻿using JMMinistry.API.Extensions;
-using JMMinistry.Common.Dtos.Cell;
-using JMMinistry.Common.Dtos.User;
-using JMMinistry.Application.Exceptions;
+using JMMinistry.Application.Features.Cells.Dtos;
 using JMMinistry.Application.Features.Cells.Commands.AddDisciples;
+using JMMinistry.Application.Features.User.Dtos;
+using JMMinistry.Application.Features.User.Commands.Authenticate;
+using JMMinistry.Application.Features.User.Commands.CreateUser;
+using JMMinistry.Application.Features.User.Commands.MarryLeaders;
+using JMMinistry.Application.Exceptions;
 using JMMinistry.Application.Features.Cells.Commands.CreateCell;
 using JMMinistry.Application.Features.Cells.Commands.RecordAttendance;
 using JMMinistry.Application.Features.Cells.Commands.RemoveDisciple;

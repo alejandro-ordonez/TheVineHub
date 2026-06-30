@@ -31,30 +31,32 @@ IF $existing == NONE {
     RELATE $admin_id->member_of->role:Admin;
 };
 
-UPDATE city:bogota CONTENT {
-    name: 'Bogotá'
-};
+INSERT INTO city [
+    { id: city:bogota, name: 'Bogotá' }
+] ON DUPLICATE KEY UPDATE name = $input.name;
 
-UPDATE locality:fontibon CONTENT { name: 'Fontibón' };
-UPDATE locality:bosa CONTENT { name: 'Bosa' };
-UPDATE locality:ciudad_bolivar CONTENT { name: 'Ciudad Bolívar' };
-UPDATE locality:kennedy CONTENT { name: 'Kennedy' };
-UPDATE locality:rafael_uribe_uribe CONTENT { name: 'Rafael Uribe Uribe' };
-UPDATE locality:tunjuelito CONTENT { name: 'Tunjuelito' };
-UPDATE locality:puente_aranda CONTENT { name: 'Puente Aranda' };
-UPDATE locality:teusaquillo CONTENT { name: 'Teusaquillo' };
-UPDATE locality:engativa CONTENT { name: 'Engativá' };
-UPDATE locality:barrios_unidos CONTENT { name: 'Barrios Unidos' };
-UPDATE locality:antonio_narino CONTENT { name: 'Antonio Nariño' };
-UPDATE locality:san_cristobal CONTENT { name: 'San Cristóbal' };
-UPDATE locality:sumapaz CONTENT { name: 'Sumapaz' };
-UPDATE locality:usme CONTENT { name: 'Usme' };
-UPDATE locality:los_martires CONTENT { name: 'Los Mártires' };
-UPDATE locality:chapinero CONTENT { name: 'Chapinero' };
-UPDATE locality:suba CONTENT { name: 'Suba' };
-UPDATE locality:usaquen CONTENT { name: 'Usaquén' };
-UPDATE locality:santa_fe CONTENT { name: 'Santa Fe' };
-UPDATE locality:la_candelaria CONTENT { name: 'La Candelaria' };
+INSERT INTO locality [
+    { id: locality:fontibon, name: 'Fontibón' },
+    { id: locality:bosa, name: 'Bosa' },
+    { id: locality:ciudad_bolivar, name: 'Ciudad Bolívar' },
+    { id: locality:kennedy, name: 'Kennedy' },
+    { id: locality:rafael_uribe_uribe, name: 'Rafael Uribe Uribe' },
+    { id: locality:tunjuelito, name: 'Tunjuelito' },
+    { id: locality:puente_aranda, name: 'Puente Aranda' },
+    { id: locality:teusaquillo, name: 'Teusaquillo' },
+    { id: locality:engativa, name: 'Engativá' },
+    { id: locality:barrios_unidos, name: 'Barrios Unidos' },
+    { id: locality:antonio_narino, name: 'Antonio Nariño' },
+    { id: locality:san_cristobal, name: 'San Cristóbal' },
+    { id: locality:sumapaz, name: 'Sumapaz' },
+    { id: locality:usme, name: 'Usme' },
+    { id: locality:los_martires, name: 'Los Mártires' },
+    { id: locality:chapinero, name: 'Chapinero' },
+    { id: locality:suba, name: 'Suba' },
+    { id: locality:usaquen, name: 'Usaquén' },
+    { id: locality:santa_fe, name: 'Santa Fe' },
+    { id: locality:la_candelaria, name: 'La Candelaria' }
+] ON DUPLICATE KEY UPDATE name = $input.name;
 
 DELETE part_of WHERE out = city:bogota;
 

@@ -1,4 +1,5 @@
-using JMMinistry.Common.Dtos.Meetings;
+using JMMinistry.Application.Features.Meetings.Dtos;
+using JMMinistry.Application.Features.Meetings.Commands.CreateMeeting;
 using Mediator;
 
 namespace JMMinistry.Application.Features.Meetings.Commands.CreateMeeting

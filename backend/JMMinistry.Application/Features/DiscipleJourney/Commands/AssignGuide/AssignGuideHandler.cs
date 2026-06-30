@@ -15,18 +15,18 @@ public class AssignGuideHandler(ISurrealDbSession session)
 
         var result = await session.Query(@$"
             -- Verify staff is a guide for this cycle
-            LET $is_guide = (SELECT count() > 0 FROM guides WHERE in = type::thing('user', {staffId}) AND out = type::thing('cycle', {cycleId}))[0];
-            
+            LET $is_guide = (SELECT count() > 0 FROM guides WHERE in = type::record('user', {staffId}) AND out = type::record('cycle', {cycleId}))[0];
+
             IF !$is_guide THEN
                 THROW 'User ' + {staffId} + ' is not a guide for cycle ' + {cycleId};
             END;
 
             BEGIN TRANSACTION;
-            
+
             FOR $enrollmentId IN {request.EnrollmentIds} {{
-                UPDATE type::thing('enrolled', $enrollmentId) SET guide = type::thing('user', {staffId});
+                UPDATE type::record('enrolled', $enrollmentId) SET guide = type::record('user', {staffId});
             }};
-            
+
             COMMIT TRANSACTION;
         ", cancellationToken);
 

@@ -15,17 +15,17 @@ public class DeleteStepCycleHandler(ISurrealDbSession session)
 
         var result = await session.Query(@$"
             -- Verify cycle belongs to step
-            LET $belongs = (SELECT count() > 0 FROM has WHERE in = type::thing('disciple_step', {stepId}) AND out = type::thing('cycle', {cycleId}))[0];
-            
+            LET $belongs = (SELECT count() > 0 FROM has WHERE in = type::record('disciple_step', {stepId}) AND out = type::record('cycle', {cycleId}))[0];
+
             IF !$belongs THEN
                 THROW 'Cycle ' + {cycleId} + ' does not belong to step ' + {stepId};
             END;
 
             BEGIN TRANSACTION;
-            
+
             -- Delete cycle
-            DELETE type::thing('cycle', {cycleId});
-            
+            DELETE type::record('cycle', {cycleId});
+
             COMMIT TRANSACTION;
         ", cancellationToken);
 

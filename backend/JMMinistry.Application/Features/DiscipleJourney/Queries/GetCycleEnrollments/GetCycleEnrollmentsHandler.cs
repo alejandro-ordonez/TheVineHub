@@ -1,4 +1,16 @@
-using JMMinistry.Common.Dtos.DiscipleJourney;
+using JMMinistry.Application.Features.DiscipleJourney.Dtos;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.AssignGuide;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.CompleteStepForDisciples;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.CreateCycleSession;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.AddCycleStaff;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.CreateDiscipleStep;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.CreateStepCycle;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.EnrollDisciples;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.RecordCycleAttendance;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateDiscipleStep;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateEnrollmentStatus;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateStepCompletion;
+using JMMinistry.Application.Features.DiscipleJourney.Commands.UpdateStepCycle;
 using Mediator;
 using SurrealDb.Net;
 using System.Linq;
@@ -14,9 +26,9 @@ public class GetCycleEnrollmentsHandler(ISurrealDbSession session)
         var requestorId = request.RequestorId.StartsWith("user:") ? request.RequestorId : $"user:{request.RequestorId}";
 
         var result = await session.Query(@$"
-            LET $stepId = (SELECT VALUE in FROM type::thing('cycle', {cycleId})<-has)[0];
-            
-            SELECT 
+            LET $stepId = (SELECT VALUE in FROM type::record('cycle', {cycleId})<-has)[0];
+
+            SELECT
                 id,
                 in AS disciple_id,
                 (SELECT VALUE name + ' ' + last_name FROM in)[0] AS disciple_name,
@@ -24,17 +36,17 @@ public class GetCycleEnrollmentsHandler(ISurrealDbSession session)
                 (SELECT VALUE name + ' ' + last_name FROM guide)[0] AS guide_name,
                 (SELECT VALUE status FROM completed WHERE in = $parent.in AND out = $stepId)[0] AS status,
                 enrolled_at,
-                (SELECT count() FROM attended WHERE in = $parent.in AND out IN (SELECT VALUE in FROM cycle_session<-session_of WHERE out = type::thing('cycle', {cycleId})))[0].count AS attendance_count
-            FROM enrolled 
-            WHERE out = type::thing('cycle', {cycleId})
+                (SELECT count() FROM attended WHERE in = $parent.in AND out IN (SELECT VALUE in FROM cycle_session<-session_of WHERE out = type::record('cycle', {cycleId})))[0].count AS attendance_count
+            FROM enrolled
+            WHERE out = type::record('cycle', {cycleId})
             AND (
-                guide = type::thing('user', {requestorId})
-                OR 
+                guide = type::record('user', {requestorId})
+                OR
                 -- If coordinator, show all
-                (SELECT count() > 0 FROM guides WHERE in = type::thing('user', {requestorId}) AND out = type::thing('cycle', {cycleId}) AND role = 'Coordinator')[0]
+                (SELECT count() > 0 FROM guides WHERE in = type::record('user', {requestorId}) AND out = type::record('cycle', {cycleId}) AND role = 'Coordinator')[0]
                 OR
                 -- If admin
-                (SELECT count() > 0 FROM type::thing('user', {requestorId})->member_of WHERE out.name = 'Admin')[0]
+                (SELECT count() > 0 FROM type::record('user', {requestorId})->member_of WHERE out.name = 'Admin')[0]
             );
         ", cancellationToken);
 

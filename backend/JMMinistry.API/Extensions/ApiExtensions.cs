@@ -1,4 +1,4 @@
-using JMMinistry.Common;
+using JMMinistry.Application.Common;
 using Microsoft.OpenApi;
 using System.Security.Claims;
 

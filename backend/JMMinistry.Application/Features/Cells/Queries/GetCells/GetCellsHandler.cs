@@ -1,6 +1,6 @@
-using JMMinistry.Application.Mappers;
-using JMMinistry.Common.Dtos.Cell;
-using JMMinistry.Domain.Cells;
+using JMMinistry.Application.Features.Cells.Dtos;
+using JMMinistry.Application.Features.Cells.Commands.AddDisciples;
+
 using Mediator;
 using SurrealDb.Net;
 using System.Linq;
@@ -36,9 +36,9 @@ namespace JMMinistry.Application.Features.Cells.Queries.GetCells
 
             ", cancellationToken);
 
-            var cells = result.GetValue<IEnumerable<Cell>>(4);
+            var cells = result.GetValue<IEnumerable<CellDto>>(4);
 
-            return cells?.ToDto() ?? [];
+            return cells ?? [];
         }
     }
 }

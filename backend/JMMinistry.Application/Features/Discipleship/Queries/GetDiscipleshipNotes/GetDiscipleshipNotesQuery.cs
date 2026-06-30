@@ -1,12 +1,18 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using FluentValidation;
-using JMMinistry.Common.Dtos.Discipleship;
+using JMMinistry.Application.Features.Discipleship.Dtos;
+using JMMinistry.Application.Features.Discipleship.Commands.CreateNote;
+using JMMinistry.Application.Features.Discipleship.Commands.CreateNoteEntry;
+using JMMinistry.Application.Features.Discipleship.Enums;
 using Mediator;
 
 namespace JMMinistry.Application.Features.Discipleship.Queries.GetDiscipleshipNotes
 {
     public class GetDiscipleshipNotesQuery : IQuery<IList<DiscipleshipNoteDto>>
     {
+        [Column("requestor_id")]
         public required string RequestorId { get; set; }
+        [Column("disciple_id")]
         public required string DiscipleId { get; set; }
     }
 

@@ -14,10 +14,10 @@ public class DeleteDiscipleStepHandler(ISurrealDbSession session)
 
         var result = await session.Query(@$"
             BEGIN TRANSACTION;
-            
+
             -- Delete step
-            DELETE type::thing('disciple_step', {stepId});
-            
+            DELETE type::record('disciple_step', {stepId});
+
             COMMIT TRANSACTION;
         ", cancellationToken);
 
