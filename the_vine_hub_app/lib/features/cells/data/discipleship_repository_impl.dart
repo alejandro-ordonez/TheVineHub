@@ -1,10 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:jm_ministry_app/features/cells/domain/discipleship_repository.dart';
-import 'package:jm_ministry_app/core/network/api/discipleship/models/discipleship_note_dto.dart';
-import 'package:jm_ministry_app/core/network/api/discipleship/models/discipleship_note_entry_dto.dart';
-import 'package:jm_ministry_app/core/network/api/discipleship/models/create_note_dto.dart';
-import 'package:jm_ministry_app/core/network/api/discipleship/models/create_note_entry_dto.dart';
-import 'package:jm_ministry_app/core/network/api/discipleship/discipleship_api.dart';
+import 'package:the_vine_hub_app/features/cells/domain/discipleship_repository.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/models/discipleship_note_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/models/discipleship_note_entry_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/models/create_note_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/models/create_note_entry_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/discipleship_api.dart';
 
 part 'discipleship_repository_impl.g.dart';
 

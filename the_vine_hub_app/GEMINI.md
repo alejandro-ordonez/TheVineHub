@@ -1,7 +1,7 @@
 # JM Ministry App - Project Context
 
 ## Project Overview
-This is a Flutter application named `jm_ministry_app`. It is designed as a high-fidelity application adhering to Clean Architecture principles.
+This is a Flutter application named `the_vine_hub_app`. It is designed as a high-fidelity application adhering to Clean Architecture principles.
 
 - **Main Technologies:** Flutter (Dart SDK ^3.11.4), Riverpod, GoRouter, Freezed.
 - **Platforms:** Android, iOS, Web, Linux, macOS, Windows.

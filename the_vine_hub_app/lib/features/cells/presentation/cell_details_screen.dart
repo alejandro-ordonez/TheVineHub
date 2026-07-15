@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:jm_ministry_app/features/cells/presentation/cells_provider.dart';
-import 'package:jm_ministry_app/features/cells/presentation/widgets/details/add_disciple_form.dart';
-import 'package:jm_ministry_app/features/cells/presentation/widgets/details/header_bento_section.dart';
-import 'package:jm_ministry_app/features/cells/presentation/widgets/details/search_and_filters.dart';
-import 'package:jm_ministry_app/features/cells/presentation/widgets/details/member_card.dart';
-import 'package:jm_ministry_app/features/cells/presentation/widgets/details/empty_members_state.dart';
-import 'package:jm_ministry_app/features/cells/domain/disciple_dto.dart';
-import 'package:jm_ministry_app/i18n/strings.g.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/cells_provider.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/details/add_disciple_form.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/details/header_bento_section.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/details/search_and_filters.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/details/member_card.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/details/empty_members_state.dart';
+import 'package:the_vine_hub_app/features/cells/domain/disciple_dto.dart';
+import 'package:the_vine_hub_app/i18n/strings.g.dart';
 
 class CellDetailsScreen extends ConsumerStatefulWidget {
   final String cellId;

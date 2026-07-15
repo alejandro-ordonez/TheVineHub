@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:jm_ministry_app/features/auth/data/auth_repository_impl.dart';
-import 'package:jm_ministry_app/features/auth/domain/authenticate_command.dart';
-import 'package:jm_ministry_app/features/auth/domain/auth_events.dart';
+import 'package:the_vine_hub_app/features/auth/data/auth_repository_impl.dart';
+import 'package:the_vine_hub_app/features/auth/domain/authenticate_command.dart';
+import 'package:the_vine_hub_app/features/auth/domain/auth_events.dart';
 import 'package:flutter/foundation.dart';
 
 part 'auth_notifier.g.dart';

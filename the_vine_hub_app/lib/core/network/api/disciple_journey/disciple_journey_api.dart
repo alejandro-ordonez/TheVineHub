@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:jm_ministry_app/core/network/dio_provider.dart';
-import 'package:jm_ministry_app/shared/domain/api_response.dart';
+import 'package:the_vine_hub_app/core/network/dio_provider.dart';
+import 'package:the_vine_hub_app/shared/domain/api_response.dart';
 
 part 'disciple_journey_api.g.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jm_ministry_app/features/cells/domain/cell_dto.dart';
-import 'package:jm_ministry_app/features/cells/presentation/widgets/leader_info.dart';
-import 'package:jm_ministry_app/shared/presentation/widgets/animations/entrance_fader.dart';
-import 'package:jm_ministry_app/i18n/strings.g.dart';
+import 'package:the_vine_hub_app/features/cells/domain/cell_dto.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/leader_info.dart';
+import 'package:the_vine_hub_app/shared/presentation/widgets/animations/entrance_fader.dart';
+import 'package:the_vine_hub_app/i18n/strings.g.dart';
 
 class CellCard extends StatefulWidget {
   final CellDto cell;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jm_ministry_app/i18n/strings.g.dart';
-import 'package:jm_ministry_app/features/cells/domain/disciple_dto.dart';
-import 'package:jm_ministry_app/shared/presentation/widgets/animations/entrance_fader.dart';
+import 'package:the_vine_hub_app/i18n/strings.g.dart';
+import 'package:the_vine_hub_app/features/cells/domain/disciple_dto.dart';
+import 'package:the_vine_hub_app/shared/presentation/widgets/animations/entrance_fader.dart';
 
 class LadderProgressBar extends StatelessWidget {
   final int progress;

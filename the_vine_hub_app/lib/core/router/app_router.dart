@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:jm_ministry_app/features/dashboard/presentation/dashboard_screen.dart';
-import 'package:jm_ministry_app/features/cells/presentation/cells_screen.dart';
-import 'package:jm_ministry_app/features/cells/presentation/cell_details_screen.dart';
-import 'package:jm_ministry_app/features/training/presentation/training_screen.dart';
-import 'package:jm_ministry_app/features/auth/presentation/login_screen.dart';
-import 'package:jm_ministry_app/features/auth/presentation/auth_notifier.dart';
-import 'package:jm_ministry_app/features/home/presentation/home_screen.dart';
-import 'package:jm_ministry_app/features/admin/presentation/admin_dashboard_screen.dart';
-import 'package:jm_ministry_app/shared/main_shell.dart';
+import 'package:the_vine_hub_app/features/dashboard/presentation/dashboard_screen.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/cells_screen.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/cell_details_screen.dart';
+import 'package:the_vine_hub_app/features/training/presentation/training_screen.dart';
+import 'package:the_vine_hub_app/features/auth/presentation/login_screen.dart';
+import 'package:the_vine_hub_app/features/auth/presentation/auth_notifier.dart';
+import 'package:the_vine_hub_app/features/home/presentation/home_screen.dart';
+import 'package:the_vine_hub_app/features/admin/presentation/admin_dashboard_screen.dart';
+import 'package:the_vine_hub_app/shared/main_shell.dart';
 
 part 'app_router.g.dart';
 

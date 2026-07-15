@@ -1,6 +1,6 @@
 {
-    "name": "jm_ministry_app",
-    "short_name": "jm_ministry_app",
+    "name": "the_vine_hub_app",
+    "short_name": "the_vine_hub_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

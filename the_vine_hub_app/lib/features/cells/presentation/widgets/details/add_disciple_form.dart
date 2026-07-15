@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:jm_ministry_app/features/cells/presentation/widgets/details/add_disciple_notifier.dart';
-import 'package:jm_ministry_app/i18n/strings.g.dart';
-import 'package:jm_ministry_app/features/cells/domain/create_user_info_dto.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/details/add_disciple_notifier.dart';
+import 'package:the_vine_hub_app/i18n/strings.g.dart';
+import 'package:the_vine_hub_app/features/cells/domain/create_user_info_dto.dart';
 
 class AddDiscipleForm extends ConsumerStatefulWidget {
   final String cellId;

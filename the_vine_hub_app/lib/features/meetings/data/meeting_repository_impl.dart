@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:jm_ministry_app/features/meetings/domain/meeting_repository.dart';
-import 'package:jm_ministry_app/features/meetings/domain/meeting_dto.dart';
-import 'package:jm_ministry_app/core/network/api/meetings/meetings_api.dart';
+import 'package:the_vine_hub_app/features/meetings/domain/meeting_repository.dart';
+import 'package:the_vine_hub_app/features/meetings/domain/meeting_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/meetings/meetings_api.dart';
 
 part 'meeting_repository_impl.g.dart';
 

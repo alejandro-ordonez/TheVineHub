@@ -1,7 +1,7 @@
-import 'package:jm_ministry_app/core/network/api/discipleship/models/discipleship_note_dto.dart';
-import 'package:jm_ministry_app/core/network/api/discipleship/models/discipleship_note_entry_dto.dart';
-import 'package:jm_ministry_app/core/network/api/discipleship/models/create_note_dto.dart';
-import 'package:jm_ministry_app/core/network/api/discipleship/models/create_note_entry_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/models/discipleship_note_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/models/discipleship_note_entry_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/models/create_note_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/models/create_note_entry_dto.dart';
 
 abstract class DiscipleshipRepository {
   Future<List<DiscipleshipNoteDto>> getNotes(String discipleId);

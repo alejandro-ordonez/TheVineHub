@@ -1,8 +1,8 @@
-import 'package:jm_ministry_app/features/auth/domain/auth_repository.dart';
-import 'package:jm_ministry_app/features/auth/domain/authenticate_command.dart';
-import 'package:jm_ministry_app/features/auth/domain/token_result.dart';
-import 'package:jm_ministry_app/core/network/token_storage.dart';
-import 'package:jm_ministry_app/core/network/api/users/users_api.dart';
+import 'package:the_vine_hub_app/features/auth/domain/auth_repository.dart';
+import 'package:the_vine_hub_app/features/auth/domain/authenticate_command.dart';
+import 'package:the_vine_hub_app/features/auth/domain/token_result.dart';
+import 'package:the_vine_hub_app/core/network/token_storage.dart';
+import 'package:the_vine_hub_app/core/network/api/users/users_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_repository_impl.g.dart';

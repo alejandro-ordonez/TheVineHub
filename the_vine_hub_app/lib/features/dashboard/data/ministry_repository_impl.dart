@@ -1,11 +1,11 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:jm_ministry_app/features/dashboard/domain/ministry_repository.dart';
-import 'package:jm_ministry_app/features/cells/domain/cell_dto.dart';
-import 'package:jm_ministry_app/features/cells/domain/disciple_dto.dart';
-import 'package:jm_ministry_app/features/cells/domain/add_cell_attendance_dto.dart';
-import 'package:jm_ministry_app/features/cells/domain/update_cell_attendance_dto.dart';
-import 'package:jm_ministry_app/core/network/api/cells/cells_api.dart';
-import 'package:jm_ministry_app/core/network/api/locations/locations_api.dart';
+import 'package:the_vine_hub_app/features/dashboard/domain/ministry_repository.dart';
+import 'package:the_vine_hub_app/features/cells/domain/cell_dto.dart';
+import 'package:the_vine_hub_app/features/cells/domain/disciple_dto.dart';
+import 'package:the_vine_hub_app/features/cells/domain/add_cell_attendance_dto.dart';
+import 'package:the_vine_hub_app/features/cells/domain/update_cell_attendance_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/cells/cells_api.dart';
+import 'package:the_vine_hub_app/core/network/api/locations/locations_api.dart';
 
 part 'ministry_repository_impl.g.dart';
 

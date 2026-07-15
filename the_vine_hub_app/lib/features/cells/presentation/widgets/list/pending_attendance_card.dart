@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jm_ministry_app/i18n/strings.g.dart';
+import 'package:the_vine_hub_app/i18n/strings.g.dart';
 
 class PendingAttendanceCard extends StatelessWidget {
   const PendingAttendanceCard({super.key});
