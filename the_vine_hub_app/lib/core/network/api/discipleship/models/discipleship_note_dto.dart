@@ -7,7 +7,7 @@ part 'discipleship_note_dto.g.dart';
 @freezed
 abstract class DiscipleshipNoteDto with _$DiscipleshipNoteDto {
   const factory DiscipleshipNoteDto({
-    required int noteId,
+    required String noteId,
     String? title,
     String? description,
     int? noteStatus,

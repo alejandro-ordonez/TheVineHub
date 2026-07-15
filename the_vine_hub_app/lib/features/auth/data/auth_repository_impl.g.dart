@@ -16,15 +16,15 @@ final class AuthRepositoryProvider
     extends $FunctionalProvider<AuthRepository, AuthRepository, AuthRepository>
     with $Provider<AuthRepository> {
   AuthRepositoryProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'authRepositoryProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'authRepositoryProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$authRepositoryHash();
@@ -48,4 +48,4 @@ final class AuthRepositoryProvider
   }
 }
 
-String _$authRepositoryHash() => r'bae969e0dcd166eac9a3040e145900b324ea48fa';
+String _$authRepositoryHash() => r'6dff24f7d6eb6faa93c4b530c526263a47fc8a45';
