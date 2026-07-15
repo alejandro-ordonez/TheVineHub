@@ -37,19 +37,19 @@ class TranslationsEs with BaseTranslations<AppLocale, Translations> implements T
 	TranslationsEs $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => TranslationsEs(meta: meta ?? this.$meta);
 
 	// Translations
-	@override late final _TranslationsAuthEs auth = _TranslationsAuthEs._(_root);
-	@override late final _TranslationsCommonEs common = _TranslationsCommonEs._(_root);
-	@override late final _TranslationsNavEs nav = _TranslationsNavEs._(_root);
-	@override late final _TranslationsHomeEs home = _TranslationsHomeEs._(_root);
-	@override late final _TranslationsAdminEs admin = _TranslationsAdminEs._(_root);
-	@override late final _TranslationsDashboardEs dashboard = _TranslationsDashboardEs._(_root);
-	@override late final _TranslationsCellsEs cells = _TranslationsCellsEs._(_root);
-	@override late final _TranslationsTrainingEs training = _TranslationsTrainingEs._(_root);
+	@override late final _Translations$auth$es auth = _Translations$auth$es._(_root);
+	@override late final _Translations$common$es common = _Translations$common$es._(_root);
+	@override late final _Translations$nav$es nav = _Translations$nav$es._(_root);
+	@override late final _Translations$home$es home = _Translations$home$es._(_root);
+	@override late final _Translations$admin$es admin = _Translations$admin$es._(_root);
+	@override late final _Translations$dashboard$es dashboard = _Translations$dashboard$es._(_root);
+	@override late final _Translations$cells$es cells = _Translations$cells$es._(_root);
+	@override late final _Translations$training$es training = _Translations$training$es._(_root);
 }
 
 // Path: auth
-class _TranslationsAuthEs implements TranslationsAuthEn {
-	_TranslationsAuthEs._(this._root);
+class _Translations$auth$es implements Translations$auth$en {
+	_Translations$auth$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -63,12 +63,12 @@ class _TranslationsAuthEs implements TranslationsAuthEn {
 	@override String get subtitle => 'Mayordomía y Crecimiento';
 	@override String get logout => 'Cerrar Sesión';
 	@override String get appName => 'JM Ministerio';
-	@override late final _TranslationsAuthErrorsEs errors = _TranslationsAuthErrorsEs._(_root);
+	@override late final _Translations$auth$errors$es errors = _Translations$auth$errors$es._(_root);
 }
 
 // Path: common
-class _TranslationsCommonEs implements TranslationsCommonEn {
-	_TranslationsCommonEs._(this._root);
+class _Translations$common$es implements Translations$common$en {
+	_Translations$common$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -82,15 +82,19 @@ class _TranslationsCommonEs implements TranslationsCommonEn {
 	@override String step({required Object id}) => 'Paso ${id}';
 	@override String get unknown => 'Desconocido';
 	@override String get profile => 'Perfil';
-	@override late final _TranslationsCommonRolesEs roles = _TranslationsCommonRolesEs._(_root);
-	@override late final _TranslationsCommonErrorsEs errors = _TranslationsCommonErrorsEs._(_root);
-	@override late final _TranslationsCommonValidationEs validation = _TranslationsCommonValidationEs._(_root);
-	@override late final _TranslationsCommonDaysEs days = _TranslationsCommonDaysEs._(_root);
+	@override String get success => 'Éxito';
+	@override String get document => 'Documento';
+	@override String get cancel => 'Cancelar';
+	@override String get save => 'Guardar';
+	@override late final _Translations$common$roles$es roles = _Translations$common$roles$es._(_root);
+	@override late final _Translations$common$errors$es errors = _Translations$common$errors$es._(_root);
+	@override late final _Translations$common$validation$es validation = _Translations$common$validation$es._(_root);
+	@override late final _Translations$common$days$es days = _Translations$common$days$es._(_root);
 }
 
 // Path: nav
-class _TranslationsNavEs implements TranslationsNavEn {
-	_TranslationsNavEs._(this._root);
+class _Translations$nav$es implements Translations$nav$en {
+	_Translations$nav$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -105,8 +109,8 @@ class _TranslationsNavEs implements TranslationsNavEn {
 }
 
 // Path: home
-class _TranslationsHomeEs implements TranslationsHomeEn {
-	_TranslationsHomeEs._(this._root);
+class _Translations$home$es implements Translations$home$en {
+	_Translations$home$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -116,8 +120,8 @@ class _TranslationsHomeEs implements TranslationsHomeEn {
 }
 
 // Path: admin
-class _TranslationsAdminEs implements TranslationsAdminEn {
-	_TranslationsAdminEs._(this._root);
+class _Translations$admin$es implements Translations$admin$en {
+	_Translations$admin$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -127,8 +131,8 @@ class _TranslationsAdminEs implements TranslationsAdminEn {
 }
 
 // Path: dashboard
-class _TranslationsDashboardEs implements TranslationsDashboardEn {
-	_TranslationsDashboardEs._(this._root);
+class _Translations$dashboard$es implements Translations$dashboard$en {
+	_Translations$dashboard$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -138,8 +142,8 @@ class _TranslationsDashboardEs implements TranslationsDashboardEn {
 }
 
 // Path: cells
-class _TranslationsCellsEs implements TranslationsCellsEn {
-	_TranslationsCellsEs._(this._root);
+class _Translations$cells$es implements Translations$cells$en {
+	_Translations$cells$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -150,6 +154,7 @@ class _TranslationsCellsEs implements TranslationsCellsEn {
 	@override String get content => 'Contenido de Células';
 	@override String get report => 'Reportar';
 	@override String get newCell => 'Nueva Célula';
+	@override String get addDisciple => 'Agregar Discípulo';
 	@override String get submitReport => 'Enviar Reporte Semanal';
 	@override String get meetingNotes => 'Notas de la Reunión';
 	@override String get notesHint => '¿Qué pasó en la célula hoy?';
@@ -170,16 +175,16 @@ class _TranslationsCellsEs implements TranslationsCellsEn {
 	@override String get noLeader => 'No hay líder asignado';
 	@override String get noMembers => 'No hay miembros en esta célula todavía';
 	@override String growth({required Object count}) => '${count} este mes';
-	@override late final _TranslationsCellsTagsEs tags = _TranslationsCellsTagsEs._(_root);
-	@override late final _TranslationsCellsLevelsEs levels = _TranslationsCellsLevelsEs._(_root);
-	@override late final _TranslationsCellsErrorsEs errors = _TranslationsCellsErrorsEs._(_root);
-	@override late final _TranslationsCellsSuccessEs success = _TranslationsCellsSuccessEs._(_root);
-	@override late final _TranslationsCellsFormEs form = _TranslationsCellsFormEs._(_root);
+	@override late final _Translations$cells$tags$es tags = _Translations$cells$tags$es._(_root);
+	@override late final _Translations$cells$levels$es levels = _Translations$cells$levels$es._(_root);
+	@override late final _Translations$cells$errors$es errors = _Translations$cells$errors$es._(_root);
+	@override late final _Translations$cells$success$es success = _Translations$cells$success$es._(_root);
+	@override late final _Translations$cells$form$es form = _Translations$cells$form$es._(_root);
 }
 
 // Path: training
-class _TranslationsTrainingEs implements TranslationsTrainingEn {
-	_TranslationsTrainingEs._(this._root);
+class _Translations$training$es implements Translations$training$en {
+	_Translations$training$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -190,8 +195,8 @@ class _TranslationsTrainingEs implements TranslationsTrainingEn {
 }
 
 // Path: auth.errors
-class _TranslationsAuthErrorsEs implements TranslationsAuthErrorsEn {
-	_TranslationsAuthErrorsEs._(this._root);
+class _Translations$auth$errors$es implements Translations$auth$errors$en {
+	_Translations$auth$errors$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -200,8 +205,8 @@ class _TranslationsAuthErrorsEs implements TranslationsAuthErrorsEn {
 }
 
 // Path: common.roles
-class _TranslationsCommonRolesEs implements TranslationsCommonRolesEn {
-	_TranslationsCommonRolesEs._(this._root);
+class _Translations$common$roles$es implements Translations$common$roles$en {
+	_Translations$common$roles$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -211,8 +216,8 @@ class _TranslationsCommonRolesEs implements TranslationsCommonRolesEn {
 }
 
 // Path: common.errors
-class _TranslationsCommonErrorsEs implements TranslationsCommonErrorsEn {
-	_TranslationsCommonErrorsEs._(this._root);
+class _Translations$common$errors$es implements Translations$common$errors$en {
+	_Translations$common$errors$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -222,8 +227,8 @@ class _TranslationsCommonErrorsEs implements TranslationsCommonErrorsEn {
 }
 
 // Path: common.validation
-class _TranslationsCommonValidationEs implements TranslationsCommonValidationEn {
-	_TranslationsCommonValidationEs._(this._root);
+class _Translations$common$validation$es implements Translations$common$validation$en {
+	_Translations$common$validation$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -232,8 +237,8 @@ class _TranslationsCommonValidationEs implements TranslationsCommonValidationEn 
 }
 
 // Path: common.days
-class _TranslationsCommonDaysEs implements TranslationsCommonDaysEn {
-	_TranslationsCommonDaysEs._(this._root);
+class _Translations$common$days$es implements Translations$common$days$en {
+	_Translations$common$days$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -248,8 +253,8 @@ class _TranslationsCommonDaysEs implements TranslationsCommonDaysEn {
 }
 
 // Path: cells.tags
-class _TranslationsCellsTagsEs implements TranslationsCellsTagsEn {
-	_TranslationsCellsTagsEs._(this._root);
+class _Translations$cells$tags$es implements Translations$cells$tags$en {
+	_Translations$cells$tags$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -260,8 +265,8 @@ class _TranslationsCellsTagsEs implements TranslationsCellsTagsEn {
 }
 
 // Path: cells.levels
-class _TranslationsCellsLevelsEs implements TranslationsCellsLevelsEn {
-	_TranslationsCellsLevelsEs._(this._root);
+class _Translations$cells$levels$es implements Translations$cells$levels$en {
+	_Translations$cells$levels$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -273,8 +278,8 @@ class _TranslationsCellsLevelsEs implements TranslationsCellsLevelsEn {
 }
 
 // Path: cells.errors
-class _TranslationsCellsErrorsEs implements TranslationsCellsErrorsEn {
-	_TranslationsCellsErrorsEs._(this._root);
+class _Translations$cells$errors$es implements Translations$cells$errors$en {
+	_Translations$cells$errors$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -287,8 +292,8 @@ class _TranslationsCellsErrorsEs implements TranslationsCellsErrorsEn {
 }
 
 // Path: cells.success
-class _TranslationsCellsSuccessEs implements TranslationsCellsSuccessEn {
-	_TranslationsCellsSuccessEs._(this._root);
+class _Translations$cells$success$es implements Translations$cells$success$en {
+	_Translations$cells$success$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
@@ -298,13 +303,14 @@ class _TranslationsCellsSuccessEs implements TranslationsCellsSuccessEn {
 }
 
 // Path: cells.form
-class _TranslationsCellsFormEs implements TranslationsCellsFormEn {
-	_TranslationsCellsFormEs._(this._root);
+class _Translations$cells$form$es implements Translations$cells$form$en {
+	_Translations$cells$form$es._(this._root);
 
 	final TranslationsEs _root; // ignore: unused_field
 
 	// Translations
 	@override String get name => 'Nombre de la Célula';
+	@override String get lastName => 'Apellido';
 	@override String get description => 'Descripción';
 	@override String get address => 'Dirección';
 	@override String get city => 'Ciudad';
@@ -343,6 +349,10 @@ extension on TranslationsEs {
 			'common.step' => ({required Object id}) => 'Paso ${id}',
 			'common.unknown' => 'Desconocido',
 			'common.profile' => 'Perfil',
+			'common.success' => 'Éxito',
+			'common.document' => 'Documento',
+			'common.cancel' => 'Cancelar',
+			'common.save' => 'Guardar',
 			'common.roles.helper' => 'Asistente',
 			'common.roles.leader' => 'Líder',
 			'common.errors.generic' => ({required Object error}) => 'Error: ${error}',
@@ -374,6 +384,7 @@ extension on TranslationsEs {
 			'cells.content' => 'Contenido de Células',
 			'cells.report' => 'Reportar',
 			'cells.newCell' => 'Nueva Célula',
+			'cells.addDisciple' => 'Agregar Discípulo',
 			'cells.submitReport' => 'Enviar Reporte Semanal',
 			'cells.meetingNotes' => 'Notas de la Reunión',
 			'cells.notesHint' => '¿Qué pasó en la célula hoy?',
@@ -409,6 +420,7 @@ extension on TranslationsEs {
 			'cells.success.attendanceRecorded' => 'Asistencia registrada con éxito',
 			'cells.success.cellCreated' => 'Célula creada con éxito',
 			'cells.form.name' => 'Nombre de la Célula',
+			'cells.form.lastName' => 'Apellido',
 			'cells.form.description' => 'Descripción',
 			'cells.form.address' => 'Dirección',
 			'cells.form.city' => 'Ciudad',

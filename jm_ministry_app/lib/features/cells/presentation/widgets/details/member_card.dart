@@ -20,7 +20,7 @@ class LadderProgressBar extends StatelessWidget {
             decoration: BoxDecoration(
               color: isActive
                   ? colorScheme.secondary
-                  : colorScheme.surfaceVariant,
+                  : colorScheme.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(3),
               border: isActive
                   ? null
@@ -54,11 +54,11 @@ class MemberCard extends StatelessWidget {
           color: colorScheme.surfaceContainerLowest,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: colorScheme.outlineVariant.withOpacity(0.5),
+            color: colorScheme.outlineVariant.withValues(alpha: 0.5),
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.02),
+              color: Colors.black.withValues(alpha: 0.02),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -179,7 +179,7 @@ class _MemberAvatar extends StatelessWidget {
           width: 64,
           height: 64,
           decoration: BoxDecoration(
-            color: colorScheme.surfaceVariant,
+            color: colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(12),
             image: DecorationImage(
               image: photoPath != null
@@ -240,7 +240,7 @@ class _MemberNameRow extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           decoration: BoxDecoration(
-            color: colorScheme.surfaceVariant,
+            color: colorScheme.surfaceContainerHighest,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(

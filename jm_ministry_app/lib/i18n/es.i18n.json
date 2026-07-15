@@ -23,6 +23,10 @@
     "step": "Paso {id}",
     "unknown": "Desconocido",
     "profile": "Perfil",
+    "success": "Éxito",
+    "document": "Documento",
+    "cancel": "Cancelar",
+    "save": "Guardar",
     "roles": {
       "helper": "Asistente",
       "leader": "Líder"
@@ -72,6 +76,7 @@
     "content": "Contenido de Células",
     "report": "Reportar",
     "newCell": "Nueva Célula",
+    "addDisciple": "Agregar Discípulo",
     "submitReport": "Enviar Reporte Semanal",
     "meetingNotes": "Notas de la Reunión",
     "notesHint": "¿Qué pasó en la célula hoy?",
@@ -117,6 +122,7 @@
     },
     "form": {
       "name": "Nombre de la Célula",
+      "lastName": "Apellido",
       "description": "Descripción",
       "address": "Dirección",
       "city": "Ciudad",

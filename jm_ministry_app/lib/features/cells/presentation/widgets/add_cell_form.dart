@@ -147,7 +147,7 @@ class _AddCellFormState extends ConsumerState<AddCellForm> {
               data: (cities) => Column(
                 children: [
                   DropdownButtonFormField<CityDto>(
-                    value: _selectedCity,
+                    initialValue: _selectedCity,
                     decoration: InputDecoration(
                       labelText: t.cells.form.city,
                       border: const OutlineInputBorder(),
@@ -170,7 +170,7 @@ class _AddCellFormState extends ConsumerState<AddCellForm> {
                   if (_selectedCity != null) ...[
                     const SizedBox(height: 16),
                     DropdownButtonFormField<LocalityDto>(
-                      value: _selectedLocality,
+                      initialValue: _selectedLocality,
                       decoration: InputDecoration(
                         labelText: t.cells.form.locality,
                         border: const OutlineInputBorder(),
@@ -195,7 +195,7 @@ class _AddCellFormState extends ConsumerState<AddCellForm> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<int>(
-              value: _selectedDay,
+              initialValue: _selectedDay,
               decoration: InputDecoration(
                 labelText: t.cells.form.meetingDay,
                 border: const OutlineInputBorder(),

@@ -23,6 +23,10 @@
     "step": "Step {id}",
     "unknown": "Unknown",
     "profile": "Profile",
+    "success": "Success",
+    "document": "Document",
+    "cancel": "Cancel",
+    "save": "Save",
     "roles": {
       "helper": "Helper",
       "leader": "Leader"
@@ -72,6 +76,7 @@
     "content": "Cells Content",
     "report": "Report",
     "newCell": "New Cell",
+    "addDisciple": "Add Disciple",
     "submitReport": "Submit Weekly Report",
     "meetingNotes": "Meeting Notes",
     "notesHint": "What happened in the cell today?",
@@ -116,6 +121,7 @@
     },
     "form": {
       "name": "Cell Name",
+      "lastName": "Last Name",
       "description": "Description",
       "address": "Address",
       "city": "City",

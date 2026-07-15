@@ -40,8 +40,8 @@ class _CellCardState extends State<CellCard> {
           curve: Curves.easeInOut,
           transform: _isHovered
               ? (Matrix4.identity()
-                  ..translate(0, -4, 0)
-                  ..scale(1.02))
+                  ..translateByDouble(0.0, -4.0, 0.0, 1.0)
+                  ..scaleByDouble(1.02, 1.02, 1.02, 1.0))
               : Matrix4.identity(),
           decoration: BoxDecoration(
             color: colorScheme.surfaceContainerLowest,

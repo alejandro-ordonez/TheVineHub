@@ -61,7 +61,7 @@ DEFINE FUNCTION fn::can_take_step($user: record<user>, $step: record<disciple_st
 -- 'sub' and 'name' are standard. 'roles' and 'guiding_steps' will be extracted by the API middleware.
 DEFINE SCOPE user SESSION 24h
     SIGNUP ( 
-        CREATE type::thing("user", $id) SET 
+        CREATE type::record("user", $id) SET 
             name = $name, 
             last_name = $last_name, 
             email = $email, 
@@ -72,7 +72,7 @@ DEFINE SCOPE user SESSION 24h
             (SELECT VALUE out.name FROM ->member_of) AS roles,
             (SELECT VALUE out<-has<-disciple_step.name FROM ->guides) AS guiding_steps
         FROM user 
-        WHERE id = type::thing("user", $id) AND crypto::argon2::compare(password, $pass) 
+        WHERE id = type::record("user", $id) AND crypto::argon2::compare(password, $pass) 
     );
 ```
 

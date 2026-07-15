@@ -40,19 +40,19 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	Translations $copyWith({TranslationMetadata<AppLocale, Translations>? meta}) => Translations(meta: meta ?? this.$meta);
 
 	// Translations
-	late final TranslationsAuthEn auth = TranslationsAuthEn._(_root);
-	late final TranslationsCommonEn common = TranslationsCommonEn._(_root);
-	late final TranslationsNavEn nav = TranslationsNavEn._(_root);
-	late final TranslationsHomeEn home = TranslationsHomeEn._(_root);
-	late final TranslationsAdminEn admin = TranslationsAdminEn._(_root);
-	late final TranslationsDashboardEn dashboard = TranslationsDashboardEn._(_root);
-	late final TranslationsCellsEn cells = TranslationsCellsEn._(_root);
-	late final TranslationsTrainingEn training = TranslationsTrainingEn._(_root);
+	late final Translations$auth$en auth = Translations$auth$en._(_root);
+	late final Translations$common$en common = Translations$common$en._(_root);
+	late final Translations$nav$en nav = Translations$nav$en._(_root);
+	late final Translations$home$en home = Translations$home$en._(_root);
+	late final Translations$admin$en admin = Translations$admin$en._(_root);
+	late final Translations$dashboard$en dashboard = Translations$dashboard$en._(_root);
+	late final Translations$cells$en cells = Translations$cells$en._(_root);
+	late final Translations$training$en training = Translations$training$en._(_root);
 }
 
 // Path: auth
-class TranslationsAuthEn {
-	TranslationsAuthEn._(this._root);
+class Translations$auth$en {
+	Translations$auth$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -85,12 +85,12 @@ class TranslationsAuthEn {
 	/// en: 'JM Ministry'
 	String get appName => 'JM Ministry';
 
-	late final TranslationsAuthErrorsEn errors = TranslationsAuthErrorsEn._(_root);
+	late final Translations$auth$errors$en errors = Translations$auth$errors$en._(_root);
 }
 
 // Path: common
-class TranslationsCommonEn {
-	TranslationsCommonEn._(this._root);
+class Translations$common$en {
+	Translations$common$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -123,15 +123,27 @@ class TranslationsCommonEn {
 	/// en: 'Profile'
 	String get profile => 'Profile';
 
-	late final TranslationsCommonRolesEn roles = TranslationsCommonRolesEn._(_root);
-	late final TranslationsCommonErrorsEn errors = TranslationsCommonErrorsEn._(_root);
-	late final TranslationsCommonValidationEn validation = TranslationsCommonValidationEn._(_root);
-	late final TranslationsCommonDaysEn days = TranslationsCommonDaysEn._(_root);
+	/// en: 'Success'
+	String get success => 'Success';
+
+	/// en: 'Document'
+	String get document => 'Document';
+
+	/// en: 'Cancel'
+	String get cancel => 'Cancel';
+
+	/// en: 'Save'
+	String get save => 'Save';
+
+	late final Translations$common$roles$en roles = Translations$common$roles$en._(_root);
+	late final Translations$common$errors$en errors = Translations$common$errors$en._(_root);
+	late final Translations$common$validation$en validation = Translations$common$validation$en._(_root);
+	late final Translations$common$days$en days = Translations$common$days$en._(_root);
 }
 
 // Path: nav
-class TranslationsNavEn {
-	TranslationsNavEn._(this._root);
+class Translations$nav$en {
+	Translations$nav$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -160,8 +172,8 @@ class TranslationsNavEn {
 }
 
 // Path: home
-class TranslationsHomeEn {
-	TranslationsHomeEn._(this._root);
+class Translations$home$en {
+	Translations$home$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -175,8 +187,8 @@ class TranslationsHomeEn {
 }
 
 // Path: admin
-class TranslationsAdminEn {
-	TranslationsAdminEn._(this._root);
+class Translations$admin$en {
+	Translations$admin$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -190,8 +202,8 @@ class TranslationsAdminEn {
 }
 
 // Path: dashboard
-class TranslationsDashboardEn {
-	TranslationsDashboardEn._(this._root);
+class Translations$dashboard$en {
+	Translations$dashboard$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -205,8 +217,8 @@ class TranslationsDashboardEn {
 }
 
 // Path: cells
-class TranslationsCellsEn {
-	TranslationsCellsEn._(this._root);
+class Translations$cells$en {
+	Translations$cells$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -229,6 +241,9 @@ class TranslationsCellsEn {
 
 	/// en: 'New Cell'
 	String get newCell => 'New Cell';
+
+	/// en: 'Add Disciple'
+	String get addDisciple => 'Add Disciple';
 
 	/// en: 'Submit Weekly Report'
 	String get submitReport => 'Submit Weekly Report';
@@ -290,16 +305,16 @@ class TranslationsCellsEn {
 	/// en: '{count} this month'
 	String growth({required Object count}) => '${count} this month';
 
-	late final TranslationsCellsTagsEn tags = TranslationsCellsTagsEn._(_root);
-	late final TranslationsCellsLevelsEn levels = TranslationsCellsLevelsEn._(_root);
-	late final TranslationsCellsErrorsEn errors = TranslationsCellsErrorsEn._(_root);
-	late final TranslationsCellsSuccessEn success = TranslationsCellsSuccessEn._(_root);
-	late final TranslationsCellsFormEn form = TranslationsCellsFormEn._(_root);
+	late final Translations$cells$tags$en tags = Translations$cells$tags$en._(_root);
+	late final Translations$cells$levels$en levels = Translations$cells$levels$en._(_root);
+	late final Translations$cells$errors$en errors = Translations$cells$errors$en._(_root);
+	late final Translations$cells$success$en success = Translations$cells$success$en._(_root);
+	late final Translations$cells$form$en form = Translations$cells$form$en._(_root);
 }
 
 // Path: training
-class TranslationsTrainingEn {
-	TranslationsTrainingEn._(this._root);
+class Translations$training$en {
+	Translations$training$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -316,8 +331,8 @@ class TranslationsTrainingEn {
 }
 
 // Path: auth.errors
-class TranslationsAuthErrorsEn {
-	TranslationsAuthErrorsEn._(this._root);
+class Translations$auth$errors$en {
+	Translations$auth$errors$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -328,8 +343,8 @@ class TranslationsAuthErrorsEn {
 }
 
 // Path: common.roles
-class TranslationsCommonRolesEn {
-	TranslationsCommonRolesEn._(this._root);
+class Translations$common$roles$en {
+	Translations$common$roles$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -343,8 +358,8 @@ class TranslationsCommonRolesEn {
 }
 
 // Path: common.errors
-class TranslationsCommonErrorsEn {
-	TranslationsCommonErrorsEn._(this._root);
+class Translations$common$errors$en {
+	Translations$common$errors$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -358,8 +373,8 @@ class TranslationsCommonErrorsEn {
 }
 
 // Path: common.validation
-class TranslationsCommonValidationEn {
-	TranslationsCommonValidationEn._(this._root);
+class Translations$common$validation$en {
+	Translations$common$validation$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -370,8 +385,8 @@ class TranslationsCommonValidationEn {
 }
 
 // Path: common.days
-class TranslationsCommonDaysEn {
-	TranslationsCommonDaysEn._(this._root);
+class Translations$common$days$en {
+	Translations$common$days$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -400,8 +415,8 @@ class TranslationsCommonDaysEn {
 }
 
 // Path: cells.tags
-class TranslationsCellsTagsEn {
-	TranslationsCellsTagsEn._(this._root);
+class Translations$cells$tags$en {
+	Translations$cells$tags$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -418,8 +433,8 @@ class TranslationsCellsTagsEn {
 }
 
 // Path: cells.levels
-class TranslationsCellsLevelsEn {
-	TranslationsCellsLevelsEn._(this._root);
+class Translations$cells$levels$en {
+	Translations$cells$levels$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -439,8 +454,8 @@ class TranslationsCellsLevelsEn {
 }
 
 // Path: cells.errors
-class TranslationsCellsErrorsEn {
-	TranslationsCellsErrorsEn._(this._root);
+class Translations$cells$errors$en {
+	Translations$cells$errors$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -463,8 +478,8 @@ class TranslationsCellsErrorsEn {
 }
 
 // Path: cells.success
-class TranslationsCellsSuccessEn {
-	TranslationsCellsSuccessEn._(this._root);
+class Translations$cells$success$en {
+	Translations$cells$success$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -478,8 +493,8 @@ class TranslationsCellsSuccessEn {
 }
 
 // Path: cells.form
-class TranslationsCellsFormEn {
-	TranslationsCellsFormEn._(this._root);
+class Translations$cells$form$en {
+	Translations$cells$form$en._(this._root);
 
 	final Translations _root; // ignore: unused_field
 
@@ -487,6 +502,9 @@ class TranslationsCellsFormEn {
 
 	/// en: 'Cell Name'
 	String get name => 'Cell Name';
+
+	/// en: 'Last Name'
+	String get lastName => 'Last Name';
 
 	/// en: 'Description'
 	String get description => 'Description';
@@ -543,6 +561,10 @@ extension on Translations {
 			'common.step' => ({required Object id}) => 'Step ${id}',
 			'common.unknown' => 'Unknown',
 			'common.profile' => 'Profile',
+			'common.success' => 'Success',
+			'common.document' => 'Document',
+			'common.cancel' => 'Cancel',
+			'common.save' => 'Save',
 			'common.roles.helper' => 'Helper',
 			'common.roles.leader' => 'Leader',
 			'common.errors.generic' => ({required Object error}) => 'Error: ${error}',
@@ -574,6 +596,7 @@ extension on Translations {
 			'cells.content' => 'Cells Content',
 			'cells.report' => 'Report',
 			'cells.newCell' => 'New Cell',
+			'cells.addDisciple' => 'Add Disciple',
 			'cells.submitReport' => 'Submit Weekly Report',
 			'cells.meetingNotes' => 'Meeting Notes',
 			'cells.notesHint' => 'What happened in the cell today?',
@@ -609,6 +632,7 @@ extension on Translations {
 			'cells.success.attendanceRecorded' => 'Attendance recorded successfully',
 			'cells.success.cellCreated' => 'Cell created successfully',
 			'cells.form.name' => 'Cell Name',
+			'cells.form.lastName' => 'Last Name',
 			'cells.form.description' => 'Description',
 			'cells.form.address' => 'Address',
 			'cells.form.city' => 'City',

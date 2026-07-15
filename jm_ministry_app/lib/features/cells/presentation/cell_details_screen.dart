@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'cells_provider.dart';
+import 'widgets/details/add_disciple_form.dart';
 import 'widgets/details/header_bento_section.dart';
 import 'widgets/details/search_and_filters.dart';
 import 'widgets/details/member_card.dart';
@@ -127,8 +128,17 @@ class _CellDetailsScreenState extends ConsumerState<CellDetailsScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // TODO: Add member
+        onPressed: () async {
+          final added = await showDialog<bool>(
+            context: context,
+            builder: (_) => AddDiscipleForm(cellId: widget.cellId),
+          );
+          if (added == true && mounted) {
+            ref.invalidate(cellDisciplesProvider(widget.cellId));
+            ScaffoldMessenger.of(
+              this.context,
+            ).showSnackBar(SnackBar(content: Text(t.common.success)));
+          }
         },
         backgroundColor: colorScheme.secondaryContainer,
         foregroundColor: colorScheme.onSecondaryContainer,
