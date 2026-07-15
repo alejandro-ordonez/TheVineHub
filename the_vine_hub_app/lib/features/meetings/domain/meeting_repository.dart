@@ -1,4 +1,4 @@
-import 'meeting_dto.dart';
+import 'package:the_vine_hub_app/features/meetings/domain/meeting_dto.dart';
 
 abstract class MeetingRepository {
   Future<List<MeetingDto>> getMeetings();

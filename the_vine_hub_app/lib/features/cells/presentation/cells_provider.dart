@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../dashboard/data/ministry_repository_impl.dart';
-import '../domain/cell_dto.dart';
-import '../domain/disciple_dto.dart';
+import 'package:the_vine_hub_app/features/dashboard/data/ministry_repository_impl.dart';
+import 'package:the_vine_hub_app/features/cells/domain/cell_dto.dart';
+import 'package:the_vine_hub_app/features/cells/domain/disciple_dto.dart';
 
 part 'cells_provider.g.dart';
 

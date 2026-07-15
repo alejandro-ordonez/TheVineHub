@@ -1,100 +1,55 @@
-import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../domain/discipleship_repository.dart';
-import '../domain/discipleship_note_dto.dart';
-import '../domain/discipleship_note_entry_dto.dart';
-import '../../../core/network/dio_provider.dart';
-import '../../../shared/domain/api_response.dart';
+import 'package:the_vine_hub_app/features/cells/domain/discipleship_repository.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/models/discipleship_note_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/models/discipleship_note_entry_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/models/create_note_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/models/create_note_entry_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/discipleship/discipleship_api.dart';
 
 part 'discipleship_repository_impl.g.dart';
 
 class DiscipleshipRepositoryImpl implements DiscipleshipRepository {
-  final Dio _dio;
+  final DiscipleshipApi _api;
 
-  DiscipleshipRepositoryImpl(this._dio);
+  DiscipleshipRepositoryImpl(this._api);
 
   @override
-  Future<List<DiscipleshipNoteDto>> getNotes(String discipleId) async {
-    final response = await _dio.get('/api/Discipleship/$discipleId/notes');
-    final apiResponse = ApiResponse<List<dynamic>>.fromJson(
-      response.data,
-      (json) => json as List<dynamic>,
-    );
+  Future<List<DiscipleshipNoteDto>> getNotes(String discipleId) {
+    return _api.getDiscipleshipNotes(discipleId);
+  }
 
-    if (apiResponse.success && apiResponse.data != null) {
-      return apiResponse.data!
-          .map((e) => DiscipleshipNoteDto.fromJson(e as Map<String, dynamic>))
-          .toList();
-    }
-    throw Exception(apiResponse.errors.join(', '));
+  @override
+  Future<DiscipleshipNoteDto> getNoteById(String discipleId, String noteId) {
+    return _api.getDiscipleshipNoteById(discipleId, noteId);
   }
 
   @override
   Future<DiscipleshipNoteDto> createNote(
     String discipleId,
-    Map<String, dynamic> command,
-  ) async {
-    final response = await _dio.post(
-      '/api/Discipleship/$discipleId/notes',
-      data: command,
-    );
-    final apiResponse = ApiResponse<Map<String, dynamic>>.fromJson(
-      response.data,
-      (json) => json as Map<String, dynamic>,
-    );
-
-    if (apiResponse.success && apiResponse.data != null) {
-      return DiscipleshipNoteDto.fromJson(apiResponse.data!);
-    }
-    throw Exception(apiResponse.errors.join(', '));
+    CreateNoteDto command,
+  ) {
+    return _api.createNote(discipleId, command);
   }
 
   @override
   Future<List<DiscipleshipNoteEntryDto>> getNoteEntries(
     String discipleId,
-    int noteId,
-  ) async {
-    final response = await _dio.get(
-      '/api/Discipleship/$discipleId/notes/$noteId/entries',
-    );
-    final apiResponse = ApiResponse<List<dynamic>>.fromJson(
-      response.data,
-      (json) => json as List<dynamic>,
-    );
-
-    if (apiResponse.success && apiResponse.data != null) {
-      return apiResponse.data!
-          .map(
-            (e) => DiscipleshipNoteEntryDto.fromJson(e as Map<String, dynamic>),
-          )
-          .toList();
-    }
-    throw Exception(apiResponse.errors.join(', '));
+    String noteId,
+  ) {
+    return _api.getNoteEntries(discipleId, noteId);
   }
 
   @override
   Future<DiscipleshipNoteEntryDto> createNoteEntry(
     String discipleId,
-    int noteId,
-    Map<String, dynamic> command,
-  ) async {
-    final response = await _dio.post(
-      '/api/Discipleship/$discipleId/notes/$noteId/entries',
-      data: command,
-    );
-    final apiResponse = ApiResponse<Map<String, dynamic>>.fromJson(
-      response.data,
-      (json) => json as Map<String, dynamic>,
-    );
-
-    if (apiResponse.success && apiResponse.data != null) {
-      return DiscipleshipNoteEntryDto.fromJson(apiResponse.data!);
-    }
-    throw Exception(apiResponse.errors.join(', '));
+    String noteId,
+    CreateNoteEntryDto command,
+  ) {
+    return _api.createNoteEntry(discipleId, noteId, command);
   }
 }
 
 @riverpod
 DiscipleshipRepository discipleshipRepository(Ref ref) {
-  return DiscipleshipRepositoryImpl(ref.watch(dioProvider));
+  return DiscipleshipRepositoryImpl(ref.watch(discipleshipApiProvider));
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:jm_ministry_app/i18n/strings.g.dart';
+import 'package:the_vine_hub_app/i18n/strings.g.dart';
 
 class SearchAndFilters extends StatelessWidget {
   final TextEditingController controller;

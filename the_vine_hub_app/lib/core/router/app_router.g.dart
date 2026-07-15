@@ -12,24 +12,20 @@ part of 'app_router.dart';
 @ProviderFor(routerListenable)
 final routerListenableProvider = RouterListenableProvider._();
 
-final class RouterListenableProvider
-    extends
-        $FunctionalProvider<
-          RouterListenable,
-          RouterListenable,
-          RouterListenable
-        >
-    with $Provider<RouterListenable> {
+final class RouterListenableProvider extends $FunctionalProvider<
+    RouterListenable,
+    RouterListenable,
+    RouterListenable> with $Provider<RouterListenable> {
   RouterListenableProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'routerListenableProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'routerListenableProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$routerListenableHash();
@@ -62,15 +58,15 @@ final class RouterProvider
     extends $FunctionalProvider<GoRouter, GoRouter, GoRouter>
     with $Provider<GoRouter> {
   RouterProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'routerProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'routerProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$routerHash();

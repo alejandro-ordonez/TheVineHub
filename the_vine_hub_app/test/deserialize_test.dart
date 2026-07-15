@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:jm_ministry_app/features/cells/domain/cell_dto.dart';
-import 'package:jm_ministry_app/features/cells/domain/disciple_dto.dart';
+import 'package:the_vine_hub_app/features/cells/domain/cell_dto.dart';
+import 'package:the_vine_hub_app/features/cells/domain/disciple_dto.dart';
 
 void main() {
   test('deserialize CellDto', () {

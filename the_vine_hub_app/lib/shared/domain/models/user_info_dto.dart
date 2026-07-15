@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'partial_user_info_dto.dart';
+import 'package:the_vine_hub_app/shared/domain/models/partial_user_info_dto.dart';
 
 part 'user_info_dto.freezed.dart';
 part 'user_info_dto.g.dart';

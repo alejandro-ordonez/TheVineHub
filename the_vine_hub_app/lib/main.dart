@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'core/router/app_router.dart';
-import 'core/theme/app_theme.dart';
-import 'i18n/strings.g.dart';
+import 'package:the_vine_hub_app/core/router/app_router.dart';
+import 'package:the_vine_hub_app/core/theme/app_theme.dart';
+import 'package:the_vine_hub_app/i18n/strings.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

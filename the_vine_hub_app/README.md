@@ -1,4 +1,4 @@
-# jm_ministry_app
+# the_vine_hub_app
 
 A new Flutter project.
 

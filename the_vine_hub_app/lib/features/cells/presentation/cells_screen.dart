@@ -4,16 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'cells_provider.dart';
-import 'widgets/cell_card.dart';
-import 'widgets/add_cell_form.dart';
-import 'widgets/list/cells_header.dart';
-import 'widgets/list/pending_attendance_card.dart';
-import 'widgets/list/empty_cells_state.dart';
-import '../domain/cell_dto.dart';
-import '../../../shared/presentation/shell_utils.dart';
-import '../../../shared/presentation/widgets/animations/entrance_fader.dart';
-import 'package:jm_ministry_app/i18n/strings.g.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/cells_provider.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/cell_card.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/add_cell_form.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/list/cells_header.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/list/pending_attendance_card.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/list/empty_cells_state.dart';
+import 'package:the_vine_hub_app/features/cells/domain/cell_dto.dart';
+import 'package:the_vine_hub_app/shared/presentation/shell_utils.dart';
+import 'package:the_vine_hub_app/shared/presentation/widgets/animations/entrance_fader.dart';
+import 'package:the_vine_hub_app/i18n/strings.g.dart';
 
 class CellsScreen extends ConsumerWidget {
   const CellsScreen({super.key});

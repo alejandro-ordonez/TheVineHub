@@ -12,24 +12,20 @@ part of 'ministry_repository_impl.dart';
 @ProviderFor(ministryRepository)
 final ministryRepositoryProvider = MinistryRepositoryProvider._();
 
-final class MinistryRepositoryProvider
-    extends
-        $FunctionalProvider<
-          MinistryRepository,
-          MinistryRepository,
-          MinistryRepository
-        >
-    with $Provider<MinistryRepository> {
+final class MinistryRepositoryProvider extends $FunctionalProvider<
+    MinistryRepository,
+    MinistryRepository,
+    MinistryRepository> with $Provider<MinistryRepository> {
   MinistryRepositoryProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'ministryRepositoryProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'ministryRepositoryProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$ministryRepositoryHash();
@@ -37,8 +33,8 @@ final class MinistryRepositoryProvider
   @$internal
   @override
   $ProviderElement<MinistryRepository> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   MinistryRepository create(Ref ref) {
@@ -55,4 +51,4 @@ final class MinistryRepositoryProvider
 }
 
 String _$ministryRepositoryHash() =>
-    r'052529c4d03e06b90d3e1af7dbd21db3c7001b8c';
+    r'460be291d579bdf91b4e3f7c0559b6590c11e0d8';

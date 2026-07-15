@@ -1,45 +1,31 @@
-import 'package:dio/dio.dart';
-import '../domain/auth_repository.dart';
-import '../domain/authenticate_command.dart';
-import '../domain/token_result.dart';
-import '../../../core/network/token_storage.dart';
-import '../../../core/network/dio_provider.dart';
-import '../../../shared/domain/api_response.dart';
+import 'package:the_vine_hub_app/features/auth/domain/auth_repository.dart';
+import 'package:the_vine_hub_app/features/auth/domain/authenticate_command.dart';
+import 'package:the_vine_hub_app/features/auth/domain/token_result.dart';
+import 'package:the_vine_hub_app/core/network/token_storage.dart';
+import 'package:the_vine_hub_app/core/network/api/users/users_api.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_repository_impl.g.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  final Dio _dio;
+  final UsersApi _usersApi;
   final TokenStorage _tokenStorage;
 
-  AuthRepositoryImpl(this._dio, this._tokenStorage);
+  AuthRepositoryImpl(this._usersApi, this._tokenStorage);
 
   @override
   Future<TokenResult> login(AuthenticateCommand command) async {
-    final response = await _dio.post('/api/User/auth', data: command.toJson());
+    final response = await _usersApi.authenticate(command.toJson());
 
-    final apiResponse = ApiResponse<TokenResult>.fromJson(
-      response.data,
-      (json) => TokenResult.fromJson(json as Map<String, dynamic>),
-    );
+    final result = TokenResult.fromJson(response as Map<String, dynamic>);
 
-    if (apiResponse.success && apiResponse.data != null) {
-      final result = apiResponse.data!;
-      if (result.isAuthenticated) {
-        await _tokenStorage.saveTokens(
-          token: result.token,
-          refreshToken: result.refreshToken,
-        );
-      }
-      return result;
-    } else {
-      throw Exception(
-        apiResponse.errors.isNotEmpty
-            ? apiResponse.errors.join(', ')
-            : 'Authentication failed',
+    if (result.isAuthenticated) {
+      await _tokenStorage.saveTokens(
+        token: result.token,
+        refreshToken: result.refreshToken,
       );
     }
+    return result;
   }
 
   @override
@@ -56,7 +42,7 @@ class AuthRepositoryImpl implements AuthRepository {
 @riverpod
 AuthRepository authRepository(Ref ref) {
   return AuthRepositoryImpl(
-    ref.watch(dioProvider),
+    ref.watch(usersApiProvider),
     ref.watch(tokenStorageProvider),
   );
 }

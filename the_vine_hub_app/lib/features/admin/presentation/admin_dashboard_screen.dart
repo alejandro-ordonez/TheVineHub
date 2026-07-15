@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../shared/presentation/shell_utils.dart';
-import '../../../i18n/strings.g.dart';
+import 'package:the_vine_hub_app/shared/presentation/shell_utils.dart';
+import 'package:the_vine_hub_app/i18n/strings.g.dart';
 
 class AdminDashboardScreen extends ConsumerWidget {
   const AdminDashboardScreen({super.key});

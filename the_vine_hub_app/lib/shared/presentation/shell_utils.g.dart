@@ -12,24 +12,20 @@ part of 'shell_utils.dart';
 @ProviderFor(shellScaffoldKey)
 final shellScaffoldKeyProvider = ShellScaffoldKeyProvider._();
 
-final class ShellScaffoldKeyProvider
-    extends
-        $FunctionalProvider<
-          GlobalKey<ScaffoldState>,
-          GlobalKey<ScaffoldState>,
-          GlobalKey<ScaffoldState>
-        >
-    with $Provider<GlobalKey<ScaffoldState>> {
+final class ShellScaffoldKeyProvider extends $FunctionalProvider<
+    GlobalKey<ScaffoldState>,
+    GlobalKey<ScaffoldState>,
+    GlobalKey<ScaffoldState>> with $Provider<GlobalKey<ScaffoldState>> {
   ShellScaffoldKeyProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'shellScaffoldKeyProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
+      : super(
+          from: null,
+          argument: null,
+          retry: null,
+          name: r'shellScaffoldKeyProvider',
+          isAutoDispose: true,
+          dependencies: null,
+          $allTransitiveDependencies: null,
+        );
 
   @override
   String debugGetCreateSourceHash() => _$shellScaffoldKeyHash();
@@ -37,8 +33,8 @@ final class ShellScaffoldKeyProvider
   @$internal
   @override
   $ProviderElement<GlobalKey<ScaffoldState>> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
+          $ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
   GlobalKey<ScaffoldState> create(Ref ref) {

@@ -1,32 +1,33 @@
-import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../domain/cell_member_repository.dart';
-import '../domain/document_check_result_dto.dart';
-import '../domain/create_user_info_dto.dart';
-import '../../../shared/domain/models/user_info_dto.dart';
-import '../../../core/network/dio_provider.dart';
+import 'package:the_vine_hub_app/features/cells/domain/cell_member_repository.dart';
+import 'package:the_vine_hub_app/features/cells/domain/document_check_result_dto.dart';
+import 'package:the_vine_hub_app/features/cells/domain/create_user_info_dto.dart';
+import 'package:the_vine_hub_app/shared/domain/models/user_info_dto.dart';
+import 'package:the_vine_hub_app/core/network/api/users/users_api.dart';
+import 'package:the_vine_hub_app/core/network/api/cells/cells_api.dart';
 
 part 'cell_member_repository_impl.g.dart';
 
 class CellMemberRepositoryImpl implements CellMemberRepository {
-  final Dio _dio;
+  final UsersApi _usersApi;
+  final CellsApi _cellsApi;
 
-  CellMemberRepositoryImpl(this._dio);
+  CellMemberRepositoryImpl(this._usersApi, this._cellsApi);
 
   @override
   Future<DocumentCheckResultDto> checkDocument(String document) async {
-    final response = await _dio.get('/api/User/Check/$document');
-    return DocumentCheckResultDto.fromJson(response.data as Map<String, dynamic>);
+    final response = await _usersApi.checkDocument(document);
+    return DocumentCheckResultDto.fromJson(response as Map<String, dynamic>);
   }
 
   @override
   Future<void> registerUser(CreateUserInfoDto userInfo) async {
-    await _dio.post('/api/User/register', data: userInfo.toJson());
+    await _usersApi.createUser(userInfo.toJson());
   }
 
   @override
   Future<void> updateUser(CreateUserInfoDto userInfo) async {
-    await _dio.put('/api/User', data: userInfo.toJson());
+    await _usersApi.updateUser(userInfo.toJson());
   }
 
   @override
@@ -35,17 +36,17 @@ class CellMemberRepositoryImpl implements CellMemberRepository {
       'cellId': cellId,
       'documents': [document],
     };
-    await _dio.post('/api/Ministry/disciples/$cellId', data: command);
+    await _cellsApi.addDisciples(cellId, command);
   }
 
   @override
   Future<UserInfoDto> getUserInfo(String document) async {
-    final response = await _dio.get('/api/User/$document');
-    return UserInfoDto.fromJson(response.data as Map<String, dynamic>);
+    final response = await _usersApi.getUserInfo(document);
+    return UserInfoDto.fromJson(response as Map<String, dynamic>);
   }
 }
 
 @riverpod
 CellMemberRepository cellMemberRepository(Ref ref) {
-  return CellMemberRepositoryImpl(ref.watch(dioProvider));
+  return CellMemberRepositoryImpl(ref.watch(usersApiProvider), ref.watch(cellsApiProvider));
 }

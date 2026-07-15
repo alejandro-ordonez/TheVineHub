@@ -7,15 +7,16 @@ part of 'meeting_dto.dart';
 // **************************************************************************
 
 _MeetingDto _$MeetingDtoFromJson(Map<String, dynamic> json) => _MeetingDto(
-  name: json['name'] as String?,
-  start: json['start'] as String,
-  end: json['end'] as String,
-  meetingTypes: (json['meetingTypes'] as num).toInt(),
-  isRecurrent: json['isRecurrent'] as bool,
-  dayOfWeek: (json['dayOfWeek'] as num?)?.toInt(),
-  date: json['date'] == null ? null : DateTime.parse(json['date'] as String),
-  meetingId: (json['meetingId'] as num).toInt(),
-);
+      name: json['name'] as String?,
+      start: json['start'] as String,
+      end: json['end'] as String,
+      meetingTypes: (json['meetingTypes'] as num).toInt(),
+      isRecurrent: json['isRecurrent'] as bool,
+      dayOfWeek: (json['dayOfWeek'] as num?)?.toInt(),
+      date:
+          json['date'] == null ? null : DateTime.parse(json['date'] as String),
+      meetingId: (json['meetingId'] as num).toInt(),
+    );
 
 Map<String, dynamic> _$MeetingDtoToJson(_MeetingDto instance) =>
     <String, dynamic>{

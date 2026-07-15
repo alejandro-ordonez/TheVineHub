@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jm_ministry_app/features/cells/presentation/cells_provider.dart';
-import 'package:jm_ministry_app/features/dashboard/data/ministry_repository_impl.dart';
-import 'package:jm_ministry_app/features/cells/domain/cell_dto.dart';
-import 'package:jm_ministry_app/i18n/strings.g.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/cells_provider.dart';
+import 'package:the_vine_hub_app/features/dashboard/data/ministry_repository_impl.dart';
+import 'package:the_vine_hub_app/features/cells/domain/cell_dto.dart';
+import 'package:the_vine_hub_app/i18n/strings.g.dart';
 
 class AddCellForm extends ConsumerStatefulWidget {
   const AddCellForm({super.key});

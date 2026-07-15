@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'token_storage.dart';
-import '../../features/auth/domain/auth_events.dart';
-import '../../features/auth/domain/token_result.dart';
-import '../../shared/domain/api_response.dart';
+import 'package:the_vine_hub_app/core/network/token_storage.dart';
+import 'package:the_vine_hub_app/features/auth/domain/auth_events.dart';
+import 'package:the_vine_hub_app/features/auth/domain/token_result.dart';
+import 'package:the_vine_hub_app/shared/domain/api_response.dart';
 
 part 'dio_provider.g.dart';
 

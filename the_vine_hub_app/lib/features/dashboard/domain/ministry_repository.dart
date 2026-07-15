@@ -1,7 +1,7 @@
-import '../../cells/domain/cell_dto.dart';
-import '../../cells/domain/disciple_dto.dart';
-import '../../cells/domain/add_cell_attendance_dto.dart';
-import '../../cells/domain/update_cell_attendance_dto.dart';
+import 'package:the_vine_hub_app/features/cells/domain/cell_dto.dart';
+import 'package:the_vine_hub_app/features/cells/domain/disciple_dto.dart';
+import 'package:the_vine_hub_app/features/cells/domain/add_cell_attendance_dto.dart';
+import 'package:the_vine_hub_app/features/cells/domain/update_cell_attendance_dto.dart';
 
 abstract class MinistryRepository {
   Future<List<CellDto>> getCells();

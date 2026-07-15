@@ -6,11 +6,11 @@ part 'discipleship_note_entry_dto.g.dart';
 @freezed
 abstract class DiscipleshipNoteEntryDto with _$DiscipleshipNoteEntryDto {
   const factory DiscipleshipNoteEntryDto({
-    required int id,
+    required String id,
     String? content,
     required DateTime date,
     required DateTime createdAt,
-    required int noteId,
+    required String noteId,
     String? authorId,
   }) = _DiscipleshipNoteEntryDto;
 
