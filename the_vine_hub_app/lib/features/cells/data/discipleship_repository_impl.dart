@@ -1,8 +1,10 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../domain/discipleship_repository.dart';
-import '../../../core/network/api/discipleship/models/discipleship_note_dto.dart';
-import '../../../core/network/api/discipleship/models/discipleship_note_entry_dto.dart';
-import '../../../core/network/api/discipleship/discipleship_api.dart';
+import 'package:jm_ministry_app/features/cells/domain/discipleship_repository.dart';
+import 'package:jm_ministry_app/core/network/api/discipleship/models/discipleship_note_dto.dart';
+import 'package:jm_ministry_app/core/network/api/discipleship/models/discipleship_note_entry_dto.dart';
+import 'package:jm_ministry_app/core/network/api/discipleship/models/create_note_dto.dart';
+import 'package:jm_ministry_app/core/network/api/discipleship/models/create_note_entry_dto.dart';
+import 'package:jm_ministry_app/core/network/api/discipleship/discipleship_api.dart';
 
 part 'discipleship_repository_impl.g.dart';
 
@@ -24,7 +26,7 @@ class DiscipleshipRepositoryImpl implements DiscipleshipRepository {
   @override
   Future<DiscipleshipNoteDto> createNote(
     String discipleId,
-    Map<String, dynamic> command,
+    CreateNoteDto command,
   ) {
     return _api.createNote(discipleId, command);
   }
@@ -41,7 +43,7 @@ class DiscipleshipRepositoryImpl implements DiscipleshipRepository {
   Future<DiscipleshipNoteEntryDto> createNoteEntry(
     String discipleId,
     String noteId,
-    Map<String, dynamic> command,
+    CreateNoteEntryDto command,
   ) {
     return _api.createNoteEntry(discipleId, noteId, command);
   }

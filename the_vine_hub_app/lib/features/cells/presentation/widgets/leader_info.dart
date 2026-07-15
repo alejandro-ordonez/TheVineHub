@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../domain/cell_dto.dart';
-import '../../../../i18n/strings.g.dart';
+import 'package:jm_ministry_app/features/cells/domain/cell_dto.dart';
+import 'package:jm_ministry_app/i18n/strings.g.dart';
 
 class LeaderInfo extends StatelessWidget {
   final CellDto cell;

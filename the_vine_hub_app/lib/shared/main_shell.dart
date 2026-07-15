@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../features/training/data/training_repository_impl.dart';
-import '../features/auth/presentation/auth_notifier.dart';
-import '../i18n/strings.g.dart';
-import '../shared/presentation/shell_utils.dart';
+import 'package:jm_ministry_app/features/training/data/training_repository_impl.dart';
+import 'package:jm_ministry_app/features/auth/presentation/auth_notifier.dart';
+import 'package:jm_ministry_app/i18n/strings.g.dart';
+import 'package:jm_ministry_app/shared/presentation/shell_utils.dart';
 
 class MainShell extends ConsumerWidget {
   final StatefulNavigationShell navigationShell;

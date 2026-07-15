@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../i18n/strings.g.dart';
+import 'package:jm_ministry_app/i18n/strings.g.dart';
 
 class EmptyMembersState extends StatelessWidget {
   const EmptyMembersState({super.key});

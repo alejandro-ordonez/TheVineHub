@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../../dio_provider.dart';
-import '../../../../shared/domain/api_response.dart';
+import 'package:jm_ministry_app/core/network/dio_provider.dart';
+import 'package:jm_ministry_app/shared/domain/api_response.dart';
 
 part 'meetings_api.g.dart';
 

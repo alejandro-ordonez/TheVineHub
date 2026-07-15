@@ -1,7 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'add_disciple_state.dart';
-import '../../../data/cell_member_repository_impl.dart';
-import '../../../domain/create_user_info_dto.dart';
+import 'package:jm_ministry_app/features/cells/presentation/widgets/details/add_disciple_state.dart';
+import 'package:jm_ministry_app/features/cells/data/cell_member_repository_impl.dart';
+import 'package:jm_ministry_app/features/cells/domain/create_user_info_dto.dart';
 
 part 'add_disciple_notifier.g.dart';
 

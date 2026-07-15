@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../i18n/strings.g.dart';
-import '../../../shared/presentation/shell_utils.dart';
+import 'package:jm_ministry_app/i18n/strings.g.dart';
+import 'package:jm_ministry_app/shared/presentation/shell_utils.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'auth_notifier.dart';
-import '../../../core/theme/app_theme.dart';
-import '../../../i18n/strings.g.dart';
+import 'package:jm_ministry_app/features/auth/presentation/auth_notifier.dart';
+import 'package:jm_ministry_app/core/theme/app_theme.dart';
+import 'package:jm_ministry_app/i18n/strings.g.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});

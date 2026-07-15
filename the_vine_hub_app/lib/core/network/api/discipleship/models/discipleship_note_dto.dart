@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'discipleship_note_entry_dto.dart';
+import 'package:jm_ministry_app/core/network/api/discipleship/models/discipleship_note_entry_dto.dart';
 
 part 'discipleship_note_dto.freezed.dart';
 part 'discipleship_note_dto.g.dart';

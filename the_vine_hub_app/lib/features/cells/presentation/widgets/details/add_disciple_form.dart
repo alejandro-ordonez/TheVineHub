@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'add_disciple_notifier.dart';
+import 'package:jm_ministry_app/features/cells/presentation/widgets/details/add_disciple_notifier.dart';
 import 'package:jm_ministry_app/i18n/strings.g.dart';
 import 'package:jm_ministry_app/features/cells/domain/create_user_info_dto.dart';
 

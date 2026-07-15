@@ -1,9 +1,9 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../domain/training_repository.dart';
-import '../domain/disciple_step_dto.dart';
-import '../domain/step_cycle_dto.dart';
-import '../domain/cycle_session_dto.dart';
-import '../../../core/network/api/disciple_journey/disciple_journey_api.dart';
+import 'package:jm_ministry_app/features/training/domain/training_repository.dart';
+import 'package:jm_ministry_app/features/training/domain/disciple_step_dto.dart';
+import 'package:jm_ministry_app/features/training/domain/step_cycle_dto.dart';
+import 'package:jm_ministry_app/features/training/domain/cycle_session_dto.dart';
+import 'package:jm_ministry_app/core/network/api/disciple_journey/disciple_journey_api.dart';
 
 part 'training_repository_impl.g.dart';
 
