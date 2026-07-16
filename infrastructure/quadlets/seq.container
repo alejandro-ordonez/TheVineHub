@@ -1,0 +1,15 @@
+[Unit]
+Description=Seq Logging Service
+After=network-online.target
+
+[Container]
+Image=datalust/seq:latest
+ContainerName=seq
+Environment=ACCEPT_EULA=Y
+PublishPort=8081:80
+PublishPort=5341:5341
+Volume=seq-data.volume:/data
+Network=jm-backend.network
+
+[Install]
+WantedBy=default.target

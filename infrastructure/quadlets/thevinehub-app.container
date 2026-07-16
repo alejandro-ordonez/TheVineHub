@@ -1,0 +1,13 @@
+[Unit]
+Description=TheVineHub Flutter Web App
+After=network-online.target
+
+[Container]
+Image=localhost/thevinehub-app:latest
+ContainerName=thevinehub-app
+Network=jm-frontend.network
+# Exposed via Cloudflare tunnel, no need to publish ports unless accessing locally directly
+# PublishPort=80:80
+
+[Install]
+WantedBy=default.target
