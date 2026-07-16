@@ -12,20 +12,24 @@ part of 'meeting_repository_impl.dart';
 @ProviderFor(meetingRepository)
 final meetingRepositoryProvider = MeetingRepositoryProvider._();
 
-final class MeetingRepositoryProvider extends $FunctionalProvider<
-    MeetingRepository,
-    MeetingRepository,
-    MeetingRepository> with $Provider<MeetingRepository> {
+final class MeetingRepositoryProvider
+    extends
+        $FunctionalProvider<
+          MeetingRepository,
+          MeetingRepository,
+          MeetingRepository
+        >
+    with $Provider<MeetingRepository> {
   MeetingRepositoryProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'meetingRepositoryProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'meetingRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$meetingRepositoryHash();
@@ -33,8 +37,8 @@ final class MeetingRepositoryProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<MeetingRepository> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   MeetingRepository create(Ref ref) {

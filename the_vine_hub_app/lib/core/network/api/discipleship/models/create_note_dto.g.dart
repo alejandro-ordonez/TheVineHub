@@ -10,7 +10,8 @@ _CreateNoteDto _$CreateNoteDtoFromJson(Map<String, dynamic> json) =>
     _CreateNoteDto(
       title: json['title'] as String,
       description: json['description'] as String? ?? '',
-      categories: (json['categories'] as List<dynamic>?)
+      categories:
+          (json['categories'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],

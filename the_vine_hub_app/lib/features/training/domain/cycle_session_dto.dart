@@ -6,10 +6,9 @@ part 'cycle_session_dto.g.dart';
 @freezed
 abstract class CycleSessionDto with _$CycleSessionDto {
   const factory CycleSessionDto({
-    required int id,
-    required int stepCycleId,
-    required DateTime date,
-    String? topic,
+    String? id,
+    required String name,
+    DateTime? date,
   }) = _CycleSessionDto;
 
   factory CycleSessionDto.fromJson(Map<String, dynamic> json) =>

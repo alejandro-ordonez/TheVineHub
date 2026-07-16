@@ -13,8 +13,8 @@ _AuthenticateCommand _$AuthenticateCommandFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$AuthenticateCommandToJson(
-        _AuthenticateCommand instance) =>
-    <String, dynamic>{
-      'document': instance.document,
-      'password': instance.password,
-    };
+  _AuthenticateCommand instance,
+) => <String, dynamic>{
+  'document': instance.document,
+  'password': instance.password,
+};

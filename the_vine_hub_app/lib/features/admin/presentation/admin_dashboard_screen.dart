@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:the_vine_hub_app/shared/presentation/shell_utils.dart';
 import 'package:the_vine_hub_app/i18n/strings.g.dart';
 
@@ -19,7 +20,31 @@ class AdminDashboardScreen extends ConsumerWidget {
           },
         ),
       ),
-      body: Center(child: Text(t.admin.emptyState)),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          children: [
+            Card(
+              child: InkWell(
+                onTap: () {
+                  context.push('/admin/meetings');
+                },
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.event, size: 48),
+                    SizedBox(height: 8),
+                    Text('Manage Meetings'),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
