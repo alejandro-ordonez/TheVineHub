@@ -1,0 +1,62 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test-api:
+    name: Run API Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore backend/TheVineHub.sln
+
+      - name: Build
+        run: dotnet build backend/TheVineHub.sln --no-restore
+
+      - name: Test
+        run: dotnet test backend/TheVineHub.sln --no-build --verbosity normal
+
+  deploy:
+    name: Deploy to Raspberry Pi
+    needs: test-api
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build API Container Image
+        run: |
+          podman build -t localhost/thevinehub-api:latest -f backend/TheVineHub.API/Dockerfile .
+
+      - name: Build Flutter App Container Image
+        run: |
+          podman build -t localhost/thevinehub-app:latest -f the_vine_hub_app/Dockerfile ./the_vine_hub_app
+
+      - name: Deploy Quadlets
+        run: |
+          # Ensure target directory exists for user-level systemd
+          mkdir -p ~/.config/containers/systemd/
+
+          # Copy Quadlet files
+          cp infrastructure/quadlets/* ~/.config/containers/systemd/
+
+          # Reload systemd to pick up Quadlet changes
+          systemctl --user daemon-reload
+
+          # Restart the services
+          systemctl --user restart surrealdb.service minio.service seq.service thevinehub-api.service thevinehub-app.service cloudflared.service
