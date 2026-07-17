@@ -1,6 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:skeletonizer/skeletonizer.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:the_vine_hub_app/features/cells/presentation/widgets/details/add_disciple_notifier.dart';
 import 'package:the_vine_hub_app/i18n/strings.g.dart';
 import 'package:the_vine_hub_app/features/cells/domain/create_user_info_dto.dart';
@@ -26,6 +27,7 @@ class _AddDiscipleFormState extends ConsumerState<AddDiscipleForm> {
   final _neighborhoodController = TextEditingController();
 
   int _gender = 0;
+  XFile? _selectedPhoto;
 
   @override
   void dispose() {
@@ -46,6 +48,16 @@ class _AddDiscipleFormState extends ConsumerState<AddDiscipleForm> {
     ref.read(addDiscipleProvider.notifier).checkDocument(doc);
   }
 
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _selectedPhoto = image;
+      });
+    }
+  }
+
   void _onSubmit() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -63,7 +75,7 @@ class _AddDiscipleFormState extends ConsumerState<AddDiscipleForm> {
 
     final success = await ref
         .read(addDiscipleProvider.notifier)
-        .submitDisciple(widget.cellId, userInfo);
+        .submitDisciple(widget.cellId, userInfo, _selectedPhoto);
 
     if (success && mounted) {
       Navigator.of(context).pop(true);
@@ -160,25 +172,42 @@ class _AddDiscipleFormState extends ConsumerState<AddDiscipleForm> {
                 if (state.documentChecked) ...[
                   const SizedBox(height: 24),
 
-                  // Photo Upload Skeleton
                   Center(
-                    child: Skeletonizer(
-                      enabled: true,
+                    child: InkWell(
+                      onTap: _pickImage,
                       child: Container(
                         width: 100,
                         height: 100,
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
+                          color: colorScheme.surfaceContainerHighest,
                           shape: BoxShape.circle,
+                          image: _selectedPhoto != null
+                              ? DecorationImage(
+                                  image: FileImage(File(_selectedPhoto!.path)),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
                         ),
-                        child: const Icon(
-                          Icons.camera_alt,
-                          color: Colors.grey,
-                          size: 40,
-                        ),
+                        child: _selectedPhoto == null
+                            ? const Icon(
+                                Icons.camera_alt,
+                                color: Colors.grey,
+                                size: 40,
+                              )
+                            : null,
                       ),
                     ),
                   ),
+                  if (_selectedPhoto == null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Center(
+                        child: Text(
+                          'Photo (Optional)',
+                          style: theme.textTheme.labelSmall,
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 24),
 
                   Row(

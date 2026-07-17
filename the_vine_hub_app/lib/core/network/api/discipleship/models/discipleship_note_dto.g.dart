@@ -19,21 +19,22 @@ _DiscipleshipNoteDto _$DiscipleshipNoteDtoFromJson(Map<String, dynamic> json) =>
       discipleId: json['discipleId'] as String?,
       leaderId: json['leaderId'] as String?,
       entries: (json['entries'] as List<dynamic>?)
-          ?.map((e) =>
-              DiscipleshipNoteEntryDto.fromJson(e as Map<String, dynamic>))
+          ?.map(
+            (e) => DiscipleshipNoteEntryDto.fromJson(e as Map<String, dynamic>),
+          )
           .toList(),
     );
 
 Map<String, dynamic> _$DiscipleshipNoteDtoToJson(
-        _DiscipleshipNoteDto instance) =>
-    <String, dynamic>{
-      'noteId': instance.noteId,
-      'title': instance.title,
-      'description': instance.description,
-      'noteStatus': instance.noteStatus,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'categories': instance.categories,
-      'discipleId': instance.discipleId,
-      'leaderId': instance.leaderId,
-      'entries': instance.entries,
-    };
+  _DiscipleshipNoteDto instance,
+) => <String, dynamic>{
+  'noteId': instance.noteId,
+  'title': instance.title,
+  'description': instance.description,
+  'noteStatus': instance.noteStatus,
+  'createdAt': instance.createdAt.toIso8601String(),
+  'categories': instance.categories,
+  'discipleId': instance.discipleId,
+  'leaderId': instance.leaderId,
+  'entries': instance.entries,
+};

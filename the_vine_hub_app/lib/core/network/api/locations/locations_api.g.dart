@@ -16,15 +16,15 @@ final class LocationsApiProvider
     extends $FunctionalProvider<LocationsApi, LocationsApi, LocationsApi>
     with $Provider<LocationsApi> {
   LocationsApiProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'locationsApiProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'locationsApiProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$locationsApiHash();

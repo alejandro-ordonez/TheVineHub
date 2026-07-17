@@ -12,19 +12,20 @@ part of 'auth_events.dart';
 @ProviderFor(authEventStream)
 final authEventStreamProvider = AuthEventStreamProvider._();
 
-final class AuthEventStreamProvider extends $FunctionalProvider<
-        AsyncValue<AuthEvent>, AuthEvent, Stream<AuthEvent>>
+final class AuthEventStreamProvider
+    extends
+        $FunctionalProvider<AsyncValue<AuthEvent>, AuthEvent, Stream<AuthEvent>>
     with $FutureModifier<AuthEvent>, $StreamProvider<AuthEvent> {
   AuthEventStreamProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'authEventStreamProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'authEventStreamProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$authEventStreamHash();

@@ -14,48 +14,47 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$CreateNoteEntryDto {
-  String get content;
-  DateTime get date;
 
-  /// Create a copy of CreateNoteEntryDto
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  $CreateNoteEntryDtoCopyWith<CreateNoteEntryDto> get copyWith =>
-      _$CreateNoteEntryDtoCopyWithImpl<CreateNoteEntryDto>(
-          this as CreateNoteEntryDto, _$identity);
+ String get content; DateTime get date;
+/// Create a copy of CreateNoteEntryDto
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$CreateNoteEntryDtoCopyWith<CreateNoteEntryDto> get copyWith => _$CreateNoteEntryDtoCopyWithImpl<CreateNoteEntryDto>(this as CreateNoteEntryDto, _$identity);
 
   /// Serializes this CreateNoteEntryDto to a JSON map.
   Map<String, dynamic> toJson();
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is CreateNoteEntryDto &&
-            (identical(other.content, content) || other.content == content) &&
-            (identical(other.date, date) || other.date == date));
-  }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, content, date);
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateNoteEntryDto&&(identical(other.content, content) || other.content == content)&&(identical(other.date, date) || other.date == date));
+}
 
-  @override
-  String toString() {
-    return 'CreateNoteEntryDto(content: $content, date: $date)';
-  }
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,content,date);
+
+@override
+String toString() {
+  return 'CreateNoteEntryDto(content: $content, date: $date)';
+}
+
+
 }
 
 /// @nodoc
-abstract mixin class $CreateNoteEntryDtoCopyWith<$Res> {
-  factory $CreateNoteEntryDtoCopyWith(
-          CreateNoteEntryDto value, $Res Function(CreateNoteEntryDto) _then) =
-      _$CreateNoteEntryDtoCopyWithImpl;
-  @useResult
-  $Res call({String content, DateTime date});
-}
+abstract mixin class $CreateNoteEntryDtoCopyWith<$Res>  {
+  factory $CreateNoteEntryDtoCopyWith(CreateNoteEntryDto value, $Res Function(CreateNoteEntryDto) _then) = _$CreateNoteEntryDtoCopyWithImpl;
+@useResult
+$Res call({
+ String content, DateTime date
+});
 
+
+
+
+}
 /// @nodoc
 class _$CreateNoteEntryDtoCopyWithImpl<$Res>
     implements $CreateNoteEntryDtoCopyWith<$Res> {
@@ -64,241 +63,199 @@ class _$CreateNoteEntryDtoCopyWithImpl<$Res>
   final CreateNoteEntryDto _self;
   final $Res Function(CreateNoteEntryDto) _then;
 
-  /// Create a copy of CreateNoteEntryDto
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? content = null,
-    Object? date = null,
-  }) {
-    return _then(_self.copyWith(
-      content: null == content
-          ? _self.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      date: null == date
-          ? _self.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
-  }
+/// Create a copy of CreateNoteEntryDto
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? content = null,Object? date = null,}) {
+  return _then(_self.copyWith(
+content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
+as DateTime,
+  ));
 }
+
+}
+
 
 /// Adds pattern-matching-related methods to [CreateNoteEntryDto].
 extension CreateNoteEntryDtoPatterns on CreateNoteEntryDto {
-  /// A variant of `map` that fallback to returning `orElse`.
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case final Subclass value:
-  ///     return ...;
-  ///   case _:
-  ///     return orElse();
-  /// }
-  /// ```
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_CreateNoteEntryDto value)? $default, {
-    required TResult orElse(),
-  }) {
-    final _that = this;
-    switch (_that) {
-      case _CreateNoteEntryDto() when $default != null:
-        return $default(_that);
-      case _:
-        return orElse();
-    }
-  }
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _CreateNoteEntryDto value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _CreateNoteEntryDto() when $default != null:
+return $default(_that);case _:
+  return orElse();
 
-  /// A `switch`-like method, using callbacks.
-  ///
-  /// Callbacks receives the raw object, upcasted.
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case final Subclass value:
-  ///     return ...;
-  ///   case final Subclass2 value:
-  ///     return ...;
-  /// }
-  /// ```
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_CreateNoteEntryDto value) $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _CreateNoteEntryDto():
-        return $default(_that);
-      case _:
-        throw StateError('Unexpected subclass');
-    }
-  }
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _CreateNoteEntryDto value)  $default,){
+final _that = this;
+switch (_that) {
+case _CreateNoteEntryDto():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
 
-  /// A variant of `map` that fallback to returning `null`.
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case final Subclass value:
-  ///     return ...;
-  ///   case _:
-  ///     return null;
-  /// }
-  /// ```
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult? Function(_CreateNoteEntryDto value)? $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _CreateNoteEntryDto() when $default != null:
-        return $default(_that);
-      case _:
-        return null;
-    }
-  }
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _CreateNoteEntryDto value)?  $default,){
+final _that = this;
+switch (_that) {
+case _CreateNoteEntryDto() when $default != null:
+return $default(_that);case _:
+  return null;
 
-  /// A variant of `when` that fallback to an `orElse` callback.
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case Subclass(:final field):
-  ///     return ...;
-  ///   case _:
-  ///     return orElse();
-  /// }
-  /// ```
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(String content, DateTime date)? $default, {
-    required TResult orElse(),
-  }) {
-    final _that = this;
-    switch (_that) {
-      case _CreateNoteEntryDto() when $default != null:
-        return $default(_that.content, _that.date);
-      case _:
-        return orElse();
-    }
-  }
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String content,  DateTime date)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _CreateNoteEntryDto() when $default != null:
+return $default(_that.content,_that.date);case _:
+  return orElse();
 
-  /// A `switch`-like method, using callbacks.
-  ///
-  /// As opposed to `map`, this offers destructuring.
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case Subclass(:final field):
-  ///     return ...;
-  ///   case Subclass2(:final field2):
-  ///     return ...;
-  /// }
-  /// ```
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(String content, DateTime date) $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _CreateNoteEntryDto():
-        return $default(_that.content, _that.date);
-      case _:
-        throw StateError('Unexpected subclass');
-    }
-  }
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String content,  DateTime date)  $default,) {final _that = this;
+switch (_that) {
+case _CreateNoteEntryDto():
+return $default(_that.content,_that.date);case _:
+  throw StateError('Unexpected subclass');
 
-  /// A variant of `when` that fallback to returning `null`
-  ///
-  /// It is equivalent to doing:
-  /// ```dart
-  /// switch (sealedClass) {
-  ///   case Subclass(:final field):
-  ///     return ...;
-  ///   case _:
-  ///     return null;
-  /// }
-  /// ```
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
 
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(String content, DateTime date)? $default,
-  ) {
-    final _that = this;
-    switch (_that) {
-      case _CreateNoteEntryDto() when $default != null:
-        return $default(_that.content, _that.date);
-      case _:
-        return null;
-    }
-  }
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String content,  DateTime date)?  $default,) {final _that = this;
+switch (_that) {
+case _CreateNoteEntryDto() when $default != null:
+return $default(_that.content,_that.date);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
 @JsonSerializable()
+
 class _CreateNoteEntryDto implements CreateNoteEntryDto {
   const _CreateNoteEntryDto({required this.content, required this.date});
-  factory _CreateNoteEntryDto.fromJson(Map<String, dynamic> json) =>
-      _$CreateNoteEntryDtoFromJson(json);
+  factory _CreateNoteEntryDto.fromJson(Map<String, dynamic> json) => _$CreateNoteEntryDtoFromJson(json);
 
-  @override
-  final String content;
-  @override
-  final DateTime date;
+@override final  String content;
+@override final  DateTime date;
 
-  /// Create a copy of CreateNoteEntryDto
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @pragma('vm:prefer-inline')
-  _$CreateNoteEntryDtoCopyWith<_CreateNoteEntryDto> get copyWith =>
-      __$CreateNoteEntryDtoCopyWithImpl<_CreateNoteEntryDto>(this, _$identity);
+/// Create a copy of CreateNoteEntryDto
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$CreateNoteEntryDtoCopyWith<_CreateNoteEntryDto> get copyWith => __$CreateNoteEntryDtoCopyWithImpl<_CreateNoteEntryDto>(this, _$identity);
 
-  @override
-  Map<String, dynamic> toJson() {
-    return _$CreateNoteEntryDtoToJson(
-      this,
-    );
-  }
+@override
+Map<String, dynamic> toJson() {
+  return _$CreateNoteEntryDtoToJson(this, );
+}
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _CreateNoteEntryDto &&
-            (identical(other.content, content) || other.content == content) &&
-            (identical(other.date, date) || other.date == date));
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CreateNoteEntryDto&&(identical(other.content, content) || other.content == content)&&(identical(other.date, date) || other.date == date));
+}
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(runtimeType, content, date);
+@JsonKey(includeFromJson: false, includeToJson: false)
+@override
+int get hashCode => Object.hash(runtimeType,content,date);
 
-  @override
-  String toString() {
-    return 'CreateNoteEntryDto(content: $content, date: $date)';
-  }
+@override
+String toString() {
+  return 'CreateNoteEntryDto(content: $content, date: $date)';
+}
+
+
 }
 
 /// @nodoc
-abstract mixin class _$CreateNoteEntryDtoCopyWith<$Res>
-    implements $CreateNoteEntryDtoCopyWith<$Res> {
-  factory _$CreateNoteEntryDtoCopyWith(
-          _CreateNoteEntryDto value, $Res Function(_CreateNoteEntryDto) _then) =
-      __$CreateNoteEntryDtoCopyWithImpl;
-  @override
-  @useResult
-  $Res call({String content, DateTime date});
-}
+abstract mixin class _$CreateNoteEntryDtoCopyWith<$Res> implements $CreateNoteEntryDtoCopyWith<$Res> {
+  factory _$CreateNoteEntryDtoCopyWith(_CreateNoteEntryDto value, $Res Function(_CreateNoteEntryDto) _then) = __$CreateNoteEntryDtoCopyWithImpl;
+@override @useResult
+$Res call({
+ String content, DateTime date
+});
 
+
+
+
+}
 /// @nodoc
 class __$CreateNoteEntryDtoCopyWithImpl<$Res>
     implements _$CreateNoteEntryDtoCopyWith<$Res> {
@@ -307,25 +264,17 @@ class __$CreateNoteEntryDtoCopyWithImpl<$Res>
   final _CreateNoteEntryDto _self;
   final $Res Function(_CreateNoteEntryDto) _then;
 
-  /// Create a copy of CreateNoteEntryDto
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $Res call({
-    Object? content = null,
-    Object? date = null,
-  }) {
-    return _then(_CreateNoteEntryDto(
-      content: null == content
-          ? _self.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      date: null == date
-          ? _self.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
-  }
+/// Create a copy of CreateNoteEntryDto
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? content = null,Object? date = null,}) {
+  return _then(_CreateNoteEntryDto(
+content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String,date: null == date ? _self.date : date // ignore: cast_nullable_to_non_nullable
+as DateTime,
+  ));
+}
+
+
 }
 
 // dart format on

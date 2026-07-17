@@ -16,15 +16,15 @@ final class HierarchyApiProvider
     extends $FunctionalProvider<HierarchyApi, HierarchyApi, HierarchyApi>
     with $Provider<HierarchyApi> {
   HierarchyApiProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'hierarchyApiProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'hierarchyApiProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$hierarchyApiHash();

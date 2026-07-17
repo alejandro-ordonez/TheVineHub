@@ -12,20 +12,24 @@ part of 'cell_member_repository_impl.dart';
 @ProviderFor(cellMemberRepository)
 final cellMemberRepositoryProvider = CellMemberRepositoryProvider._();
 
-final class CellMemberRepositoryProvider extends $FunctionalProvider<
-    CellMemberRepository,
-    CellMemberRepository,
-    CellMemberRepository> with $Provider<CellMemberRepository> {
+final class CellMemberRepositoryProvider
+    extends
+        $FunctionalProvider<
+          CellMemberRepository,
+          CellMemberRepository,
+          CellMemberRepository
+        >
+    with $Provider<CellMemberRepository> {
   CellMemberRepositoryProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'cellMemberRepositoryProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'cellMemberRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$cellMemberRepositoryHash();
@@ -33,8 +37,8 @@ final class CellMemberRepositoryProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<CellMemberRepository> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   CellMemberRepository create(Ref ref) {

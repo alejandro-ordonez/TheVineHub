@@ -12,20 +12,24 @@ part of 'discipleship_repository_impl.dart';
 @ProviderFor(discipleshipRepository)
 final discipleshipRepositoryProvider = DiscipleshipRepositoryProvider._();
 
-final class DiscipleshipRepositoryProvider extends $FunctionalProvider<
-    DiscipleshipRepository,
-    DiscipleshipRepository,
-    DiscipleshipRepository> with $Provider<DiscipleshipRepository> {
+final class DiscipleshipRepositoryProvider
+    extends
+        $FunctionalProvider<
+          DiscipleshipRepository,
+          DiscipleshipRepository,
+          DiscipleshipRepository
+        >
+    with $Provider<DiscipleshipRepository> {
   DiscipleshipRepositoryProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'discipleshipRepositoryProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'discipleshipRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$discipleshipRepositoryHash();
@@ -33,8 +37,8 @@ final class DiscipleshipRepositoryProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<DiscipleshipRepository> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   DiscipleshipRepository create(Ref ref) {

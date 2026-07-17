@@ -8,4 +8,5 @@ abstract class CellMemberRepository {
   Future<void> updateUser(CreateUserInfoDto userInfo);
   Future<void> addDiscipleToCell(String cellId, String document);
   Future<UserInfoDto> getUserInfo(String document);
+  Future<void> uploadPhoto(String document, String photoPath);
 }
