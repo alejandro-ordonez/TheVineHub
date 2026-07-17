@@ -199,6 +199,9 @@ class Translations$admin$en {
 
 	/// en: 'Admin management tools will appear here.'
 	String get emptyState => 'Admin management tools will appear here.';
+
+	/// en: 'Manage Meetings'
+	String get manageMeetings => 'Manage Meetings';
 }
 
 // Path: dashboard
@@ -588,6 +591,7 @@ extension on Translations {
 			'home.emptyState' => 'Announcements will appear here.',
 			'admin.title' => 'Admin Dashboard',
 			'admin.emptyState' => 'Admin management tools will appear here.',
+			'admin.manageMeetings' => 'Manage Meetings',
 			'dashboard.title' => 'Ministry Dashboard',
 			'dashboard.content' => 'Dashboard Content',
 			'cells.title' => 'Cells',

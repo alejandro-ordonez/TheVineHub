@@ -63,7 +63,8 @@
   },
   "admin": {
     "title": "Admin Dashboard",
-    "emptyState": "Admin management tools will appear here."
+    "emptyState": "Admin management tools will appear here.",
+    "manageMeetings": "Manage Meetings"
   },
   "dashboard": {
     "title": "Ministry Dashboard",

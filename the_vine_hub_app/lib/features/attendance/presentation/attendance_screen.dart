@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:the_vine_hub_app/core/network/api/meetings/meetings_api.dart';
-import 'package:the_vine_hub_app/core/network/api/cells/cells_api.dart';
 import 'package:the_vine_hub_app/features/cells/presentation/cells_provider.dart';
 import 'package:the_vine_hub_app/shared/presentation/shell_utils.dart';
 import 'package:the_vine_hub_app/features/meetings/domain/meeting_dto.dart';
+import 'package:the_vine_hub_app/features/cells/domain/add_cell_attendance_dto.dart';
+import 'package:the_vine_hub_app/features/dashboard/data/ministry_repository_impl.dart';
 
 final meetingsProvider = FutureProvider.autoDispose<List<MeetingDto>>((ref) async {
   final api = ref.watch(meetingsApiProvider);
@@ -111,16 +112,14 @@ class _DisciplesListState extends ConsumerState<_DisciplesList> {
   Future<void> _submitAttendance() async {
     setState(() => _isSaving = true);
     try {
-      final api = ref.read(cellsApiProvider);
+      final repo = ref.read(ministryRepositoryProvider);
 
-      // As per the provided CellsApi.recordAttendance endpoint
-      // Expected structure depends on backend, typical example:
-      final command = {
-        'meetingId': int.tryParse(widget.meetingId),
-        'attendedDisciples': _attendedDiscipleIds.toList(),
-      };
+      final dto = AddCellAttendanceDto(
+        disciples: _attendedDiscipleIds.toList(),
+        notes: widget.meetingId,
+      );
 
-      await api.recordAttendance(widget.cellId, command);
+      await repo.addAttendance(widget.cellId, dto);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Attendance recorded!')));

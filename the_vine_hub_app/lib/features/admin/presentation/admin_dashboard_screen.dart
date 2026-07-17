@@ -32,12 +32,12 @@ class AdminDashboardScreen extends ConsumerWidget {
                 onTap: () {
                   context.push('/admin/meetings');
                 },
-                child: const Column(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.event, size: 48),
-                    SizedBox(height: 8),
-                    Text('Manage Meetings'),
+                    const Icon(Icons.event, size: 48),
+                    const SizedBox(height: 8),
+                    Text(t.admin.manageMeetings),
                   ],
                 ),
               ),
