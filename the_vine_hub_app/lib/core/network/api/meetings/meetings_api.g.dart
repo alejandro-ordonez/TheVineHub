@@ -16,15 +16,15 @@ final class MeetingsApiProvider
     extends $FunctionalProvider<MeetingsApi, MeetingsApi, MeetingsApi>
     with $Provider<MeetingsApi> {
   MeetingsApiProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'meetingsApiProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'meetingsApiProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$meetingsApiHash();

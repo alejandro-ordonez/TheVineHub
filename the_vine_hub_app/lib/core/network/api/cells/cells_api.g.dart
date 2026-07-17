@@ -16,15 +16,15 @@ final class CellsApiProvider
     extends $FunctionalProvider<CellsApi, CellsApi, CellsApi>
     with $Provider<CellsApi> {
   CellsApiProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'cellsApiProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'cellsApiProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$cellsApiHash();

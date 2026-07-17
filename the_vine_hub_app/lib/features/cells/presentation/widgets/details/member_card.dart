@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:the_vine_hub_app/i18n/strings.g.dart';
 import 'package:the_vine_hub_app/features/cells/domain/disciple_dto.dart';
 import 'package:the_vine_hub_app/shared/presentation/widgets/animations/entrance_fader.dart';
@@ -100,7 +101,7 @@ class MemberCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            _MemberActions(t: t, colorScheme: colorScheme),
+            _MemberActions(t: t, colorScheme: colorScheme, disciple: disciple),
           ],
         ),
       ),
@@ -135,8 +136,9 @@ class _ActionButton extends StatelessWidget {
 class _MemberActions extends StatelessWidget {
   final Translations t;
   final ColorScheme colorScheme;
+  final DiscipleDto disciple;
 
-  const _MemberActions({required this.t, required this.colorScheme});
+  const _MemberActions({required this.t, required this.colorScheme, required this.disciple});
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +146,11 @@ class _MemberActions extends StatelessWidget {
       children: [
         Expanded(
           child: FilledButton.icon(
-            onPressed: () {},
+            onPressed: () {
+              if (disciple.cellId != null) {
+                context.push('/cells/${disciple.cellId}/profile', extra: disciple);
+              }
+            },
             icon: const Icon(Icons.person_outline, size: 18),
             label: Text(t.common.profile),
             style: FilledButton.styleFrom(

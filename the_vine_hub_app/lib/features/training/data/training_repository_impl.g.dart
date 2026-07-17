@@ -12,20 +12,24 @@ part of 'training_repository_impl.dart';
 @ProviderFor(trainingRepository)
 final trainingRepositoryProvider = TrainingRepositoryProvider._();
 
-final class TrainingRepositoryProvider extends $FunctionalProvider<
-    TrainingRepository,
-    TrainingRepository,
-    TrainingRepository> with $Provider<TrainingRepository> {
+final class TrainingRepositoryProvider
+    extends
+        $FunctionalProvider<
+          TrainingRepository,
+          TrainingRepository,
+          TrainingRepository
+        >
+    with $Provider<TrainingRepository> {
   TrainingRepositoryProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'trainingRepositoryProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'trainingRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$trainingRepositoryHash();
@@ -33,8 +37,8 @@ final class TrainingRepositoryProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<TrainingRepository> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   TrainingRepository create(Ref ref) {

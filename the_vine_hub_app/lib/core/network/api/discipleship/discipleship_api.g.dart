@@ -12,18 +12,20 @@ part of 'discipleship_api.dart';
 @ProviderFor(discipleshipApi)
 final discipleshipApiProvider = DiscipleshipApiProvider._();
 
-final class DiscipleshipApiProvider extends $FunctionalProvider<DiscipleshipApi,
-    DiscipleshipApi, DiscipleshipApi> with $Provider<DiscipleshipApi> {
+final class DiscipleshipApiProvider
+    extends
+        $FunctionalProvider<DiscipleshipApi, DiscipleshipApi, DiscipleshipApi>
+    with $Provider<DiscipleshipApi> {
   DiscipleshipApiProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'discipleshipApiProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'discipleshipApiProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$discipleshipApiHash();

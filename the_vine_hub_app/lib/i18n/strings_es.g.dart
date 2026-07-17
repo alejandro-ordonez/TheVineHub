@@ -127,7 +127,8 @@ class _Translations$admin$es implements Translations$admin$en {
 
 	// Translations
 	@override String get title => 'Panel de Administración';
-	@override String get emptyState => 'Las herramientas de gestión de administración aparecerán aquí.';
+	@override String get emptyState => 'Las herramientas de administración aparecerán aquí.';
+	@override String get manageMeetings => 'Administrar Reuniones';
 }
 
 // Path: dashboard
@@ -375,7 +376,8 @@ extension on TranslationsEs {
 			'home.title' => 'Inicio / Anuncios',
 			'home.emptyState' => 'Los anuncios aparecerán aquí.',
 			'admin.title' => 'Panel de Administración',
-			'admin.emptyState' => 'Las herramientas de gestión de administración aparecerán aquí.',
+			'admin.emptyState' => 'Las herramientas de administración aparecerán aquí.',
+			'admin.manageMeetings' => 'Administrar Reuniones',
 			'dashboard.title' => 'Panel del Ministerio',
 			'dashboard.content' => 'Contenido del Panel',
 			'cells.title' => 'Células',

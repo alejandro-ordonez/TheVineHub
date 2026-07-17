@@ -16,15 +16,15 @@ final class UsersApiProvider
     extends $FunctionalProvider<UsersApi, UsersApi, UsersApi>
     with $Provider<UsersApi> {
   UsersApiProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'usersApiProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'usersApiProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$usersApiHash();

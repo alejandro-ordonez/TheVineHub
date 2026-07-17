@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:the_vine_hub_app/features/cells/presentation/widgets/details/add_disciple_state.dart';
 import 'package:the_vine_hub_app/features/cells/data/cell_member_repository_impl.dart';
 import 'package:the_vine_hub_app/features/cells/domain/create_user_info_dto.dart';
@@ -50,7 +51,7 @@ class AddDiscipleNotifier extends _$AddDiscipleNotifier {
     }
   }
 
-  Future<bool> submitDisciple(String cellId, CreateUserInfoDto userInfo) async {
+  Future<bool> submitDisciple(String cellId, CreateUserInfoDto userInfo, XFile? photo) async {
     state = state.copyWith(isSubmitting: true, error: null);
     try {
       final repo = ref.read(cellMemberRepositoryProvider);
@@ -59,6 +60,10 @@ class AddDiscipleNotifier extends _$AddDiscipleNotifier {
         await repo.updateUser(userInfo.copyWith(isUpdate: true));
       } else {
         await repo.registerUser(userInfo);
+      }
+
+      if (photo != null) {
+        await repo.uploadPhoto(userInfo.document, photo.path);
       }
 
       await repo.addDiscipleToCell(cellId, userInfo.document);

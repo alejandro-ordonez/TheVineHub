@@ -12,20 +12,24 @@ part of 'disciple_journey_api.dart';
 @ProviderFor(discipleJourneyApi)
 final discipleJourneyApiProvider = DiscipleJourneyApiProvider._();
 
-final class DiscipleJourneyApiProvider extends $FunctionalProvider<
-    DiscipleJourneyApi,
-    DiscipleJourneyApi,
-    DiscipleJourneyApi> with $Provider<DiscipleJourneyApi> {
+final class DiscipleJourneyApiProvider
+    extends
+        $FunctionalProvider<
+          DiscipleJourneyApi,
+          DiscipleJourneyApi,
+          DiscipleJourneyApi
+        >
+    with $Provider<DiscipleJourneyApi> {
   DiscipleJourneyApiProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'discipleJourneyApiProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'discipleJourneyApiProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
 
   @override
   String debugGetCreateSourceHash() => _$discipleJourneyApiHash();
@@ -33,8 +37,8 @@ final class DiscipleJourneyApiProvider extends $FunctionalProvider<
   @$internal
   @override
   $ProviderElement<DiscipleJourneyApi> $createElement(
-          $ProviderPointer pointer) =>
-      $ProviderElement(pointer);
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
 
   @override
   DiscipleJourneyApi create(Ref ref) {
