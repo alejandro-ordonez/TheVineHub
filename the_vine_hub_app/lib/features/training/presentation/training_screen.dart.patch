@@ -1,0 +1,41 @@
+<<<<<<< SEARCH
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:the_vine_hub_app/i18n/strings.g.dart';
+import 'package:the_vine_hub_app/shared/presentation/shell_utils.dart';
+
+class TrainingScreen extends ConsumerWidget {
+  final int? stepId;
+=======
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:the_vine_hub_app/i18n/strings.g.dart';
+import 'package:the_vine_hub_app/shared/presentation/shell_utils.dart';
+import 'package:the_vine_hub_app/core/network/api/disciple_journey/disciple_journey_api.dart';
+
+final cyclesProvider = FutureProvider.family<List<dynamic>, String>((ref, stepId) async {
+  final api = ref.watch(discipleJourneyApiProvider);
+  return await api.getCycles(stepId);
+});
+
+final sessionsProvider = FutureProvider.family<List<dynamic>, String>((ref, cycleId) async {
+  final api = ref.watch(discipleJourneyApiProvider);
+  return await api.getSessions(cycleId);
+});
+
+class TrainingScreen extends ConsumerWidget {
+  final int? stepId;
+>>>>>>> REPLACE
+<<<<<<< SEARCH
+      body: Center(
+        child: Text(
+          stepId == null
+              ? t.training.content
+              : t.training.stepDetail(id: stepId!),
+        ),
+      ),
+=======
+      body: stepId == null
+          ? Center(child: Text(t.training.content))
+          : _StepDetailView(stepId: stepId!.toString()),
+>>>>>>> REPLACE

@@ -1,0 +1,15 @@
+[Unit]
+Description=Cloudflare Tunnel
+After=network-online.target
+
+[Container]
+Image=cloudflare/cloudflared:latest
+ContainerName=cloudflared
+Exec=tunnel --no-autoupdate run
+EnvironmentFile=%h/.config/thevinehub.env
+Network=jm-frontend.network
+# If it also needs to route to the API locally:
+Network=jm-backend.network
+
+[Install]
+WantedBy=default.target

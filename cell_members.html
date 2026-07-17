@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cell Members - Growth Tracker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#f8f9fa",
+                    "secondary-fixed": "#ffe170",
+                    "secondary": "#705d00",
+                    "primary-fixed-dim": "#bdc2ff",
+                    "primary-container": "#1a237e",
+                    "error-container": "#ffdad6",
+                    "outline-variant": "#c6c5d4",
+                    "tertiary-fixed": "#cfe5ff",
+                    "tertiary-fixed-dim": "#99cbff",
+                    "tertiary": "#001c33",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-variant": "#e1e3e4",
+                    "on-error": "#ffffff",
+                    "secondary-fixed-dim": "#e9c400",
+                    "error": "#ba1a1a",
+                    "surface": "#f8f9fa",
+                    "surface-container-highest": "#e1e3e4",
+                    "primary-fixed": "#e0e0ff",
+                    "primary": "#000666",
+                    "inverse-on-surface": "#f0f1f2",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-high": "#e7e8e9",
+                    "on-secondary-fixed-variant": "#544600",
+                    "on-secondary-container": "#6f5c00",
+                    "on-tertiary-fixed": "#001d34",
+                    "on-primary-fixed-variant": "#343d96",
+                    "inverse-primary": "#bdc2ff",
+                    "on-primary-fixed": "#000767",
+                    "tertiary-container": "#003254",
+                    "surface-container-low": "#f3f4f5",
+                    "secondary-container": "#fdd400",
+                    "on-primary-container": "#8690ee",
+                    "inverse-surface": "#2e3132",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#004a78",
+                    "on-secondary-fixed": "#221b00",
+                    "surface-dim": "#d9dadb",
+                    "surface-container": "#edeeef",
+                    "surface-bright": "#f8f9fa",
+                    "surface-tint": "#4c56af",
+                    "on-surface-variant": "#454652",
+                    "on-surface": "#191c1d",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "outline": "#767683",
+                    "on-tertiary-container": "#379ded",
+                    "on-background": "#191c1d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "container-padding": "24px",
+                    "stack-sm": "8px",
+                    "stack-lg": "32px",
+                    "unit": "8px",
+                    "stack-md": "16px"
+            },
+            "fontFamily": {
+                    "h1": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "h2": ["Inter"],
+                    "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "h1": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "h2": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f8f9fa;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface">
+<!-- TopAppBar Shell Mapping -->
+<header class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 py-3 w-full bg-slate-50 border-b border-slate-200 shadow-sm">
+<div class="flex items-center gap-4">
+<button class="p-2 transition-colors duration-200 hover:bg-slate-100 rounded-full text-[#1A237E]">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<h1 class="text-lg font-bold text-[#1A237E] font-sans">Growth Tracker</h1>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-slate-900 font-sans font-medium text-label-md">Cell Members</span>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white text-[10px] overflow-hidden">
+<img alt="Profile" data-alt="A professional headshot of a young adult male leader with a friendly expression. The lighting is bright and natural, set against a clean, minimalist studio background. The style is modern and corporate, following a high-key light mode aesthetic with soft shadows and crisp focus on facial features." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCakiGpDxQAFVoQDRDXbzOLXpP-ZvsML9Yj8G04tKGijAAudQG3TVKfRrjq4pEPrYTGFsCUZJkEEm_Gjp5ot2rgUTPhM8-wySfvHPKXFUZGGBrOhoe6KZcH_IJFNxsAgFekDCGRd84CvGwnSMfkM5FwSBmKizyHX2vAw_F7XGb2nDrfw32ymZUjmB3SeVJm70lUkLX6yoTeZxAxRagdB7hLg4vFkWQ5N6EXIWz4ZUFGwFBYH9K_R0kkq6MR9HY_EXmnIaBI7QmRrZY"/>
+</div>
+</div>
+</header>
+<main class="pt-20 pb-12 px-container-padding max-w-4xl mx-auto space-y-stack-lg">
+<!-- Header Section (Bento Style) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-stack-md">
+<div class="md:col-span-2 bg-surface-container-lowest p-6 rounded-xl border border-slate-100 shadow-[0_2px_10px_rgba(26,35,126,0.04)]">
+<div class="flex flex-col gap-unit">
+<span class="text-secondary font-label-sm uppercase tracking-widest">Active Group</span>
+<h2 class="font-h1 text-primary text-h1">Downtown Young Adults</h2>
+<div class="flex items-center gap-2 mt-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-body-md" data-icon="person_celebrate">person_celebrate</span>
+<span class="font-label-md">Leader: <strong>Marcus Sterling</strong></span>
+</div>
+</div>
+</div>
+<div class="bg-primary-container p-6 rounded-xl flex flex-col justify-center items-center text-center">
+<span class="text-on-primary-container font-label-sm uppercase">Total Members</span>
+<span class="text-white font-h1 text-[48px] leading-none my-2">24</span>
+<div class="flex items-center gap-1 text-on-primary-container text-label-sm">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span>+2 this month</span>
+</div>
+</div>
+</section>
+<!-- Search & Filters -->
+<section class="flex flex-col md:flex-row gap-stack-md items-center">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full h-12 pl-12 pr-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-container focus:border-transparent transition-all outline-none text-body-md" placeholder="Search members by name..." type="text"/>
+</div>
+<div class="flex gap-stack-sm w-full md:w-auto">
+<button class="flex items-center gap-2 px-4 py-3 bg-white border border-slate-200 rounded-xl text-on-surface-variant font-label-md hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+<span>Filter</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-3 bg-white border border-slate-200 rounded-xl text-on-surface-variant font-label-md hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined" data-icon="sort">sort</span>
+<span>Sort</span>
+</button>
+</div>
+</section>
+<!-- Members List -->
+<section class="space-y-stack-md">
+<h3 class="font-h2 text-h2 text-on-surface px-1">Member Directory</h3>
+<div class="grid grid-cols-1 gap-stack-md">
+<!-- Member Card 1 -->
+<div class="bg-white p-5 rounded-xl border border-slate-100 shadow-[0_2px_10px_rgba(26,35,126,0.04)] flex flex-col sm:flex-row items-center sm:items-start gap-5 hover:shadow-md transition-shadow group">
+<div class="relative">
+<img alt="Sarah Jenkins" class="w-20 h-20 rounded-xl object-cover" data-alt="A portrait of a smiling woman in her late 20s with a warm, inclusive expression. She is set against a soft-focus urban park background during golden hour. The lighting is warm and directional, emphasizing a bright and welcoming ministry atmosphere with high-contrast, clean colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEchoz1BphZ3AXonNaqVWZDQnxTMfTAGylEbLr01Crvjd7ma2ZlYhA5cCtp-ursVV3g8XlDSRZVAN8Iyo8h7MCFPk39eY0mV5ZnZmc9Gq0jBmgJdvDpd--07_Us9i0MkzgWjUDvc9s2JF3bs4J_uyo_ct5LWa25X-pStszX1ih_CjjhLclHrbo_mD3Sj9OtAGPUhfET1SGzN_IxcmM2rM5_Mt7D-Jm458IkGa1gvYuD_3rB2oQx-TNt6zpcENIQmE1pjAZd5mvTKA"/>
+<div class="absolute -bottom-2 -right-2 bg-secondary-container text-on-secondary-container p-1 rounded-lg border-2 border-white">
+<span class="material-symbols-outlined text-[16px] block" data-icon="star" data-weight="fill" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<div class="flex-grow text-center sm:text-left">
+<div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+<h4 class="font-h2 text-body-lg text-primary">Sarah Jenkins</h4>
+<span class="inline-block px-3 py-1 bg-surface-container text-on-surface-variant text-label-sm rounded-full w-fit mx-auto sm:mx-0">Helper</span>
+</div>
+<!-- Ladder of Success -->
+<div class="flex flex-col gap-2 mb-4">
+<span class="text-label-sm text-outline uppercase tracking-tighter">Ladder of Success</span>
+<div class="flex items-center gap-1">
+<div class="flex-1 h-1.5 rounded-full bg-secondary"></div>
+<div class="flex-1 h-1.5 rounded-full bg-secondary"></div>
+<div class="flex-1 h-1.5 rounded-full bg-secondary"></div>
+<div class="flex-1 h-1.5 rounded-full bg-slate-100 border border-slate-200"></div>
+<span class="ml-2 text-label-sm font-bold text-secondary">Discipleship</span>
+</div>
+</div>
+<div class="flex flex-wrap justify-center sm:justify-start gap-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-primary-container text-white rounded-lg text-label-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm" data-icon="person">person</span>
+<span>Profile</span>
+</button>
+<button class="p-2 border border-slate-200 rounded-lg text-primary hover:bg-blue-50 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chat">chat</span>
+</button>
+<button class="p-2 border border-slate-200 rounded-lg text-primary hover:bg-blue-50 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="call">call</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Member Card 2 -->
+<div class="bg-white p-5 rounded-xl border border-slate-100 shadow-[0_2px_10px_rgba(26,35,126,0.04)] flex flex-col sm:flex-row items-center sm:items-start gap-5 hover:shadow-md transition-shadow group">
+<img alt="David Chen" class="w-20 h-20 rounded-xl object-cover" data-alt="A portrait of a cheerful young man with dark hair, looking directly at the camera. He is in a modern, brightly lit office or community space with clean white walls and subtle navy blue accents. The lighting is soft and even, creating a clean, professional, and reverent tone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRYPfe4JgSUA_cdQvbi1BkN2kAVjITRRKbzCvxyB1MH3QLo2s_dpQE0EJQCRDlnM8cRefTXenVXVwNFClmDUCCCvT8dWfhReAey_A9xPc37S69mhhHdU9jqqMHLedrStBgHzER18yTtZpRlRPq28rJctsgDHpA-KY0ECnalg3hG8zRFw14n9ZsjWMElahTckhC3fIA2W_4Ui07C46mX2zu4oKIn8C_njeuk_hSf7urVQiei_ft2zWr6uJxu-FTbja8W8SVgFEvjaU"/>
+<div class="flex-grow text-center sm:text-left">
+<div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+<h4 class="font-h2 text-body-lg text-primary">David Chen</h4>
+<span class="inline-block px-3 py-1 bg-surface-container text-on-surface-variant text-label-sm rounded-full w-fit mx-auto sm:mx-0">Regular Member</span>
+</div>
+<div class="flex flex-col gap-2 mb-4">
+<span class="text-label-sm text-outline uppercase tracking-tighter">Ladder of Success</span>
+<div class="flex items-center gap-1">
+<div class="flex-1 h-1.5 rounded-full bg-secondary"></div>
+<div class="flex-1 h-1.5 rounded-full bg-secondary"></div>
+<div class="flex-1 h-1.5 rounded-full bg-slate-100 border border-slate-200"></div>
+<div class="flex-1 h-1.5 rounded-full bg-slate-100 border border-slate-200"></div>
+<span class="ml-2 text-label-sm font-bold text-secondary">Consolidate</span>
+</div>
+</div>
+<div class="flex flex-wrap justify-center sm:justify-start gap-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-primary-container text-white rounded-lg text-label-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm" data-icon="person">person</span>
+<span>Profile</span>
+</button>
+<button class="p-2 border border-slate-200 rounded-lg text-primary hover:bg-blue-50 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chat">chat</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Member Card 3 -->
+<div class="bg-white p-5 rounded-xl border border-slate-100 shadow-[0_2px_10px_rgba(26,35,126,0.04)] flex flex-col sm:flex-row items-center sm:items-start gap-5 hover:shadow-md transition-shadow group">
+<img alt="Elena Rodriguez" class="w-20 h-20 rounded-xl object-cover" data-alt="A close-up portrait of a thoughtful young woman in a brightly lit library setting. Soft, natural light streams in from large windows, creating a peaceful and studious atmosphere. The visual style is minimalist and high-contrast, with a color palette of soft grays, whites, and deep blues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6Af1u7eSOLWrKxcegJJOyxiwHuT4nhTx2Ah8QebNMULkavr3ynLZ3B5MbZXm3u_fYzZlVjFbjEJoYhfhx35RNKhQErCo8NjlyLxR9UYbBozffLxm2ko3st8iuJ1FQigJsSseASPSq2-Ee_v1gxQ-_RrKLBQpZOBaxGXw-HM_DCiXtRTOD1vdSM5n1CqIp5epnh3wkaLVGRoEih95PAMxDPx3CzEskK_pvKh7qWXORQM03K5rW-eGeaRkiJr8_aaxm5qQdsn1jj_g"/>
+<div class="flex-grow text-center sm:text-left">
+<div class="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
+<h4 class="font-h2 text-body-lg text-primary">Elena Rodriguez</h4>
+<span class="inline-block px-3 py-1 bg-surface-container text-on-surface-variant text-label-sm rounded-full w-fit mx-auto sm:mx-0">New Believer</span>
+</div>
+<div class="flex flex-col gap-2 mb-4">
+<span class="text-label-sm text-outline uppercase tracking-tighter">Ladder of Success</span>
+<div class="flex items-center gap-1">
+<div class="flex-1 h-1.5 rounded-full bg-secondary"></div>
+<div class="flex-1 h-1.5 rounded-full bg-slate-100 border border-slate-200"></div>
+<div class="flex-1 h-1.5 rounded-full bg-slate-100 border border-slate-200"></div>
+<div class="flex-1 h-1.5 rounded-full bg-slate-100 border border-slate-200"></div>
+<span class="ml-2 text-label-sm font-bold text-secondary">Gain</span>
+</div>
+</div>
+<div class="flex flex-wrap justify-center sm:justify-start gap-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-primary-container text-white rounded-lg text-label-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm" data-icon="person">person</span>
+<span>Profile</span>
+</button>
+<button class="p-2 border border-slate-200 rounded-lg text-primary hover:bg-blue-50 transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="chat">chat</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Floating Button for adding new member (Contextual) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-secondary-container text-on-secondary-container rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="person_add">person_add</span>
+</button>
+</main>
+</body></html>

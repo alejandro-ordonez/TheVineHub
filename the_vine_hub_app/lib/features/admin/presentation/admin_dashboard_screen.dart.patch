@@ -1,0 +1,5 @@
+<<<<<<< SEARCH
+                    Text('Manage Meetings'),
+=======
+                    Text(t.admin.manageMeetings),
+>>>>>>> REPLACE

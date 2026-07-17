@@ -1,0 +1,10 @@
+base_locale: en
+fallback_base_locale: true
+input_directory: lib/i18n
+input_file_pattern: .i18n.json
+output_directory: lib/i18n
+output_file_name: strings.g.dart
+string_interpolation: braces
+render_flat_map: false
+# This ensures that variables are detected
+# See: https://pub.dev/packages/slang#string-interpolation

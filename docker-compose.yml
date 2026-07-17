@@ -1,101 +1,83 @@
-version: '3.9'
+version: "3.9"
 
 networks:
   jm-backend:
     external: true
-    #driver: bridge
   jm-frontend:
     external: true
-    #driver: bridge
   jm-db:
     external: true
-    #driver: bridge
 
 services:
-    aspire-dashboard:
-        image: mcr.microsoft.com/dotnet/aspire-dashboard:latest
-        container_name: aspire-dashboard
-        restart: unless-stopped
-        environment:
-            - DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS=true
-        ports:
-            - 18888:18888
-        networks:
-            - jm-backend
+  surrealdb:
+    image: surrealdb/surrealdb:latest
+    container_name: surrealdb
+    command: start --user root --pass root --bind 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    volumes:
+      - ./app-data/db/surrealdb-data:/mydata
+    healthcheck:
+      test: ["CMD", "/surreal", "is-ready"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - jm-db
 
-    database:
-        # Official Postgres image from DockerHub (we use the last version)
-        image: 'postgres:latest'
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: server /data --console-address ":9001"
+    ports:
+      - 9005:9000
+      - 9006:9001
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - ./app-data/minio-data:/data
+    networks:
+      - jm-db
 
-        # By default, a Postgres database is running on the 5432 port.
-        # If we want to access the database from our computer (outside the container),
-        # we must share the port with our computer's port.
-        # The syntax is [port we want on our machine]:[port we want to retrieve in the container]
-        # Note: You are free to change your computer's port,
-        # but take into consideration that it will change the way
-        # you are connecting to your database.
-        ports:
-            - 5432:5432
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 8081:80 # Dashboard UI accessible at http://localhost:8081
+      - 5341:5341 # Standard port for OTLP gRPC/HTTP ingestion
+    volumes:
+      - ./app-data/seq-data:/data
+    networks:
+      - jm-backend
 
-        environment:
-            - POSTGRES_USER=jm-db # The PostgreSQL user (useful to connect to the database)
-            - POSTGRES_PASSWORD # The PostgreSQL password (useful to connect to the database)
-            - POSTGRES_DB=jm-db # The PostgreSQL default database (automatically created at first launch)
-
-        volumes:
-            - /app-data/db/:/var/lib/postgresql/
-        healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U jm-db"]
-            interval: 5s
-            timeout: 5s
-            retries: 5
-        networks:
-            - jm-db
-
-    jmministry.api:
-        #image: ${DOCKER_REGISTRY-}jmministryapi
-        container_name: jmministry-api
-        build:
-            context: .
-            dockerfile: JMMinistry.API/Dockerfile
-        environment:
-            - ASPNETCORE_HTTP_PORTS=8080
-            - JwtSettings__Key
-            - JwtSettings__Issuer
-            - JwtSettings__DurationInMinutes
-            - JwtSettings__Audience
-            - DefaultUser__Password
-            - DefaultUser__Name
-            - DefaultUser__LastName
-            - DefaultUser__Document
-            - OTEL_EXPORTER_OTLP_ENDPOINT=http://aspire-dashboard:18889
-            - OTEL_SERVICE_NAME=jmministry-api
-        volumes:
-            - /app-data/app-files:/app/uploads
-        ports:
-            - 62421:8080
-        networks:
-            - jm-backend
-            - jm-db
-            - jm-frontend 
-        depends_on:
-            database:
-                condition: service_healthy
-            aspire-dashboard:
-                condition: service_started
-
-    jmministry.web:
-       container_name: jmministry-web
-       build:
-           context: .
-           dockerfile: JMMinistry.Web/Dockerfile
-           args:
-            - API_URL=$API_URL
-       environment:
-            - API_URL
-       ports:
-           - 62422:80
-       networks:
-           - jm-frontend
-       depends_on:
-           - jmministry.api
+  jmministry.api:
+    #image: ${DOCKER_REGISTRY-}jmministryapi
+    container_name: jmministry-api
+    build:
+      context: .
+      dockerfile: backend/JMMinistry.API/Dockerfile
+    environment:
+      - ASPNETCORE_HTTP_PORTS=8080
+      - JwtSettings__Key
+      - JwtSettings__Issuer
+      - JwtSettings__DurationInMinutes
+      - JwtSettings__Audience
+      - DefaultUser__Password
+      - DefaultUser__Name
+      - DefaultUser__LastName
+      - DefaultUser__Document
+      - OTEL_SERVICE_NAME=jmministry-api
+      # Tell the .NET OpenTelemetry exporter to send data to Seq
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://seq:5341
+    ports:
+      - 62421:8080
+    networks:
+      - jm-backend
+      - jm-db
+      - jm-frontend
+    depends_on:
+      surrealdb:
+        condition: service_healthy
