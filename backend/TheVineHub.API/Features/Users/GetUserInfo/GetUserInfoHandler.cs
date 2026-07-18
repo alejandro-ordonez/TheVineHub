@@ -48,9 +48,9 @@ namespace TheVineHub.API.Features.Users.GetUserInfo
             {
                 var error = result.Errors.First();
                 if (error is SurrealDbErrorResult errorRes)
-                    throw new Exception($"SurrealDB Error: {errorRes.Details}");
+                    throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {errorRes.Details}");
 
-                throw new Exception($"SurrealDB Error: {error}");
+                throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {error}");
             }
 
             var data = result.GetValue<GetUserInfoDbResult>(0) ?? throw new Exception("Unexpected null from DB");

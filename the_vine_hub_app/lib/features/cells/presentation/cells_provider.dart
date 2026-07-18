@@ -12,6 +12,18 @@ Future<List<CellDto>> cells(Ref ref) async {
 }
 
 @riverpod
+Future<Map<int, List<CellDto>>> groupedCells(Ref ref) async {
+  final cellsAsync = await ref.watch(cellsProvider.future);
+
+  final groupedCells = <int, List<CellDto>>{};
+  for (final cell in cellsAsync) {
+    groupedCells.putIfAbsent(cell.level, () => []).add(cell);
+  }
+
+  return groupedCells;
+}
+
+@riverpod
 Future<CellDto> cellDetails(Ref ref, String id) async {
   final repository = ref.watch(ministryRepositoryProvider);
   return repository.getCell(id);

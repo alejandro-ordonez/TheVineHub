@@ -62,9 +62,9 @@ namespace TheVineHub.API.Features.Discipleship.CreateNoteEntry
             {
                 var error = result.Errors.First();
                 if (error is SurrealDbErrorResult errorRes)
-                    throw new Exception($"SurrealDB Error: {errorRes.Details}");
+                    throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {errorRes.Details}");
 
-                throw new Exception($"SurrealDB Error: {error}");
+                throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {error}");
             }
 
             var entryDto = result.GetValue<DiscipleshipNoteEntryDto>(0) ?? throw new Exception("Unexpected null from DB");

@@ -47,9 +47,9 @@ public class CreateStepCycleHandler(ISurrealDbSession session)
         {
             var error = result.Errors.First();
             if (error is SurrealDbErrorResult errorRes)
-                throw new Exception($"SurrealDB Error: {errorRes.Details}");
+                throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {errorRes.Details}");
 
-            throw new Exception($"SurrealDB Error: {error}");
+            throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {error}");
         }
 
         return result.GetValue<StepCycleDto>(0) ?? throw new Exception("Unexpected null from DB");

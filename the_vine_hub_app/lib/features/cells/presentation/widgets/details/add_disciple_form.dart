@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:the_vine_hub_app/features/cells/presentation/widgets/details/add_disciple_notifier.dart';
 import 'package:the_vine_hub_app/i18n/strings.g.dart';
 import 'package:the_vine_hub_app/features/cells/domain/create_user_info_dto.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/details/add_disciple_form_sections/document_input_section.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/details/add_disciple_form_sections/personal_details_section.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/details/add_disciple_form_sections/address_section.dart';
 
 class AddDiscipleForm extends ConsumerStatefulWidget {
   final String cellId;
@@ -120,180 +122,26 @@ class _AddDiscipleFormState extends ConsumerState<AddDiscipleForm> {
                     ),
                   ),
 
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: _documentController,
-                        decoration: InputDecoration(
-                          labelText: t.common.document,
-                          border: const OutlineInputBorder(),
-                        ),
-                        enabled: !state.documentChecked && !state.isChecking,
-                        validator: (v) => v?.isEmpty ?? true
-                            ? t.common.validation.required
-                            : null,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    FilledButton(
-                      onPressed: (!state.documentChecked && !state.isChecking)
-                          ? _onCheckDocument
-                          : null,
-                      style: FilledButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 20,
-                          horizontal: 24,
-                        ),
-                      ),
-                      child: state.isChecking
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(Icons.search),
-                    ),
-                  ],
+                DocumentInputSection(
+                  documentController: _documentController,
+                  state: state,
+                  onCheckDocument: _onCheckDocument,
                 ),
-
                 if (state.documentChecked) ...[
                   const SizedBox(height: 24),
-
-                  // Photo Upload Skeleton
-                  Center(
-                    child: Skeletonizer(
-                      enabled: true,
-                      child: Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.camera_alt,
-                          color: Colors.grey,
-                          size: 40,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: _nameController,
-                          decoration: InputDecoration(
-                            labelText: t.cells.form.name,
-                            border: const OutlineInputBorder(),
-                          ),
-                          validator: (v) => v?.isEmpty ?? true
-                              ? t.common.validation.required
-                              : null,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: TextFormField(
-                          controller: _lastNameController,
-                          decoration: InputDecoration(
-                            labelText: t
-                                .cells
-                                .form
-                                .lastName, // Ensure to add translation or default to last name
-                            border: const OutlineInputBorder(),
-                          ),
-                          validator: (v) => v?.isEmpty ?? true
-                              ? t.common.validation.required
-                              : null,
-                        ),
-                      ),
-                    ],
+                  PersonalDetailsSection(
+                    nameController: _nameController,
+                    lastNameController: _lastNameController,
+                    phoneController: _phoneController,
+                    emailController: _emailController,
+                    gender: _gender,
+                    onGenderChanged: (v) => setState(() => _gender = v ?? 0),
                   ),
                   const SizedBox(height: 16),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: _phoneController,
-                          decoration: const InputDecoration(
-                            labelText: 'Phone',
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: DropdownButtonFormField<int>(
-                          initialValue: _gender,
-                          decoration: const InputDecoration(
-                            labelText: 'Gender',
-                            border: OutlineInputBorder(),
-                          ),
-                          items: const [
-                            DropdownMenuItem(value: 0, child: Text('Male')),
-                            DropdownMenuItem(value: 1, child: Text('Female')),
-                          ],
-                          onChanged: (v) => setState(() => _gender = v ?? 0),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-
-                  TextFormField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          controller: _cityController,
-                          decoration: const InputDecoration(
-                            labelText: 'City',
-                            border: OutlineInputBorder(),
-                          ),
-                          validator: (v) => v?.isEmpty ?? true
-                              ? t.common.validation.required
-                              : null,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: TextFormField(
-                          controller: _neighborhoodController,
-                          decoration: const InputDecoration(
-                            labelText: 'Neighborhood',
-                            border: OutlineInputBorder(),
-                          ),
-                          validator: (v) => v?.isEmpty ?? true
-                              ? t.common.validation.required
-                              : null,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-
-                  TextFormField(
-                    controller: _addressController,
-                    decoration: InputDecoration(
-                      labelText: t.cells.form.address,
-                      border: const OutlineInputBorder(),
-                    ),
-                    validator: (v) => v?.isEmpty ?? true
-                        ? t.common.validation.required
-                        : null,
+                  AddressSection(
+                    cityController: _cityController,
+                    neighborhoodController: _neighborhoodController,
+                    addressController: _addressController,
                   ),
                 ],
               ],
