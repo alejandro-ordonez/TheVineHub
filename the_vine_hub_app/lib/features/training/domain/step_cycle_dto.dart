@@ -6,16 +6,8 @@ part 'step_cycle_dto.g.dart';
 @freezed
 abstract class StepCycleDto with _$StepCycleDto {
   const factory StepCycleDto({
-    required int id,
-    required int discipleStepId,
-    String? name,
-    required DateTime startDate,
-    required DateTime endDate,
-    required int minAttendanceRequired,
-    required bool isOpen,
-    DateTime? enrollmentDeadline,
-    required int sessionCount,
-    required int enrolledCount,
+    String? id,
+    required String name,
   }) = _StepCycleDto;
 
   factory StepCycleDto.fromJson(Map<String, dynamic> json) =>

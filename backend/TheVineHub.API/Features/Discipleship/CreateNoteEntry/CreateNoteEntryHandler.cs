@@ -1,4 +1,5 @@
 using TheVineHub.API.Configuration.Exceptions;
+using TheVineHub.API.Configuration.Exceptions;
 using TheVineHub.API.Features.Hierarchy.IsLeaderInHierarchy;
 using TheVineHub.API.Features.Discipleship;
 using TheVineHub.API.Features.Discipleship.CreateNote;
@@ -62,9 +63,9 @@ namespace TheVineHub.API.Features.Discipleship.CreateNoteEntry
             {
                 var error = result.Errors.First();
                 if (error is SurrealDbErrorResult errorRes)
-                    throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {errorRes.Details}");
+                    throw new DatabaseExecutionException($"SurrealDB Error: {errorRes.Details}");
 
-                throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {error}");
+                throw new DatabaseExecutionException($"SurrealDB Error: {error}");
             }
 
             var entryDto = result.GetValue<DiscipleshipNoteEntryDto>(0) ?? throw new Exception("Unexpected null from DB");

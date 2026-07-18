@@ -1,3 +1,4 @@
+using TheVineHub.API.Configuration.Exceptions;
 using TheVineHub.API.Features.Users;
 using TheVineHub.API.Features.Users.Authenticate;
 using TheVineHub.API.Features.Users.CreateUser;
@@ -37,9 +38,9 @@ namespace TheVineHub.API.Features.Users.CheckDocument
             {
                 var error = result.Errors.First();
                 if (error is SurrealDbErrorResult errorRes)
-                    throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {errorRes.Details}");
+                    throw new DatabaseExecutionException($"SurrealDB Error: {errorRes.Details}");
 
-                throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {error}");
+                throw new DatabaseExecutionException($"SurrealDB Error: {error}");
             }
 
             return result.GetValue<DocumentCheckResultDto>(0) ?? throw new Exception("Unexpected null from DB");

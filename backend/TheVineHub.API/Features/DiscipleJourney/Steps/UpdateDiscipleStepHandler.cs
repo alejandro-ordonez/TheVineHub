@@ -1,3 +1,4 @@
+using TheVineHub.API.Configuration.Exceptions;
 using TheVineHub.API.Features.DiscipleJourney;
 using Mediator;
 using SurrealDb.Net;
@@ -42,9 +43,9 @@ public class UpdateDiscipleStepHandler(ISurrealDbSession session)
         {
             var error = result.Errors.First();
             if (error is SurrealDbErrorResult errorRes)
-                throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {errorRes.Details}");
+                throw new DatabaseExecutionException($"SurrealDB Error: {errorRes.Details}");
 
-            throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {error}");
+            throw new DatabaseExecutionException($"SurrealDB Error: {error}");
         }
 
         return result.GetValue<DiscipleStepDto>(0) ?? throw new Exception("Unexpected null from DB");

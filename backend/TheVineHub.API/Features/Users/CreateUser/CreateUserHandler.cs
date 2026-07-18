@@ -1,3 +1,4 @@
+using TheVineHub.API.Configuration.Exceptions;
 using TheVineHub.API.Common;
 using TheVineHub.API.Features.Users;
 using TheVineHub.API.Configuration.Exceptions;
@@ -51,9 +52,9 @@ namespace TheVineHub.API.Features.Users.CreateUser
             {
                 var error = result.Errors.First();
                 if (error is SurrealDbErrorResult errorRes)
-                    throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {errorRes.Details}");
+                    throw new DatabaseExecutionException($"SurrealDB Error: {errorRes.Details}");
 
-                throw new TheVineHub.API.Configuration.Exceptions.DatabaseExecutionException($"SurrealDB Error: {error}");
+                throw new DatabaseExecutionException($"SurrealDB Error: {error}");
             }
 
             return "User created successfully";

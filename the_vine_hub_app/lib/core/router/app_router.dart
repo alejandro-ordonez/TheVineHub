@@ -5,10 +5,14 @@ import 'package:the_vine_hub_app/features/dashboard/presentation/dashboard_scree
 import 'package:the_vine_hub_app/features/cells/presentation/cells_screen.dart';
 import 'package:the_vine_hub_app/features/cells/presentation/cell_details_screen.dart';
 import 'package:the_vine_hub_app/features/training/presentation/training_screen.dart';
+import 'package:the_vine_hub_app/features/discipleship/presentation/disciple_profile_screen.dart';
+import 'package:the_vine_hub_app/features/cells/domain/disciple_dto.dart';
 import 'package:the_vine_hub_app/features/auth/presentation/login_screen.dart';
 import 'package:the_vine_hub_app/features/auth/presentation/auth_notifier.dart';
 import 'package:the_vine_hub_app/features/home/presentation/home_screen.dart';
 import 'package:the_vine_hub_app/features/admin/presentation/admin_dashboard_screen.dart';
+import 'package:the_vine_hub_app/features/meetings/presentation/meetings_admin_screen.dart';
+import 'package:the_vine_hub_app/features/attendance/presentation/attendance_screen.dart';
 import 'package:the_vine_hub_app/shared/main_shell.dart';
 
 part 'app_router.g.dart';
@@ -21,6 +25,9 @@ final _shellNavigatorDashboardKey = GlobalKey<NavigatorState>(
 final _shellNavigatorCellsKey = GlobalKey<NavigatorState>(debugLabel: 'cells');
 final _shellNavigatorTrainingKey = GlobalKey<NavigatorState>(
   debugLabel: 'training',
+);
+final _shellNavigatorAttendanceKey = GlobalKey<NavigatorState>(
+  debugLabel: 'attendance',
 );
 final _shellNavigatorAdminKey = GlobalKey<NavigatorState>(debugLabel: 'admin');
 
@@ -125,6 +132,15 @@ GoRouter router(Ref ref) {
                       final id = state.pathParameters['id']!;
                       return CellDetailsScreen(cellId: id);
                     },
+                    routes: [
+                      GoRoute(
+                        path: 'profile',
+                        builder: (context, state) {
+                          final disciple = state.extra as DiscipleDto;
+                          return DiscipleProfileScreen(disciple: disciple);
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -149,11 +165,26 @@ GoRouter router(Ref ref) {
             ],
           ),
           StatefulShellBranch(
+            navigatorKey: _shellNavigatorAttendanceKey,
+            routes: [
+              GoRoute(
+                path: '/attendance',
+                builder: (context, state) => const AttendanceScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
             navigatorKey: _shellNavigatorAdminKey,
             routes: [
               GoRoute(
                 path: '/admin',
                 builder: (context, state) => const AdminDashboardScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'meetings',
+                    builder: (context, state) => const MeetingsAdminScreen(),
+                  ),
+                ],
               ),
             ],
           ),

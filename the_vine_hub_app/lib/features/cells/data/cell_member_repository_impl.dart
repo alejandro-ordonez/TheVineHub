@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart' as dio;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:the_vine_hub_app/features/cells/domain/cell_member_repository.dart';
 import 'package:the_vine_hub_app/features/cells/domain/document_check_result_dto.dart';
@@ -43,6 +44,14 @@ class CellMemberRepositoryImpl implements CellMemberRepository {
   Future<UserInfoDto> getUserInfo(String document) async {
     final response = await _usersApi.getUserInfo(document);
     return UserInfoDto.fromJson(response as Map<String, dynamic>);
+  }
+
+  @override
+  Future<void> uploadPhoto(String document, String photoPath) async {
+    final formData = dio.FormData.fromMap({
+      'file': await dio.MultipartFile.fromFile(photoPath),
+    });
+    await _usersApi.uploadPhoto(document, formData);
   }
 }
 

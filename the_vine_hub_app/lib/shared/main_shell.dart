@@ -122,6 +122,15 @@ class MainShell extends ConsumerWidget {
                   ),
 
                   const Divider(),
+                  _DrawerItem(
+                    icon: Icons.how_to_reg,
+                    label: 'Attendance',
+                    isSelected: navigationShell.currentIndex == 4,
+                    onTap: () {
+                      _onItemTapped(4, context, scaffoldKey);
+                    },
+                  ),
+                  const Divider(),
                   // Admin Section
                   Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -135,9 +144,9 @@ class MainShell extends ConsumerWidget {
                   _DrawerItem(
                     icon: Icons.admin_panel_settings_outlined,
                     label: t.nav.adminPanel,
-                    isSelected: navigationShell.currentIndex == 4,
+                    isSelected: navigationShell.currentIndex == 5,
                     onTap: () {
-                      _onItemTapped(4, context, scaffoldKey);
+                      _onItemTapped(5, context, scaffoldKey);
                     },
                   ),
                   _DrawerItem(

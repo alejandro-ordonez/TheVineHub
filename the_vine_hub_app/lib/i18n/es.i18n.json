@@ -63,7 +63,8 @@
   },
   "admin": {
     "title": "Panel de Administración",
-    "emptyState": "Las herramientas de gestión de administración aparecerán aquí."
+    "emptyState": "Las herramientas de administración aparecerán aquí.",
+    "manageMeetings": "Administrar Reuniones"
   },
   "dashboard": {
     "title": "Panel del Ministerio",
