@@ -12,40 +12,46 @@ namespace TheVineHub.API.Features.Cells.GetCells
         public async ValueTask<IEnumerable<CellDto>> Handle(GetCellsQuery request, CancellationToken cancellationToken)
         {
             var result = await session.Query(@$"
-                RETURN {{
-                    LET $user = type::record('user', {request.Document});
-                    LET $level_map = [];
-                    LET $current_level_cells = (SELECT VALUE out FROM leads WHERE in = $user);
-                    LET $current_depth = 1;
+                LET $user = type::record('user', {request.Document});
 
-                    WHILE array::len($current_level_cells) > 0 {{
-                        LET $level_map = array::add($level_map, {{ depth: $current_depth, cells: $current_level_cells }});
-                        LET $current_level_cells = (SELECT VALUE out FROM leads WHERE in IN (SELECT VALUE in FROM disciple_in WHERE out IN $current_level_cells));
-                        LET $current_depth = $current_depth + 1;
-                    }};
+                -- Level 1
+                LET $l1 = (SELECT VALUE out FROM leads WHERE in = $user);
 
-                    LET $all_relevant_cells = (SELECT VALUE cells FROM $level_map).flatten();
+                -- Level 2
+                LET $l2 = (SELECT VALUE out FROM leads WHERE in IN (SELECT VALUE in FROM disciple_in WHERE out IN $l1));
 
-                    RETURN (
-                        SELECT
-                            *,
-                            count(<-disciple_in) AS member_count,
-                            <-leads.in.*.{{id, full_name, photo_path}} AS leaders,
-                            (
-                                LET $cell_id = id;
-                                SELECT VALUE depth FROM $level_map WHERE $cell_id IN cells
-                            )[0] AS level,
-                            (
-                                SELECT VALUE id FROM (SELECT VALUE out FROM <-leads.in->disciple_in) WHERE id INSIDE $all_relevant_cells
-                            )[0] AS parent_cell_id
-                        FROM cell
-                        WHERE id INSIDE $all_relevant_cells
-                        ORDER BY level ASC, name ASC
-                    );
-                }};
+                -- Level 3
+                LET $l3 = (SELECT VALUE out FROM leads WHERE in IN (SELECT VALUE in FROM disciple_in WHERE out IN $l2));
+
+                -- Level 4
+                LET $l4 = (SELECT VALUE out FROM leads WHERE in IN (SELECT VALUE in FROM disciple_in WHERE out IN $l3));
+
+                -- Level 5
+                LET $l5 = (SELECT VALUE out FROM leads WHERE in IN (SELECT VALUE in FROM disciple_in WHERE out IN $l4));
+
+                LET $all_relevant_cells = array::flatten([$l1, $l2, $l3, $l4, $l5]);
+
+                RETURN (
+                    SELECT
+                        *,
+                        count(<-disciple_in) AS member_count,
+                        <-leads.in.*.{{id, full_name, photo_path}} AS leaders,
+                        (IF id INSIDE $l1 THEN 1
+                         ELSE IF id INSIDE $l2 THEN 2
+                         ELSE IF id INSIDE $l3 THEN 3
+                         ELSE IF id INSIDE $l4 THEN 4
+                         ELSE IF id INSIDE $l5 THEN 5
+                         ELSE 6 END) AS level,
+                        (
+                            SELECT VALUE id FROM (SELECT VALUE out FROM <-leads.in->disciple_in) WHERE id INSIDE $all_relevant_cells
+                        )[0] AS parent_cell_id
+                    FROM cell
+                    WHERE id INSIDE $all_relevant_cells
+                    ORDER BY level ASC, name ASC
+                );
             ", cancellationToken);
 
-            var cells = result.GetValue<IEnumerable<CellDto>>(0);
+            var cells = result.GetValue<IEnumerable<CellDto>>(7);
 
             return cells ?? [];
         }

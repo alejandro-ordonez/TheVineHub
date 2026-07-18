@@ -15,7 +15,7 @@ namespace TheVineHub.IntegrationTests;
 public abstract class BaseIntegrationTest : IAsyncLifetime
 {
     private readonly IContainer _surrealDbContainer = new ContainerBuilder()
-        .WithImage("surrealdb/surrealdb:latest")
+        .WithImage("surrealdb/surrealdb:v1.5.3")
         .WithCommand("start", "--user", "root", "--pass", "root", "--bind", "0.0.0.0:8000")
         .WithPortBinding(8000, true)
         .WithWaitStrategy(Wait.ForUnixContainer().UntilMessageIsLogged(".*Started.*"))
