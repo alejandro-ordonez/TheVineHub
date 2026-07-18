@@ -26,4 +26,6 @@ public class CellDto
     public DateOnly? OpeningDate { get; set; }
     [Column("leaders")]
     public IEnumerable<LeaderInfoDto> Leaders { get; set; } = [];
+    [Column("parent_cell_id")]
+    public string? ParentCellId { get; set; }
 }
