@@ -44,6 +44,15 @@ namespace TheVineHub.API.Configuration
                 response.Errors = [exception.Message];
             }
 
+            else if (exception is DatabaseExecutionException dbException)
+            {
+                response.StatusCode = StatusCodes.Status500InternalServerError;
+                response.Details = "A database operation failed.";
+                // Do not expose raw database errors to the client to prevent information leakage
+                response.Errors = ["An internal data error occurred. Please try again later."];
+                logger.LogError(dbException, "Database execution failed: {DbErrorMessage}", dbException.Message);
+            }
+
             else
             {
                 response.StatusCode = StatusCodes.Status500InternalServerError;
@@ -52,7 +61,7 @@ namespace TheVineHub.API.Configuration
             }
 
 
-            logger.LogError("Exception occurred: {ExceptionName}", exception.GetType().Name);
+            logger.LogError(exception, "Exception occurred: {ExceptionName}", exception.GetType().Name);
 
             httpContext.Response.StatusCode = response.StatusCode;
             await httpContext.Response.WriteAsJsonAsync(response);

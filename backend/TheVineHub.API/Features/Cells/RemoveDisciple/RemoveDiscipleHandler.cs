@@ -1,3 +1,4 @@
+using TheVineHub.API.Configuration.Exceptions;
 using TheVineHub.API.Features.Users;
 using TheVineHub.API.Features.Users.Authenticate;
 using TheVineHub.API.Features.Users.CreateUser;
@@ -39,9 +40,9 @@ namespace TheVineHub.API.Features.Cells.RemoveDisciple
             {
                 var error = result.Errors.First();
                 if (error is SurrealDbErrorResult errorRes)
-                    throw new Exception($"SurrealDB Error: {errorRes.Details}");
+                    throw new DatabaseExecutionException($"SurrealDB Error: {errorRes.Details}");
 
-                throw new Exception($"SurrealDB Error: {error}");
+                throw new DatabaseExecutionException($"SurrealDB Error: {error}");
             }
 
             var disciples = result.GetValue<List<DiscipleDto>>(0);

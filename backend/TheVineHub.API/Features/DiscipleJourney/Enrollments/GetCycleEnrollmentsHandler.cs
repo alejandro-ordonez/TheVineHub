@@ -1,3 +1,4 @@
+using TheVineHub.API.Configuration.Exceptions;
 using TheVineHub.API.Features.DiscipleJourney;
 using TheVineHub.API.Features.DiscipleJourney.Enrollments;
 using TheVineHub.API.Features.DiscipleJourney.Steps;
@@ -56,9 +57,9 @@ namespace TheVineHub.API.Features.DiscipleJourney.Enrollments
             {
                 var error = result.Errors.First();
                 if (error is SurrealDbErrorResult errorRes)
-                    throw new Exception($"SurrealDB Error: {errorRes.Details}");
+                    throw new DatabaseExecutionException($"SurrealDB Error: {errorRes.Details}");
 
-                throw new Exception($"SurrealDB Error: {error}");
+                throw new DatabaseExecutionException($"SurrealDB Error: {error}");
             }
 
             var enrollments = result.GetValue<List<CycleEnrollmentDto>>(1);

@@ -1,15 +1,12 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:the_vine_hub_app/features/cells/presentation/cells_provider.dart';
-import 'package:the_vine_hub_app/features/cells/presentation/widgets/cell_card.dart';
 import 'package:the_vine_hub_app/features/cells/presentation/widgets/add_cell_form.dart';
 import 'package:the_vine_hub_app/features/cells/presentation/widgets/list/cells_header.dart';
 import 'package:the_vine_hub_app/features/cells/presentation/widgets/list/pending_attendance_card.dart';
 import 'package:the_vine_hub_app/features/cells/presentation/widgets/list/empty_cells_state.dart';
+import 'package:the_vine_hub_app/features/cells/presentation/widgets/list/cells_grid.dart';
 import 'package:the_vine_hub_app/features/cells/domain/cell_dto.dart';
 import 'package:the_vine_hub_app/shared/presentation/shell_utils.dart';
 import 'package:the_vine_hub_app/shared/presentation/widgets/animations/entrance_fader.dart';
@@ -18,16 +15,12 @@ import 'package:the_vine_hub_app/i18n/strings.g.dart';
 class CellsScreen extends ConsumerWidget {
   const CellsScreen({super.key});
 
-  String _getLevelName(int level, Translations t) {
-    if (level <= 0) return t.common.unknown;
-    final powerValue = math.pow(12, level).toInt();
-    return t.cells.levels.g12(count: powerValue);
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final t = Translations.of(context);
     final cellsAsync = ref.watch(cellsProvider);
+    final groupedCellsAsync = ref.watch(groupedCellsProvider);
+
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -55,126 +48,77 @@ class CellsScreen extends ConsumerWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () => ref.refresh(cellsProvider.future),
-        child: Skeletonizer(
-          enabled: cellsAsync.isLoading,
-          child: Center(
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1400),
-              child: CustomScrollView(
-                slivers: [
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 24,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 1400),
+            child: CustomScrollView(
+              slivers: [
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 24,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const EntranceFader(delay: 0, child: CellsHeader()),
+                        const SizedBox(height: 24),
+                        EntranceFader(
+                          delay: 100,
+                          child: _SearchField(colorScheme: colorScheme, t: t),
+                        ),
+                        const SizedBox(height: 24),
+                        const EntranceFader(
+                          delay: 200,
+                          child: PendingAttendanceCard(),
+                        ),
+                        const SizedBox(height: 32),
+                      ],
                     ),
-                    sliver: SliverToBoxAdapter(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const EntranceFader(delay: 0, child: CellsHeader()),
-                          const SizedBox(height: 24),
-                          EntranceFader(
-                            delay: 100,
-                            child: _SearchField(colorScheme: colorScheme, t: t),
-                          ),
-                          const SizedBox(height: 24),
-                          const EntranceFader(
-                            delay: 200,
-                            child: PendingAttendanceCard(),
-                          ),
-                          const SizedBox(height: 32),
-                        ],
+                  ),
+                ),
+                cellsAsync.when(
+                  data: (cells) {
+                    if (cells.isEmpty) {
+                      return const EmptyCellsState();
+                    }
+
+                    final groupedCells = groupedCellsAsync.hasValue ? groupedCellsAsync.value! : <int, List<CellDto>>{};
+
+                    return CellsGrid(
+                      groupedCells: groupedCells,
+                      crossAxisCount: crossAxisCount,
+                    );
+                  },
+                  loading: () {
+                    final dummyCells = List.generate(
+                      6,
+                      (index) => CellDto(
+                        name: 'Loading Cell Name',
+                        description: 'Loading description...',
+                        mainCell: false,
+                        level: (index % 2) + 1,
                       ),
-                    ),
-                  ),
-                  cellsAsync.when(
-                    data: (cells) {
-                      if (cells.isEmpty && !cellsAsync.isLoading) {
-                        return const EmptyCellsState();
-                      }
+                    );
 
-                      final displayCells = cellsAsync.isLoading
-                          ? List.generate(
-                              6,
-                              (index) => CellDto(
-                                name: 'Loading Cell Name',
-                                description:
-                                    'This is a loading description for the skeleton state.',
-                                mainCell: false,
-                                level: (index % 2) + 1,
-                              ),
-                            )
-                          : cells;
+                    final groupedDummyCells = <int, List<CellDto>>{};
+                    for (final cell in dummyCells) {
+                      groupedDummyCells.putIfAbsent(cell.level, () => []).add(cell);
+                    }
 
-                      // Group cells by level
-                      final groupedCells = <int, List<CellDto>>{};
-                      for (final cell in displayCells) {
-                        groupedCells
-                            .putIfAbsent(cell.level, () => [])
-                            .add(cell);
-                      }
-
-                      final sortedLevels = groupedCells.keys.toList()..sort();
-
-                      return SliverList(
-                        delegate: SliverChildBuilderDelegate((
-                          context,
-                          levelIndex,
-                        ) {
-                          final level = sortedLevels[levelIndex];
-                          final levelCells = groupedCells[level]!;
-
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 16,
-                                ),
-                                child: Text(
-                                  _getLevelName(level, t),
-                                  style: theme.textTheme.titleLarge?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: colorScheme.secondary,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                ),
-                                child: MasonryGridView.count(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  crossAxisCount: crossAxisCount,
-                                  mainAxisSpacing: 20,
-                                  crossAxisSpacing: 20,
-                                  itemBuilder: (context, index) {
-                                    return CellCard(
-                                      index: index,
-                                      cell: levelCells[index],
-                                      onTap: () => context.push(
-                                        '/cells/${levelCells[index].id}',
-                                      ),
-                                    );
-                                  },
-                                  itemCount: levelCells.length,
-                                ),
-                              ),
-                              const SizedBox(height: 32),
-                            ],
-                          );
-                        }, childCount: sortedLevels.length),
-                      );
-                    },
-                    loading: () =>
-                        const SliverToBoxAdapter(child: SizedBox.shrink()),
-                    error: (err, stack) => _ErrorState(err: err, ref: ref),
-                  ),
-                  const SliverToBoxAdapter(child: SizedBox(height: 100)),
-                ],
-              ),
+                    return Skeletonizer.sliver(
+                      enabled: true,
+                      child: CellsGrid(
+                        groupedCells: groupedDummyCells,
+                        crossAxisCount: crossAxisCount,
+                      ),
+                    );
+                  },
+                  error: (err, stack) => _ErrorState(err: err, ref: ref),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 100)),
+              ],
             ),
           ),
         ),
