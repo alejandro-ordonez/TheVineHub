@@ -39,24 +39,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build API Container Image
+      - name: Build and deploy using Docker Compose
         run: |
-          podman build -t localhost/thevinehub-api:latest -f backend/TheVineHub.API/Dockerfile .
-
-      - name: Build Flutter App Container Image
-        run: |
-          podman build -t localhost/thevinehub-app:latest -f the_vine_hub_app/Dockerfile ./the_vine_hub_app
-
-      - name: Deploy Quadlets
-        run: |
-          # Ensure target directory exists for user-level systemd
-          mkdir -p ~/.config/containers/systemd/
-
-          # Copy Quadlet files
-          cp infrastructure/quadlets/* ~/.config/containers/systemd/
-
-          # Reload systemd to pick up Quadlet changes
-          systemctl --user daemon-reload
-
-          # Restart the services
-          systemctl --user restart surrealdb.service minio.service seq.service thevinehub-api.service thevinehub-app.service cloudflared.service
+          docker compose build
+          # Add any docker compose up command if necessary, e.g. docker compose up -d
