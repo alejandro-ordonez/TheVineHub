@@ -1,10 +1,10 @@
 networks:
   jm-backend:
-    external: false
+    external: true
   jm-frontend:
-    external: false
+    external: true
   jm-db:
-    external: false
+    external: true
 
 services:
   surrealdb:
