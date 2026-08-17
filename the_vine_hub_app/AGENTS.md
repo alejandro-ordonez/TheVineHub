@@ -1,4 +1,6 @@
-# JM Ministry App - Project Context
+# AI Agent Guidelines (Frontend)
+
+These instructions apply when modifying the Flutter application located in the `the_vine_hub_app/` directory.
 
 ## Project Overview
 This is a Flutter application named `the_vine_hub_app`. It is designed as a high-fidelity application adhering to Clean Architecture principles.
@@ -29,11 +31,14 @@ lib/
 
 ## Tech Stack & Library Standards
 - **State Management:** `flutter_riverpod` (v3+). Use `@riverpod` annotation for code generation.
-- **Routing:** `go_router` with typed routes.
+- **Routing:** `go_router` with typed routes. Uses a `StatefulNavigationShell` for its main navigation layout.
 - **Immutability:** `freezed` for all Entities and Models.
 - **Networking:** `dio` for REST, managed via a singleton client in `core/network`.
+    - The network/service layer maps 1:1 with the .NET backend feature domains (e.g., Cells, Discipleship, Meetings, Users, etc.).
+    - Backend API responses are wrapped in an `ApiResponse` object that should be parsed on the client side. Throw exceptions only when `apiResponse.success == false`.
 - **Visualization:** `syncfusion_flutter_charts` is the standard for all high-performance rendering and financial plotting.
 - **UI Polish:** `skeletonizer` for loading states and `flutter_staggered_grid_view` for bento-style layouts.
+    - When refactoring complex UI screens, divide them into smaller widgets while retaining Skeletonizer for loading states. Do not wrap entire screens in Skeletonizer if it causes layout shifts; wrap specific data-driven components instead.
 
 ## Building and Running
 - **Get Dependencies:** `flutter pub get`
